@@ -1,0 +1,63 @@
+ion-content{
+
+--background: linear-gradient(#e86868, #88ed89) !important;
+}
+
+ion-list{
+
+--background: linear-gradient(#e86868, #88ed89) !important;
+}
+
+
+
+.list{
+text-align: center;
+  }
+
+  .tool1{
+    font-size: 20px;
+    font-style: normal;
+    font-family: "Roboto", sans-serif;
+      padding: 8;
+    }
+
+  .h2{
+  font-size: 18px;
+  font-style: normal;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+  }
+
+  .img{
+      text-align: center;
+      }
+
+    .tool2{
+      --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+      font-size: 18px;
+      font-style: normal;
+      text-align: center;
+      font-family: "Roboto", sans-serif;
+    color: #ffffff;
+    padding: 5;
+    text-align: center;
+      }
+
+      .header-row {
+        background: #7163AA;
+        color: #fff;
+        font-size: 18px;
+      }
+
+      ion-col {
+        border: 1px solid #ECEEEF;
+      }
+
+      .custom-icon {
+        color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
+      }
+
+
+      .menu{
+        border-radius: 12px;
+        }

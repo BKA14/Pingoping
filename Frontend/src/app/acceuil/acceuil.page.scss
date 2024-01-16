@@ -1,0 +1,382 @@
+ion-content{
+--ion-background-color:#fdfdfd;
+}
+
+ion-item{
+--background: linear-gradient(#e86868, #88ed89) !important;
+font-style: normal;
+font-family: "Roboto", sans-serif;
+}
+
+// Définissez la couleur de fond pour la classe .liked
+ion-button.likes.liked {
+  background-color: #6feca3; // Remplacez par la couleur souhaitée
+}
+
+
+.deconnect{
+  float: right;
+  }
+
+.utilisateur{
+  float: left;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+
+.list{
+
+font-style: normal;
+font-family: "Roboto", sans-serif;
+padding: 1px;
+}
+
+
+.tool1{
+font-size: 20px;
+font-style: normal;
+  padding: 6;
+  border-radius: 3px;
+  font-family: "Roboto", sans-serif;
+}
+
+
+.iconsupp{
+  //display: inline-block;
+  color: #f70707a9;
+  }
+
+  .iconmodif{
+  //display: inline-block;
+  color: #0808f8a9;
+
+}
+.checkbox {
+//display: inline-block;
+font-size: 42px;
+color: #0808f8a9;
+//vertical-align: middle;
+float: left;
+
+}
+
+.icon{
+  //display: inline-block;
+  font-size: 42px;
+  color: #2dd36f;
+  vertical-align: middle;
+  float: right;
+  }
+
+
+  .text{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 16px;
+  font-style: normal;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+}
+
+
+.span{
+  display: inline-block;
+  vertical-align: middle;
+  font-style: normal;
+  text-align: center;
+  --ion-background-color:#fdfdfd;
+  font-family: "Roboto", sans-serif;
+}
+
+.select{
+  padding: 7px;
+  top: 0px;
+  color: #121212;
+  left: 200px;
+  width: 100px;
+  right: 1px;
+  vertical-align: right;
+  width: 150px;
+  height: 0px;
+  text-align: right;
+  font-size: 13px;
+  font-style: normal;
+  --ion-background-color:#fdfdfd;
+  font-family: "Roboto", sans-serif;
+
+}
+.toolbar{
+  height: 40px;
+  font-size: 10px;
+  font-style: normal;
+
+
+}
+
+.span1{
+  width: 100px;
+  text-align: left;
+  font-size: 10px;
+  font-style: normal;
+  --ion-background-color:#fdfdfd;
+}
+
+
+.nombre{
+  //vertical-align: middle;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+}
+
+
+.h2{
+  //vertical-align: middle;
+  font-size: 15px;
+  font-style: normal;
+  padding: 11px;
+  font-family: "Roboto", sans-serif;
+}
+
+.tool2{
+  --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+  font-size: 16px;
+  font-style: normal;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  color: #ffffff;
+  padding: 6;
+  }
+
+  /* Dans votre fichier CSS ou SCSS */
+.custom-background {
+
+
+  font-style: normal;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+color: #ffffff;
+padding: 3px;
+overflow-y: auto; /* Autoriser le défilement vertical si nécessaire */
+max-height: 100%; /* Ajustez la valeur en fonction de vos besoins */
+}
+
+  .tool{
+    //display: inline-block;
+    font-size: 42px;
+    color: #ffffff;
+    font-family: "Roboto", sans-serif;
+  }
+
+.welcometitle{
+color: #ffffff;
+}
+
+.logo {
+  text-align: center;
+  font-size: 55px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 38%;
+  //transform: translateY(-50%);
+  color: #ffffff;
+  font-style: normal;
+  font-family: "Roboto", sans-serif;
+}
+
+.recherche {
+  font-size: 20px;
+  line-height: 26px;
+  --ion-background-color:#fafafa;
+  font-family: "Roboto", sans-serif;
+}
+
+.log {
+  font-size: 16px;
+  line-height: 22px;
+  font-family: "Roboto", sans-serif;
+  color: #ffffff;
+
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+  color: #d90a0a;
+}
+
+/* Fixer le tab bar en bas de la page */
+ion-tab-button {
+--color-selected: #2dd36f; /* Couleur des icônes sélectionnées (en vert) */
+--color-unselected: #2dd36f; /* Couleur des icônes non sélectionnées (en vert) */
+}
+
+
+/* Ajouter un espace au contenu pour éviter qu'il ne soit caché par le tab bar */
+ion-content {
+margin-bottom: 50px; /* Ajustez la valeur en fonction de la hauteur de votre tab bar */
+}
+
+
+/* Dans votre fichier CSS ou SCSS */
+.centered-text {
+font-size: 30 px;
+text-align: center;
+color: #121212;
+}
+
+.couleur-commentaire{
+color: #ffffff;
+font-size: 17px;
+}
+
+/* Dans votre fichier CSS ou SCSS */
+.custom-image {
+width: auto; /* Largeur souhaitée */
+height: auto; /* Hauteur souhaitée */
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative;
+}
+
+.transparent-button {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+.like-button-green {
+  background-color: green;
+  color: white;
+}
+
+
+/* Dans votre fichier CSS ou SCSS */
+.custom-icon {
+color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
+}
+
+/*
+.card-assombrie {
+background-color: #c1decc;
+padding: 0px;
+}
+*/
+
+.icon-right {
+float: right; /* Aligne l'icône à droite */
+
+}
+
+.couleurBouton{
+
+color: #02751b;
+--background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+font-family: "Roboto", sans-serif;
+}
+
+
+.menu{
+border-radius: 12px;
+}
+
+.commentaire
+{
+//vertical-align: middle;
+font-style: normal;
+padding: 4px;
+font-family: "Roboto", sans-serif;
+color: #080a09;
+--background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+
+white-space: normal; /* Permet le retour à la ligne automatique */
+word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
+text-align: justify;
+font-size: medium;
+margin: 0;
+
+--padding-start: 0;
+--padding-end: 0;
+
+}
+
+
+
+.localisation{
+  //vertical-align: middle;
+  font-size: medium;
+  font-style: normal;
+  padding: 3px;
+  font-family: "Roboto", sans-serif;
+  color: #080a09;
+  --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+
+  white-space: normal; /* Permet le retour à la ligne automatique */
+  word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
+  text-align: justify;
+  margin: 0;
+
+  --padding-start: 0;
+  --padding-end: 0;
+
+  }
+
+
+.titre
+{
+//vertical-align: middle;
+font-size: 22px;
+font-style: bold;
+
+padding: 3px;
+font-family: "Roboto", sans-serif;
+color: #060908;
+--background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+white-space: normal; /* Permet le retour à la ligne automatique */
+word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
+text-align: justify;
+margin: 0;
+text-align: center;
+--padding-start: 0;
+--padding-end: 0;
+}
+
+.ligne{
+  background-color:  #4ca05e;
+  padding: 0.6px;
+  width: auto;
+  --padding-start: 0;
+  --padding-end: 0;
+  margin: 0;
+  }
+
+  .likes
+  {
+    background-color:  #fbf9f8;
+   color: #747775;
+   --border-color: #4ca05e;
+    }
+
+    .btnpub
+    {
+      background-color:  #fbf9f8;
+     color: #4ca05e;
+     --border-color: #4ca05e;
+      }
+
+    .nombre_likes {
+      font-size: 15px;
+      font-style: normal;
+      padding: 11px;
+      font-family: "Roboto", sans-serif;
+      }
+
+      .vert {
+        background-color: rgb(137, 207, 125); /* ou toute autre couleur que vous préférez */
+        //color: white; /* ou toute autre couleur de texte que vous préférez */
+      }

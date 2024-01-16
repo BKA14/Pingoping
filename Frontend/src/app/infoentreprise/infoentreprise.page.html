@@ -1,0 +1,60 @@
+<ion-header >
+
+  <ion-toolbar class="tool1" color="success">
+    <br/>
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <br/> <br/>
+      <ion-title class="tool2">INFORMATION</ion-title>
+      <br/>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="custom-background"  [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+<br/>
+<ion-list >
+
+ <ion-item  class="custom-background" lines="inset" *ngFor="let coupon of coupon">
+  <ion-label color="dark">
+    <h2 class="commentaire1">{{coupon.commentaire1}}</h2 >  <br/><br/>
+      <ion-label class="ion-text-small">1XBET</ion-label> <br>
+      <ion-label class="ion-text-small">{{coupon.xbet}}</ion-label>
+      <ion-button  (click)="copyText(coupon.xbet)" expand="full" fill="clear" color="success"><br/>
+
+        <ion-icon name="copy-outline"></ion-icon> Copier
+      </ion-button>
+      <br/><br/>
+
+      <ion-label class="ion-text-small">BETWINNER</ion-label> <br>
+      <ion-label class="ion-text-small">{{coupon.betwinner}}</ion-label>
+      <ion-button  (click)="copyText(coupon.betwinner)" expand="full" fill="clear" color="success"><br/>
+        <ion-icon name="copy-outline"></ion-icon> Copier
+      </ion-button>
+      <br/><br/>
+
+
+
+  <ion-label class="ion-text-small">{{coupon.commentaire2}}</ion-label >  <br/>
+
+    <ion-col>
+      <a href="https://t.me/votregroupe" target="_blank">
+        <ion-button color="success" shape="round" expand="full">
+          Rejoindre le groupe de paris  Telegram
+          <ion-icon name="share-social-outline" style="zoom: 1.5;"></ion-icon>
+        </ion-button>
+      </a>
+    </ion-col>
+    <br> <br>
+    <div *ngIf="copied" class="copied-message">Texte copié avec succès!</div>
+  </ion-label>
+  <div class="item-note">
+  </div>
+</ion-item>
+</ion-list>
+
+</ion-content>

@@ -1,0 +1,44 @@
+
+<ion-header >
+  <ion-toolbar color="success" class="tool1" >
+    <br/>  <br/>
+    <ion-title class="tool2">CATEGORIE</ion-title>
+      <br/>
+    <div class="item-note"  *ngIf="grade === 'superadmin'">
+      <ion-button color="light"  size="small" class="utilisateur"  [routerLink]="['/welcome/']" >Entreprise</ion-button>
+    </div>
+    <ion-button color="danger"  size="small" class="deconnect" (click)="deconnect()" >Deconnexion</ion-button>
+    <br/> <br/> <br/>
+    <ion-label class="h2">{{prenom1|uppercase}}</ion-label>
+      <ion-searchbar class="recherche" type="text"  placeholder="Rechercher une catégorie" [(ngModel)]="term" ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding class="tool3" [fullscreen]="true">
+
+  <ion-item class="span" *ngIf="grade === 'admin' || grade === 'superadmin'">
+
+    <span class="span" color="success">Ajouter une catégorie </span>
+    <ion-icon type="button" [routerLink]="['/ajoutcategorie/']" name="add-circle-outline" class="icon"></ion-icon>
+  </ion-item>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+<ion-list class="list">
+ <ion-item  button *ngFor="let categorie of categorie1 | customFilter: term">
+
+
+
+    <ion-label class="h2">{{categorie.nom_categorie}}</ion-label>
+
+  <div class="item-note"  *ngIf="grade === 'admin' || grade === 'superadmin'">
+
+    <ion-icon name="create"  style="zoom: 2.0;"  color="success"  [routerLink]="['/update-categorie/',categorie.id]"></ion-icon>
+    <ion-icon name="trash"  style="zoom: 2.0;"  class="iconsupp" (click)="presentAlert3(categorie.id)"></ion-icon>
+
+    </div>
+
+
+
+</ion-item>
+</ion-list>
+</ion-content>

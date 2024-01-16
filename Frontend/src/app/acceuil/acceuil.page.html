@@ -1,0 +1,146 @@
+
+<ion-header  >
+<ion-toolbar color="success" class="tool1" >
+  <br/> <br/>
+  <ion-title class="tool2">PINGOPING NEWS</ion-title>
+  <br/>
+  <div class="item-note"  *ngIf="grade === 'superadmin'">
+  <ion-button color="light"  size="small" class="utilisateur"  [routerLink]="['/liste-user/']" >Utilisateurs</ion-button>
+</div>
+  <ion-button color="danger"  size="small" class="deconnect" (click)="deconnect()" >Deconnexion</ion-button><br/><br/>
+  <div class="span1"  *ngIf="grade === 'admin' || grade === 'superadmin'">
+    <ion-button  class="span1"  size="small"   [routerLink]="['/categorie/']" >Categorie</ion-button>
+  </div>
+
+    <br/>
+    <div  style="display: flex;">
+      <ion-label class="h2 light">{{prenom1 | uppercase}}</ion-label>
+      <span style="margin-left: auto;">
+        <ion-button (click)="reloadPage()" class="light" color="light" style="text-align: left;">
+          actualiser
+        </ion-button>
+      </span>
+    </div>
+
+
+
+    <br>
+
+</ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding  class="custom-background"  [fullscreen]="true" style="--offset-bottom: 300px;">
+<ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
+<br>
+<ion-item class="span" *ngIf="grade === 'admin' || grade === 'superadmin'">
+
+  <span class="span" color="success">Ajouter une entreprise </span>
+  <ion-icon type="button" [routerLink]="['/ajouterpub/']" name="add-circle-outline" class="icon"></ion-icon>
+</ion-item>
+
+<ion-list class="list" #maliste>
+  <ion-item *ngFor="let pub of pub">
+    <ion-card >
+      <ion-card-header>
+        <ion-card-title class="titre" >{{pub.titre}}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <!-- Illustration (image ou vidéo) de la publicité -->
+        <ng-container *ngIf="pub.photo.includes('.jpg') || pub.photo.includes('.png')">
+          <ion-img class="custom-image"  src={{pub.photo}}></ion-img>
+        </ng-container>
+        <ng-container *ngIf="!pub.photo.includes('.jpg') && !pub.photo.includes('.png')">
+          <video class="custom-image" width="320" height="250" controls autoplay muted>
+            <source src={{pub.photo}} type="video/mp4">
+          </video>
+        </ng-container>
+
+        <br>
+        <!-- Commentaire de la publicité -->
+        <p class="commentaire" >{{pub.commentaire}}</p>
+        <br> <br>
+        <ion-label  class="localisation" *ngIf="pub.distanceToUser !== undefined " >
+          Vous êtes présentement à : {{ convertMetersToKilometers(pub.distanceToUser) }} du lieu.
+        </ion-label>
+        <br>
+        <p class="ligne"></p>
+
+          <br>
+
+          &nbsp;
+
+        <ion-button *ngIf="pub.longitude && pub.latitude" class="btnpub" fill="outline" [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pub.latitude + ',' + pub.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pub.latitude + ',' + pub.longitude">
+          Localiser le lieu
+          <ion-icon name="location-outline"></ion-icon>
+        </ion-button>
+
+         &nbsp;
+
+        <ion-button *ngIf="pub.contact" class="btnpub" fill="outline" [href]="getWhatsAppLink(pub.contact)">
+          <ion-icon class="black" name="logo-whatsapp"></ion-icon>
+          Contact-Info
+        </ion-button>
+
+          <br>
+          <!-- Remplacez la section j'aime par ce code -->
+          <div>
+            <ion-label class="h2 light">{{ pub.likes }}</ion-label>
+            <ion-label class="h2 light">{{ etats.couleurbouton }}</ion-label>
+            <span style="margin-left: auto;">
+              <ion-button (click)="LikePub(pub)" class="likes" fill="outline"
+              [ngClass]="{'vert': etats.couleurbouton === 'oui'}">
+                <ion-icon class="black" name="thumbs-up"></ion-icon>
+                J'aime
+              </ion-button>
+            </span>
+          </div>
+
+
+
+        <!-- Bouton "Voir" -->
+        <!--  <ion-button expand="full"  class="couleurBouton">Voir</ion-button>-->
+      </ion-card-content>
+
+      <div class="icon-right" *ngIf="grade === 'admin' || grade === 'superadmin'">
+        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/updatepub/',pub.id]"></ion-icon>
+        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(pub.id)"></ion-icon>
+      </div>
+
+    </ion-card>
+  </ion-item>
+</ion-list>
+
+
+
+
+<!-- <div style="margin-bottom: 50px;"></div>-->
+
+<!-- Tab bar fixe en bas de la page -->
+<!-- Tab bar -->
+
+
+
+
+</ion-content>
+
+<!-- Tab bar avec hideOnScroll -->
+<ion-tab-bar  class="menu" slot="bottom" hideOnScroll="true">
+<ion-tab-button (click)="acceuil()" tab="account">
+  <ion-icon class="custom-icon" name="home"></ion-icon>
+</ion-tab-button>
+<ion-tab-button (click)="service()" tab="contact">
+  <ion-icon  class="custom-icon" name="glasses"></ion-icon>
+</ion-tab-button>
+<ion-tab-button (click)="ping()" tab="settings">
+  <ion-icon class="custom-icon" name="star"></ion-icon>
+</ion-tab-button>
+<ion-tab-button (click)="apropos()" tab="settings">
+  <ion-icon class="custom-icon" name="information-circle"></ion-icon>
+</ion-tab-button>
+</ion-tab-bar>

@@ -1,0 +1,46 @@
+<ion-header >
+
+  <ion-toolbar class="tool1" color="success">
+    <ion-buttons  slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <br/> <br/>
+      <ion-title class="tool2">A PROPOS</ion-title>
+      <br/>
+    </ion-toolbar>
+</ion-header>
+<br/><br>
+<ion-content padding class="tool3" [fullscreen]="true">
+  <div class="list">
+    <img height="220px"  src="http://localhost/img/pingoping.jpg"  >
+<br/> <br/>
+<ion-label class="h2">Contact: 74-44-34-34</ion-label>
+<br/> <br/> <br/>
+<ion-label class="h2">Email: pingoping@gmail.com</ion-label>
+<br/> <br/> <br/>
+<ion-label class="h2">Version Android: 1.0.0</ion-label>
+<br/> <br/> <br/>
+<ion-label class="h2">Pingoping, le multi-service prés de chez vous !</ion-label>
+<br/> <br/> <br/>
+<ion-button type="button" (click)="openUrl()" color="success" shape="round" expand="full">
+  Visiter la Page Facebook
+</ion-button>
+</div>
+</ion-content>
+
+
+ <!-- Tab bar avec hideOnScroll -->
+ <ion-tab-bar  class="menu" slot="bottom" hideOnScroll="true">
+  <ion-tab-button (click)="acceuil()" tab="account">
+    <ion-icon class="custom-icon" name="home"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button (click)="service()" tab="contact">
+    <ion-icon  class="custom-icon" name="glasses"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button (click)="ping()" tab="settings">
+    <ion-icon class="custom-icon" name="star"></ion-icon>
+  </ion-tab-button>
+  <ion-tab-button (click)="apropos()" tab="settings">
+    <ion-icon class="custom-icon" name="information-circle"></ion-icon>
+  </ion-tab-button>
+</ion-tab-bar>

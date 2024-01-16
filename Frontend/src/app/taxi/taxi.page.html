@@ -1,0 +1,57 @@
+<ion-header >
+
+  <ion-toolbar class="tool1" color="success">
+    <br/>
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <br/> <br> <br>
+      <ion-title >FORMATION INFORMATIQUE</ion-title>
+      <br/>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="custom-background"  [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+<br/>
+<ion-list >
+
+ <ion-item  class="custom-background" lines="inset" *ngFor="let taxi of taxi">
+  <ion-label color="dark">
+
+      <h2 class="custom-text">{{taxi.commentaire2}}</h2>  <br/><br/>
+      <div class="menu">
+
+          <ion-img class="item-image" [src]="taxi.lienphoto"></ion-img>
+          <div class="item-content">
+            <h2 class="prix"></h2> <br/>
+            <p class="prix" >{{taxi.prix}}</p>
+
+        </div>
+      </div>
+
+  </ion-label>
+
+</ion-item>
+</ion-list>
+
+<ion-item  class="custom-background" lines="inset" *ngFor="let taxi of taxi">
+<h2 class="ion-text-small">{{taxi.commentaire3}}</h2 >  <br/> <br/>
+</ion-item>
+<br>
+  <ion-col style="display: flex; justify-content: center;">
+    <a href="https://api.whatsapp.com/send?phone=+22662023367&text=Bonjour%2C%20j'aimerais%20faire%20une%20commande" target="_blank">
+      <ion-button color="success" shape="round">
+        <p class="prix">Contactez nous </p>
+        <ion-icon name="logo-whatsapp" style="zoom: 1.5;"></ion-icon>
+      </ion-button>
+    </a>
+  </ion-col>
+
+
+
+
+</ion-content>

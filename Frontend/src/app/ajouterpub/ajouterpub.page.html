@@ -1,0 +1,88 @@
+<ion-header>
+
+  <ion-toolbar  color="success" class="tool1" >
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <br/>  <br/>
+    <ion-title class="tool2">Ajouter une publicité</ion-title>
+    <br/>
+  </ion-toolbar>
+</ion-header>
+<br/>
+<ion-content [fullscreen]="true">
+  <form [formGroup]="verifieForm">
+
+    <ion-item>
+      <ion-label position="floating" class="h2"> titre de la pub</ion-label><br/>
+      <ion-input [(ngModel)]="titre"  formControlName="titre"  type="text" ></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('titre').touched && verifieForm.get('titre').errors?.required">Veuillez entrer le titre de la publicité</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('titre').touched && verifieForm.get('titre').hasError('minlength')">Verifier le titre</ion-label>
+    <br/>
+
+    <ion-item>
+      <ion-label position="floating" class="h2"> commentaire sur la pub</ion-label><br/>
+      <ion-input [(ngModel)]="commentaire" formControlName="commentaire" type="text" ></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('commentaire').touched && verifieForm.get('commentaire').errors?.required">Veuillez entrer le commentaire de la publicité</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('commentaire').touched && verifieForm.get('commentaire').hasError('minlength')">Verifier le commentaire</ion-label>
+    <br/>
+
+    <ion-item>
+      <ion-label position="floating" class="h2"> Lien photo illutrative</ion-label><br/>
+      <ion-input [(ngModel)]="photo" formControlName="photo" type="text" ></ion-input>
+    </ion-item>
+    <ion-label color="photo" *ngIf="verifieForm.get('photo').touched && verifieForm.get('photo').errors?.required">Veuillez entrer le lien de la photo</ion-label>
+    <ion-label color="photo" *ngIf="verifieForm.get('photo').touched && verifieForm.get('photo').hasError('minlength')">Verifier le lien de la photo</ion-label>
+    <br/>
+
+    <ion-item>
+      <ion-label position="floating" class="h2"> Contact </ion-label><br/>
+      <ion-input [(ngModel)]="contact"  formControlName="contact"  type="text" ></ion-input>
+    </ion-item>
+
+    <br/>
+
+    <ion-item>
+      <ion-label position="floating" class="h2"> Longitude </ion-label><br/>
+      <ion-input [(ngModel)]="longitude"  formControlName="longitude" type="text" ></ion-input>
+    </ion-item>
+
+    <br/>
+
+    <ion-item>
+      <ion-label position="floating" class="h2"> Latitude </ion-label><br/>
+      <ion-input [(ngModel)]="latitude"  formControlName="latitude"  type="text" ></ion-input>
+    </ion-item>
+    <br/>
+
+
+    <ion-item>
+      <ion-label position="floating" class="h2"> Rang de la pub </ion-label><br/>
+      <ion-input [(ngModel)]="rangpub" formControlName="rangpub" type="number" ></ion-input>
+    </ion-item>
+    <ion-label color="bouton" *ngIf="verifieForm.get('rangpub').touched && verifieForm.get('rangpub').errors?.required">Veuillez entrer le rang ou 1000 par defaut</ion-label>
+    <br/>
+
+    <ion-item>
+      <ion-label position="floating" class="h2">Lien boutton voir</ion-label><br/>
+      <ion-input [(ngModel)]="bouton" formControlName="bouton" type="text" ></ion-input>
+    </ion-item>
+    <ion-label color="bouton" *ngIf="verifieForm.get('bouton').touched && verifieForm.get('bouton').errors?.required">Veuillez entrer le lien du bouton</ion-label>
+    <ion-label color="bouton" *ngIf="verifieForm.get('bouton').touched && verifieForm.get('bouton').hasError('minlength')">Verifier le lien du bouton</ion-label>
+    <br/>
+
+
+<ion-col>
+  <br/> <br/>
+  <ion-button type="button" (click)="addpub()"  [disabled]="!verifieForm.valid" color="success" shape="round" expand="full">
+
+  Ajouter
+</ion-button>
+</ion-col>
+
+</form>
+</ion-content>
+
+

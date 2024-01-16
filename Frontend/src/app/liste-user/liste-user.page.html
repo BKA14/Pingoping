@@ -1,0 +1,53 @@
+
+<ion-header >
+  <ion-toolbar color="success" class="tool1" >
+    <br/>  <br/>
+    <ion-title class="tool2">UTILISATEURS</ion-title>
+      <br/>
+    <div class="item-note"  *ngIf="grade === 'superadmin'">
+      <ion-button color="light"  size="small" class="utilisateur"  [routerLink]="['/welcome/']" >Entreprise</ion-button>
+    </div>
+    <ion-button color="danger"  size="small" class="deconnect" (click)="deconnect()" >Deconnexion</ion-button>
+    <br/> <br/> <br/>
+    <ion-label class="h2">{{prenom1|uppercase}}</ion-label>
+      <ion-searchbar class="recherche" type="text"  placeholder="Rechercher un utilisateur" [(ngModel)]="term" ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<div  >
+  <ion-select
+  class="select"
+    interface="popover"
+    placeholder=" Recherche par groupe"
+    [(ngModel)]="term"
+  >
+  <ion-select-option *ngFor="let grade_utilisateur of rang" [value]="grade_utilisateur.nom_grade">{{grade_utilisateur.nom_grade}}</ion-select-option>
+  </ion-select>
+</div>
+
+<ion-content padding class="tool3" [fullscreen]="true">
+
+  <ion-item class="span" *ngIf="grade === 'admin' || grade === 'superadmin'">
+
+    <span class="span" color="success">Ajouter un Utilisateur </span>
+    <ion-icon type="button" [routerLink]="['/inscription/']" name="add-circle-outline" class="icon"></ion-icon>
+  </ion-item>
+  <p class="nombre"> Nombre total d'utilisateur:{{userCount}} </p>
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+<ion-list class="list">
+ <ion-item  button *ngFor="let user of users | customFilter: term">
+
+    <ion-label color="dark" [routerLink]="['/info-user/', user.id]">
+    <ion-label class="h2">{{user.email}}</ion-label>
+  </ion-label>
+  <div class="item-note"  *ngIf="grade === 'admin' || grade === 'superadmin'">
+    <ion-icon name="create"  style="zoom: 2.0;"  color="success"  [routerLink]="['/update-user/',user.id]"></ion-icon>
+    <ion-icon name="trash"  style="zoom: 2.0;"  class="iconsupp" (click)="presentAlert2(user.id)"></ion-icon>
+    </div>
+
+</ion-item>
+</ion-list>
+</ion-content>

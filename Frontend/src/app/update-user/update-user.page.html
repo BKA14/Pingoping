@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar class="tool1" color="success">
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons> 
+     <br/> <br/> 
+    <ion-title class="tool2">Modifier les donnees</ion-title>
+    <br/> 
+  </ion-toolbar>
+</ion-header>
+<br/>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <form [formGroup]="verifieForm">
+    <ion-item>
+      <ion-label position="floating" class="h2"> Nom</ion-label>
+      <ion-input [(ngModel)]="nom2" formControlName="nom" type="text"></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('nom').touched && verifieForm.get('nom').errors?.required">Veuillez entrer le nom </ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('nom').touched && verifieForm.get('nom').hasError('minlength')">Verifier le nom</ion-label>
+    <br/>
+    <ion-item>
+      <ion-label position="floating" class="h2"> Prenom</ion-label>
+      <ion-input [(ngModel)]="prenom2" formControlName="prenom" ></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('prenom').touched && verifieForm.get('prenom').errors?.required">Veuillez entrer le prenom </ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('prenom').touched && verifieForm.get('prenom').hasError('minlength')">Verifier le prenom</ion-label>
+ 
+    <br/>
+    <ion-item>
+      <ion-label position="floating" class="h2">Email</ion-label>
+      <ion-input [(ngModel)]="email2" formControlName="email" type="text"></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').errors?.required">Veuillez entrer l'email</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').hasError('minlength')">Verifier votre email</ion-label>
+    <br/>
+
+    <div>
+      <ion-list>
+        <ion-item>
+          <ion-label position="floating" class="h2">Genre</ion-label>
+          <ion-select 
+          placeholder="Genre" 
+           [(ngModel)]="genre" 
+          formControlName="select1">
+            <ion-select-option value="masculin">Masculin</ion-select-option>
+            <ion-select-option value="féminin">Féminin</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+    <ion-label color="danger" *ngIf="verifieForm.get('select1').touched && verifieForm.get('select1').errors?.required">Veuillez selectionner le genre de l'utilisateur</ion-label>
+    <br/>
+
+    <div>
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating" class="h2">Grade</ion-label>
+      <ion-select
+        placeholder="Grade"
+        [(ngModel)]="grade"
+        formControlName="select" 
+      >
+        <ion-select-option *ngFor="let grade_utilisateur of rang"   [value]="grade_utilisateur.nom_grade">{{grade_utilisateur.nom_grade}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</div>
+    <ion-label color="danger" *ngIf="verifieForm.get('select').touched && verifieForm.get('select').errors?.required">Veuillez selectionner le grade de l'utilisateur</ion-label>
+    <br/>
+    
+    <ion-item>
+      <ion-label position="floating" class="h2">Contact de L'entreprise</ion-label><br/>
+      <ion-input [(ngModel)]="contact" formControlName="contact" type="number"></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('contact').touched && verifieForm.get('contact').errors?.required">Veuillez entrer un numero</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('contact').touched && verifieForm.get('contact').hasError('min')">Contact non valide</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('contact').touched && verifieForm.get('contact').hasError('max')">Contact non valide</ion-label>
+    
+
+  <ion-item>
+      <ion-label position="floating" class="h2"> password</ion-label>
+      <ion-input [(ngModel)]="password1"   type="password" formControlName="password"></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('password').touched && verifieForm.get('password').errors?.required">Veuillez entrer le mot de passe</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('password').touched && verifieForm.get('password').hasError('minlength')">Entrer un mot de passe d'au moins 8 caractere</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('password').touched && verifieForm.get('password').hasError('pattern')">Entrer un mot de passe de 8 caractere avec au moins une majuscule,une minuscule et un chiffre </ion-label>
+    <br/>
+    <ion-item> 
+      <ion-label position="floating" class="h2"> password2</ion-label>
+      <ion-input [(ngModel)]="password2" formControlName="password2" type="password"  pattern="{{password1}}"></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('password2').touched && verifieForm.get('password2').errors?.required">Veuillez entrer un numero</ion-label>
+    <ion-label position="floating" class="mot_passe"> Assurez-vous que les mots de passes correspondent</ion-label>
+
+<ion-col>
+  <br/> <br/>
+  <ion-button type="button" (click)="updateuser()" [disabled]="!verifieForm.valid" color="success" shape="round" expand="full">
+  Modifier
+</ion-button>
+</ion-col>
+
+</form>
+</ion-content>
