@@ -11,24 +11,46 @@
 </ion-header>
 <br/>
 <ion-content [fullscreen]="true">
-  <form [formGroup]="verifieForm">
+  <form >
 
 
 
     <ion-item>
-      <ion-label position="floating" class="h2"> titre de la pub</ion-label><br/>
-      <ion-input [(ngModel)]="titre"  formControlName="titre"  type="text" ></ion-input>
+      <ion-segment (ionChange)="updatetitre($event)">
+        <ion-segment-button value="pas_de_titre">
+          <ion-label> Mettre un titre</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
     </ion-item>
-    <ion-label color="danger" *ngIf="verifieForm.get('titre').touched && verifieForm.get('titre').errors?.required">Veuillez entrer le titre de la publicité, ou "non" par defaut</ion-label>
+    <br/>
+
+    <ion-item *ngIf="selectedtitre !== 'none'" >
+      <ion-label position="floating" class="h2"> titre de la pub</ion-label><br/>
+      <ion-input [(ngModel)]="titre"  name="titre"  type="text" ></ion-input>
+    </ion-item>
     <br/>
 
     <ion-item>
-      <ion-label position="floating" class="h2"> commentaire sur la pub</ion-label><br/>
-      <ion-input [(ngModel)]="commentaire" formControlName="commentaire" type="text" ></ion-input>
+      <ion-segment (ionChange)="updatecommentaire($event)">
+        <ion-segment-button value="pas_de_commentaire">
+          <ion-label> Mettre un commentaire</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
     </ion-item>
-    <ion-label position="floating"color="warning"  class="h2">Si vous avez un lien de redirection, mettez le lien complet dans le commentaire</ion-label><br/><br/>
-    <ion-label color="danger" *ngIf="verifieForm.get('commentaire').touched && verifieForm.get('commentaire').errors?.required">Veuillez entrer le commentaire de la publicité, ou entrée "non" par defaut</ion-label>
-    <br/><br/>
+    <br/>
+
+    <ion-item *ngIf="selectedcommentaire !== 'none'">
+      <ion-label position="floating" class="h2"> commentaire sur la pub</ion-label><br/>
+      <ion-input [(ngModel)]="commentaire" name="commentaire" type="text" ></ion-input>
+    </ion-item>
+    <ion-label position="floating" class="h2">Si vous avez un lien de redirection, mettez le lien complet dans le commentaire</ion-label><br/>
+    <br/>
 
 
     <ion-item>
@@ -48,6 +70,66 @@
     </ion-item>
     <br/>
 
+
+
+    <ion-item>
+      <ion-segment (ionChange)="updatelongitude($event)">
+        <ion-segment-button value="pas_de_longitude">
+          <ion-label> Mettre la longitude</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+    <ion-item *ngIf="selectedlongitude !== 'none'">
+      <ion-label position="floating" class="h2"> Longitude </ion-label><br/>
+      <ion-input [(ngModel)]="longitude" name="longitude"  type="text" ></ion-input>
+    </ion-item>
+
+    <br/>
+
+    <ion-item>
+      <ion-segment (ionChange)="updatelatitude($event)">
+        <ion-segment-button value="pas_de_latitude">
+          <ion-label> Mettre la latitude</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selectedlatitude !== 'none'">
+      <ion-label position="floating" class="h2"> Latitude </ion-label><br/>
+      <ion-input [(ngModel)]="latitude" name="latitude" type="text" ></ion-input>
+    </ion-item> <br/>
+    <br/>
+
+
+    <ion-item>
+      <ion-segment (ionChange)="updatecontact($event)">
+        <ion-segment-button value="pas_de_contact">
+          <ion-label> Mettre le contact</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selectedcontact!== 'none'">
+      <ion-label position="floating" class="h2"> Contact </ion-label><br/>
+      <ion-input [(ngModel)]="contact" name="contact" type="number" ></ion-input>
+    </ion-item>
+
+    <br/>
 
 
 
@@ -103,42 +185,35 @@
       </ion-segment>
     </ion-item>
 
-<br>
+    <br>
 
     <ion-item>
+      <ion-segment (ionChange)="updaterang($event)">
+        <ion-segment-button value="pas_de_rang">
+          <ion-label> Mettre le rang</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <br/>
+
+
+    <ion-item *ngIf="selectedrang !== 'none'">
       <ion-label position="floating" class="h2"> Rang de la pub </ion-label><br/>
-      <ion-input [(ngModel)]="rangpub" formControlName="rangpub" type="number" ></ion-input>
+      <ion-input [(ngModel)]="rangpub"  name="rang" type="number" ></ion-input>
     </ion-item>
-    <ion-label color="bouton" *ngIf="verifieForm.get('rangpub').touched && verifieForm.get('rangpub').errors?.required">Veuillez entrer le rang ou entrée 1000 par defaut</ion-label>
     <br/>
 
 
-    <ion-item>
-      <ion-label position="floating" class="h2"> Contact </ion-label><br/>
-      <ion-input [(ngModel)]="contact" formControlName="contact"  type="number" ></ion-input>
-    </ion-item>
-    <ion-label color="bouton" *ngIf="verifieForm.get('contact').touched && verifieForm.get('contact').errors?.required">Veuillez entrer le contact ou entrée "0" par defaut</ion-label>
-    <br/>
 
 
-    <ion-item>
-      <ion-label position="floating" class="h2"> Longitude </ion-label><br/>
-      <ion-input [(ngModel)]="longitude" formControlName="longitude"  type="text" ></ion-input>
-    </ion-item>
-    <ion-label color="danger" *ngIf="verifieForm.get('longitude').touched && verifieForm.get('longitude').errors?.required">Veuillez entrer la longitude, ou entrée "non" par defaut </ion-label>
-    <br/>
-
-
-    <ion-item>
-      <ion-label position="floating" class="h2"> Latitude </ion-label><br/>
-      <ion-input [(ngModel)]="latitude"  formControlName="latitude"  type="text" ></ion-input>
-    </ion-item>
-    <ion-label color="danger" *ngIf="verifieForm.get('latitude').touched && verifieForm.get('latitude').errors?.required">Veuillez entrer la latitude, ou entrée "non" par defaut</ion-label>
-    <br/>
 
   <ion-col>
   <br/> <br/>
-  <ion-button type="button" (click)="updatepub()"  [disabled]="!verifieForm.valid" color="success" shape="round" expand="full">
+  <ion-button type="button" (click)="updatepub()"   color="success" shape="round" expand="full">
    Modifier
   </ion-button>
   </ion-col>

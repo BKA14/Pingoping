@@ -30,6 +30,12 @@ export class UpdatepubPage implements OnInit {
   selectedDateOptionfin: string = 'none';  // Option par défaut pour la date de début
   selectedDateOptiondeb:  string = 'none';  // Option par défaut pour la date de début
   selectedphoto : string = 'none'; // Option par défaut pour la photo
+ selectedtitre: string = 'pas_de_titre'; // Option par défaut pour la titre
+ selectedcommentaire: string = 'pas_de_commentaire'; // Option par défaut pour la commentaire
+ selectedrang: string = 'pas_de_rang'; // Option par défaut pour la rang
+ selectedcontact: string = 'pas_de_contact'; // Option par défaut pour la contact
+ selectedlatitude: string = 'pas_de_latitude'; // Option par défaut pour la latitude
+ selectedlongitude: string = 'pas_de_longitude'; // Option par défaut pour la longitude
 
   entreprises: any = [];
 
@@ -103,6 +109,28 @@ export class UpdatepubPage implements OnInit {
   })
 }
 
+
+
+
+updatetitre(event: any) {
+  this.selectedtitre = event.detail.value;
+}
+updatecommentaire(event: any) {
+  this.selectedcommentaire = event.detail.value;
+}
+updaterang(event: any) {
+  this.selectedrang = event.detail.value;
+}
+updatecontact(event: any) {
+  this.selectedcontact = event.detail.value;
+}
+updatelatitude(event: any) {
+  this.selectedlatitude = event.detail.value;
+}
+updatelongitude(event: any) {
+  this.selectedlongitude = event.detail.value;
+}
+
 updatephoto(event: any) {
   this.selectedphoto = event.detail.value;
 }
@@ -156,32 +184,71 @@ updateDateOptiondeb(event: any) {
 
     const formData = new FormData();
     formData.append('id_pub', this.id);
-    formData.append('titre', this.titre);
-    formData.append('commentaire', this.commentaire);
-    // Pour l'enregistrement photo
-    if (this.selectedphoto !== 'none') {
-      formData.append('photo', file);
-    }
-    else {
-      formData.append('photo', 'non');
-    }
-    formData.append('rangpub', this.rangpub);
-    formData.append('contact', this.contact);
-    formData.append('longitude', this.longitude);
-    formData.append('latitude', this.latitude);
+    // Construisez l'objet FormData
 
-    if (this.selectedDateOptiondeb !== 'none') {
-      formData.append('datePublication', this.datePublication);
-    } else {
-      formData.append('datePublication', 'non'); // Vous pouvez utiliser une valeur spécifique pour indiquer "Non"
-    }
+ if (this.selectedtitre!== 'none') {
+   formData.append('titre', this.titre);
+ }
+ else {
+   formData.append('titre', 'non');
+ }
+// Pour l'enregistrement commentaire
+ if (this.selectedcommentaire!== 'none') {
+   formData.append('commentaire', this.commentaire);
+ }
+ else {
+   formData.append('commentaire', 'non');
+ }
+ // Pour l'enregistrement photo
+ if (this.selectedphoto !== 'none') {
+   formData.append('photo', file);
+ }
+ else {
+   formData.append('photo', 'non');
+ }
+   // Pour l'enregistrement du rang
+   if (this.selectedrang !== 'none') {
+     formData.append('rangpub', this.rangpub);
+   }
+   else {
+     formData.append('rangpub', '50');
+   }
 
-      // pour la date de fin
-    if (this.selectedDateOptionfin !== 'none') {
-      formData.append('datefin', this.datefin);
-    } else {
-      formData.append('datefin', 'non'); // Vous pouvez utiliser une valeur spécifique pour indiquer "Non"
-    }
+    // Pour l'enregistrement du contact
+    if (this.selectedcontact !== 'none') {
+     formData.append('contact', this.contact);
+   }
+   else {
+     formData.append('contact', '0');
+   }
+   // Pour l'enregistrement du longitude
+   if (this.selectedlongitude !== 'none') {
+     formData.append('longitude', this.longitude);
+   }
+   else {
+     formData.append('longitude', 'non');
+   }
+   // Pour l'enregistrement du latitude
+   if (this.selectedlatitude !== 'none') {
+     formData.append('latitude', this.latitude);
+   }
+   else {
+     formData.append('latitude', 'non');
+   }
+// pour la date de debut
+ if (this.selectedDateOptiondeb !== 'none') {
+   formData.append('datePublication', this.datePublication);
+ } else {
+   formData.append('datePublication', 'non'); // Vous pouvez utiliser une valeur spécifique pour indiquer "Non"
+ }
+
+   // pour la date de fin
+ if (this.selectedDateOptionfin !== 'none') {
+   formData.append('datefin', this.datefin);
+ } else {
+   formData.append('datefin', 'non'); // Vous pouvez utiliser une valeur spécifique pour indiquer "Non"
+ }
+
   const loading = await this.loadingCtrl.create({
     message: 'Rechargement...',
    spinner:'lines',

@@ -12,7 +12,7 @@ export class ApiService {
    adr_web: string='http://localhost:80';
    adr_mobile: string='http://192.168.1.65:80';
 
-   base_url = this.adr_web;
+   base_url = this.adr_mobile;
    constructor(public http: HttpClient)
    {
 

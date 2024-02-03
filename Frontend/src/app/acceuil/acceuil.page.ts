@@ -1,6 +1,6 @@
 import { CommentaireService } from './CommentaireService';
 import { ListeUserPage } from './../liste-user/liste-user.page';
-import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { App } from '@capacitor/app';
 import { AlertController, IonList, LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
@@ -60,6 +60,42 @@ export class AcceuilPage implements OnInit {
     isLiked = false;
     public countdown: string;
 
+    private observer: IntersectionObserver;
+
+
+    ngAfterViewInit() {
+      this.ngZone.runOutsideAngular(() => {
+        this.observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.playVideo();
+            } else {
+              this.pauseVideo();
+            }
+          });
+        }, { threshold: 0.5 });
+
+        this.observer.observe(this.el.nativeElement);
+      });
+    }
+
+    ngOnDestroy() {
+      if (this.observer) {
+        this.observer.disconnect();
+      }
+    }
+
+    playVideo() {
+      console.log('Play Video');
+      this.el.nativeElement.play();
+    }
+
+    pauseVideo() {
+      console.log('Pause Video');
+      this.el.nativeElement.pause();
+    }
+
+
     shouldBlink(countdown: string): boolean {
       // Ajoutez la logique pour déterminer si le texte doit clignoter
       // Vous pouvez vérifier la condition spécifique que vous souhaitez ici
@@ -84,7 +120,8 @@ export class AcceuilPage implements OnInit {
       private zone: NgZone,
       private appRef: ApplicationRef,
       private routerOutlet: IonRouterOutlet,
-      private commentaireService: CommentaireService
+      private commentaireService: CommentaireService,
+      private el: ElementRef, private ngZone: NgZone
       )
     {
       this.getpub();

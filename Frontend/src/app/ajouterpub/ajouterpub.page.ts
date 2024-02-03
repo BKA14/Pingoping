@@ -12,7 +12,6 @@ import { LoadingController } from '@ionic/angular';
 export class AjouterpubPage implements OnInit {
   verifieForm: FormGroup;
 
-
  id:any;
  annee_entreprise:any;
  titre:any;
@@ -105,7 +104,6 @@ updateDateFin(event: any) {
   this.datefin = event.detail.value;
 }
 
-
 updateDateOptionfin(event: any) {
   this.selectedDateOptionfin = event.detail.value;
 }
@@ -113,7 +111,6 @@ updateDateOptionfin(event: any) {
 updateDateOptiondeb(event: any) {
   this.selectedDateOptiondeb = event.detail.value;
 }
-
 
 async addpub() {
   const file: File = this.selectedFile;
