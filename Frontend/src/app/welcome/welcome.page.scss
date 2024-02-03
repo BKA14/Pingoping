@@ -263,12 +263,25 @@ ion-tab-button {
 }
 
 .menu{
-border-radius: 12px;
-}
+  border-radius: 12px;
+  height: 32px;
+  }
 
-.custom-icon {
-color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
-}
+  .custom-icon {
+    color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
+    font-size: 22px;
+    }
+
+    .lignemenu {
+      background-color:  #2dd36f;
+      height: 2px; /* Ajustez la largeur de la ligne selon vos préférences */
+      width: auto;
+      --padding-start: 0;
+      --padding-end: 0;
+      margin: 10px;
+    }
+
+
 
 .custom-text {
   white-space: normal; /* Permet le retour à la ligne automatique */

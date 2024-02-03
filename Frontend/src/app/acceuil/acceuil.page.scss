@@ -1,6 +1,9 @@
-ion-content{
---ion-background-color:#fdfdfd;
+ion-content  {
+  --ion-background-color:#dfe0df
 }
+
+
+
 
 ion-item{
 --background: linear-gradient(#e86868, #88ed89) !important;
@@ -8,15 +11,43 @@ font-style: normal;
 font-family: "Roboto", sans-serif;
 }
 
+ion-card{
+  font-style: normal;
+  font-family: "Roboto", sans-serif;
+  border-radius: 18px;
+  }
+
+  .custom-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background-color: #dfe0df; /* Couleur de fond verte, ajustez selon vos besoins */
+
+  }
+
+
+  .custom-card {
+    margin-bottom: 20px; /* Espace entre les cartes, ajustez selon vos besoins */
+    border-radius: 2px; /* Coins arrondis, ajustez selon vos besoins */
+    box-shadow: 0 4px 8px rgba(43, 218, 116, 0.1); /* Ombre, ajustez selon vos besoins */
+    overflow: hidden; /* Pour masquer le débordement de la carte */
+    background-color: rgb(255, 255, 255); /* Couleur de fond verte, ajustez selon vos besoins */
+  }
+
+
+
+
 // Définissez la couleur de fond pour la classe .liked
 ion-button.likes.liked {
-  background-color: #6feca3; // Remplacez par la couleur souhaitée
+  background-color: #0eeb49; // Remplacez par la couleur souhaitée
+  transition: background-color 0.3s ease-in-out ;
 }
 
 
 .deconnect{
   float: right;
   }
+
 
 .utilisateur{
   float: left;
@@ -28,7 +59,7 @@ body {
 
 
 .list{
-
+  border-radius: 15px;
 font-style: normal;
 font-family: "Roboto", sans-serif;
 padding: 1px;
@@ -154,8 +185,6 @@ float: left;
 
   /* Dans votre fichier CSS ou SCSS */
 .custom-background {
-
-
   font-style: normal;
   text-align: center;
   font-family: "Roboto", sans-serif;
@@ -201,7 +230,6 @@ color: #ffffff;
   line-height: 22px;
   font-family: "Roboto", sans-serif;
   color: #ffffff;
-
   margin: 0;
 }
 
@@ -236,14 +264,45 @@ font-size: 17px;
 }
 
 /* Dans votre fichier CSS ou SCSS */
-.custom-image {
-width: auto; /* Largeur souhaitée */
-height: auto; /* Hauteur souhaitée */
-display: flex;
-justify-content: center;
-align-items: center;
-position: relative;
+/* Dans votre fichier CSS ou SCSS */
+ion-card-content{
+  padding: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
+
+
+/* Dans votre fichier CSS ou SCSS */
+.custom-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cela garantit que l'image couvre entièrement le conteneur, sans déformation */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+
+.facebook-style {
+  width: 100%;
+  height: 100%; /* Ajustez selon vos besoins pour maintenir le rapport hauteur/largeur de l'image */
+  object-fit: cover ;
+  border-radius: 0px; /* Coins arrondis, ajustez selon vos besoins */
+  box-shadow: 0 4px 8px rgba(4, 245, 80, 0.1); /* Ombre, ajustez selon vos besoins */
+  overflow: hidden;
+  padding: 0% !important;
+}
+
+.video-style {
+  width: 100%;
+  height: 100%; /* Ajustez selon vos besoins pour maintenir le rapport hauteur/largeur de l'image */
+  object-fit: cover ;
+  border-radius: 0px; /* Coins arrondis, ajustez selon vos besoins */
+  box-shadow: 0 4px 8px rgba(4, 245, 80, 0.1); /* Ombre, ajustez selon vos besoins */
+  overflow: hidden;
+}
+
 
 .transparent-button {
   background-color: transparent !important;
@@ -257,9 +316,7 @@ position: relative;
 
 
 /* Dans votre fichier CSS ou SCSS */
-.custom-icon {
-color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
-}
+
 
 /*
 .card-assombrie {
@@ -270,11 +327,30 @@ padding: 0px;
 
 .icon-right {
 float: right; /* Aligne l'icône à droite */
-
 }
 
-.couleurBouton{
+.deconte {
+float: right; /* Aligne l'icône à droite */
+background-color: #8ee092; /* Couleur de fond verte */
+color: rgb(24, 23, 23); /* Couleur du texte blanche */
+padding: 0px; /* Espacement intérieur pour plus de visibilité */
+border-radius: 1px; /* Coins arrondis */
+font-size: 15px; /* Taille de la police */
+margin: 10px;
+}
 
+.deconte.blinking-text {
+  animation: blinker 4s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+
+.couleurBouton{
 color: #02751b;
 --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
 font-family: "Roboto", sans-serif;
@@ -283,7 +359,24 @@ font-family: "Roboto", sans-serif;
 
 .menu{
 border-radius: 12px;
+height: 32px;
 }
+
+.custom-icon {
+  color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
+  font-size: 22px;
+  }
+
+  .lignemenu {
+    background-color:  #2dd36f;
+    height: 2px; /* Ajustez la largeur de la ligne selon vos préférences */
+    width: auto;
+    --padding-start: 0;
+    --padding-end: 0;
+    margin: 10px;
+  }
+
+
 
 .commentaire
 {
@@ -298,7 +391,7 @@ white-space: normal; /* Permet le retour à la ligne automatique */
 word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
 text-align: justify;
 font-size: medium;
-margin: 0;
+margin: 3%;
 
 --padding-start: 0;
 --padding-end: 0;
@@ -355,6 +448,16 @@ text-align: center;
   margin: 0;
   }
 
+  .lignemenu {
+    background-color:  #2dd36f;
+    height: 2px; /* Ajustez la largeur de la ligne selon vos préférences */
+    width: auto;
+    --padding-start: 0;
+    --padding-end: 0;
+    margin: 10px;
+  }
+
+
   .likes
   {
     background-color:  #fbf9f8;
@@ -362,12 +465,6 @@ text-align: center;
    --border-color: #4ca05e;
     }
 
-    .btnpub
-    {
-      background-color:  #fbf9f8;
-     color: #4ca05e;
-     --border-color: #4ca05e;
-      }
 
     .nombre_likes {
       font-size: 15px;
@@ -380,3 +477,54 @@ text-align: center;
         background-color: rgb(137, 207, 125); /* ou toute autre couleur que vous préférez */
         //color: white; /* ou toute autre couleur de texte que vous préférez */
       }
+
+      .btnpub {
+        margin-bottom: 10px; /* Ajoute un espacement entre les boutons */
+      }
+
+      /* Styliser le bouton de localisation */
+      .btnpub.location {
+        background-color: #fbf9f8;
+        color: #4ca05e;
+        --border-color: #4ca05e;
+      }
+
+      /* Styliser le bouton de contact WhatsApp */
+      .btnpub.contact {
+        background-color: #fbf9f8;
+        color: #4ca05e;
+        --border-color: #4ca05e;
+      }
+
+      /* Media queries pour ajuster le style en fonction de la taille de l'écran */
+      @media screen and (max-width: 600px) {
+        .btnpub {
+          width: 100%; /* Ajuster la largeur du bouton pour les petits écrans */
+        }
+      }
+
+      .likes {
+        background-color: #ffffff;
+        color: #4ca05e;
+        border: 1px solid #4ca05e;
+        border-radius: 5px;
+        padding: 4px 8px; /* Ajustez la taille du bouton */
+        cursor: pointer;
+      }
+
+      .likes ion-icon {
+        margin-right: 4px; /* Espacement entre l'icône et le texte */
+      }
+
+      /* Style spécifique pour la classe 'vert' */
+      .likes.vert {
+        background-color: #6ed384;
+        color: #e3dfdf;
+      }
+
+      /* Style pour placer le bouton à gauche */
+      .left-align {
+           text-align: left; /* Ajustez la marge à gauche selon vos besoins */
+      }
+
+

@@ -1,9 +1,7 @@
 
 <ion-header  >
 <ion-toolbar color="success" class="tool1" >
-  <br/> <br/>
-  <ion-title class="tool2">PINGOPING NEWS</ion-title>
-  <br/>
+<br>
   <div class="item-note"  *ngIf="grade === 'superadmin'">
   <ion-button color="light"  size="small" class="utilisateur"  [routerLink]="['/liste-user/']" >Utilisateurs</ion-button>
 </div>
@@ -11,6 +9,7 @@
   <div class="span1"  *ngIf="grade === 'admin' || grade === 'superadmin'">
     <ion-button  class="span1"  size="small"   [routerLink]="['/categorie/']" >Categorie</ion-button>
   </div>
+  <ion-title class="tool2">PINGOPING NEWS</ion-title>
 
     <br/>
     <div  style="display: flex;">
@@ -22,8 +21,6 @@
       </span>
     </div>
 
-
-
     <br>
 
 </ion-toolbar>
@@ -31,42 +28,47 @@
 </ion-header>
 
 
-<ion-content padding  class="custom-background"  [fullscreen]="true" style="--offset-bottom: 300px;">
+<ion-content padding  class="custom-background"  [fullscreen]="true" style="--offset-bottom: 300px;" >
 <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
   <ion-refresher-content></ion-refresher-content>
 </ion-refresher>
-<br>
+
 <ion-item class="span" *ngIf="grade === 'admin' || grade === 'superadmin'">
 
   <span class="span" color="success">Ajouter une entreprise </span>
   <ion-icon type="button" [routerLink]="['/ajouterpub/']" name="add-circle-outline" class="icon"></ion-icon>
 </ion-item>
 
-<ion-list class="list" #maliste>
-  <ion-item *ngFor="let pub of pub">
-    <ion-card >
+<div class="custom-container">
+  <div *ngFor="let pubs of pubs" class="custom-card">
+    <div *ngIf="pubs.countdown !== undefined && pubs.countdown !== null && pubs.countdown.trim() !== 'non'">
+      <ion-label class="deconte" [ngClass]="{'blinking-text': shouldBlink(pubs.countdown)}">  {{ pubs.countdown }}</ion-label>
+    </div>
+
+      <br>  <!-- Pour ne pas deplacer le titre -->
       <ion-card-header>
-        <ion-card-title class="titre" >{{pub.titre}}</ion-card-title>
+        <ion-card-title class="titre"   *ngIf="pubs.titre.toLowerCase().trim() !== 'non'  && pubs.titre !== null && pubs.titre !== undefined" >{{pubs.titre}}</ion-card-title>
       </ion-card-header>
+
+      <!-- Commentaire de la publicité -->
+      <p  [innerHTML]="commentaireService.sanitize(pubs.commentaire)" *ngIf="pubs.commentaire.toLowerCase().trim() !== 'non' && pubs.commentaire !== null && pubs.commentaire !== undefined"  class="commentaire" >{{pubs.commentaire}}</p>
+      <br> <br>
 
       <ion-card-content>
 
         <!-- Illustration (image ou vidéo) de la publicité -->
-        <ng-container *ngIf="pub.photo.includes('.jpg') || pub.photo.includes('.png')">
-          <ion-img class="custom-image"  src={{pub.photo}}></ion-img>
-        </ng-container>
-        <ng-container *ngIf="!pub.photo.includes('.jpg') && !pub.photo.includes('.png')">
-          <video class="custom-image" width="320" height="250" controls autoplay muted>
-            <source src={{pub.photo}} type="video/mp4">
-          </video>
+        <ng-container  *ngIf="(pubs.photo.includes('.jpg') || pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo.trim() !== null && pubs.photo.trim() !== undefined">
+          <ion-img class="custom-image facebook-style"  src={{pubs.photo}}></ion-img>
         </ng-container>
 
-        <br>
-        <!-- Commentaire de la publicité -->
-        <p class="commentaire" >{{pub.commentaire}}</p>
-        <br> <br>
-        <ion-label  class="localisation" *ngIf="pub.distanceToUser !== undefined " >
-          Vous êtes présentement à : {{ convertMetersToKilometers(pub.distanceToUser) }} du lieu.
+        <ng-container *ngIf="(!pubs.photo.includes('.jpg') && !pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo !== null && pubs.photo !== undefined">
+          <video  class="custom-image video-style"  controls autoplay muted>
+            <source src={{pubs.photo}} type="video/mp4">
+          </video>
+        </ng-container>
+ <br>
+        <ion-label  class="localisation" *ngIf="pubs.distanceToUser !== undefined && pubs.distanceToUser !== null  && pubs.longitude.toLowerCase().trim() !== 'non' && pubs.latitude.toLowerCase().trim() !== 'non'   " >
+          Vous êtes présentement à : {{ convertMetersToKilometers(pubs.distanceToUser) }} du lieu.
         </ion-label>
         <br>
         <p class="ligne"></p>
@@ -75,46 +77,44 @@
 
           &nbsp;
 
-        <ion-button *ngIf="pub.longitude && pub.latitude" class="btnpub" fill="outline" [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pub.latitude + ',' + pub.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pub.latitude + ',' + pub.longitude">
+        <ion-button *ngIf="pubs.longitude && pubs.latitude  && pubs.longitude !== undefined && pubs.latitude !== undefined  && pubs.longitude !== null && pubs.latitude !== null && pubs.longitude.toLowerCase().trim() !== 'non' && pubs.latitude.toLowerCase().trim() !== 'non' " class="btnpub location" fill="outline" [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pubs.latitude + ',' + pubs.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pubs.latitude + ',' + pubs.longitude">
           Localiser le lieu
           <ion-icon name="location-outline"></ion-icon>
         </ion-button>
 
-         &nbsp;
+         &nbsp; <br>
 
-        <ion-button *ngIf="pub.contact" class="btnpub" fill="outline" [href]="getWhatsAppLink(pub.contact)">
+        <ion-button *ngIf="pubs.contact &&  pubs.contact.trim() !== '0'  &&  pubs.contact !== undefined &&  pubs.contact !== null" class="btnpub contact" fill="outline" [href]="getWhatsAppLink(pubs.contact)">
           <ion-icon class="black" name="logo-whatsapp"></ion-icon>
           Contact-Info
         </ion-button>
-
+          <br>
           <br>
           <!-- Remplacez la section j'aime par ce code -->
-          <div>
-            <ion-label class="h2 light">{{ pub.likes }}</ion-label>
-            <ion-label class="h2 light">{{ etats.couleurbouton }}</ion-label>
+          <div class="left-align">
+            <ion-label class="h2 light"  *ngIf="pubs.likes !== null && pubs.likes !== undefined">{{ pubs.likes }}</ion-label>
+            <br>
+           <!--   <ion-label class="h2 light">{{ pubs.couleur}}</ion-label>-->
             <span style="margin-left: auto;">
-              <ion-button (click)="LikePub(pub)" class="likes" fill="outline"
-              [ngClass]="{'vert': etats.couleurbouton === 'oui'}">
+              <ion-button (click)="LikePub(pubs)" class="likes left-align " fill="outline" [ngClass]="{'vert': pubs.couleur.trim() === 'oui'}">
                 <ion-icon class="black" name="thumbs-up"></ion-icon>
                 J'aime
               </ion-button>
+
             </span>
           </div>
-
-
 
         <!-- Bouton "Voir" -->
         <!--  <ion-button expand="full"  class="couleurBouton">Voir</ion-button>-->
       </ion-card-content>
 
       <div class="icon-right" *ngIf="grade === 'admin' || grade === 'superadmin'">
-        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/updatepub/',pub.id]"></ion-icon>
-        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(pub.id)"></ion-icon>
+        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/updatepub/',pubs.id]"></ion-icon>
+        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(pubs.id)"></ion-icon>
       </div>
 
-    </ion-card>
-  </ion-item>
-</ion-list>
+    </div>
+  </div>
 
 
 
@@ -135,7 +135,7 @@
   <ion-icon class="custom-icon" name="home"></ion-icon>
 </ion-tab-button>
 <ion-tab-button (click)="service()" tab="contact">
-  <ion-icon  class="custom-icon" name="glasses"></ion-icon>
+  <ion-icon  class="custom-icon" name="apps"></ion-icon>
 </ion-tab-button>
 <ion-tab-button (click)="ping()" tab="settings">
   <ion-icon class="custom-icon" name="star"></ion-icon>
@@ -144,3 +144,4 @@
   <ion-icon class="custom-icon" name="information-circle"></ion-icon>
 </ion-tab-button>
 </ion-tab-bar>
+<p class="lignemenu"></p>

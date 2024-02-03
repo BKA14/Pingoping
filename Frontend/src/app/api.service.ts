@@ -10,17 +10,11 @@ export class ApiService {
 
   headers : HttpHeaders;
    adr_web: string='http://localhost:80';
-   adr_mobile: string='http://192.168.1.68:80';
+   adr_mobile: string='http://192.168.1.65:80';
 
    base_url = this.adr_web;
    constructor(public http: HttpClient)
    {
-
-  this.headers = new HttpHeaders();
-  this.headers.append("Accept", 'application/json');
-  this.headers.append('Content-Type', 'application/json');
-  this.headers.append('Access-Control-Allow-Origin', '*');;
-  this.headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
 
    }
 
@@ -40,12 +34,11 @@ return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/create.php',data
 .pipe(retry(0), catchError(this.handleError));
 }
 
-addpub(data) {
-  return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/addpub.php',data)
-  .pipe(timeout(15000))
-  .pipe(retry(0), catchError(this.handleError));
-  }
-
+addpub(formData: FormData) {
+  return this.http.post(this.base_url + '/Projet_ Lokaliser/Backend/addpub.php', formData)
+    .pipe(timeout(15000))
+    .pipe(retry(0), catchError(this.handleError));
+}
 
 addentreprises(data) {
   return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//create.php',data)
@@ -80,6 +73,7 @@ getpub(){
   .pipe(timeout(15000))
   .pipe(retry(0), catchError(this.handleError));
   }
+
 
   getlivraison(){
     return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getlivraison.php')
@@ -159,6 +153,8 @@ presentAlert(id){
     .pipe(timeout(15000))
     .pipe(retry(1), catchError(this.handleError))
     }
+
+
     presentAlert3(id){
       return this.http.delete(this.base_url+'/Projet_ Lokaliser/Backend/delete3categorie.php?id='+id)
       .pipe(timeout(15000))
@@ -409,11 +405,12 @@ presentAlert(id){
     .pipe(retry(0), catchError(this.handleError))
   }
 
-  updatepub(id,data){
-    return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatepub.php?id='+id,data)
-    .pipe(timeout(15000))
-    .pipe(retry(0), catchError(this.handleError))
+  updatepub(id, formData) {
+    return this.http.post(`${this.base_url}/Projet_ Lokaliser/Backend/updatepub.php?id=${id}`, formData)
+      .pipe(timeout(15000))
+      .pipe(retry(0), catchError(this.handleError));
   }
+
 
   updatecategorie(id,data){
     return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatecategorie.php?id='+id,data)

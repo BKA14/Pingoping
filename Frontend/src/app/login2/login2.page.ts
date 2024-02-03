@@ -71,10 +71,8 @@ email_entreprise:any;
      }
      if (res===0)
      {
-
       alert('Erreur email ou mot de passe incorrect');
       this.router.navigateByUrl('/login2');
-
     }
 
     this.setsession();
@@ -83,7 +81,7 @@ email_entreprise:any;
     }
     ,(error: any) => {
       loading.dismiss();
-      alert('Erreur de connexion avec le serveur, veuillez réessayer ou contactez nous ! : ' + error.error); // Afficher le message d'erreur de l'objet error
+      alert('Erreur de connexion avec le serveur, veuillez réessayer ou contactez nous ! : '); // Afficher le message d'erreur de l'objet error
      console.log("ERROR ===",error);
     })
 

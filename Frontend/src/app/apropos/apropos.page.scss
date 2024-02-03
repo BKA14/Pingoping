@@ -53,11 +53,22 @@ text-align: center;
         border: 1px solid #ECEEEF;
       }
 
-      .custom-icon {
-        color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
-      }
 
 
-      .menu{
-        border-radius: 12px;
-        }
+.menu{
+  height: 44px;
+  }
+
+  .custom-icon {
+    color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
+    font-size: 22px;
+    }
+
+    .lignemenu {
+      background-color:  #2dd36f;
+      height: 2px; /* Ajustez la largeur de la ligne selon vos préférences */
+      width: auto;
+      --padding-start: 0;
+      --padding-end: 0;
+      margin: 10px;
+    }

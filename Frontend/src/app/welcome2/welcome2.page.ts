@@ -12,36 +12,36 @@ export class Welcome2Page implements OnInit {
   term;
   handlerMessage = '';
   roleMessage = '';
-  
+
   nom:any;
    annee:any;
    responsable:any;
    contact:any;
    entreprises: any = [];
   navCtrl: any;
-   
-  
+
+
     constructor(public _apiService: ApiService,
-      private alertController: AlertController, 
+      private alertController: AlertController,
       private route: ActivatedRoute,
       private router: Router,
-      private loadingCtrl: LoadingController) 
-    { 
+      private loadingCtrl: LoadingController)
+    {
       this.getentreprises();
-      
+
     }
-  
+
    addEntreprise(){
    let data = {
     annee: this.annee,
     nom: this.nom,
     responsable: this.responsable,
     contact: this.contact,
-  
+
    }
    this._apiService.addentreprise(data).subscribe((res:any) => {
     console.log("SUCCESS ===",res);
-  
+
      this.annee ='';
      this.nom ='';
      this.responsable ='';
@@ -53,7 +53,7 @@ export class Welcome2Page implements OnInit {
     console.log("ERROR ===",error);
    })
    }
-   
+
   getentreprises(){
     this._apiService.getentreprises().subscribe((res:any) => {
       console.log("SUCCESS ===",res);
@@ -62,7 +62,7 @@ export class Welcome2Page implements OnInit {
       alert('Erreur de connection actualiser');
       //console.log("ERREUR ===",error);
   })
-  
+
   }
 
   go(){
@@ -78,8 +78,8 @@ export class Welcome2Page implements OnInit {
     e.target.complete();
   }, 1500);
   }
-  
-  
+
+
   async presentAlert(id) {
     const alert = await this.alertController.create({
       header: 'Etes-vous sur de vouloir supprimer cette entreprise ?',
@@ -97,7 +97,6 @@ export class Welcome2Page implements OnInit {
           handler: () => {
             this._apiService.presentAlert(id).subscribe((res:any)  => {
               this.getentreprises();
-              
             });
         },
         },
@@ -115,15 +114,14 @@ export class Welcome2Page implements OnInit {
 
     loading.present();
     //this.router.navigateByUrl('/welcome')
-    this.router.navigateByUrl('/welcome');
+    this.router.navigateByUrl('/acceuil');
     //this.navCtrl.setRoot('/welcome');
     this.getentreprises();
   }
-  
+
   ngOnInit()
   {}
-  
+
   }
-  
-  
-  
+
+

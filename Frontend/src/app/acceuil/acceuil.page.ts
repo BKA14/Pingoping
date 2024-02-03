@@ -1,12 +1,17 @@
+import { CommentaireService } from './CommentaireService';
 import { ListeUserPage } from './../liste-user/liste-user.page';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { App } from '@capacitor/app';
 import { AlertController, IonList, LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import { DistanceCalculatorService } from './distance-calculator.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { interval } from 'rxjs';
+import { ApplicationRef } from '@angular/core';
+import { IonRouterOutlet } from '@ionic/angular';
+import { filter } from 'rxjs/operators';
 
 
 
@@ -17,6 +22,7 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 
 export class AcceuilPage implements OnInit {
+
 
   term;
   handlerMessage = '';
@@ -40,19 +46,32 @@ export class AcceuilPage implements OnInit {
   numuser: any;
   categorie: any = [];
    pub: any = [];
+   pubs: any = [];
    etats: any = [];
+   etats1: any = [];
+   etatpub: any = [];
    pubvideo: any = [];
     navCtrl: any;
-    etat : any;
 
     etatid: any;
     pubid:any;
     idpub: any;
 
     isLiked = false;
+    public countdown: string;
+
+    shouldBlink(countdown: string): boolean {
+      // Ajoutez la logique pour déterminer si le texte doit clignoter
+      // Vous pouvez vérifier la condition spécifique que vous souhaitez ici
+      return countdown.trim() === 'Événement en cours!';
+    }
+
+    // Date de l'événement (remplacez cela par votre propre logique pour récupérer la date)
+
 
 
     public progress = 0;
+  etatService: any;
 
     constructor(public _apiService: ApiService,
       private alertController: AlertController,
@@ -62,90 +81,85 @@ export class AcceuilPage implements OnInit {
       public loadingController: LoadingController,
       private distanceCalculatorService: DistanceCalculatorService,
       private cdr: ChangeDetectorRef,
+      private zone: NgZone,
+      private appRef: ApplicationRef,
+      private routerOutlet: IonRouterOutlet,
+      private commentaireService: CommentaireService
       )
     {
+      this.getpub();
+      this.getUserLocation();
+      this.getcategorie();
+      this.getsessionuser();
+      this.getetat();
+      this.pub2();
+      this.getpub();
+
+
+    }
+
+
+ionViewWillEnter() {
 
       this.getpub();
       this.getUserLocation();
       this.getcategorie();
       this.getsessionuser();
+      this.getetat();
+      this.pub2();
+      this.getpub();
 
 
-    }
+}
 
+    intervale() {
+      // Rafraîchir toutes les 0.4 secondes
+      interval(90000).subscribe(() => {
+        // this.pub2();
+         this.getpub();
+         this.getetat();
+         this.getpub();
+         this.getetat();
+         this.getpub();
+         this.getetat();
 
-
-    LikePub2(pub): void {
-      this._apiService.getetat().subscribe((res: any) => {
-        console.log("SUCCESS ==", res);
-
-        this.pubid = pub.id;
-
-        // Supposons que les données contiennent un tableau d'états
-        const etatsArray = res;
-
-        let conditionSatisfaite = false; // Initialisation à false avant la boucle
-
-        // Utilisation d'une boucle for...of pour parcourir les éléments du tableau
-        for (const etat of etatsArray) {
-          // ... (votre code à l'intérieur de la boucle)
-
-          // Assigner les valeurs à des variables locales
-          this.etatid = etat.id;
-          console.log("SUCCESS ==", etat.id);
-          const etatIdPub = etat.idpub;
-          const etatContactUser = etat.contactuser;
-          const etatIdUser = etat.iduser;
-          const etatEtat = etat.etat;
-
-          console.log("pudid 2 ===", etatIdPub, this.pubid, etat.id , this.iduser);
-
-          // Conditions pour vérifier les états
-          if (
-            this.pubid === etatIdPub &&
-            this.numuser === etatContactUser &&
-            this.iduser === etatIdUser &&
-            etatEtat.trim() === 'non'
-          ) {
-            this.likePublication(pub);
-            this.updateetatlikes2();
-            conditionSatisfaite = true;
-            break; // Sortir de la boucle si une condition est satisfaite
-          } else if (
-            this.pubid === etatIdPub &&
-            this.numuser === etatContactUser &&
-            this.iduser === etatIdUser &&
-            etatEtat.trim()  === 'oui'
-          ) {
-            conditionSatisfaite = true;
-            this.dislikePublication(pub);
-            this.updateetatlikes();
-            break; // Sortir de la boucle si une condition est satisfaite
-          }
-        }
-
-        // Réinitialisation de conditionSatisfaite à false après la boucle
-
-
-        // Si aucune condition n'est satisfaite dans la boucle, exécuter ces actions
-        if (!conditionSatisfaite) {
-          this.addetatlikes();
-          this.likePublication(pub);
-        }
       });
     }
 
+    ngOnInit() {
+      this.reloadPage();
+      this.updateCountdownForAds() ;
+
+      // Mettez à jour le compte à rebours chaque seconde
+      setInterval(() => {
+       this.updateCountdownForAds() ;
+       // this.openUrl() ;
+      }, 1000);
+    }
 
 
 
-    LikePub(pub): void {
-      this._apiService.getetat().subscribe((res: any) => {
-        console.log("SUCCESS ==", res);
+    reloadPage() {
+      //window.location.reload();
+      this.getpub();
+      this.getetat();
+      this.actualiser();
+    }
 
-        this.pubid= pub.id;
+
+    actualiser(){
+
+   // this.pub2();
+    this.getpub();
+      this.getetat();
+
+    }
+    async LikePub3(pubs): Promise<void> {
+
+        this.pubid= pubs.id;
 
         // Supposons que les données contiennent un tableau d'états
-        const etatsArray = res;
+        const etatsArray = this.etats;
 
         let conditionSatisfaite = false;
 
@@ -153,6 +167,7 @@ export class AcceuilPage implements OnInit {
             const etat = etatsArray[i];
 
             // Assigner les valeurs à des variables locales
+
             this.etatid = etat.id;
             console.log("SUCCESS ==", etat.id);
             const etatIdPub = etat.idpub;
@@ -162,94 +177,270 @@ export class AcceuilPage implements OnInit {
 
             console.log("pudid 2 ===", etatIdPub, this.pubid, etat.id , this.iduser);
 
+          // Conditions pour vérifier les états
+          if (
+            this.pubid === etatIdPub &&
+            this.numuser === etatContactUser &&
+            this.iduser === etatIdUser &&
+            etatEtat.trim() === 'non'
+          ) {
+            // Mettre à jour le modèle après l'ajout de l'état
+
+            this.updateView(this.pubs);  // Mettre à jour la vue ici
+            this.likePublication(pubs);
+            this.updateetatlikes2();
+            if (pubs.etat.etat) {
+              pubs.etat.etat = 'oui'; // Affecter la valeur 'non' à l'état de la publicité
+                                 }
+              console.log(pubs.etat.etat);
+            conditionSatisfaite = true;
+            break; // Sortir de la boucle si une condition est satisfaite
+          } else if (
+            this.pubid === etatIdPub &&
+            this.numuser === etatContactUser &&
+            this.iduser === etatIdUser &&
+            etatEtat.trim()  === 'oui'
+          ) {
+
+            conditionSatisfaite = true;
+            this.dislikePublication(pubs);
+            this.updateetatlikes();
+            if (pubs.etat.etat) {
+              pubs.etat.etat = 'non'; // Affecter la valeur 'non' à l'état de la publicité
+                                 }
+              console.log(pubs.etat.etat);
+            break; // Sortir de la boucle si une condition est satisfaite
+          }
+        }
+
+
+        // Réinitialisation de conditionSatisfaite à false après la boucle
+
+        // Si aucune condition n'est satisfaite dans la boucle, exécuter ces actions
+        if (!conditionSatisfaite) {
+          this.addetatlikes()
+            .then(() => {
+              // Mettre à jour le modèle après l'ajout de l'état
+              pubs.etat = { etat: 'oui' };
+              this.updateView(this.pubs);  // Mettre à jour la vue ici
+              this.likePublication(pubs);
+
+            })
+            .catch(error => {
+              console.error("Erreur lors de l'ajout du like :", error);
+            });
+        }
+
+    }
+
+/*
+   Ceci est un commentaire
+   sur plusieurs lignes
+*/
+
+    async getetat(){
+      this.zone.run(async () => {
+      const loading = await this.loadingCtrl.create({
+        message: 'Rechargement...',
+        spinner: 'lines',
+        cssClass: 'custom-loading',
+      });
+
+      loading.present();
+
+      this._apiService.getetat().subscribe((res:any) => {
+        console.log("SUCCESS ===",res);
+        this.etats = res;
+        loading.dismiss();
+       },(error: any) => {
+        console.log("Erreur de connection ",error);
+        this.cdr.detectChanges();
+        loading.dismiss();
+    })
+  });
+    }
+
+
+
+    async LikePub(pubs): Promise<void> {
+
+
+      this.pubid= pubs.id;
+
+      //   console.log('Valeur de pub jointure etat :',  pubs.etat.etat);
+
+
+       this._apiService.getetat().subscribe(async (res:any) => {
+         console.log("SUCCESS ===",res);
+          this.etats1 = res;
+
+
+
+        // Supposons que les données contiennent un tableau d'états
+        const etatsArray = this.etats1;
+
+        let conditionSatisfaite = false;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          for (let i = 0; i < etatsArray.length; i++) {
+            const etat = etatsArray[i];
+
+            // Assigner les valeurs à des variables locales
+
+            this.etatid = etat.id;
+            console.log("SUCCESS ==", etat.id);
+            console.log("SUCCESS ==", pubs.couleur);
+            const etatIdPub = etat.idpub;
+            const etatContactUser = etat.contactuser;
+            const etatIdUser = etat.iduser;
+            const etatEtat = etat.etat;
+
+            console.log("pudid 2 ===", etatIdPub, this.pubid, etat.id , this.iduser);
+            console.log( pubs.couleur);
             // Conditions pour vérifier les états
             if (
-              this.pubid.trim() === etatIdPub.trim() &&
-              this.numuser.trim() === etatContactUser.trim() &&
-              this.iduser.trim() === etatIdUser.trim() &&
-               etatEtat.trim() === 'non'
-               ) {
-              this.likePublication(pub);
-              this.updateetatlikes2();
+
+              (
+                this.pubid.trim() === etatIdPub.trim() &&
+                this.numuser.trim() === etatContactUser.trim() &&
+                this.iduser.trim() === etatIdUser.trim() &&
+                etatEtat.trim() === 'non' &&
+                pubs.couleur.trim() === 'non'
+              )
+
+            ) {
+               this.likePublication(pubs);
+               this.updateetatlikes2();
+              //  console.log(pubs.etat.etat);
+               pubs.couleur = 'oui'
+
+              //  console.log(pubs.etat.etat);
+              console.log("  il est passé ici  pour le non et devient oui");
               console.log(" etat est non et un j'aime effectué ");
               conditionSatisfaite = true;
               break; // Sortir de la boucle si une condition est satisfaite
             } else if (
-              this.pubid.trim() === etatIdPub.trim() &&
-              this.numuser.trim() === etatContactUser.trim() &&
-              this.iduser.trim() === etatIdUser.trim() &&
-              etatEtat.trim()  === 'oui'
-            ) {
+
+              (
+                this.pubid.trim() === etatIdPub.trim() &&
+                this.numuser.trim() === etatContactUser.trim() &&
+                this.iduser.trim() === etatIdUser.trim() &&
+                etatEtat.trim() === 'oui' &&
+                pubs.couleur.trim() === 'oui'
+              )
+            )
+            {
               conditionSatisfaite = true;
-              this.dislikePublication(pub);
-              console.log(" etat est oui et un j'aime retiré ");
+              this.dislikePublication(pubs);
               this.updateetatlikes();
+              console.log(this.etatpub);
+              pubs.couleur = 'non';
+
+            // console.log(pubs.etat.etat);
+              console.log(" etat est oui et un j'aime retiré ");
+              console.log("  il est passé ici  pour le oui et devient non");
+
               break; // Sortir de la boucle si une condition est satisfaite
             }
           }
 
           // Si aucune condition n'est satisfaite dans la boucle, exécuter ces actions
-          if (!conditionSatisfaite) {
-            this.addetatlikes();
-            console.log(" j'aime et nouveau etat ajouté ajouté ");
-            this.likePublication(pub);
+          if (!conditionSatisfaite &&  pubs.couleur.trim()==='premier') {
+              await  this.addetatlikes()
+             .then(async () => {
+              await  this.likePublication(pubs),
+               // Après avoir mis à jour vos données
+               this.cdr.markForCheck(),
+               this.appRef.tick()
+            })
+
+              .then(() => {
+                if ( pubs.couleur) {
+                  pubs.couleur = 'oui';
+                }
+                console.log( pubs.couleur);
+                console.log("  il est passé ici  pour le premier et devient oui");
+                this.cdr.detectChanges(); // Déclencher manuellement la détection de changement
+              })
+              .catch(error => {
+                console.error("Erreur lors de l'ajout du like :", error);
+              });
           }
-                });
+
+          // Forcer la détection des changements manuelle
+            this.cdr.detectChanges();
+          })
+
+
+          }
+
+
+              async dislikePublication(pubs) {
+                try {
+                  pubs.likes = parseInt(pubs.likes, 10);
+
+                  if (!isNaN(pubs.likes)) {
+                    // Incrémenter le nombre de likes
+                    pubs.likes -= 1;
+                    this.likes = pubs.likes;
+
+                    let data = {
+                      id: pubs.id,
+                      likes: this.likes
+                    };
+
+
+
+                    this._apiService.updatelikes(pubs.id, data).subscribe(
+                      (res: any) => {
+
+                        console.log("SUCCESS ===", res);
+                      },
+                      (error: any) => {
+
+                        console.error("Erreur de connexion", error);
+                        // Afficher un message d'erreur à l'utilisateur
+                        // Par exemple, à l'aide d'un service d'alerte
+                        this.showErrorMessage("Erreur lors de la mise à jour des likes.");
+                      }
+                    );
+                  } else {
+                    console.error("Erreur : pub.likes n'est pas un nombre valide.");
+                  }
+                } catch (error) {
+                  console.error("Erreur inattendue :", error);
+                  // Afficher un message d'erreur à l'utilisateur
+                  // Par exemple, à l'aide d'un service d'alerte
+                  this.showErrorMessage("Erreur inattendue lors du traitement.");
+                } finally {
+                  this.cdr.detectChanges();
+                }
+              }
+
+              // Fonction pour afficher un message d'erreur à l'utilisateur
+              showErrorMessage(message: string) {
+                // Utilisez un service d'alerte ou autre moyen pour afficher le message à l'utilisateur
+                console.error(message); // Vous pouvez également afficher dans la console pour le débogage
               }
 
 
 
-    async dislikePublication(pub) {
+    async likePublication(pubs) {
 
-      this.id = pub.id;
-      pub.likes = parseInt(pub.likes, 10);
 
-      if (!isNaN(pub.likes)) {
+      this.id = pubs.id;
+      pubs.likes = parseInt(pubs.likes, 10);
+
+      if (!isNaN(pubs.likes)) {
         // Incrémenter le nombre de likes
 
-          pub.likes -= 1;
-          this.likes= pub.likes;
-
-          console.log("Erreur de connection 1",this.id);
-      let data = {
-        id: this.id,
-        likes: this.likes
-                 }
-
- const loading = await this.loadingCtrl.create({
-        message: 'Rechargement...',
-       spinner:'lines',
-      // showBackdrop:false,
-        cssClass: 'custom-loading',
-      });
-
-      loading.present();
-      console.log("Erreur de connection 2", this.id);
-      this._apiService.updatelikes(this.id, data).subscribe((res:any) => {
-        loading.dismiss();
-        console.log("SUCCESS ===",res);
-
-      },(error: any) => {
-        loading.dismiss();
-        console.log("Erreur de connection",error);
-      })
-
-    }else {
-      console.error("Erreur : pub.likes n'est pas un nombre valide.");
-    }
-  }
-
-
-    async likePublication(pub) {
-
-      this.id = pub.id;
-      pub.likes = parseInt(pub.likes, 10);
-
-      if (!isNaN(pub.likes)) {
-        // Incrémenter le nombre de likes
-
-          pub.likes += 1;
-          this.likes= pub.likes;
+          pubs.likes += 1;
+          this.likes= pubs.likes;
 
           console.log("Erreur de connection 1",this.id);
       let data = {
@@ -257,27 +448,21 @@ export class AcceuilPage implements OnInit {
         likes: this.likes
       }
 
- const loading = await this.loadingCtrl.create({
-        message: 'Rechargement...',
-       spinner:'lines',
-      // showBackdrop:false,
-        cssClass: 'custom-loading',
-      });
-
-      loading.present();
       console.log("Erreur de connection 2", this.id);
-      this._apiService.updatelikes(this.id, data).subscribe((res:any) => {
-        loading.dismiss();
+      this._apiService.updatelikes(pubs.id, data).subscribe((res:any) => {
+
         console.log("SUCCESS ===",res);
 
       },(error: any) => {
-        loading.dismiss();
+
         console.log("Erreur de connection",error);
       })
 
     }else {
       console.error("Erreur : pub.likes n'est pas un nombre valide.");
     }
+    this.cdr.detectChanges();
+
   }
 
   async addetatlikes(){
@@ -290,97 +475,73 @@ export class AcceuilPage implements OnInit {
 
     }
 
-    console.log("SUCCESS ===",this.pubid);
-    const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
-     spinner:'lines',
-    // showBackdrop:false,
-      cssClass: 'custom-loading',
-    });
-
-    loading.present();
 
     this._apiService.addetatlikes(data).subscribe((res:any) => {
      console.log("SUCCESS ===",res);
       //window.location.reload();
-      loading.dismiss();
-      alert(' Nouveau etat ajoute avec success');
+
+      //alert('Nouveau etat ajoute avec success');
     },(error: any) => {
-      loading.dismiss();
+
      alert('Erreur de connection  nouveau etat non enregistre');
      console.log("ERROR ===",error);
     })
+    this.cdr.detectChanges();
    }
 
 
    async updateetatlikes(){
     let data = {
 
-     id: this.etatid,
-     iduser: this.iduser,
-     contactuser: this.numuser,
+     id: this.etatid.trim(),
+     iduser: this.iduser.trim(),
+     contactuser: this.numuser.trim(),
      etat: 'non',
-     pubid:this.pubid,
+     pubid:this.pubid.trim(),
 
     }
 
-    const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
-     spinner:'lines',
-    // showBackdrop:false,
-      cssClass: 'custom-loading',
-    });
-    loading.present();
 
+    console.log("SUCCESS ===",data.id, data.contactuser,data.etat,data.pubid,data.iduser);
     this._apiService.updateetatlikes(data.id,data).subscribe((res:any) => {
      console.log("SUCCESS ===",res);
       //window.location.reload();
-      loading.dismiss();
-      alert('Etat modifier avec success');
+
+      //alert('Etat modifier avec success');
     },(error: any) => {
-      loading.dismiss();
-     alert('Erreur de connection etat non modifier');
+
+    // alert('Erreur de connection etat non modifier');
      console.log("ERROR ===",error);
     })
+    this.cdr.detectChanges();
    }
 
 
    async updateetatlikes2(){
     let data = {
-
-     id: this.etatid,
-     iduser: this.iduser,
-     contactuser: this.numuser,
+     id: this.etatid.trim(),
+     iduser: this.iduser.trim(),
+     contactuser: this.numuser.trim(),
      etat: 'oui',
-     pubid:this.pubid,
-
+     pubid:this.pubid.trim(),
     }
 
-    const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
-     spinner:'lines',
-    // showBackdrop:false,
-      cssClass: 'custom-loading',
-    });
-    loading.present();
 
+    console.log("SUCCESS ===",data.id, data.contactuser,data.etat,data.pubid,data.iduser);
     this._apiService.updateetatlikes(data.id,data).subscribe((res:any) => {
      console.log("SUCCESS ===",res);
       //window.location.reload();
-      loading.dismiss();
-      alert('Etat modifier avec success');
+
+     // alert('Etat modifier avec success');
     },(error: any) => {
-      loading.dismiss();
-     alert('Erreur de connection etat non modifier');
+
+    // alert('Erreur de connection etat non modifier');
      console.log("ERROR ===",error);
     })
+    this.cdr.detectChanges();
+
    }
 
-
-
-    reloadPage() {
-      window.location.reload();
-    }
 
     getsession(){
      this.grade= (localStorage.getItem('grade'));
@@ -404,8 +565,6 @@ export class AcceuilPage implements OnInit {
            }
 
 
-
-
   async getpub(){
 
     const loading = await this.loadingCtrl.create({
@@ -423,6 +582,7 @@ export class AcceuilPage implements OnInit {
       this.pub = res;
       this.openUrl();
       this.couleurbtn();
+      this.pub2();
      this.latitude=rep.latitude;
      this.longitude=rep.longitude;
      loading.dismiss();
@@ -434,16 +594,18 @@ export class AcceuilPage implements OnInit {
      // console.log("ERREUR ===",error);
   })
 
-
   this.getsession();
   this.getsession1();
   this.getsessionuser();
+  this.cdr.detectChanges();
+
   }
 
 
   getWhatsAppLink(contact: string): string {
     const encodedContact = encodeURIComponent(contact);
     return `whatsapp://send?phone=${encodedContact}`;
+
   }
 
   getpubvideo(){
@@ -460,14 +622,19 @@ export class AcceuilPage implements OnInit {
   })
 
   this.getsession();
-  this.getsession1()
+  this.getsession1();
+  this.cdr.detectChanges();
+
   }
 
 
   refreshPage(e){
   setTimeout(() => {
     this.getpub();
+    this.pub2();
     this.getpubvideo();
+    this.getUserLocation();
+    this.cdr.detectChanges();
     this.getUserLocation();
     console.log('rafraichissement de la page');
     e.target.complete();
@@ -498,7 +665,7 @@ export class AcceuilPage implements OnInit {
        },(error: any) => {
 
         console.log("Erreur de connection ",error);
-
+        this.cdr.detectChanges();
     })
 
     }
@@ -514,6 +681,7 @@ export class AcceuilPage implements OnInit {
           let couleur = '';
 
 ///////////////////////////////////////////////////////////////////////////////
+
           // Itérer sur les états
           etats.forEach(async  (etat) => {
             const etatContactUser = etat.contactuser;
@@ -547,11 +715,109 @@ export class AcceuilPage implements OnInit {
       //    console.log(`La couleur du bouton est activée: ${couleur}`);
 
          // console.log(`La couleur du bouton est activée : ${publi.couleurbouton}`);
-
+         this.cdr.detectChanges();
         });
 
+    }
+
+    async pub2() {
+
+      this.zone.run(() => {
+        // Effectuer la jointure
+        const pubsWithEtat = this.pub.map(publicite => {
+          // Trouver l'état associé à la publicité actuelle
+          this.etatpub = this.etats.find(etat => etat.idpub.trim() === publicite.id.trim());
+
+
+          // Vérifier l'état et définir la couleur en conséquence
+          publicite.couleur = (
+            this.etatpub &&
+            this.iduser.trim() === this.etatpub.iduser.trim() &&
+            this.numuser.trim() === this.etatpub.contactuser.trim()
+           //  this.pubid.trim() === this.etatpub.idpub.trim()
+          ) ? (this.etatpub.etat.trim() === 'oui' ? 'oui' : 'non') : 'premier';
+
+          // Retourner l'objet avec l'état associé et la nouvelle propriété couleur
+          return { ...publicite, etat: this.etatpub, couleur: publicite.couleur };
+        });
+
+        // Mettre à jour le modèle après la jointure
+        this.pubs = pubsWithEtat;
+
+        // Afficher la valeur de la nouvelle propriété "couleur" pour la première pub dans le tableau
+        console.log('Valeur de pub jointure etat et couleur :', this.pubs[0].couleur);
+
+
+        this.updateView(this.pubs);
+        this.cdr.detectChanges();
+        this.cdr.markForCheck();
+        this.appRef.tick();
+      });
+    }
+
+
+    updateView(pubs) {
+      console.log('pub avec etat:', this.pubs.etat);
+
+      // Filtrer les publicités avec un état
+      const pubsWithEtat = this.pubs.filter(publicite => publicite.etat);
+
+      // Effectuer d'autres actions nécessaires pour mettre à jour votre modèle Ionic
+      console.log('pub avec etat:', pubsWithEtat);
+
+      // Forcer la détection de changement
+      this.cdr.detectChanges();
 
     }
+    async updateCountdownForAds() {
+      const now = new Date();
+
+      // Supposons que chaque publicité a une propriété 'date' représentant la date de début de l'événement
+      // et 'datefin' représentant la date de fin de l'événement
+
+      for (const pub of this.pubs) {
+        if (pub.date.toLowerCase().trim() === 'non' || pub.datefin.toLowerCase().trim() === 'non') {
+          pub.countdown = 'non';
+        } else {
+          const startDate = new Date(pub.date.trim());
+          const endDate = new Date(pub.datefin.trim());
+
+          if (now < startDate && startDate < endDate) {
+            // L'événement n'a pas encore commencé
+            const difference = startDate.getTime() - now.getTime();
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            pub.countdown = `${days}J - ${hours}h - ${minutes}m - ${seconds}s avant le début`;
+          } else if (now < endDate && startDate < endDate) {
+            // L'événement est en cours
+            const difference = endDate.getTime() - now.getTime();
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            pub.countdown =  'Événement en cours!';
+          }
+          else if ( endDate.getTime() === startDate.getTime() ) {
+            // La date a ete mal ajouté, la date de debut est supérieur a la date de fin
+            pub.countdown = 'non';
+          }
+          else if ( endDate < startDate ) {
+            // La date a ete mal ajouté, la date de debut est supérieur a la date de fin
+            pub.countdown = 'non';
+          }
+          else {
+            // L'événement est terminé
+            pub.countdown = 'Événement terminé';
+          }
+        }
+      }
+    }
+
+
 
 
 
@@ -578,7 +844,7 @@ export class AcceuilPage implements OnInit {
       //this.navCtrl.setRoot('/welcome2');
       // console.log("ERREUR ===",error);
    })
-
+   this.cdr.detectChanges();
       }
 
 
@@ -603,6 +869,7 @@ export class AcceuilPage implements OnInit {
         //this.navCtrl.setRoot('/welcome2');
         // console.log("ERREUR ===",error);
      })
+     this.cdr.detectChanges();
         }
 
 
@@ -630,6 +897,7 @@ export class AcceuilPage implements OnInit {
     ],
     });
   return alert.present();
+  this.cdr.detectChanges();
   }
 
   async presentAlertvideo(id) {
@@ -655,6 +923,7 @@ export class AcceuilPage implements OnInit {
     ],
     });
   return alert.present();
+  this.cdr.detectChanges();
   }
 
 
@@ -708,17 +977,7 @@ export class AcceuilPage implements OnInit {
     this.getpub();
   }
 
-  ionViewWillEnter()
-  {
-    this.getpub();
-    this.getpubvideo();
-  }
 
-  ngOnInit()
-  {
-    this.getpub();
-    this.getpubvideo();
-  }
 
   @ViewChild('maliste', {static: false}) list: IonList;
 
@@ -789,6 +1048,7 @@ try {
 } catch (error) {
   console.error('Erreur lors de la récupération des coordonnées:', error);
   return null;
+
 }
 
 }
@@ -804,7 +1064,7 @@ async openUrl() {
 
     const { userLatitude, userLongitude } = userLocationData;
 
-    this.pub.forEach(async (publi) => {
+    this.pubs.forEach(async (publi) => {
       const distance = this.distanceCalculatorService.haversineDistance(
         userLatitude,
         userLongitude,
@@ -840,6 +1100,7 @@ async openUrl() {
 
     return `${formattedDistance} km`;
   }
+
 
 
 }

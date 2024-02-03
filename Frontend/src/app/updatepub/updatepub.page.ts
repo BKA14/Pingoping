@@ -19,12 +19,24 @@ export class UpdatepubPage implements OnInit {
   titre:any;
   commentaire:any;
   photo:any;
-  bouton: any;
   contact: any;
   longitude: any;
   latitude: any;
   rangpub: any;
+  datePublication : any;
+  datefin: any;
+  date_deb:any;
+  date_de_fin: any;
+  selectedDateOptionfin: string = 'none';  // Option par défaut pour la date de début
+  selectedDateOptiondeb:  string = 'none';  // Option par défaut pour la date de début
+  selectedphoto : string = 'none'; // Option par défaut pour la photo
+
   entreprises: any = [];
+
+  selectedFile: File;
+
+
+
 
 
   constructor(
@@ -42,43 +54,6 @@ export class UpdatepubPage implements OnInit {
 
    }
 
-
-   async addpub(){
-     let data = {
-      id: this.id,
-      titre: this.titre,
-      commentaire: this.commentaire,
-      photo: this.photo,
-      bouton:this.bouton,
-      rangpub: this.rangpub,
-     }
-
-     const loading = await this.loadingCtrl.create({
-       message: 'Rechargement...',
-      spinner:'lines',
-     // showBackdrop:false,
-       cssClass: 'custom-loading',
-     });
-     loading.present();
-
-     this._apiService.addpub(data).subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
-       this.id ='';
-       this.titre ='';
-       this.commentaire ='';
-       this.photo ='';
-       this.bouton ='';
-       this.rangpub ='';
-       //window.location.reload();
-       loading.dismiss();
-       this.router.navigateByUrl('/acceuil');
-       alert('pub ajoute avec success');
-     },(error: any) => {
-       loading.dismiss();
-      alert('Erreur de connection pub non enregistre');
-      console.log("ERROR ===",error);
-     })
-    }
 
     getentreprises(){
      this._apiService.getentreprises().subscribe((res:any) => {
@@ -112,33 +87,101 @@ export class UpdatepubPage implements OnInit {
       this.titre = pub.titre;
       this.commentaire = pub.commentaire;
       this.photo = pub.photo;
-      this.bouton = pub.bouton;
       this.rangpub = pub.rangpub;
       this.contact = pub.contact;
       this.longitude = pub.longitude;
       this.latitude = pub.latitude;
+      this.datePublication = pub.date;
+      this.datefin = pub.datefin;
+      this.photo = pub.photo;
+
+      this.date_deb= pub.date;
+      this.date_de_fin = pub.datefin;
 
      },(error: any) => {
       console.log("Erreur de connection",error);
   })
 }
 
+updatephoto(event: any) {
+  this.selectedphoto = event.detail.value;
+}
+
+updateDate(event: any) {
+  this.datePublication = event.detail.value;
+}
+updateDateFin(event: any) {
+  this.datefin = event.detail.value;
+}
+
+
+updateDateOptionfin(event: any) {
+  this.selectedDateOptionfin = event.detail.value;
+}
+
+updateDateOptiondeb(event: any) {
+  this.selectedDateOptiondeb = event.detail.value;
+}
+
+
+   // Ajoutez cette méthode pour gérer la sélection de fichier
+   onFileSelected(event: any): void {
+    const files: FileList = event.target.files;
+
+    if (files.length > 0) {
+      // Assurez-vous que this.selectedFile contient le fichier sélectionné
+      this.selectedFile = files[0];
+
+      // Affichez des informations sur le fichier dans la console (optionnel)
+      console.log('Nom du fichier:', this.selectedFile.name);
+
+      if (this.selectedFile.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          const imagePreview = e.target.result;
+          console.log('Aperçu de l\'image:', imagePreview);
+          // Vous pouvez affecter imagePreview à une variable de modèle pour l'afficher dans votre template.
+        };
+        reader.readAsDataURL(this.selectedFile);
+      }
+    }
+
+   }
 
 
    async updatepub(){
 
-    let data = {
-        id: this.id,
-        titre: this.titre,
-        commentaire: this.commentaire,
-        photo: this.photo,
-        bouton:this.bouton,
-        rangpub:this.rangpub,
-        contact: this.contact,
-        longitude: this.longitude,
-        latitude: this.latitude,
-               }
+    const file: File = this.selectedFile;
 
+
+    const formData = new FormData();
+    formData.append('id_pub', this.id);
+    formData.append('titre', this.titre);
+    formData.append('commentaire', this.commentaire);
+    // Pour l'enregistrement photo
+    if (this.selectedphoto !== 'none') {
+      formData.append('photo', file);
+    }
+    else {
+      formData.append('photo', 'non');
+    }
+    formData.append('rangpub', this.rangpub);
+    formData.append('contact', this.contact);
+    formData.append('longitude', this.longitude);
+    formData.append('latitude', this.latitude);
+
+    if (this.selectedDateOptiondeb !== 'none') {
+      formData.append('datePublication', this.datePublication);
+    } else {
+      formData.append('datePublication', 'non'); // Vous pouvez utiliser une valeur spécifique pour indiquer "Non"
+    }
+
+      // pour la date de fin
+    if (this.selectedDateOptionfin !== 'none') {
+      formData.append('datefin', this.datefin);
+    } else {
+      formData.append('datefin', 'non'); // Vous pouvez utiliser une valeur spécifique pour indiquer "Non"
+    }
   const loading = await this.loadingCtrl.create({
     message: 'Rechargement...',
    spinner:'lines',
@@ -146,8 +189,9 @@ export class UpdatepubPage implements OnInit {
     cssClass: 'custom-loading',
   });
 
+  console.log('formdata ===', formData);
   loading.present();
-  this._apiService.updatepub(this.id,data).subscribe((res:any) => {
+  this._apiService.updatepub(this.id,formData).subscribe((res:any) => {
     console.log("SUCCESS ===",res);
     //this.getentreprisee(this.id);
 
@@ -163,13 +207,13 @@ export class UpdatepubPage implements OnInit {
  async showLoading() {
    const loading = await this.loadingCtrl.create({
      message: 'Rechargement...',
-     duration: 1500,
      cssClass: 'custom-loading',
    });
 
    loading.present();
-   this.addpub();
+
    this.updatepub();
+   loading.dismiss();
    //this.router.navigateByUrl('/welcome')
    this.router.navigateByUrl('/welcome');
    //this.navCtrl.setRoot('/welcome');
@@ -185,39 +229,29 @@ export class UpdatepubPage implements OnInit {
 
    titre: new FormControl('', [
      Validators.required,
-     Validators.minLength(2),
+
    ]),
 
        commentaire: new FormControl('', [
-         Validators.required,
-         Validators.minLength(2),
-       ]),
-
-       photo: new FormControl('', [
-         Validators.required,
-         Validators.minLength(2),
-       ]),
-
-       bouton: new FormControl('', [
          Validators.required,
 
        ]),
 
        rangpub: new FormControl('', [
-
+        Validators.required,
 
       ]),
 
       contact: new FormControl('', [
-
+        Validators.required,
       ]),
 
       longitude: new FormControl('', [
-
+        Validators.required,
       ]),
 
       latitude: new FormControl('', [
-
+        Validators.required,
       ]),
 
    });

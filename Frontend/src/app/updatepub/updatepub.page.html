@@ -19,37 +19,105 @@
       <ion-label position="floating" class="h2"> titre de la pub</ion-label><br/>
       <ion-input [(ngModel)]="titre"  formControlName="titre"  type="text" ></ion-input>
     </ion-item>
-    <ion-label color="danger" *ngIf="verifieForm.get('titre').touched && verifieForm.get('titre').errors?.required">Veuillez entrer le titre de la publicité</ion-label>
-    <ion-label color="danger" *ngIf="verifieForm.get('titre').touched && verifieForm.get('titre').hasError('minlength')">Verifier le titre</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('titre').touched && verifieForm.get('titre').errors?.required">Veuillez entrer le titre de la publicité, ou "non" par defaut</ion-label>
     <br/>
 
     <ion-item>
       <ion-label position="floating" class="h2"> commentaire sur la pub</ion-label><br/>
       <ion-input [(ngModel)]="commentaire" formControlName="commentaire" type="text" ></ion-input>
     </ion-item>
-    <ion-label color="danger" *ngIf="verifieForm.get('commentaire').touched && verifieForm.get('commentaire').errors?.required">Veuillez entrer le commentaire de la publicité</ion-label>
-    <ion-label color="danger" *ngIf="verifieForm.get('commentaire').touched && verifieForm.get('commentaire').hasError('minlength')">Verifier le commentaire</ion-label>
-    <br/>
+    <ion-label position="floating"color="warning"  class="h2">Si vous avez un lien de redirection, mettez le lien complet dans le commentaire</ion-label><br/><br/>
+    <ion-label color="danger" *ngIf="verifieForm.get('commentaire').touched && verifieForm.get('commentaire').errors?.required">Veuillez entrer le commentaire de la publicité, ou entrée "non" par defaut</ion-label>
+    <br/><br/>
+
 
     <ion-item>
-      <ion-label position="floating" class="h2"> Lien photo illutrative</ion-label><br/>
-      <ion-input [(ngModel)]="photo" formControlName="photo" type="text" ></ion-input>
+      <ion-segment (ionChange)="updatephoto($event)">
+        <ion-segment-button value="pas_de_photo">
+          <ion-label> Une photo</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
     </ion-item>
-    <ion-label color="photo" *ngIf="verifieForm.get('photo').touched && verifieForm.get('photo').errors?.required">Veuillez entrer le lien de la photo</ion-label>
-    <ion-label color="photo" *ngIf="verifieForm.get('photo').touched && verifieForm.get('photo').hasError('minlength')">Verifier le lien de la photo</ion-label>
     <br/>
+    <ion-item>
+      <ion-label *ngIf="selectedphoto !== 'none'" position="floating" class="h2">Lien illustratif (photo ou vidéo)</ion-label><br/>
+      <input   type="file" accept="image/*,video/*"   (change)="onFileSelected($event)" />
+    </ion-item>
+    <br/>
+
+
+
+
+
+    <ion-item>
+      <ion-label position="floating" class="h2">Date début</ion-label><br/>
+      <br>
+      <ion-label position="floating" class="h2"> Ancienne date début : {{date_deb}}</ion-label><br/>
+      <br/>
+
+      <ion-datetime
+        *ngIf="selectedDateOptiondeb !== 'none'"
+
+        displayFormat="DD/MM/YYYY"
+        (ionChange)="updateDate($event)"
+      ></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-segment (ionChange)="updateDateOptiondeb($event)">
+        <ion-segment-button value="pas_de_date_debut">
+          <ion-label>Date spécifique</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label position="floating" class="h2">Date fin</ion-label><br/>
+      <br>
+      <ion-label position="floating" class="h2"> Ancienne date fin : {{date_de_fin}}</ion-label><br/>
+
+      <br>
+      <ion-datetime
+        *ngIf="selectedDateOptionfin.trim() !== 'none'"
+
+        displayFormat="DD/MM/YYYY"
+        (ionChange)="updateDateFin($event)"
+      ></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-segment (ionChange)="updateDateOptionfin($event)">
+        <ion-segment-button value="pas_de_date_fin">
+          <ion-label>Date spécifique</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label>Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+<br>
 
     <ion-item>
       <ion-label position="floating" class="h2"> Rang de la pub </ion-label><br/>
       <ion-input [(ngModel)]="rangpub" formControlName="rangpub" type="number" ></ion-input>
     </ion-item>
-    <ion-label color="bouton" *ngIf="verifieForm.get('rangpub').touched && verifieForm.get('rangpub').errors?.required">Veuillez entrer le rang ou 1000 par defaut</ion-label>
+    <ion-label color="bouton" *ngIf="verifieForm.get('rangpub').touched && verifieForm.get('rangpub').errors?.required">Veuillez entrer le rang ou entrée 1000 par defaut</ion-label>
     <br/>
+
 
     <ion-item>
       <ion-label position="floating" class="h2"> Contact </ion-label><br/>
-      <ion-input [(ngModel)]="contact" formControlName="contact"  type="text" ></ion-input>
+      <ion-input [(ngModel)]="contact" formControlName="contact"  type="number" ></ion-input>
     </ion-item>
+    <ion-label color="bouton" *ngIf="verifieForm.get('contact').touched && verifieForm.get('contact').errors?.required">Veuillez entrer le contact ou entrée "0" par defaut</ion-label>
     <br/>
 
 
@@ -57,7 +125,7 @@
       <ion-label position="floating" class="h2"> Longitude </ion-label><br/>
       <ion-input [(ngModel)]="longitude" formControlName="longitude"  type="text" ></ion-input>
     </ion-item>
-
+    <ion-label color="danger" *ngIf="verifieForm.get('longitude').touched && verifieForm.get('longitude').errors?.required">Veuillez entrer la longitude, ou entrée "non" par defaut </ion-label>
     <br/>
 
 
@@ -65,26 +133,15 @@
       <ion-label position="floating" class="h2"> Latitude </ion-label><br/>
       <ion-input [(ngModel)]="latitude"  formControlName="latitude"  type="text" ></ion-input>
     </ion-item>
-
+    <ion-label color="danger" *ngIf="verifieForm.get('latitude').touched && verifieForm.get('latitude').errors?.required">Veuillez entrer la latitude, ou entrée "non" par defaut</ion-label>
     <br/>
 
-
-    <ion-item>
-      <ion-label position="floating" class="h2">Lien boutton voir</ion-label><br/>
-      <ion-input [(ngModel)]="bouton" formControlName="bouton"  type="text" ></ion-input>
-    </ion-item>
-    <ion-label color="bouton" *ngIf="verifieForm.get('bouton').touched && verifieForm.get('bouton').errors?.required">Veuillez entrer le lien du bouton</ion-label>
-    <ion-label color="bouton" *ngIf="verifieForm.get('bouton').touched && verifieForm.get('bouton').hasError('minlength')">Verifier le lien du bouton</ion-label>
-    <br/>
-
-
-<ion-col>
+  <ion-col>
   <br/> <br/>
   <ion-button type="button" (click)="updatepub()"  [disabled]="!verifieForm.valid" color="success" shape="round" expand="full">
-
-  Modifier
-</ion-button>
-</ion-col>
+   Modifier
+  </ion-button>
+  </ion-col>
 
 </form>
 </ion-content>
