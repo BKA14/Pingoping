@@ -1,6 +1,6 @@
 import { CommentaireService } from './CommentaireService';
 import { ListeUserPage } from './../liste-user/liste-user.page';
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, NgZone, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { App } from '@capacitor/app';
 import { AlertController, IonList, LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
@@ -8,10 +8,12 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import { DistanceCalculatorService } from './distance-calculator.service';
 import { ChangeDetectorRef } from '@angular/core';
-import { interval } from 'rxjs';
 import { ApplicationRef } from '@angular/core';
 import { IonRouterOutlet } from '@ionic/angular';
 import { filter } from 'rxjs/operators';
+import { Subscription, fromEvent, interval } from 'rxjs';
+import { debounceTime, map, startWith, switchMap } from 'rxjs/operators';
+
 
 
 
@@ -60,40 +62,6 @@ export class AcceuilPage implements OnInit {
     isLiked = false;
     public countdown: string;
 
-    private observer: IntersectionObserver;
-
-
-    ngAfterViewInit() {
-      this.ngZone.runOutsideAngular(() => {
-        this.observer = new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              this.playVideo();
-            } else {
-              this.pauseVideo();
-            }
-          });
-        }, { threshold: 0.5 });
-
-        this.observer.observe(this.el.nativeElement);
-      });
-    }
-
-    ngOnDestroy() {
-      if (this.observer) {
-        this.observer.disconnect();
-      }
-    }
-
-    playVideo() {
-      console.log('Play Video');
-      this.el.nativeElement.play();
-    }
-
-    pauseVideo() {
-      console.log('Pause Video');
-      this.el.nativeElement.pause();
-    }
 
 
     shouldBlink(countdown: string): boolean {
@@ -103,7 +71,6 @@ export class AcceuilPage implements OnInit {
     }
 
     // Date de l'événement (remplacez cela par votre propre logique pour récupérer la date)
-
 
 
     public progress = 0;
@@ -121,7 +88,8 @@ export class AcceuilPage implements OnInit {
       private appRef: ApplicationRef,
       private routerOutlet: IonRouterOutlet,
       private commentaireService: CommentaireService,
-      private el: ElementRef, private ngZone: NgZone
+      private el: ElementRef,
+      private ngZone: NgZone
       )
     {
       this.getpub();
@@ -132,8 +100,77 @@ export class AcceuilPage implements OnInit {
       this.pub2();
       this.getpub();
 
-
     }
+
+    @ViewChildren('videoElement') videoElements: QueryList<ElementRef>;
+
+    setupIntersectionObserver() {
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      };
+
+      const callback = (entries: IntersectionObserverEntry[]) => {
+        entries.forEach((entry) => {
+          const video = entry.target as HTMLVideoElement;
+          if (entry.isIntersecting) {
+            this.playVideo(video);
+          } else {
+            this.pauseVideo(video);
+          }
+        });
+      };
+
+      const observer = new IntersectionObserver(callback, options);
+
+      this.videoElements.forEach((videoElement) => {
+        const video = videoElement.nativeElement;
+
+        // Observer pour l'intersection
+        observer.observe(video);
+
+        // Gestionnaire d'événements de clic
+        //fromEvent(video, 'click').subscribe(() => {
+         // this.toggleVideo(video);
+       // });
+
+
+      });
+    }
+
+
+
+    handleVideoClick(videoElement: ElementRef) {
+
+      const video = videoElement.nativeElement as HTMLVideoElement;
+     // this.toggleVideo(video);
+      console.log('Video clicked!');
+
+      }
+
+
+    toggleVideo(video: HTMLVideoElement) {
+      if (video.paused) {
+        this.playVideo(video);
+      } else {
+        this.pauseVideo(video);
+      }
+    }
+
+
+    playVideo(video: HTMLVideoElement) {
+      if (video.paused) {
+        video.play();
+      }
+    }
+
+    pauseVideo(video: HTMLVideoElement) {
+      if (!video.paused) {
+        video.pause();
+      }
+    }
+
 
 
 ionViewWillEnter() {
@@ -146,8 +183,7 @@ ionViewWillEnter() {
       this.pub2();
       this.getpub();
 
-
-}
+                   }
 
     intervale() {
       // Rafraîchir toutes les 0.4 secondes
@@ -159,17 +195,18 @@ ionViewWillEnter() {
          this.getetat();
          this.getpub();
          this.getetat();
-
       });
     }
 
-    ngOnInit() {
-      this.reloadPage();
+    async ngOnInit() {
+       //this.reloadPage();
       this.updateCountdownForAds() ;
 
+      this.setupIntersectionObserver();
       // Mettez à jour le compte à rebours chaque seconde
       setInterval(() => {
        this.updateCountdownForAds() ;
+
        // this.openUrl() ;
       }, 1000);
     }
@@ -789,6 +826,8 @@ ionViewWillEnter() {
         this.cdr.detectChanges();
         this.cdr.markForCheck();
         this.appRef.tick();
+        this.setupIntersectionObserver();
+
       });
     }
 

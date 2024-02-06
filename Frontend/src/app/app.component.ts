@@ -33,7 +33,7 @@ export class AppComponent {
       this.openAlert();
      } )
     this.initializeApp();
-   
+
   }
      async openAlert(){
    const alert = await this.alertController.create({
@@ -44,17 +44,17 @@ buttons: [{
   role: 'confirm',
   handler: () => {
     //navigator['app'].exit.App();
-    this.router.navigateByUrl('/welcome2');
+    //this.router.navigateByUrl('/welcome2');
   }
 }]
    });
 
 await alert.present();
      }
-  
+
      async openAlert1(){
       const alert = await this.alertController.create({
-  
+
       });
         }
 
@@ -63,7 +63,7 @@ await alert.present();
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.backButtonService.init();
-      
+
        });
   }
 

@@ -10,10 +10,10 @@
   </ion-toolbar>
 </ion-header>
 <br/>
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true"  keyboard-attach>
   <form >
-
-    <ion-item>
+ <br>
+    <ion-item class="itementreprise" >
       <ion-segment (ionChange)="updatetitre($event)">
         <ion-segment-button value="pas_de_titre">
           <ion-label> Mettre un titre</ion-label>
@@ -30,8 +30,9 @@
       <ion-input [(ngModel)]="titre"  name="titre"  type="text" ></ion-input>
     </ion-item>
     <br/>
+    <br>
 
-    <ion-item>
+    <ion-item class="itementreprise" >
       <ion-segment (ionChange)="updatecommentaire($event)">
         <ion-segment-button value="pas_de_commentaire">
           <ion-label> Mettre un commentaire</ion-label>
@@ -47,11 +48,12 @@
       <ion-label position="floating" class="h2"> commentaire sur la pub</ion-label><br/>
       <ion-input [(ngModel)]="commentaire" name="commentaire" type="text" ></ion-input>
     </ion-item>
-    <ion-label position="floating" class="h2">Si vous avez un lien de redirection, mettez le lien complet dans le commentaire</ion-label><br/>
+    <ion-label color="warning">Si vous avez un lien de redirection, mettez le lien complet dans le commentaire</ion-label><br/>
     <br/>
+    <br>
 
 
-    <ion-item>
+    <ion-item class="itementreprise">
       <ion-segment (ionChange)="updatephoto($event)">
         <ion-segment-button value="pas_de_photo">
           <ion-label> Une photo</ion-label>
@@ -67,9 +69,10 @@
       <input type="file" accept="image/*,video/*"  name="photo" (change)="onFileSelected($event)" />
     </ion-item>
     <br/>
+    <br>
 
 
-    <ion-item>
+    <ion-item class="itementreprise">
       <ion-segment (ionChange)="updatelongitude($event)">
         <ion-segment-button value="pas_de_longitude">
           <ion-label> Mettre la longitude</ion-label>
@@ -86,9 +89,10 @@
       <ion-input [(ngModel)]="longitude" name="longitude"  type="text" ></ion-input>
     </ion-item>
 
+    <br>
     <br/>
 
-    <ion-item>
+    <ion-item class="itementreprise">
       <ion-segment (ionChange)="updatelatitude($event)">
         <ion-segment-button value="pas_de_latitude">
           <ion-label> Mettre la latitude</ion-label>
@@ -106,9 +110,9 @@
       <ion-input [(ngModel)]="latitude" name="latitude" type="text" ></ion-input>
     </ion-item> <br/>
     <br/>
+<br>
 
-
-    <ion-item>
+    <ion-item class="itementreprise" >
       <ion-segment (ionChange)="updatecontact($event)">
         <ion-segment-button value="pas_de_contact">
           <ion-label> Mettre le contact</ion-label>
@@ -123,14 +127,15 @@
 
     <ion-item *ngIf="selectedcontact!== 'none'">
       <ion-label position="floating" class="h2"> Contact </ion-label><br/>
-      <ion-input [(ngModel)]="contact" name="contact" type="number" ></ion-input>
+      <ion-input keyboard-attach [(ngModel)]="contact" name="contact" type="number" ></ion-input>
     </ion-item>
 
     <br/>
+    <br>
 
 
 
-    <ion-item>
+    <ion-item class="itementreprise">
       <ion-segment (ionChange)="updateDateOptiondeb($event)">
         <ion-segment-button value="pas_de_date_debut">
           <ion-label>Date spécifique</ion-label>
@@ -150,9 +155,9 @@
         (ionChange)="updateDate($event)" name="datedeb"
       ></ion-datetime>
     </ion-item>
+ <br> <br>
 
-
-    <ion-item>
+    <ion-item class="itementreprise">
       <ion-segment (ionChange)="updateDateOptionfin($event)">
         <ion-segment-button value="pas_de_date_fin">
           <ion-label>Date spécifique</ion-label>
@@ -174,8 +179,9 @@
       ></ion-datetime>
     </ion-item>
     <br>
+    <br>
 
-    <ion-item>
+    <ion-item class="itementreprise">
       <ion-segment (ionChange)="updaterang($event)">
         <ion-segment-button value="pas_de_rang">
           <ion-label> Mettre le rang</ion-label>
@@ -190,7 +196,7 @@
 
     <ion-item *ngIf="selectedrang !== 'none'">
       <ion-label position="floating" class="h2"> Rang de la pub </ion-label><br/>
-      <ion-input [(ngModel)]="rangpub"  name="rang" type="number" ></ion-input>
+      <ion-input  ion-keyboard-fix [(ngModel)]="rangpub"  name="rang" type="number" ></ion-input>
     </ion-item>
     <br/>
 

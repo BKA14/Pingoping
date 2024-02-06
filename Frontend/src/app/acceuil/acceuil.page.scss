@@ -350,6 +350,27 @@ margin: 10px;
 }
 
 
+.video-controls {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+button {
+  margin-right: 10px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 20px;
+}
+
+input {
+  width: 100px;
+}
+
+
 .couleurBouton{
 color: #02751b;
 --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
@@ -390,9 +411,9 @@ color: #080a09;
 white-space: normal; /* Permet le retour à la ligne automatique */
 word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
 text-align: justify;
-font-size: medium;
+font-size :large;
 margin: 3%;
-
+line-height: 1.5;
 --padding-start: 0;
 --padding-end: 0;
 

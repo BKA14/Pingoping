@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
-import { LoadingController } from '@ionic/angular';
+import { IonContent, LoadingController } from '@ionic/angular';
+
+
 
 @Component({
   selector: 'app-ajouterpub',
@@ -11,6 +13,8 @@ import { LoadingController } from '@ionic/angular';
 })
 export class AjouterpubPage implements OnInit {
   verifieForm: FormGroup;
+
+
 
  id:any;
  annee_entreprise:any;
@@ -45,6 +49,7 @@ export class AjouterpubPage implements OnInit {
   private _apiService : ApiService,
   private loadingCtrl: LoadingController,
   public loadingController: LoadingController,
+
 ) {
 
   }
@@ -318,7 +323,9 @@ async showLoading() {
   //this.navCtrl.setRoot('/welcome');
 }
 
+
 ngOnInit() {
+
 
   this.verifieForm = new FormGroup({
 

@@ -181,6 +181,9 @@ updateDateOptiondeb(event: any) {
 
     const file: File = this.selectedFile;
 
+    if (this.selectedphoto == 'nouvelle' && !file){
+      return " choisissez la photo";
+    }
 
     const formData = new FormData();
     formData.append('id_pub', this.id);
@@ -200,12 +203,15 @@ updateDateOptiondeb(event: any) {
    formData.append('commentaire', 'non');
  }
  // Pour l'enregistrement photo
- if (this.selectedphoto !== 'none') {
+ if (this.selectedphoto == 'nouvelle') {
    formData.append('photo', file);
  }
- else {
+ else if (this.selectedphoto == 'none') {
    formData.append('photo', 'non');
  }
+ else if (this.selectedphoto == 'garder_photo') {
+  formData.append('photo', this.photo);
+}
    // Pour l'enregistrement du rang
    if (this.selectedrang !== 'none') {
      formData.append('rangpub', this.rangpub);

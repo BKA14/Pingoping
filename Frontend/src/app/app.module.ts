@@ -16,10 +16,11 @@ import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
 import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { IntersectionDirective } from './intersection.directive';
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, IntersectionDirective],
   imports: [BrowserModule, CommonModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule, FormsModule, ReactiveFormsModule],
   providers: [StatusBar,Network,
     SplashScreen,CallNumber,

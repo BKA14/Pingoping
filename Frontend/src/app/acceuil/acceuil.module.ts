@@ -8,6 +8,7 @@ import { AcceuilPageRoutingModule } from './acceuil-routing.module';
 
 import { AcceuilPage } from './acceuil.page';
 import { HttpClientModule } from '@angular/common/http';
+import { IonVideoPlayerModule } from 'ion-video-player';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
     IonicModule,
     AcceuilPageRoutingModule,
     HttpClientModule,
+    IonVideoPlayerModule,
 
   ],
   declarations: [AcceuilPage]

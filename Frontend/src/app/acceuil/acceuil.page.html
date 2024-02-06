@@ -57,19 +57,20 @@
       <ion-card-content>
 
         <!-- Illustration (image ou vidéo) de la publicité -->
-        <ng-container  *ngIf="(pubs.photo.includes('.jpg') || pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo.trim() !== null && pubs.photo.trim() !== undefined">
-          <ion-img class="custom-image facebook-style"  src={{pubs.photo}}></ion-img>
+        <ng-container   *ngIf="(pubs.photo.includes('.jpg') || pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo.trim() !== null && pubs.photo.trim() !== undefined">
+          <ion-img  class="custom-image facebook-style"  [src]="pubs.photo.trim()" ></ion-img>
         </ng-container>
-<!-- Votre composant HTML -->
 
-        <ng-container *ngIf="(!pubs.photo.includes('.jpg') && !pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo !== null && pubs.photo !== undefined">
-          <video appIntersectionObserver #videoElement class="custom-image video-style" loop controls muted>
-            <source [src]="pubs.photo" type="video/mp4">
+        <!-- Votre composant HTML -->
+
+        <ng-container  *ngIf="(!pubs.photo.includes('.jpg') && !pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo !== null && pubs.photo !== undefined" >
+          <video #videoElement class="custom-image video-style" loop muted (click)="handleVideoClick(videoElement)" controls>
+            <source [src]="pubs.photo.trim()" type="video/mp4">
           </video>
-        </ng-container>
 
+          </ng-container>
 
- <br>
+        <br>
         <ion-label  class="localisation" *ngIf="pubs.distanceToUser !== undefined && pubs.distanceToUser !== null  && pubs.longitude.toLowerCase().trim() !== 'non' && pubs.latitude.toLowerCase().trim() !== 'non' && pubs.distanceToUser !== NaN " >
           Vous êtes présentement à : {{ convertMetersToKilometers(pubs.distanceToUser) }} du lieu.
         </ion-label>
