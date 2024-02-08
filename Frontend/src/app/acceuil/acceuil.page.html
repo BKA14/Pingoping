@@ -54,6 +54,8 @@
       <p  [innerHTML]="commentaireService.sanitize(pubs.commentaire)" *ngIf="pubs.commentaire.toLowerCase().trim() !== 'non' && pubs.commentaire !== null && pubs.commentaire !== undefined"  class="commentaire" >{{pubs.commentaire}}</p>
       <br> <br>
 
+      <p class="ligne"></p> <br>
+
       <ion-card-content>
 
         <!-- Illustration (image ou vidéo) de la publicité -->
