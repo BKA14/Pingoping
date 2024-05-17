@@ -1,0 +1,32 @@
+
+<ion-header>
+<ion-toolbar color="success" class="tool1">
+  <br/>  <br/>
+<ion-buttons slot="start">
+<ion-back-button defaultHref="/" color="light"></ion-back-button>
+</ion-buttons>
+<ion-title class="tool2">ADMINISTRATEUR</ion-title>
+<br/>
+</ion-toolbar>
+</ion-header>
+
+  <ion-content padding  class="custom-background"  style="--offset-bottom: 300px;" >
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+  <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+
+  <ion-list class="list" >
+
+    <ion-button (click)="signalement()"  class="list" fill="outline" color="success">
+      <ion-icon name=""></ion-icon>
+       <ng-container >
+        Signalement
+       </ng-container>
+      </ion-button>
+  </ion-list>
+
+  </ion-content>
+
+ <!-- Menu -->
+ <app-sidebar></app-sidebar>

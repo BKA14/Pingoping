@@ -1,0 +1,32 @@
+
+.tool1{
+  font-size: 20px;
+  font-style: normal;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    padding: 8;
+  }
+  
+    .tool2{
+        --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+        font: size 23px; ;
+        font-style: normal;
+        text-align: center;
+          font-family:Verdana, Geneva, Tahoma, sans-serif;
+      color: #ffffff;
+      padding: 5;
+        }
+        label {
+          display: block;
+          font: 1rem 'Fira Sans', sans-serif;
+      }
+      ion-loading.custom-loading {
+        --background: #e3edff;
+        --spinner-color: #1c6dff;
+      
+        color: #1c6dff;
+      }
+      input,
+      label {
+          margin: .4rem 0;
+      }
+      

@@ -1,0 +1,51 @@
+label {
+  font-size: 14px;
+  font-style: normal;
+  padding: 11px;
+  font-family: "Roboto", sans-serif;
+  color: #2a2c2a;
+  text-align: center;
+}
+
+h2 {
+  font-size: 15px;
+  font-style: normal;
+  padding: 11px;
+  font-family: "Roboto", sans-serif;
+  color: #2a2c2a;
+  text-align: center;
+  margin: auto;
+  padding: 2px;
+
+  word-spacing: 0px;
+  white-space: normal; /* Permet le retour à la ligne automatique */
+  word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
+}
+
+
+.itementreprise{
+  background-color:  #42b670;
+  padding: 0.6px;
+
+  width: auto;
+  --padding-start: 0;
+  --padding-end: 0;
+  margin: 0;
+  }
+  .keyboard-fix {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+  }
+
+  .tool2{
+    --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+    font-size: 16px;
+    font-style: normal;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    color: #ffffff;
+    padding: 6;
+    }

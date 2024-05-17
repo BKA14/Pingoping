@@ -1,0 +1,58 @@
+.form{
+    font-size: 20px;
+    font-style: normal;
+      font-family:Verdana, Geneva, Tahoma, sans-serif;
+      padding: 10px;
+      vertical-align: middle;
+      top: 25%;
+      text-align: center;
+      border-radius: 20px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      //transform: translateY(-50%);
+      --ion-background-color:#eff6f0;
+
+    }
+    ion-content{
+
+          --ion-background-color:#6edb80;
+
+        }
+        .inscrip{
+          font-size: 16px;
+          font-style: normal;
+            font-family:Verdana, Geneva, Tahoma, sans-serif;
+
+        }
+
+        .defile {
+          width: 100%;
+          overflow: hidden;
+        }
+
+        .text_defile {
+          display: inline-block;
+          white-space: nowrap;
+          animation: text_defile 10s linear infinite;
+          text-align: left;
+          color: #eff6f0;
+          font-size: 25px;
+        }
+
+        @keyframes text_defile {
+          0% {
+            transform: translateX(100%);
+          }
+          100% {
+            transform: translateX(-100%);
+          }
+
+
+        }
+
+
+        .rounded-form {
+          border-radius: 14px; /* Ajustez la valeur selon vos préférences */
+        }
+

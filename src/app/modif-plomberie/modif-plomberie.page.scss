@@ -1,0 +1,73 @@
+.h3{
+  font-size: 21px;
+  font-style: normal;
+
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: black;
+  }
+  .tool1{
+    font-size: 20px;
+    font-style: normal;
+      font-family:Verdana, Geneva, Tahoma, sans-serif;
+      padding: 8;
+    }
+
+  .h2{
+  font-size: 18px;
+  font-style: normal;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  }
+
+    .tool2{
+      --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+      font-size: 14px;
+      font-style: normal;
+      text-align: center;
+        font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: #ffffff;
+    padding: 5;
+      }
+
+      .header-row {
+        background: #7163AA;
+        color: #fff;
+        font-size: 18px;
+      }
+
+      ion-col {
+        border: 1px solid #ECEEEF;
+      }
+
+      .commentaire1 {
+        text-align: center;
+        font-size: 25px;
+      }
+
+      /* Dans votre fichier CSS personnalisé */
+      .custom-background {
+       --background: #a29797; /* Remplacez cette couleur par la nuance de gris légère que vous souhaitez */
+
+       }
+       .list {
+        --background: #a29797; /* Remplacez cette couleur par la nuance de gris légère que vous souhaitez */
+        }
+
+        .Label{
+        text-align: center;
+        font-size: 22 px;
+        }
+
+        .custom-text {
+          white-space: normal; /* Permet le retour à la ligne automatique */
+          word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
+          text-align: justify;
+          font-size: medium;
+        }
+
+        /* Ajoutez ces styles à votre fichier styles.scss */
+
+        .custom-input {
+          width: 100%; /* Ou une valeur appropriée pour la largeur */
+          word-wrap: break-word;
+        }
+

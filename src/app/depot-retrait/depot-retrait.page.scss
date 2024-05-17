@@ -1,0 +1,110 @@
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+
+
+.h3{
+  font-size: 21px;
+  font-style: normal;
+
+  font-family: "Roboto", sans-serif;
+    color: black;
+  }
+  .tool1{
+    font-size: 20px;
+    font-style: normal;
+    font-family: "Roboto", sans-serif;
+      padding: 8;
+  border-radius: 10px;
+    }
+
+  .h2{
+  font-size: 18px;
+  font-style: normal;
+
+  font-family: "Roboto", sans-serif;
+  }
+
+    .tool2{
+      --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+      font-size: 14px;
+      font-style: normal;
+      text-align: center;
+      font-family: "Roboto", sans-serif;
+    color: #ffffff;
+    padding: 5;
+      }
+
+      .header-row {
+        background: #7163AA;
+        color: #fff;
+        font-size: 18px;
+      }
+
+      ion-col {
+        border: 1px solid #ECEEEF;
+      }
+
+      body {
+        word-wrap: break-word;
+      }
+
+      .commentaire1 {
+        text-align: center;
+        font-size: 19px;
+      }
+
+      /* Dans votre fichier CSS personnalisé */
+      .custom-background {
+       --background: #f2f2f2; /* Remplacez cette couleur par la nuance de gris légère que vous souhaitez */
+
+       }
+       .list {
+        --background: #a29797; /* Remplacez cette couleur par la nuance de gris légère que vous souhaitez */
+
+        }
+
+
+        .custom-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.custom-content {
+  background-color: #f5f5f5; /* Couleur de fond pour votre contenu */
+
+}
+
+.custom-list {
+  padding: 16px;
+}
+
+.custom-comment {
+  font-size: 20px;
+  color: #333; /* Couleur de texte personnalisée */
+  font-weight: bold;
+}
+
+.custom-label {
+  font-size: 14px;
+  color: #555; /* Couleur de texte personnalisée */
+}
+
+
+.numpmu{
+  font-size: 18px;
+  color: #555; /* Couleur de texte personnalisée */
+}
+
+.numpmu {
+  text-shadow: 2px 2px 4px rgba(0, 128, 0, 0.5); /* Ombre portée verte */
+  color: #69c769; /* Couleur de texte verte */
+}
+
+
+
+

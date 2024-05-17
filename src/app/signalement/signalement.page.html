@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar color="success" class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <br>
+    <ion-title class="title">SIGNALEMENT</ion-title>
+    <br>
+    <ion-searchbar class="recherche" type="text"  placeholder="Rechercher id,nom,prenom,..."  [(ngModel)]="term"  ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-item class="select1">
+  <ion-label >Affichage</ion-label>
+  <ion-select  class="select"  [(ngModel)]="term2" placeholder="Sélectionner">
+
+  <ion-select-option value="">Aucune</ion-select-option>
+
+    <ion-select-option  [value]= oui_terminer>
+     Signalement géré
+    </ion-select-option>
+
+    <ion-select-option  [value]= non_terminer>
+      Signalement non géré
+     </ion-select-option>
+
+  </ion-select>
+  <ion-icon color="success"  style="zoom: 0.8;" name="search-outline" slot="end"></ion-icon>
+</ion-item>
+
+
+<ion-content class="content">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <ion-item class="item" *ngFor="let signalement of signalement  | customFilter: term | customFilter: term2">
+      <ion-label class="label">
+        <p class="target">Signalé le : {{ formatCommentTime (signalement.heurecomdusignaler) }}</p>
+        <p class="target">ID du signalement : {{ signalement.id }}</p> <br>
+        <p class="commentid">ID du commentaire : {{ signalement.idcomsignaler }}</p>
+        <p class="commentid">ID du signaleur : {{ signalement.iduserdusignaleur }}</p>
+        <p class="commentid">ID du signalé : {{ signalement.idusersignaler }}</p>
+        <p class="commentid"> Nom et prenom du signaleur : {{ signalement.nomsignaleur }} {{ signalement.prenomdusignaleur }}</p>
+        <p class="datetime">Signalé le : {{ formatCommentTime (signalement.heuredusignalement) }}</p>
+        <p class="commentid"> Nom et prenom du signalé : {{ signalement.nomestsignaler }} {{ signalement.prenomestsignaler }}</p>
+        <p class="comment">Commentaire signalé : {{ signalement.commentairesignaler }}</p>
+        <p class="pubid">ID de la publication du commentaire : {{ signalement.pubidcomsignaler }}</p>
+        <p class="bloquer" *ngIf="findDateFinBlocage(signalement.idusersignaler) !== 'non'">Utilisateur bloqué jusqu'au : {{ findDateFinBlocage(signalement.idusersignaler) }}</p>
+        <br> <br>
+
+        <ion-button (click)="terminer(signalement)" [ngClass]="{'button-rouge': signalement.traitement == 'non', 'button-vert': signalement.traitement == 'oui' ,'button-vert1': findDateFinBlocage(signalement.idusersignaler) !== 'non' && findDateFinBlocage(signalement.idusersignaler) !== null && findDateFinBlocage(signalement.idusersignaler) !== undefined}">
+          Signalement
+        </ion-button>
+
+        <ion-button (click)="btn()">
+          bloquer
+        </ion-button>
+
+        <ion-button (click)="debloquer(signalement)">
+          Débloquer
+        </ion-button>
+
+
+
+        <ion-item *ngIf="selectedDateOption">
+          <ion-label position="floating" class="h1">Date fin blocage</ion-label><br/>
+
+          <ion-datetime
+            displayFormat="DD/MM/YYYY"
+            (ionChange)="updateDate($event)"
+          ></ion-datetime>
+        </ion-item>
+         <br>
+        <ion-button *ngIf="selectedDateOption" (click)="confirmer(signalement)">
+          confirmer
+        </ion-button>
+
+         </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+

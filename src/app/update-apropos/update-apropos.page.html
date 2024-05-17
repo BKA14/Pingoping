@@ -1,0 +1,258 @@
+<ion-header>
+
+  <ion-toolbar  color="success" class="tool1" >
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <br/>  <br/> <br>
+    <ion-title class="tool2">Mise à jours A propos</ion-title>
+    <br/>
+  </ion-toolbar>
+</ion-header>
+<br/>
+<ion-content keyboard-attach>
+
+  <form >
+
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="updateemail($event)">
+        <ion-segment-button value="pas_de_email">
+          <ion-label> Mettre un email</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item >
+    <br/>
+
+    <ion-item  *ngIf="selectedemail !== 'none'" >
+      <ion-label position="floating" class="h2"> email </ion-label><br/>
+      <ion-input [(ngModel)]="email"  name="titre"  type="text" ></ion-input>
+    </ion-item>
+    <br/>
+<br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="updatecommentaire($event)">
+        <ion-segment-button value="pas_de_commentaire">
+          <ion-label> Mettre un commentaire</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+    <ion-item *ngIf="selectedcommentaire !== 'none'">
+      <ion-label position="floating" class="h2"> commentaire apropos</ion-label><br/>
+      <ion-input [(ngModel)]="commentaire" name="commentaire" type="text" ></ion-input>
+    </ion-item>
+
+    <br/>
+    <br> <br>
+
+
+    <ion-item class="itementreprise">
+
+      <p > Logo  </p> <br> <br>
+      <ion-segment (ionChange)="updatephoto($event)">
+        <ion-segment-button value="nouvelle">
+          <ion-label>Nouvelle </ion-label>
+        </ion-segment-button> &nbsp;
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+    <ion-item *ngIf="selectedphoto !== 'none'">
+      <ion-label  position="floating" class="h2">Logo </ion-label><br/>
+      <input   type="file" accept="image/*"   (change)="onFileSelected($event)" />
+    </ion-item>
+
+    <br>
+    <br>
+
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="updatecontact($event)">
+        <ion-segment-button value="pas_de_contact">
+          <ion-label> Mettre le contact</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selectedcontact!== 'none'">
+      <ion-label position="floating" class="h2"> Contact </ion-label><br/>
+      <ion-input [(ngModel)]="contact" name="contact" type="text" ></ion-input>
+    </ion-item>
+
+    <br>
+    <br> <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="updateversion($event)">
+        <ion-segment-button value="pas_de_version">
+          <ion-label> Mettre la version</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <br/> <br>
+
+
+    <ion-item *ngIf="selectedversion !== 'none'">
+      <ion-label position="floating" class="h2"> Version</ion-label><br/>
+      <ion-input ion-keyboard-fix [(ngModel)]="version"   class="keyboard-fix" name="version" type="text" ></ion-input>
+    </ion-item>
+
+    <br/>
+    <br>
+
+
+        <ion-item class="itementreprise">
+          <ion-segment (ionChange)="updatefacebook($event)">
+            <ion-segment-button value="pas_de_facebook">
+              <ion-label> Mettre le lien facebook</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="none">
+              <ion-label >Non</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-item>
+        <br/>
+
+        <ion-item *ngIf="selectedfacebook !== 'none'">
+          <ion-label position="floating" class="h2"> lien facebook</ion-label><br/>
+          <ion-input [(ngModel)]="facebook" name="facebook" type="text" ></ion-input>
+        </ion-item>
+
+        <br/>
+        <br>
+
+            <ion-item class="itementreprise">
+              <ion-segment (ionChange)="updatewhatsapp($event)">
+                <ion-segment-button value="pas_de_whatsapp">
+                  <ion-label> Mettre le lien whatsapp</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="none">
+                  <ion-label >Non</ion-label>
+                </ion-segment-button>
+              </ion-segment>
+            </ion-item>
+            <br/>
+
+            <ion-item *ngIf="selectedwhatsapp !== 'none'">
+              <ion-label position="floating" class="h2"> lien whatsapp</ion-label><br/>
+              <ion-input [(ngModel)]="whatsapp" name="whatsapp" type="text" ></ion-input>
+            </ion-item>
+
+            <br/>
+            <br>
+
+                <ion-item class="itementreprise">
+                  <ion-segment (ionChange)="updateinstagram($event)">
+                    <ion-segment-button value="pas_de_instagram">
+                      <ion-label> Mettre le lien instagram</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="none">
+                      <ion-label >Non</ion-label>
+                    </ion-segment-button>
+                  </ion-segment>
+                </ion-item>
+                <br/>
+
+                <ion-item *ngIf="selectedinstagram !== 'none'">
+                  <ion-label position="floating" class="h2"> lien instagram</ion-label><br/>
+                  <ion-input [(ngModel)]="instagram" name="instagram" type="text" ></ion-input>
+                </ion-item>
+
+                <br/>
+                <br>
+
+                <br/>
+                <br>
+
+                    <ion-item class="itementreprise">
+                      <ion-segment (ionChange)="updatetiktok($event)">
+                        <ion-segment-button value="pas_de_tiktok">
+                          <ion-label> Mettre le lien tiktok</ion-label>
+                        </ion-segment-button>
+                        <ion-segment-button value="none">
+                          <ion-label >Non</ion-label>
+                        </ion-segment-button>
+                      </ion-segment>
+                    </ion-item>
+                    <br/>
+
+                    <ion-item *ngIf="selectedtiktok !== 'none'">
+                      <ion-label position="floating" class="h2"> lien tiktok</ion-label><br/>
+                      <ion-input [(ngModel)]="tiktok" name="tiktok" type="text" ></ion-input>
+                    </ion-item>
+
+                    <br/>
+                    <br>
+
+                    <ion-item class="itementreprise">
+                      <ion-segment (ionChange)="updateyoutube($event)">
+                        <ion-segment-button value="pas_de_youtube">
+                          <ion-label> Mettre le lien youtube</ion-label>
+                        </ion-segment-button>
+                        <ion-segment-button value="none">
+                          <ion-label >Non</ion-label>
+                        </ion-segment-button>
+                      </ion-segment>
+                    </ion-item>
+                    <br/>
+
+                    <ion-item *ngIf="selectedyoutube !== 'none'">
+                      <ion-label position="floating" class="h2"> lien youtube</ion-label><br/>
+                      <ion-input [(ngModel)]="youtube" name="youtube" type="text" ></ion-input>
+                    </ion-item>
+
+                    <br/>
+                    <br>
+
+                    <ion-item class="itementreprise">
+                      <ion-segment (ionChange)="updatetelegram($event)">
+                        <ion-segment-button value="pas_de_telegram">
+                          <ion-label> Mettre le lien telegram</ion-label>
+                        </ion-segment-button>
+                        <ion-segment-button value="none">
+                          <ion-label >Non</ion-label>
+                        </ion-segment-button>
+                      </ion-segment>
+                    </ion-item>
+                    <br/>
+
+                    <ion-item *ngIf="selectedtelegram !== 'none'">
+                      <ion-label position="floating" class="h2"> lien telegram</ion-label><br/>
+                      <ion-input [(ngModel)]="telegram" name="telegram" type="text" ></ion-input>
+                    </ion-item>
+
+                    <br/>
+                    <br>
+
+  <ion-col>
+  <br/> <br/>
+  <ion-button type="button" (click)="update_apropos()"   color="success" shape="round" expand="full">
+   Modifier
+  </ion-button>
+  </ion-col>
+
+</form>
+</ion-content>
+
+

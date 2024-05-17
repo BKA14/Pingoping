@@ -1,0 +1,23 @@
+
+<ion-header >
+  <ion-toolbar color="success" class="tool1">
+ 
+    <br/> <br/>
+      <ion-title class="tool2">LISTE DES ENTREPRISES</ion-title>
+      <br/>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content padding class="tool3" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-icon name="trash"  style="zoom: 3.0;"  class="iconsupp" (click)="presentAlert(entreprise.id)"></ion-icon>
+<ion-list class="list">
+ <ion-item  button *ngFor="let entreprise of entreprises |filter:term">
+    <ion-checkbox slot="start" ></ion-checkbox>
+  <ion-label>{{entreprise.nom_entreprise}}</ion-label>
+  <ion-icon name="checkbox-outline"  style="zoom: 1.0;"  color="success" type="button" [routerLink]="['/welcome3/']" class="checkbox"></ion-icon>
+</ion-item>
+</ion-list>
+</ion-content>

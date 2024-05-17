@@ -1,0 +1,165 @@
+ion-content{
+
+--background: linear-gradient(#e86868, #88ed89) !important;
+}
+
+ion-list{
+
+--background: linear-gradient(#e86868, #88ed89) !important;
+}
+
+.deconnect{
+float: right;
+}
+
+.centered-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.span{
+  font-size: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  font-style: normal;
+  text-align: center;
+  --ion-background-color:#fdfdfd;
+  font-family: "Roboto", sans-serif;
+}
+
+.utilisateur{
+float: left;
+}
+
+
+.list{
+text-align: center;
+}
+
+.toolbar{
+  font-size: 20px;
+  font-style: normal;
+  font-family: "Roboto", sans-serif;
+  padding: auto;
+  margin: auto;
+
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 5px; /* Rayon pour le coin inférieur gauche */
+  border-bottom-right-radius: 5px; /* Rayon pour le coin inférieur droit */
+
+
+
+  }
+
+  .toolbar ion-button {
+    border-radius: 10px; /* Ajustez la valeur selon vos préférences */
+}
+
+
+
+.h2{
+font-size: 18px;
+font-style: normal;
+font-weight: bold;
+font-family: "Roboto", sans-serif;
+}
+
+.img{
+    text-align: center;
+    }
+
+  .tool2{
+    --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+    font-size: 18px;
+    font-style: normal;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+  color: #ffffff;
+  padding: 5;
+  text-align: center;
+    }
+
+    .header-row {
+      background: #7163AA;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    ion-col {
+      border: 1px solid #ECEEEF;
+    }
+
+
+
+.custom-icon {
+  color: #f5fcf8;
+  font-size: 22px;
+  }
+
+  .lignemenu {
+    background-color:  #2dd36f;
+    height: 2px;
+    width: auto;
+    --padding-start: 0;
+    --padding-end: 0;
+    margin: 10px;
+  }
+
+  .social-icons-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .social-icons {
+    display: flex;
+  }
+
+  .facebook-icon {
+    color: #3b5998; /* Couleur Facebook */
+
+  }
+
+  .whatsapp-icon {
+    color: #25D366; /* Couleur WhatsApp */
+
+  }
+
+  .tiktok-icon {
+    color: #000000; /* Couleur TikTok */
+  }
+
+  .instagram-icon {
+    color: #E4405F; /* Couleur Instagram */
+  }
+
+  .youtube-icon {
+    color: #FF0000; /* Couleur YouTube */
+  }
+
+  .telegram-icon {
+    color: #0088cc; /* Couleur Telegram */
+  }
+
+  .icon{
+    //display: inline-block;
+
+
+    vertical-align: middle;
+    float: right;
+    }
+
+    .menu .custom-icon {
+      color: #ffffff; /* blanc */
+    }
+
+    /* Ajustement de la barre de tabulation */
+    .menu {
+      height: 44px;
+      background-color: #2dd36f; /* Vert de la couleur de succès d'Ionic */
+      border-top-left-radius: 3px; /* Arrondir les coins supérieurs gauches */
+      border-top-right-radius: 3px; /* Arrondir les coins supérieurs droits */
+      box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Ombre sous la barre de tabulation */
+    }

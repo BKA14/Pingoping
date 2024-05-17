@@ -1,0 +1,78 @@
+<ion-header >
+
+<ion-toolbar class="toolbar" color="success">
+
+  <br/> <br/>
+    <ion-title class="tool2">A PROPOS</ion-title>
+    <br/>
+
+<div class="item-note"  *ngIf="grade === 'superadmin'">
+  <ion-button color="light"  size="small" class="utilisateur"  [routerLink]="['/liste-user/']" >Utilisateurs</ion-button>
+</div>
+  <ion-button color="danger"  size="small" class="deconnect" (click)="deconnect()" >Deconnexion</ion-button>
+<br>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="tool3">
+
+  <br>
+  <div class="centered-div" *ngIf="grade === 'admin' || grade === 'superadmin'">
+    <span class="span" color="success">Modification de la page à propos </span> &nbsp;
+    <ion-icon name="create" style="zoom: 1.7;" color="success" class="icon" [routerLink]="['/update-apropos/']"></ion-icon>
+</div>
+
+<br>
+
+<div class="list">
+
+  <div *ngIf="a_propos.logo && a_propos.logo.trim() !== undefined &&  a_propos.logo.trim() !== '' && a_propos.logo.trim() !== 'non' &&  a_propos.logo.trim() !== null " >
+    <ion-img class="logo"  [src]="a_propos.logo?.trim()" style="width: 200px; height: auto; margin: 0 auto;"></ion-img>
+  </div>
+
+<br>
+<ion-label class="h2" *ngIf="a_propos.contact && a_propos.contact !== undefined &&  a_propos.contact !== '' && a_propos.contact !== '0' &&  a_propos.contact !== null"  >{{a_propos.contact}}</ion-label>
+<br/> <br/> <br/>
+<ion-label class="h2" *ngIf="a_propos.email && a_propos.email !== undefined &&  a_propos.email !== '' && a_propos.email !== 'non' &&  a_propos.email !== null" >{{a_propos.email}}</ion-label>
+<br/> <br/> <br/>
+<ion-label class="h2" *ngIf="a_propos.version && a_propos.version !== undefined &&  a_propos.version !== '' && a_propos.version !== 'non' &&  a_propos.version !== null" >{{a_propos.version}}</ion-label>
+<br/> <br/> <br/>
+<ion-label class="h2" *ngIf="a_propos.commentaire && a_propos.commentaire !== undefined &&  a_propos.commentaire !== '' && a_propos.commentaire !== 'non' &&  a_propos.commentaire !== null"  >{{a_propos.commentaire}}</ion-label>
+<br/> <br>
+</div>
+
+
+ <!-- Boutons pour les réseaux sociaux -->
+<div class="social-icons-container">
+  <div class="social-icons">
+    <ion-button *ngIf="a_propos.facebook && a_propos.facebook !== undefined &&  a_propos.facebook !== null  && a_propos.facebook !=='' && a_propos.facebook !== 'non' " (click)="openFacebook(a_propos.facebook)" color="light">
+      <ion-icon name="logo-facebook" slot="icon-only"   class="facebook-icon" ></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.whatsapp && a_propos.whatsapp !== undefined &&  a_propos.whatsapp !== null  && a_propos.whatsapp !=='' && a_propos.whatsapp !== 'non' " (click)="openWhatsApp(a_propos.whatsapp)" color="light">
+      <ion-icon name="logo-whatsapp" slot="icon-only"  class="whatsapp-icon" ></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.tiktok && a_propos.tiktok !== undefined &&  a_propos.tiktok !== null  && a_propos.tiktok !=='' && a_propos.tiktok !== 'non' " (click)="openTiktok(a_propos.tiktok)" color="light">
+      <ion-icon name="logo-tiktok" slot="icon-only"  class="tiktok-icon"></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.instagram && a_propos.instagram !== undefined &&  a_propos.instagram !== null  && a_propos.instagram !=='' && a_propos.instagram !== 'non' " (click)="openInstagram(a_propos.instagram)" color="light">
+      <ion-icon name="logo-instagram" slot="icon-only"  class="instagram-icon"></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.youtube  && a_propos.youtube !== undefined &&  a_propos.youtube !== null  && a_propos.youtube !=='' && a_propos.youtube !== 'non' " (click)="openYoutube(a_propos.youtube)" color="light">
+      <ion-icon name="logo-youtube" slot="icon-only"  class="youtube-icon"></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.telegram  && a_propos.telegram !== undefined &&  a_propos.telegram !== null  && a_propos.telegram !=='' && a_propos.telegram !== 'non' " (click)="openTelegram(a_propos.telegram)" color="light">
+      <ion-icon name="paper-plane-outline" slot="icon-only"  class="telegram-icon"></ion-icon>
+    </ion-button>
+<br>
+</div>
+
+</div>
+
+</ion-content>
+
+<app-sidebar></app-sidebar>

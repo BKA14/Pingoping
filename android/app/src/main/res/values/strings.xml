@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">pingoping</string>
+    <string name="title_activity_main">pingoping</string>
+    <string name="package_name">com.pingoping.bf</string>
+    <string name="custom_url_scheme">com.pingoping.bf</string>
+</resources>

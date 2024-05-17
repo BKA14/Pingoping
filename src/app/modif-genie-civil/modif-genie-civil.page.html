@@ -1,0 +1,74 @@
+<ion-header >
+
+  <ion-toolbar class="tool1" color="success">
+    <br/>
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <br/> <br/>
+      <ion-title class="tool2">INFORMATION</ion-title>
+      <br/>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="tool3"  [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+<br/>
+<form [formGroup]="verifieForm">
+
+  <ion-label class="Label">Commentaire1</ion-label >  <br>
+  <ion-item>
+    <ion-input [(ngModel)]="commentaire1" formControlName="commentaire1" type="text" class="custom-input"></ion-input>
+  </ion-item>
+  <ion-label color="danger" *ngIf="verifieForm.get('commentaire1').touched && verifieForm.get('commentaire1').errors?.required">Veuillez entrer le commentaire </ion-label>
+  <ion-label color="danger" *ngIf="verifieForm.get('commentaire1').touched && verifieForm.get('commentaire1').hasError('minlength')">Verifier la longueur commentaire</ion-label>
+  <br/><br/>
+
+  <ion-label class="custom-label">Commentaire2</ion-label>
+<ion-item class="custom-item">
+  <ion-input [(ngModel)]="commentaire2" formControlName="commentaire2" type="text" class="custom-input"></ion-input>
+</ion-item>
+<ion-label class="custom-label" color="danger" *ngIf="verifieForm.get('commentaire2').touched && verifieForm.get('commentaire2').errors?.required">
+  Veuillez entrer le commentaire
+</ion-label>
+<ion-label class="custom-label" color="danger" *ngIf="verifieForm.get('commentaire2').touched && verifieForm.get('commentaire2').hasError('minlength')">
+  Vérifier la longueur du commentaire
+</ion-label>
+<br><br>
+
+  <ion-label class="Label">Prix</ion-label >  <br>
+  <ion-item>
+    <ion-input [(ngModel)]="prix" formControlName="prix" type="text"></ion-input>
+  </ion-item>
+  <ion-label color="danger" *ngIf="verifieForm.get('prix').touched && verifieForm.get('prix').errors?.required">Veuillez entrer le prix </ion-label>
+  <ion-label color="danger" *ngIf="verifieForm.get('prix').touched && verifieForm.get('prix').hasError('minlength')">Verifier la longueur du prix</ion-label>
+  <br/><br/>
+
+  <ion-label class="Label">Lien Photo</ion-label >  <br>
+  <ion-item>
+    <ion-input [(ngModel)]="lienphoto" formControlName="lienphoto" type="text"></ion-input>
+  </ion-item>
+  <ion-label color="danger" *ngIf="verifieForm.get('lienphoto').touched && verifieForm.get('lienphoto').errors?.required">Veuillez entrer le lien de la photo </ion-label>
+  <ion-label color="danger" *ngIf="verifieForm.get('lienphoto').touched && verifieForm.get('lienphoto').hasError('minlength')">Verifier la longueur du lien</ion-label>
+  <br/><br/>
+
+  <ion-label class="Label">Commentaire3</ion-label >  <br>
+  <ion-item>
+    <ion-input [(ngModel)]="commentaire3" formControlName="commentaire3" type="text"></ion-input>
+  </ion-item>
+  <ion-label color="danger" *ngIf="verifieForm.get('commentaire3').touched && verifieForm.get('commentaire3').errors?.required">Veuillez entrer le commentaire </ion-label>
+  <ion-label color="danger" *ngIf="verifieForm.get('commentaire3').touched && verifieForm.get('commentaire3').hasError('minlength')">Verifier la longueur commentaire</ion-label>
+  <br/><br/>
+
+<ion-col>
+  <br/> <br/>
+  <ion-button type="button" (click)="update_genie_civil()" [disabled]="!verifieForm.valid" color="success" shape="round" expand="full">
+  Modifier
+</ion-button>
+</ion-col>
+
+</form>
+</ion-content>

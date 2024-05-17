@@ -1,0 +1,60 @@
+<ion-header >
+
+  <ion-toolbar class="tool1" color="success">
+    <br/>
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <br/> <br/>
+      <ion-title class="tool2">INFORMATION</ion-title>
+      <br/>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content padding class="custom-background"  [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <br/>
+
+    <form [formGroup]="verifieForm">
+
+
+
+      <ion-label class="Label">Commentaire 1</ion-label >  <br>
+      <ion-item>
+        <ion-input [(ngModel)]="commentaire1" formControlName="commentaire1" type="text"></ion-input>
+      </ion-item>
+      <ion-label color="danger" *ngIf="verifieForm.get('commentaire1').touched && verifieForm.get('commentaire1').errors?.required">Veuillez entrer le commentaire </ion-label>
+      <ion-label color="danger" *ngIf="verifieForm.get('commentaire1').touched && verifieForm.get('commentaire1').hasError('minlength')">Verifier la longueur commentaire</ion-label>
+      <br/><br/>
+
+      <ion-label class="Label">Commentaire 2</ion-label >  <br>
+        <ion-item>
+          <ion-input [(ngModel)]="commentaire2" formControlName="commentaire2" type="text"></ion-input>
+        </ion-item>
+        <ion-label color="danger" *ngIf="verifieForm.get('commentaire2').touched && verifieForm.get('commentaire2').errors?.required">Veuillez entrer le nombre de partant </ion-label>
+        <ion-label color="danger" *ngIf="verifieForm.get('commentaire2').touched && verifieForm.get('commentaire2').hasError('minlength')">Verifier la longueur </ion-label>
+        <br/><br/>
+
+
+        <ion-label class="Label">Commentaire 3</ion-label >  <br>
+          <ion-item>
+            <ion-input [(ngModel)]="commentaire3" formControlName="commentaire3" type="text"></ion-input>
+          </ion-item>
+          <ion-label color="danger" *ngIf="verifieForm.get('commentaire3').touched && verifieForm.get('commentaire3').errors?.required">Veuillez entrer le montant </ion-label>
+          <ion-label color="danger" *ngIf="verifieForm.get('commentaire3').touched && verifieForm.get('commentaire3').hasError('minlength')">Verifier le montant </ion-label>
+          <br/><br/>
+
+
+
+    <ion-col>
+      <br/> <br/>
+      <ion-button type="button" (click)="showLoading()" [disabled]="!verifieForm.valid" color="success" shape="round" expand="full">
+      Modifier
+    </ion-button>
+    </ion-col>
+  </form>
+
+  </ion-content>
