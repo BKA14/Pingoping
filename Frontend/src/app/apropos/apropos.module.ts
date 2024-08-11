@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { AproposPageRoutingModule } from './apropos-routing.module';
 
 import { AproposPage } from './apropos.page';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AproposPageRoutingModule
+    AproposPageRoutingModule,
+    SharedModule
   ],
   declarations: [AproposPage]
 })

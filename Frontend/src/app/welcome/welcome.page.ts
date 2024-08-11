@@ -20,6 +20,15 @@ import { CustomFilterPipe } from './custom-filter.pipe';
 })
 export class WelcomePage implements OnInit {
 
+  activities = [
+    { title: 'Signalisation', icon: 'alert-circle-outline', description: 'Envoyer des alertes aux différentes entreprises de votre ville.', link: '/signalisation'  },
+    { title: 'Évènements à venir/Achat de ticket', icon: 'calendar-outline', description: 'Consultez les prochains événements.' , link: '/signalisation'  },
+    { title: 'Restaurant', icon: 'restaurant', description: 'Découvrez nos fabuleux mets.', link: '/signalisation'  },
+    { title: 'Lien utile', icon: 'link-outline', description: 'Accédez à des liens utiles.', link: '/numero-service' },
+    { title: 'Numéros de service', icon: 'call-outline', description: 'Trouvez des numéros utiles.', link: '/numero-service'  },
+    { title: 'Market', icon: 'cart-outline', description: 'Explorez notre marché.', link: '/signalisation'  }
+  ];
+
 term;
 term2
 handlerMessage = '';
@@ -45,7 +54,7 @@ categorie: any = [];
     public loadingController: LoadingController
     )
   {
-    this.getentreprises();
+
     this.getcategorie();
   }
 
@@ -82,7 +91,7 @@ categorie: any = [];
    },(error: any) => {
    alert('Erreur de connection avec le serveur veillez reessayer');
    //this.navCtrl.setRoot('/welcome2');
-   this.router.navigateByUrl('/welcome2');
+   //this.router.navigateByUrl('/welcome2');
    loading.dismiss();
    // console.log("ERREUR ===",error);
 })
@@ -100,40 +109,33 @@ setTimeout(() => {
 },500);
 }
 
-  async deconnect(){
 
+async getcategorie() {
   const loading = await this.loadingCtrl.create({
     message: 'Rechargement...',
-   spinner:'lines',
-  // showBackdrop:false,
+    spinner: 'lines',
     cssClass: 'custom-loading',
   });
-  loading.present();
+  await loading.present();
 
-localStorage.clear();
-  this.router.navigateByUrl('/login2');
-  loading.dismiss();
+  try {
+    this._apiService.getcategorie().subscribe(
+      (res: any) => {
+        console.log("SUCCESS ===", res);
+        this.categorie = res;
+        loading.dismiss();
+      },
+      (error: any) => {
+        console.log("Erreur de connection ", error);
+        loading.dismiss();
+      }
+    );
+  } catch (error) {
+    console.error('Erreur inattendue :', error);
+    loading.dismiss();
   }
+}
 
-  async getcategorie(){
-
-    const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
-     spinner:'lines',
-    // showBackdrop:false,
-      cssClass: 'custom-loading',
-    });
-    loading.present();
-
-    this._apiService.getcategorie().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
-      this.categorie = res;
-      loading.dismiss();
-     },(error: any) => {
-      console.log("Erreur de connection ",error);
-      loading.dismiss();
-  })
-  }
 
   async supprimer(id){
 
@@ -148,7 +150,7 @@ localStorage.clear();
 
   this._apiService.presentAlert(id).subscribe((res:any)  => {
     loading.dismiss();
-    this.getentreprises();
+
 
   },(error: any) => {
     loading.dismiss();
@@ -184,41 +186,6 @@ async presentAlert(id) {
 return alert.present();
 }
 
-async Loading() {
-    const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
-      duration: 4000,
-      cssClass: 'custom-loading',
-    });
-
-    loading.present();
-    this.router.navigateByUrl('/welcome')
-    //this.navCtrl.setRoot('/welcome');
-    this.getentreprises();
-  }
-
-async quitter(id) {
-  const alert = await this.alertController.create({
-    header: 'Etes-vous sur de vouloir quitter Lokalist ?',
-    buttons: [
-      {
-        text: 'Cancel',
-        role: 'cancel',
-        handler: () => {
-          //this.handlerMessage = 'Alert canceled';
-        },
-      },
-      {
-        text: 'OK',
-        role: 'confirm',
-        handler: () => {
-          App.exitApp();
-      },
-      },
-  ],
-  });
-return alert.present();
-}
 
 async showLoading() {
   const loading = await this.loadingCtrl.create({
@@ -230,7 +197,6 @@ async showLoading() {
   loading.present();
   this.router.navigateByUrl('/welcome')
   //this.navCtrl.setRoot('/welcome');
-  this.getentreprises();
 }
 
 ionViewWillEnter()
@@ -240,7 +206,7 @@ ionViewWillEnter()
 
 ngOnInit()
 {
-  this.getentreprises();
+
 }
 
 @ViewChild('maliste', {static: false}) list: IonList;

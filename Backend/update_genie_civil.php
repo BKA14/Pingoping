@@ -16,8 +16,8 @@ $q = mysqli_query($con, "UPDATE `genie_civil` SET `prix` =' $prix',`lienphoto` =
 if($q){
     $message['status'] = "Success";
 }else{
-    http_reponse_code(422);
-    $message['status']= " Error";
+    http_response_code(422);
+    $message['status'] = "Invalid Input";
 }
 echo json_encode($message);
 echo mysqli_error($con);

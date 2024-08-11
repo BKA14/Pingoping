@@ -24,3 +24,13 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+@import '~leaflet/dist/leaflet.css';
+
+
+body {
+  transition: padding-bottom 0.3s ease-in-out;
+}
+
+ion-content {
+  padding-bottom: 0 !important;
+}

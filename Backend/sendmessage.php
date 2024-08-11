@@ -1,0 +1,70 @@
+<?php
+include "config.php";
+
+// Récupérer les données JSON de la requête POST
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+
+// Initialiser un tableau pour la réponse JSON
+$response = array();
+
+// Fonction pour générer un ID unique
+function generateUniqueID($con) {
+    do {
+        $id = uniqid();
+        $query = mysqli_query($con, "SELECT * FROM `message_user` WHERE `id` = '$id'");
+    } while (mysqli_num_rows($query) > 0);
+    
+    return $id;
+}
+
+// Valider les données d'entrée
+$iduser = isset($data['iduser']) ? trim($data['iduser']) : null;
+$nom = isset($data['nom']) ? trim($data['nom']) : null;
+$prenom = isset($data['prenom']) ? trim($data['prenom']) : null;
+$contact = isset($data['contact']) ? trim($data['contact']) : null;
+$message = isset($data['message']) ? trim($data['message']) : null;
+
+if ($iduser && $nom && $prenom && $contact && $message) {
+    if (strlen($message) > 300) {
+        http_response_code(400); // Bad Request
+        $response['status'] = "Error";
+        $response['message'] = "Message trop long. Maximum 300 caractères autorisés.";
+    } else {
+        // Générer un ID unique
+        $id = generateUniqueID($con);
+
+        // Préparer et exécuter la requête SQL pour insérer le message dans les tables
+        $sql = "INSERT INTO message_user (id, iduser, message, nom, prenom, contact) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "sssssi", $id, $iduser, $message, $nom, $prenom, $contact);
+        $success_message_user = mysqli_stmt_execute($stmt);
+
+        // Insertion dans la table `message_userstockage`
+        $sql_stockage = "INSERT INTO message_userstockage (id, iduser, message, nom, prenom, contact) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt_stockage = mysqli_prepare($con, $sql_stockage);
+        mysqli_stmt_bind_param($stmt_stockage, "sssssi", $id, $iduser, $message, $nom, $prenom, $contact);
+        $success_message_userstockage = mysqli_stmt_execute($stmt_stockage);
+
+        // Vérifier le succès de l'insertion dans les deux tables
+        if ($success_message_user && $success_message_userstockage) {
+            http_response_code(201); // Created
+            $response['status'] = "Success";
+            $response['id'] = $id;
+        } else {
+            http_response_code(422); // Unprocessable Entity
+            $response['status'] = "Error";
+            $response['message'] = "Erreur lors de l'insertion du message.";
+        }
+    }
+} else {
+    http_response_code(400); // Bad Request
+    $response['status'] = "Error";
+    $response['message'] = "Données manquantes ou invalides.";
+}
+
+// Retourner la réponse au format JSON
+echo json_encode($response);
+
+// Fermer la connexion à la base de données
+mysqli_close($con);

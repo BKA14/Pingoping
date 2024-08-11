@@ -1,25 +1,51 @@
 <?php
 include "config.php";
+
+// Récupérer les données JSON depuis la requête POST
 $input = file_get_contents('php://input');
-$data = json_decode($input,true);
+$data = json_decode($input, true);
 $message = array();
-//$id = $data['id'];
+
+// Extraire les données de la requête JSON
 $idpub = $data['pubid'];
 $iduser = $data['iduser'];
 $contactuser = $data['contactuser'];
 $etat = $data['etat'];
 
+// Requête SQL sécurisée avec une requête préparée
+$sql = "INSERT INTO etatdelikes (idpub, iduser, contactuser, etat) VALUES (?, ?, ?, ?)";
+$stmt = mysqli_prepare($con, $sql);
 
-$q = mysqli_query($con,  "INSERT INTO `etatdelikes` (`idpub`, `iduser`, `contactuser`, `etat`) VALUES ('$idpub', '$iduser', '$contactuser', '$etat')");
-//$q = mysqli_query($con, "INSERT INTO 'entreprise' ('year','entrepriseOne','entrepriseTwo') VALUES ('$year','$entrepriseOne','$entrepriseTwo')");
+// Vérifier si la préparation de la requête a réussi
+if ($stmt) {
+    // Binder les paramètres à la requête préparée
+    mysqli_stmt_bind_param($stmt, "ssss", $idpub, $iduser, $contactuser, $etat);
 
-if($q){
-    http_response_code(201);
-    $message['status'] = "Success";
-}else{
-   
-    http_response_code(422);
-    $message['status']= "Error";
+    // Exécuter la requête préparée
+    $success = mysqli_stmt_execute($stmt);
+
+    // Vérifier si l'insertion a réussi
+    if ($success) {
+        http_response_code(201); // Created
+        $message['status'] = "Success";
+    } else {
+        // Gestion des erreurs lors de l'exécution de la requête
+        http_response_code(422); // Unprocessable Entity
+        $message['status'] = "Error";
+        $message['error'] = mysqli_error($con);
+    }
+
+    // Fermer la requête préparée
+    mysqli_stmt_close($stmt);
+} else {
+    // Gestion des erreurs lors de la préparation de la requête
+    http_response_code(500); // Internal Server Error
+    $message['status'] = "Error";
+    $message['error'] = "Erreur lors de la préparation de la requête : " . mysqli_error($con);
 }
+
+// Retourner la réponse au format JSON
 echo json_encode($message);
-echo mysqli_error($con);
+
+// Fermer la connexion à la base de données
+mysqli_close($con);

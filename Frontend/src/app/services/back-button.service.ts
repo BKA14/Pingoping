@@ -16,7 +16,22 @@ export class BackButtonService {
         this.withDoublePress("appuyez à nouveau pour quitter", () => {
           navigator['app'].exitApp();
         });
-      } else {
+      } else if (currentUrl === "/welcome") {
+        this.withDoublePress("appuyez à nouveau pour quitter", () => {
+          navigator['app'].exitApp();
+        });
+      }
+      else if (currentUrl === "/acceuil") {
+        this.withDoublePress("appuyez à nouveau pour quitter", () => {
+          navigator['app'].exitApp();
+        });
+      }
+      else if (currentUrl === "/apropos") {
+        this.withDoublePress("appuyez à nouveau pour quitter", () => {
+          navigator['app'].exitApp();
+        });
+      }
+      else {
         this.navControlelr.back();
       }
 

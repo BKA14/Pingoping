@@ -1,48 +1,98 @@
 <ion-header >
 
-  <ion-toolbar class="tool1" color="success">
-    <ion-buttons  slot="start">
-      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
-    </ion-buttons>
-    <br/> <br/>
-      <ion-title class="tool2">A PROPOS</ion-title>
-      <br/>
-    </ion-toolbar>
+<ion-toolbar class="toolbar">
+  <br  style="padding: 50px;">
+  <ion-buttons slot="start">
+  <ion-back-button defaultHref="/" color="light"></ion-back-button>
+  </ion-buttons>
+<br>
+    <ion-title class="tool2">A PROPOS</ion-title>
+    <br/>
+  </ion-toolbar>
 </ion-header>
-<br/><br>
-<ion-content padding class="tool3" [fullscreen]="true">
-  <div class="list">
-    <img height="220px"  src="http://localhost/img/pingoping.jpg"  >
-<br/> <br/>
-<ion-label class="h2">Contact: 74-44-34-34</ion-label>
-<br/> <br/> <br/>
-<ion-label class="h2">Email: pingoping@gmail.com</ion-label>
-<br/> <br/> <br/>
-<ion-label class="h2">Version Android: 1.0.0</ion-label>
-<br/> <br/> <br/>
-<ion-label class="h2">Pingoping, le multi-service prés de chez vous !</ion-label>
-<br/> <br/> <br/>
-<ion-button type="button" (click)="openUrl()" color="success" shape="round" expand="full">
-  Visiter la Page Facebook
-</ion-button>
+
+<ion-content padding class="tool3">
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <br>
+
+  <div class="centered-div" *ngIf="grade === 'admin' || grade === 'superadmin'">
+    <span class="span" color="success">Modification de la page à propos </span> &nbsp;
+    <ion-icon name="create" style="zoom: 1.7;" color="success" class="icon" [routerLink]="['/update-apropos/']"></ion-icon>
 </div>
+
+<br>
+
+<div class="list" *ngIf="a_propos !== 'erreur_chargement' && a_propos !== 'aucune_alerte'">
+
+  <div *ngIf="a_propos.logo && a_propos.logo.trim() !== undefined &&  a_propos.logo.trim() !== '' && a_propos.logo.trim() !== 'non' &&  a_propos.logo.trim() !== null " >
+    <ion-img class="logo"  [src]="a_propos.logo?.trim()" style="width: 200px; height: auto; margin: 0 auto;"></ion-img>
+  </div>
+
+<br>
+<ion-label class="h2" *ngIf="a_propos.contact && a_propos.contact !== undefined &&  a_propos.contact !== '' && a_propos.contact !== '0' &&  a_propos.contact !== null"  >{{a_propos.contact}}</ion-label>
+<br/> <br/> <br/>
+<ion-label class="h2" *ngIf="a_propos.email && a_propos.email !== undefined &&  a_propos.email !== '' && a_propos.email !== 'non' &&  a_propos.email !== null" >{{a_propos.email}}</ion-label>
+<br/> <br/> <br/>
+<ion-label class="h2" *ngIf="a_propos.version && a_propos.version !== undefined &&  a_propos.version !== '' && a_propos.version !== 'non' &&  a_propos.version !== null" >{{a_propos.version}}</ion-label>
+<br/> <br/> <br/>
+<ion-label class="h2" *ngIf="a_propos.commentaire && a_propos.commentaire !== undefined &&  a_propos.commentaire !== '' && a_propos.commentaire !== 'non' &&  a_propos.commentaire !== null"  >{{a_propos.commentaire}}</ion-label>
+<br/> <br>
+</div>
+
+
+ <!-- Boutons pour les réseaux sociaux -->
+<div class="social-icons-container">
+  <div class="social-icons">
+    <ion-button *ngIf="a_propos.facebook && a_propos.facebook !== undefined &&  a_propos.facebook !== null  && a_propos.facebook !=='' && a_propos.facebook !== 'non' " (click)="openFacebook(a_propos.facebook)" color="light">
+      <ion-icon name="logo-facebook" slot="icon-only"   class="facebook-icon" ></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.whatsapp && a_propos.whatsapp !== undefined &&  a_propos.whatsapp !== null  && a_propos.whatsapp !=='' && a_propos.whatsapp !== 'non' " (click)="openWhatsApp(a_propos.whatsapp)" color="light">
+      <ion-icon name="logo-whatsapp" slot="icon-only"  class="whatsapp-icon" ></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.tiktok && a_propos.tiktok !== undefined &&  a_propos.tiktok !== null  && a_propos.tiktok !=='' && a_propos.tiktok !== 'non' " (click)="openTiktok(a_propos.tiktok)" color="light">
+      <ion-icon name="logo-tiktok" slot="icon-only"  class="tiktok-icon"></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.instagram && a_propos.instagram !== undefined &&  a_propos.instagram !== null  && a_propos.instagram !=='' && a_propos.instagram !== 'non' " (click)="openInstagram(a_propos.instagram)" color="light">
+      <ion-icon name="logo-instagram" slot="icon-only"  class="instagram-icon"></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.youtube  && a_propos.youtube !== undefined &&  a_propos.youtube !== null  && a_propos.youtube !=='' && a_propos.youtube !== 'non' " (click)="openYoutube(a_propos.youtube)" color="light">
+      <ion-icon name="logo-youtube" slot="icon-only"  class="youtube-icon"></ion-icon>
+    </ion-button>
+
+    <ion-button *ngIf="a_propos.telegram  && a_propos.telegram !== undefined &&  a_propos.telegram !== null  && a_propos.telegram !=='' && a_propos.telegram !== 'non' " (click)="openTelegram(a_propos.telegram)" color="light">
+      <ion-icon name="paper-plane-outline" slot="icon-only"  class="telegram-icon"></ion-icon>
+    </ion-button>
+<br>
+</div>
+
+</div>
+<br *ngIf="a_propos == 'erreur_chargement'">
+<br *ngIf="a_propos == 'erreur_chargement'">
+<div *ngIf="a_propos == 'erreur_chargement'" class="erreur_chargement">
+  <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+  <p>Erreur de chargement</p>
+  <br>
+  <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+</div>
+
+<br *ngIf="a_propos == 'aucune_alerte'">
+<br *ngIf="a_propos == 'aucune_alerte'">
+<div>
+  <div  *ngIf="a_propos == 'aucune_alerte'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Aucune alerte effectué</p>
+    <br>
+  </div>
+</div>
+
+
 </ion-content>
 
-
- <!-- Tab bar avec hideOnScroll -->
- <ion-tab-bar  class="menu" slot="bottom" hideOnScroll="true">
-  <ion-tab-button (click)="acceuil()" tab="account">
-    <ion-icon class="custom-icon" name="home"></ion-icon>
-  </ion-tab-button>
-  <ion-tab-button (click)="service()" tab="contact">
-    <ion-icon  class="custom-icon" name="glasses"></ion-icon>
-  </ion-tab-button>
-  <ion-tab-button (click)="ping()" tab="settings">
-    <ion-icon class="custom-icon" name="star"></ion-icon>
-  </ion-tab-button>
-  <ion-tab-button (click)="apropos()" tab="settings">
-    <ion-icon class="custom-icon" name="information-circle"></ion-icon>
-  </ion-tab-button>
-  <p class="lignemenu"></p>
-</ion-tab-bar>
 

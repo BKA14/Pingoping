@@ -4,13 +4,13 @@
     <ion-buttons slot="start">
       <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
     </ion-buttons>
-    <br/>  <br/>
+    <br/>  <br/> <br>
     <ion-title class="tool2">Mise à jours de la  publicité</ion-title>
     <br/>
   </ion-toolbar>
 </ion-header>
 <br/>
-<ion-content [fullscreen]="true" keyboard-attach>
+<ion-content  keyboard-attach>
 
   <form >
 
@@ -215,11 +215,30 @@
 
     <ion-item *ngIf="selectedrang !== 'none'">
       <ion-label position="floating" class="h2"> Rang de la pub </ion-label><br/>
-      <ion-input ion-keyboard-fix [(ngModel)]="rangpub"   class="keyboard-fix" name="rang" type="number" ></ion-input>
+      <ion-input ion-keyboard-fix [(ngModel)]="rangpub"  name="rang" type="number" ></ion-input>
+    </ion-item>
+
+    <br>
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="updateadmin($event)">
+        <ion-segment-button value="pub_admin">
+          <ion-label> Mettre en admin</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
     </ion-item>
     <br/>
 
 
+    <ion-item *ngIf="selectedadmin !== 'none'">
+      <ion-label position="floating" class="h2"> grade de la pub : admin </ion-label><br/>
+      <ion-label name="admin" > {{ admin }}</ion-label>
+    </ion-item>
+    <br/>
 
   <ion-col>
   <br/> <br/>

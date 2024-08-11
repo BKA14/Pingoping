@@ -1,0 +1,20 @@
+.menu .custom-icon {
+  color: #ffffff; /* blanc */
+}
+
+/* Ajustement de la barre de tabulation */
+.menu {
+  height: 42px;
+  width: auto;
+  background-color: #2dd36f; /* Vert de la couleur de succès d'Ionic */
+  border-bottom-left-radius: 20px; /* Rayon pour le coin inférieur gauche */
+  border-bottom-right-radius: 20px; /* Rayon pour le coin inférieur droit */
+  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Ombre sous la barre de tabulation */
+  transition: background-color 0.3s ease; /* Ajoute une transition de fondu à la couleur de fond */
+}
+
+/* Style pour l'élément actif */
+.menu .active {
+  color: #ffffff; /* blanc */
+  background-color: #00ff00; /* Vert clair pour l'élément actif */
+}

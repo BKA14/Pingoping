@@ -1,0 +1,152 @@
+<ion-header>
+  <ion-toolbar color="success" class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-row class="header-row">
+      <ion-title class="title">SIGNALEMENT</ion-title>
+    </ion-row>
+  </ion-toolbar>
+  <div class="search-container">
+    <ion-input class="recherche" type="text" placeholder="Rechercher id, nom, prenom,..." [(ngModel)]="term"></ion-input>
+    <ion-icon name="search" class="search-icon" color="light" style="zoom: 1.9;" (click)="search_active()"></ion-icon>
+  </div>
+</ion-header>
+
+
+<div class="arrow-container" #scrollButton  (click)="scrollToTop()" >
+  <ion-icon name="arrow-up-circle" class="red-arrow" style="zoom: 3.0;"></ion-icon>
+</div>
+
+
+<ion-content class="custom-background ">
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-item class="select1" >
+    <ion-select  class="select"  (ionChange)="filterAlerts()" [(ngModel)]="term2" placeholder="catégorie">
+
+    <ion-select-option value=''>Aucune</ion-select-option>
+
+      <ion-select-option  value= "oui">
+       Signalement géré
+      </ion-select-option>
+
+      <ion-select-option  value= "non">
+        Signalement non géré
+       </ion-select-option>
+
+    </ion-select>
+  </ion-item>
+
+
+<div *ngIf="recherche_date">
+  <ion-item>
+    <ion-label>De</ion-label>
+    <ion-datetime display-format="YYYY-MM-DD" [(ngModel)]="startDate"></ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>À</ion-label>
+    <ion-datetime display-format="YYYY-MM-DD" [(ngModel)]="endDate" [min]="startDate" (ionChange)="updateDateFin($event)"></ion-datetime>
+  </ion-item>
+
+  <ion-button (click)="choisir_date()">Appliquer filtre de date</ion-button>
+
+  <ion-button (click)="annuler_date()" color="warning">Annuler</ion-button>
+</div>
+
+<ion-button (click)="refreshPage($event)"  color="success" style="padding: 5px; margin: 1px;">Actualiser</ion-button>
+&nbsp;  &nbsp;
+<ion-button size="small" (click)="date()" color="success" style="padding: 5px;" *ngIf="!recherche_date">date</ion-button>
+
+
+
+  <ion-list class="message-list"  *ngIf="signalement !== 'erreur_chargement' && signalement !== 'aucune_alerte'">
+    <div lines="inset"  class="message-item " *ngFor="let signalement of signalement  | customFilter: term | customFilter: term2">
+      <ion-label color="dark">
+        <p class="target">Signalé le : {{ formatCommentTime (signalement.heurecomdusignaler ? signalement.heurecomdusignaler : '') }}</p>
+        <p class="target">ID du signalement : {{ signalement.id ? signalement.id : ''}}</p> <br>
+        <ion-label class="label-title">ID du commentaire : </ion-label>
+        <h2 class="message-content">{{ signalement.idcomsignaler ? signalement.idcomsignaler : '' }}</h2>
+        <ion-label class="label-title">ID du signaleur : </ion-label>
+        <h2 class="message-content">{{ signalement.iduserdusignaleur ? signalement.iduserdusignaleur : ''}}</h2>
+        <ion-label class="label-title">ID du signalé : </ion-label>
+        <h2 class="message-content">{{ signalement.idusersignaler ? signalement.idusersignaler : '' }}</h2>
+        <ion-label class="label-title"> Nom et prenom du signaleur :</ion-label>
+        <h2 class="message-content">{{ signalement.nomsignaleur ? signalement.nomsignaleur : '' }} {{ signalement.prenomdusignaleur ? signalement.prenomdusignaleur : '' }}</h2>
+        <ion-label class="label-title">Signalé le :</ion-label>
+        <h2 class="message-content">{{ formatCommentTime (signalement.heuredusignalement ? signalement.heuredusignalement : '') }}</h2>
+        <ion-label class="label-title"> Nom et prenom du signalé : </ion-label>
+        <h2 class="message-content">{{ signalement.nomestsignaler ? signalement.nomestsignaler : ''}} {{ signalement.prenomestsignaler ? signalement.prenomestsignaler : ''}}</h2>
+        <ion-label class="label-title">Commentaire signalé : </ion-label>
+        <h2 class="message-content">{{ signalement.commentairesignaler ? signalement.commentairesignaler : ''   }}</h2>
+        <ion-label class="label-title">ID de la publication du commentaire :</ion-label>
+        <h2 class="message-content">{{ signalement.pubidcomsignaler ? signalement.pubidcomsignaler : '' }}</h2>
+        <ion-label class="label-title" *ngIf="signalement.admin_nom !== 'non' && signalement.admin_prenom !== 'non' "> Administrateur : </ion-label>
+        <h2 class="message-content">{{ signalement.admin_nom ? signalement.admin_nom : '' }} {{ signalement.admin_prenom ? signalement.admin_prenom : '' }}</h2>
+
+        <p class="bloquer" *ngIf="findDateFinBlocage(signalement.idusersignaler) !== 'non'">Utilisateur bloqué jusqu'au : {{ findDateFinBlocage(signalement.idusersignaler) }}</p>
+        <br> <br>
+
+        <ion-button (click)="terminer(signalement)" [ngClass]="{'button-rouge': signalement.traitement == 'non', 'button-vert': signalement.traitement == 'oui' ,'button-vert1': findDateFinBlocage(signalement.idusersignaler) !== 'non' && findDateFinBlocage(signalement.idusersignaler) !== null && findDateFinBlocage(signalement.idusersignaler) !== undefined}">
+          Signalement
+        </ion-button>
+
+        <ion-button (click)="btn()">
+          bloquer
+        </ion-button>
+
+        <ion-button (click)="debloquer(signalement)">
+          Débloquer
+        </ion-button>
+
+
+
+        <ion-item *ngIf="selectedDateOption">
+          <ion-label position="floating" class="h1">Date fin blocage</ion-label><br/>
+
+          <ion-datetime
+            displayFormat="DD/MM/YYYY"
+            (ionChange)="updateDate($event)"
+          ></ion-datetime>
+        </ion-item>
+         <br>
+        <ion-button *ngIf="selectedDateOption" (click)="confirmer(signalement)">
+          confirmer
+        </ion-button>
+
+         </ion-label>
+         <div class="item-note"></div>
+    </div>
+  </ion-list>
+
+  <br *ngIf="signalement == 'erreur_chargement'">
+<br *ngIf="signalement == 'erreur_chargement'">
+<div *ngIf="signalement == 'erreur_chargement'" class="erreur_chargement">
+  <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+  <p>Erreur de chargement</p>
+  <br>
+  <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+</div>
+
+<br *ngIf="signalement == 'aucune_alerte'">
+<br *ngIf="signalement == 'aucune_alerte'">
+<div>
+  <div  *ngIf="signalement == 'aucune_alerte'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Aucune alerte effectué</p>
+    <br>
+  </div>
+</div>
+
+<!-- Infinite Scroll -->
+<ion-infinite-scroll [disabled]="infiniteScrollDisabled" threshold="100px" (ionInfinite)="getLoadFunction($event)">
+  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+
+</ion-content>
+
+

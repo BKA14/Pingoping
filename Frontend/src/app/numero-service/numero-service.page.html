@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <br> <br> <br>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-row class="header-row">
+      <ion-title class="title">NUMERO SERVICE</ion-title>
+    </ion-row>
+    <br><br>
+    <ion-searchbar class="recherche" type="text" placeholder="Rechercher entreprise..." [(ngModel)]="term"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<br>
+
+<item class="span" *ngIf="grade === 'admin' || grade === 'superadmin'">
+<span class="span" color="success">Ajouter un nouveau numero </span>
+<ion-icon type="button" [routerLink]="['/ajouter-numero/']" style="zoom: 1.1;" name="add-circle-outline" class="icon"></ion-icon>
+</item>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-card *ngFor="let number of number  | customFilter: term" class="service-card">
+      <br>
+      <ion-card-header>
+        <ion-label class="nom" color="success" >{{ number.nom_service }}</ion-label>
+      </ion-card-header>
+      <ion-card-content>
+        <p> {{ number.description }} </p>
+        <ion-button color="success" (click)="appeler(number.numero)">
+          <ion-icon slot="start" name="call-outline"></ion-icon>
+          Appeler
+        </ion-button>
+      </ion-card-content>
+      <div class="icon-right" *ngIf="grade === 'admin' || grade === 'superadmin'">
+        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/update-numero/',number.id]"></ion-icon>
+        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(number)"></ion-icon>
+      </div>
+    </ion-card>
+  </ion-list>
+</ion-content>

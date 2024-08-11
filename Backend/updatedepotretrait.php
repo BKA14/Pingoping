@@ -17,7 +17,7 @@ $q = mysqli_query($con, "UPDATE `depotretrait` SET `commentaire1` =' $commentair
 if($q){
     $message['status'] = "Success";
 }else{
-    http_reponse_code(422);
+    http_response_code(422);
     $message['status']= " Error";
 }
 echo json_encode($message);

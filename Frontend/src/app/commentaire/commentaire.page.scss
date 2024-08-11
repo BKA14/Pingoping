@@ -1,0 +1,802 @@
+ion-content  {
+  --ion-background-color:rgb(237, 231, 234);
+}
+
+ion-card{
+  font-style: normal;
+  font-family: "Roboto", sans-serif;
+  border-radius: 18px;
+  }
+
+  .my-comment {
+    background-color: lightblue; // Couleur de fond pour mes propres commentaires
+    padding: 10px;
+    border-radius: 10px;
+    margin-right: 30%; // Marge à droite pour aligner à gauche (simule un alignement à gauche)
+  }
+
+  .other-comment {
+    background-color: rgb(190, 227, 203);// Couleur de fond pour les commentaires des autres utilisateurs
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 30%; // Marge à gauche pour aligner à droite (simule un alignement à droite)
+  }
+
+  .commentaire-actions {
+    display: flex;
+    gap: 10px; /* Ajoute un espace entre les éléments */
+}
+
+.a_commentaire {
+    text-decoration: none; /* Enlève la décoration de lien */
+    color: #327d4b; /* Change la couleur du lien */
+    cursor: pointer; /* Change le curseur pour pointer */
+}
+
+.a_commentaire:hover {
+    text-decoration: underline; /* Souligne le lien au survol */
+}
+
+  .nom{
+   color: grey ;
+      }
+
+  .reponse{
+   font-size: medium;
+   color: black
+  }
+
+  .comment-date {
+    font-size: 12px;
+    color: gray;
+  }
+
+
+  .custom-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background-color: #dfe0df; /* Couleur de fond verte, ajustez selon vos besoins */
+    margin: 26px;
+    border-radius: 30px;
+  }
+
+
+  .custom-card {
+    margin-bottom: 20px; /* Espace entre les cartes, ajustez selon vos besoins */
+    border-radius: 14px; /* Coins arrondis, ajustez selon vos besoins */
+    box-shadow: 0 4px 8px rgba(43, 218, 116, 0.1); /* Ombre, ajustez selon vos besoins */
+    overflow: hidden; /* Pour masquer le débordement de la carte */
+    background-color: rgb(255, 255, 255); /* Couleur de fond verte, ajustez selon vos besoins */
+  }
+
+
+
+
+// Définissez la couleur de fond pour la classe .liked
+ion-button.likes.liked {
+  background-color: #0eeb49; // Remplacez par la couleur souhaitée
+  transition: background-color 0.3s ease-in-out ;
+}
+
+
+.deconnect{
+  float: right;
+  }
+
+
+.utilisateur{
+  float: left;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+
+.list{
+  border-radius: 15px;
+font-style: normal;
+font-family: "Roboto", sans-serif;
+padding: 1px;
+}
+
+
+.tool1{
+font-size: 9px;
+font-style: normal;
+  padding: 6;
+  border-radius: 3px;
+  font-family: "Roboto", sans-serif;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 5px; /* Rayon pour le coin inférieur gauche */
+  border-bottom-right-radius: 5px; /* Rayon pour le coin inférieur droit */
+  --background: linear-gradient(to right, #0eeb49, #05a83d); /* Ajout d'un dégradé */
+  --ion-toolbar-background: transparent;
+}
+
+
+.iconsupp{
+  //display: inline-block;
+  color: #f70707a9;
+  }
+
+  .iconmodif{
+  //display: inline-block;
+  color: #0808f8a9;
+
+}
+.checkbox {
+//display: inline-block;
+font-size: 42px;
+color: #0808f8a9;
+//vertical-align: middle;
+float: left;
+
+}
+
+.icon{
+  //display: inline-block;
+  font-size: 42px;
+  color: #2dd36f;
+  vertical-align: middle;
+  float: right;
+  }
+
+
+  .text{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 16px;
+  font-style: normal;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+}
+
+
+.span{
+  display: inline-block;
+  vertical-align: middle;
+  font-style: normal;
+  text-align: center;
+  --ion-background-color:#fdfdfd;
+  font-family: "Roboto", sans-serif;
+  --background: linear-gradient(#e0ede4, #afcab0) !important;
+}
+
+.select{
+  padding: 7px;
+  top: 0px;
+  color: #121212;
+  left: 200px;
+  width: 100px;
+  right: 1px;
+  vertical-align: right;
+  width: 150px;
+  height: 0px;
+  text-align: right;
+  font-size: 13px;
+  font-style: normal;
+  --ion-background-color:#fdfdfd;
+  font-family: "Roboto", sans-serif;
+
+}
+.toolbar{
+  height: 40px;
+  font-size: 10px;
+  font-style: normal;
+}
+
+.span1{
+  width: 100px;
+  text-align: left;
+  font-size: 10px;
+  font-style: normal;
+  --ion-background-color:#fdfdfd;
+}
+
+
+.nombre{
+  //vertical-align: middle;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+}
+
+
+.h2{
+  //vertical-align: middle;
+  font-size: 15px;
+  font-style: normal;
+  padding: 11px;
+  font-family: "Roboto", sans-serif;
+}
+
+.tool2{
+  --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+  font-size: 16px;
+  font-style: normal;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  color: #ffffff;
+  padding: 6;
+  }
+
+  .btnannuler{
+    font-size: 25px;
+    background-color: rgb(243, 238, 243);
+    font-style: normal;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    text-align: center;
+    color: #8cd2a4;
+    margin: 8px;
+
+    }
+
+
+    .copy-message {
+      display: none;
+      background-color: rgb(247, 241, 247); /* Green background */
+      color: rgb(164, 228, 178); /* White text */
+      padding: 10px;
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      z-index: 1000;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+    }
+
+    .copy-message.show {
+      display: block;
+    }
+
+
+
+  /* Dans votre fichier CSS ou SCSS */
+.custom-background {
+  font-style: normal;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+color: #ffffff;
+padding: 3px;
+
+}
+
+  .tool{
+    //display: inline-block;
+    font-size: 42px;
+    color: #ffffff;
+    font-family: "Roboto", sans-serif;
+  }
+
+.welcometitle{
+color: #ffffff;
+}
+
+.logo {
+  text-align: center;
+  font-size: 55px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 38%;
+  //transform: translateY(-50%);
+  color: #ffffff;
+  font-style: normal;
+  font-family: "Roboto", sans-serif;
+}
+
+.recherche {
+  font-size: 20px;
+  line-height: 26px;
+  --ion-background-color:#fafafa;
+  font-family: "Roboto", sans-serif;
+}
+
+.log {
+  font-size: 16px;
+  line-height: 22px;
+  font-family: "Roboto", sans-serif;
+  color: #ffffff;
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+  color: #d90a0a;
+}
+
+/* Fixer le tab bar en bas de la page */
+ion-tab-button {
+--color-selected: #2dd36f; /* Couleur des icônes sélectionnées (en vert) */
+--color-unselected: #2dd36f; /* Couleur des icônes non sélectionnées (en vert) */
+}
+
+
+/* Ajouter un espace au contenu pour éviter qu'il ne soit caché par le tab bar */
+ion-content {
+margin-bottom: 50px; /* Ajustez la valeur en fonction de la hauteur de votre tab bar */
+}
+
+
+/* Dans votre fichier CSS ou SCSS */
+.centered-text {
+font-size: 30 px;
+text-align: center;
+color: #121212;
+}
+
+.couleur-commentaire{
+color: #ffffff;
+font-size: 17px;
+}
+
+/* Dans votre fichier CSS ou SCSS */
+/* Dans votre fichier CSS ou SCSS */
+ion-card-content{
+  padding: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+
+/* Dans votre fichier CSS ou SCSS */
+.custom-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cela garantit que l'image couvre entièrement le conteneur, sans déformation */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+
+.facebook-style {
+  width: 100%;
+  height: 100%; /* Ajustez selon vos besoins pour maintenir le rapport hauteur/largeur de l'image */
+  object-fit: cover ;
+  border-radius: 0px; /* Coins arrondis, ajustez selon vos besoins */
+  box-shadow: 0 4px 8px rgba(4, 245, 80, 0.1); /* Ombre, ajustez selon vos besoins */
+  overflow: hidden;
+  padding: 0% !important;
+}
+
+.video-style {
+  width: 100%;
+  height: 100%; /* Ajustez selon vos besoins pour maintenir le rapport hauteur/largeur de l'image */
+  object-fit: cover ;
+  border-radius: 0px; /* Coins arrondis, ajustez selon vos besoins */
+  box-shadow: 0 4px 8px rgba(4, 245, 80, 0.1); /* Ombre, ajustez selon vos besoins */
+  overflow: hidden;
+}
+
+
+.transparent-button {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+.like-button-green {
+  background-color: green;
+  color: white;
+}
+
+
+
+.icon-right {
+float: right; /* Aligne l'icône à droite */
+}
+
+.deconte {
+float: right; /* Aligne l'icône à droite */
+background-color: #8ee092; /* Couleur de fond verte */
+color: rgb(24, 23, 23); /* Couleur du texte blanche */
+padding: 0px; /* Espacement intérieur pour plus de visibilité */
+border-radius: 1px; /* Coins arrondis */
+font-size: 15px; /* Taille de la police */
+margin: 10px;
+}
+
+.deconte.blinking-text {
+  animation: blinker 4s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+
+.video-controls {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+button {
+  margin-right: 10px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 20px;
+}
+
+input {
+  width: 100px;
+}
+
+
+.couleurBouton{
+color: #02751b;
+--background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+font-family: "Roboto", sans-serif;
+}
+
+
+.menu{
+border-radius: 12px;
+height: 32px;
+}
+
+.custom-icon {
+  color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
+  font-size: 22px;
+  }
+
+  .lignemenu {
+    background-color:  #2dd36f;
+    height: 2px; /* Ajustez la largeur de la ligne selon vos préférences */
+    width: auto;
+    --padding-start: 0;
+    --padding-end: 0;
+    margin: 10px;
+  }
+
+
+
+.commentaire
+{
+//vertical-align: middle;
+font-style: normal;
+padding: 4px;
+font-family: "Roboto", sans-serif;
+color: #080a09;
+--background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+
+white-space: normal; /* Permet le retour à la ligne automatique */
+word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
+text-align: justify;
+font-size :large;
+margin: 3%;
+line-height: 1.5;
+--padding-start: 0;
+--padding-end: 0;
+
+}
+
+
+
+.localisation{
+  //vertical-align: middle;
+  font-size: medium;
+  font-style: normal;
+  padding: 3px;
+  font-family: "Roboto", sans-serif;
+  color: #080a09;
+  --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+
+  white-space: normal; /* Permet le retour à la ligne automatique */
+  word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
+  text-align: justify;
+  margin: 0;
+
+  --padding-start: 0;
+  --padding-end: 0;
+
+  }
+
+
+.titre
+{
+//vertical-align: middle;
+font-size: 22px;
+font-style: bold;
+
+padding: 3px;
+font-family: "Roboto", sans-serif;
+color: #060908;
+--background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+white-space: normal; /* Permet le retour à la ligne automatique */
+word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
+text-align: justify;
+margin: 0;
+text-align: center;
+--padding-start: 0;
+--padding-end: 0;
+}
+
+.ligne{
+  background-color:  #4ca05e;
+  padding: 0.6px;
+  width: auto;
+  --padding-start: 0;
+  --padding-end: 0;
+  margin: 0;
+  }
+
+  .lignemenu {
+    background-color:  #2dd36f;
+    height: 2px; /* Ajustez la largeur de la ligne selon vos préférences */
+    width: auto;
+    --padding-start: 0;
+    --padding-end: 0;
+    margin: 10px;
+  }
+
+
+  .likes
+  {
+    background-color:  #fbf9f8;
+   color: #747775;
+   --border-color: #4ca05e;
+    }
+
+    .likes1
+    {
+      background-color:  #fbf9f8;
+     color: #747775;
+     --border-color: #4ca05e;
+     margin-left: auto; /* Aligner à droite */
+      }
+
+      .comment-options-button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+
+      .comment-options {
+        position:relative;
+        bottom: 0;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 2px;
+        margin: 2px;
+        display: none;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .comment-options.active {
+        display: block;
+      }
+
+      .comment-options a {
+        display: block;
+        color: #232923;
+        text-decoration: none;
+        padding: 5px 0;
+      }
+
+      .comment-options a:hover {
+        background-color: #f2f2f2;
+      }
+
+      .comment-options-button {
+        border: none;
+        background: none;
+        color: #e7ece5;
+        cursor: pointer;
+        background-color: #429f1d;
+      }
+
+
+
+      .comment-options-button .icon-only {
+        font-size: 20px;
+      }
+
+    .nombre_likes {
+      font-size: 15px;
+      font-style: normal;
+      padding: 11px;
+      font-family: "Roboto", sans-serif;
+      }
+
+      .parent-comment {
+        margin-top: 5px; /* Marge supérieure pour séparer le commentaire parent */
+        border: 4px solid #f1efef; /* Bordure pour encadrer le commentaire parent */
+        padding: 10px; /* Espacement intérieur pour le commentaire parent */
+        background-color: rgb(220, 227, 188); /* Couleur de fond pour le commentaire parent */
+        border-radius: 3px;
+      }
+
+
+      .ligne{
+        background-color:  #4ca05e;
+        padding: 0.6px;
+        width: auto;
+        --padding-start: 0;
+        --padding-end: 0;
+        margin: 0;
+        }
+
+      .vert {
+        background-color: rgb(137, 207, 125); /* ou toute autre couleur que vous préférez */
+        //color: white; /* ou toute autre couleur de texte que vous préférez */
+      }
+
+      .btnpub {
+        margin-bottom: 10px; /* Ajoute un espacement entre les boutons */
+      }
+
+      /* Styliser le bouton de localisation */
+      .btnpub.location {
+        background-color: #fbf9f8;
+        color: #4ca05e;
+        --border-color: #4ca05e;
+      }
+
+      /* Styliser le bouton de contact WhatsApp */
+      .btnpub.contact {
+        background-color: #fbf9f8;
+        color: #4ca05e;
+        --border-color: #4ca05e;
+      }
+
+      /* Media queries pour ajuster le style en fonction de la taille de l'écran */
+      @media screen and (max-width: 600px) {
+        .btnpub {
+          width: 100%; /* Ajuster la largeur du bouton pour les petits écrans */
+        }
+      }
+
+      .likes {
+        background-color: #ffffff;
+        color: #4ca05e;
+        border: 1px solid #4ca05e;
+        border-radius: 5px;
+        padding: 4px 8px; /* Ajustez la taille du bouton */
+        cursor: pointer;
+      }
+
+      .likes ion-icon {
+        margin-right: 4px; /* Espacement entre l'icône et le texte */
+      }
+
+      /* Style spécifique pour la classe 'vert' */
+      .likes.vert {
+        background-color: #6ed384;
+        color: #e3dfdf;
+      }
+
+      /* Style pour placer le bouton à gauche */
+      .left-align {
+           text-align: left; /* Ajustez la marge à gauche selon vos besoins */
+      }
+
+      .video-style {
+        width: 100%;
+        height: auto;
+        object-fit: cover; /* ou object-fit: contain; en fonction de votre besoin */
+      }
+
+      .video-style:-webkit-full-screen {
+        width: 100vw;
+        height: 100vh;
+        object-fit: contain; /* ou une autre valeur appropriée */
+      }
+
+
+      .scroll-arrow {
+        position: fixed;
+        right: 20px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: rgb(220, 19, 19);
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        z-index: 1000;
+                    }
+
+      #scrollUp {
+        bottom: 80px;
+      }
+
+      #scrollDown {
+        bottom: 20px;
+      }
+
+        .itemcommentaire {
+        max-height: 100%; /* Adjust as needed */
+        overflow-y: auto ;
+      }
+
+      .container_a {
+        display: flex;
+        justify-content: flex-end;
+        padding: 0;
+        margin: 0;
+      }
+
+      .a_droite {
+        margin-right: 2px; /* Ajustez la marge selon vos besoins */
+        color: rgb(54, 56, 59) ; /* Couleur du texte, ajustez selon votre design */
+        text-decoration: none; /* Retire le soulignement par défaut des liens */
+      }
+
+      .a_commentaire
+      {
+        padding: 0;
+        margin: 0;
+        color: rgb(54, 56, 59) ; /* Couleur du texte, ajustez selon votre design */
+        text-decoration: none; /* Retire le soulignement par défaut des liens */
+      }
+
+      .admin {
+      color : hsla(93, 77%, 41%, 0.799);
+      }
+
+
+      .video-container {
+        position: relative;
+      }
+
+      // pour les video
+      .controls {
+        position: relative;
+        bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(69, 206, 78, 0.5);
+        padding: 2px;
+        border-radius: 7px;
+      }
+
+      .controls ion-icon, .controls input[type="range"] {
+        background:  rgb(249, 250, 250);
+        border: none;
+        color: rgb(72, 210, 132);
+      }
+
+      .controls input[type="range"] {
+        flex: 1;
+        margin: 0 10px;
+      }
+
+      .arrow-container {
+        position: fixed;
+        bottom: 18%;/* Ajustez cette valeur selon vos préférences */
+        right: 12px;  /* Ajustez cette valeur selon vos préférences */
+        color: #7cc571; /* Couleur de l'icône */
+        border-radius: 70%;
+        cursor: pointer;
+        transition: opacity 0.3s ease-in-out;
+        z-index: 1000; /* Assurez-vous que l'icône est au-dessus des autres éléments */
+      }
+
+      .arrow-container.visible {
+        opacity: 1;
+      }
+
+      .scrollable-content {
+        height: 100%;
+        overflow-y: auto;
+      }
+
+      .erreur_chargement {
+        text-align: center;
+        bottom: 35%;
+      }

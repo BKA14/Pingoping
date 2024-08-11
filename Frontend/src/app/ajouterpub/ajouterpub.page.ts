@@ -15,7 +15,6 @@ export class AjouterpubPage implements OnInit {
   verifieForm: FormGroup;
 
 
-
  id:any;
  annee_entreprise:any;
  titre:any;
@@ -32,6 +31,7 @@ export class AjouterpubPage implements OnInit {
  selectedtitre: string = 'none'; // Option par défaut pour la titre
  selectedcommentaire: string = 'none'; // Option par défaut pour la commentaire
  selectedrang: string = 'none'; // Option par défaut pour la rang
+ selectedadmin: string = 'none'; // Option par défaut si admin
  selectedcontact: string = 'none'; // Option par défaut pour la contact
  selectedlatitude: string = 'none'; // Option par défaut pour la latitude
  selectedlongitude: string = 'none'; // Option par défaut pour la longitude
@@ -39,6 +39,8 @@ export class AjouterpubPage implements OnInit {
  entreprises: any = [];
 
  selectedFile: File;
+  minDate: string;
+  admin: any;
 
 
 
@@ -88,6 +90,9 @@ updatecommentaire(event: any) {
 updaterang(event: any) {
   this.selectedrang = event.detail.value;
 }
+updateadmin(event: any) {
+  this.selectedadmin = event.detail.value;
+}
 updatecontact(event: any) {
   this.selectedcontact = event.detail.value;
 }
@@ -102,11 +107,22 @@ updatephoto(event: any) {
   this.selectedphoto = event.detail.value;
 }
 
-updateDate(event: any) {
+updateDate(event: CustomEvent) {
   this.datePublication = event.detail.value;
+  // Mettre à jour la date minimale de fin pour qu'elle soit au moins égale à la date de début
+  if (this.datefin && this.datefin < this.datePublication) {
+    this.datefin = this.datePublication;
+  }
 }
-updateDateFin(event: any) {
+
+updateDateFin(event: CustomEvent) {
   this.datefin = event.detail.value;
+  // Vérifier que la date de fin est supérieure à la date de début
+  if (this.datePublication && this.datefin < this.datePublication) {
+    // Afficher une alerte ou gérer l'erreur comme vous le souhaitez
+    alert('La date de fin doit être supérieure à la date de début');
+    this.datefin = this.datePublication;
+  }
 }
 
 updateDateOptionfin(event: any) {
@@ -116,6 +132,7 @@ updateDateOptionfin(event: any) {
 updateDateOptiondeb(event: any) {
   this.selectedDateOptiondeb = event.detail.value;
 }
+
 
 async addpub() {
   const file: File = this.selectedFile;
@@ -138,6 +155,7 @@ async addpub() {
 
   // Autres champs synchrones...
   const rangpub = this.selectedrang !== 'none' ? this.rangpub : '50';
+  const admin = this.selectedadmin !== 'none' ? this.admin : 'non';
   const contact = this.selectedcontact !== 'none' ? this.contact : '0';
   const longitude = this.selectedlongitude !== 'none' ? this.longitude : 'non';
   const latitude = this.selectedlatitude !== 'none' ? this.latitude : 'non';
@@ -161,6 +179,7 @@ async addpub() {
   formData.append('commentaire', commentaire);
   formData.append('photo', photo);
   formData.append('rangpub', rangpub);
+  formData.append('admin', 'admin');
   formData.append('contact', contact);
   formData.append('longitude', longitude);
   formData.append('latitude', latitude);
@@ -171,7 +190,8 @@ async addpub() {
   console.log('datefin ===', datefin);
   console.log('titre ===', titre);
   console.log('commentaire ===', commentaire);
-  console.log('rangpub ===', rangpub);
+  console.log('rangpub ===', 'admin');
+  console.log('admin ===', admin);
   console.log('longitude ===', longitude);
   console.log('latitude ===', latitude);
 
@@ -233,6 +253,14 @@ async addpub2() {
     else {
       formData.append('rangpub', '50');
     }
+
+      // Pour si admin
+      if (this.selectedadmin !== 'none') {
+        formData.append('admin', 'admin');
+      }
+      else {
+        formData.append('admin', 'non');
+      }
 
      // Pour l'enregistrement du contact
      if (this.selectedcontact !== 'none') {
@@ -326,6 +354,8 @@ async showLoading() {
 
 ngOnInit() {
 
+  this.minDate = new Date().toISOString().split('T')[0];
+
 
   this.verifieForm = new FormGroup({
 
@@ -343,6 +373,7 @@ ngOnInit() {
 
 
 }
+
 
 
 

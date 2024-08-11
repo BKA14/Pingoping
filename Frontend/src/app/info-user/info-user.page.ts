@@ -17,7 +17,7 @@ export class InfoUserPage implements OnInit {
   responsable_entreprise:any;
   contact_entreprise: any;
  users: any = [];
- 
+
 
   constructor(
     private route: ActivatedRoute,
@@ -25,7 +25,7 @@ export class InfoUserPage implements OnInit {
     private _apiService : ApiService,
     private loadingCtrl: LoadingController,
   public loadingController: LoadingController
-  ) { 
+  ) {
     this.route.params.subscribe((param:any) => {
       this.id = param.id;
       console.log(this.id);
@@ -33,15 +33,15 @@ export class InfoUserPage implements OnInit {
     })
   }
 
- 
+
 
   ngOnInit() {
   }
-  
+
   refreshPage(e){
     setTimeout(() => {
       this.getuser1(this.id);
-      
+
       console.log('rafraichissement de la page');
       e.target.complete();
     },500);
@@ -65,5 +65,7 @@ export class InfoUserPage implements OnInit {
     console.log("Erreur de connection ===",error);
 })
 }
+
+
 openUrl(){ window.open('https://www.google.es/maps?q=11.1497202,-4.2774270', '_system'); }
 }

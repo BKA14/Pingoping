@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
 
+
 android {
-    namespace "com.example.app"
+    namespace "com.pingoping.bf"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.example.app"
+        applicationId "com.pingoping.bf"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -40,7 +41,14 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+     // Import the BoM for the Firebase platform
+    implementation platform("com.google.firebase:firebase-bom:32.7.2")
+
+    // Add the dependencies for the In-App Messaging and Analytics libraries
+    implementation "com.google.firebase:firebase-inappmessaging-display"
+    implementation "com.google.firebase:firebase-analytics"
 }
+
 
 apply from: 'capacitor.build.gradle'
 

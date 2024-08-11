@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar color="success">
+
+    <br><br> <br>
+    <ion-title class="tool2">PAIEMENT</ion-title>
+    <br>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="payment-page">
+  <div class="payment-form">
+    <ion-item>
+      <ion-label position="floating">Nom sur la carte</ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Numéro de carte</ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Date d'expiration</ion-label>
+          <ion-input type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Code CVV</ion-label>
+          <ion-input type="text"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-button expand="block" color="success" class="pay-button">Payer</ion-button>
+  </div>
+</ion-content>
+
+<app-sidebar></app-sidebar>

@@ -8,7 +8,7 @@ import { AcceuilPageRoutingModule } from './acceuil-routing.module';
 
 import { AcceuilPage } from './acceuil.page';
 import { HttpClientModule } from '@angular/common/http';
-import { IonVideoPlayerModule } from 'ion-video-player';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -17,7 +17,7 @@ import { IonVideoPlayerModule } from 'ion-video-player';
     IonicModule,
     AcceuilPageRoutingModule,
     HttpClientModule,
-    IonVideoPlayerModule,
+    SharedModule
 
   ],
   declarations: [AcceuilPage]

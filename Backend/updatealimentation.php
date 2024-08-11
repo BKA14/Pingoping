@@ -15,8 +15,8 @@ $q = mysqli_query($con, "UPDATE `achatalimentation` SET `commentaire1` =' $comme
 if($q){
     $message['status'] = "Success";
 }else{
-    http_reponse_code(422);
-    $message['status']= " Error";
+    http_response_code(422);
+    $message['status'] = "Invalid Input";
 }
 echo json_encode($message);
 echo mysqli_error($con);

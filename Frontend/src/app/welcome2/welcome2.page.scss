@@ -13,10 +13,10 @@ ion-content{
     font-style: normal;
       font-family:Verdana, Geneva, Tahoma, sans-serif;
       padding: 5;
-    } 
-  
+    }
+
   .tool1{
-    
+
     font-size: 20px;
     font-style: normal;
       font-family:Verdana, Geneva, Tahoma, sans-serif;
@@ -30,23 +30,23 @@ ion-content{
         //display: inline-block;
         color: #f2f20ac5;
        }
-     
-  
+
+
      .iconmodif{
       //display: inline-block;
       color: #0808f8a9;
-  
+
     }
-  
+
     .icon{
       //display: inline-block;
       font-size: 42px;
       color: #0808f8a9;
       vertical-align: middle;
       float: right;
-      
+
      }
-  
+
      .text{
       display: inline-block;
       vertical-align: middle;
@@ -64,7 +64,7 @@ ion-content{
       --ion-background-color:#fdfdfd;
         font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
-  
+
     .h2{
       //vertical-align: middle;
       font-size: 15px;
@@ -72,7 +72,7 @@ ion-content{
       padding: 11px;
       font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
-  
+
     .tool2{
       --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
       font-size: 16px;
@@ -82,7 +82,7 @@ ion-content{
     color: #ffffff;
     padding: 6;
       }
-      
+
     .tool3{
       font-size: 16px;
       font-style: normal;
@@ -91,18 +91,18 @@ ion-content{
     color: #ffffff;
     padding: 4;
       }
-      
+
       .tool{
         //display: inline-block;
         font-size: 42px;
         color: #ffffff;
-      
+
       }
-  
+
       ion-loading.custom-loading {
         --background: #e3edff;
         --spinner-color: #1c6dff;
-      
+
         color: #1c6dff;
       }
     .welcometitle{
@@ -120,24 +120,24 @@ ion-content{
       font-style: normal;
       font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
-    
+
     .recherche {
       font-size: 20px;
       line-height: 26px;
       --ion-background-color:#fafafa;
     }
-    
-    .log {
-      font-size: 16px;
-      line-height: 22px;
-    
-      color: #ffffff;
-    
-      margin: 0;
+
+    .centre {
+   text-align: center;
     }
-    
+
     #container a {
       text-decoration: none;
       color: #d90a0a;
     }
-    
+
+    .loading {
+border-radius: 40px;
+    }
+
+

@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <br>
+    <br>
+    <ion-title class="title">Message recu</ion-title>
+    <br>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-content>
+    <br>
+    <br>
+    <ion-list class="message-list">
+      <div lines="inset" *ngFor="let message of message" class="message-item">
+        <ion-label color="dark">
+          <ion-label class="label-title">ID de l'utilisateur :</ion-label>
+          <h2 class="message-content">{{message.iduser}}</h2>
+
+          <ion-label class="label-title">Nom :</ion-label>
+          <h2 class="message-content">{{message.nom}}</h2>
+
+          <ion-label class="label-title">Prénom :</ion-label>
+          <h2 class="message-content">{{message.prenom}}</h2>
+
+          <ion-label class="label-title">Contact :</ion-label>
+          <h2 class="message-content">{{message.contact}}</h2>
+
+          <ion-label class="label-title">Message :</ion-label>
+          <h2 class="message-content">{{message.message}}</h2>
+
+          <ion-label class="label-title">Message :</ion-label>
+          <h2 class="message-content">{{message.heure_message}}</h2>
+
+        </ion-label>
+        <div class="item-note"></div>
+      </div>
+    </ion-list>
+
+
+<!-- Infinite Scroll -->
+<ion-infinite-scroll [disabled]="infiniteScrollDisabled" threshold="100px" (ionInfinite)="loadMore($event)">
+  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+
+  </ion-content>
+

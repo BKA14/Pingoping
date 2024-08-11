@@ -1,0 +1,34 @@
+<!-- Tab bar avec hideOnScroll -->
+<div color="success">
+  <ion-tab-bar class="menu ion-justify-content-around" slot="bottom" hideOnScroll="true" color="success">
+
+    <ion-tab-button (click)="acceuil()" tab="account" id="accueil-btn">
+      <ion-icon class="custom-icon" name="home"></ion-icon>
+      <ion-label>Accueil</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button (click)="service()" tab="contact" id="service-btn">
+      <ion-icon class="custom-icon" name="construct"></ion-icon>
+      <ion-label>Ping-Boutiques</ion-label>
+    </ion-tab-button>
+
+<!-- Pour l'admin
+
+    <ion-tab-button  *ngIf="grade === 'admin' || grade === 'superadmin'" (click)="admin()" tab="settings" id="paiement-btn">
+      <ion-icon class="custom-icon" name="construct"></ion-icon>
+      <ion-label>Admin</ion-label>
+    </ion-tab-button>
+-->
+
+    <ion-tab-button (click)="paiement()" tab="settings" id="paiement-btn">
+      <ion-icon class="custom-icon" name="wallet"></ion-icon>
+      <ion-label>Mes Achats</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button (click)="menu()" tab="settings" id="apropos-btn">
+      <ion-icon class="custom-icon" name="menu"></ion-icon>
+      <ion-label>Menu</ion-label>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+</div>

@@ -1,153 +1,288 @@
 
 <ion-header  >
-<ion-toolbar color="success" class="tool1" >
-<br>
-  <div class="item-note"  *ngIf="grade === 'superadmin'">
-  <ion-button color="light"  size="small" class="utilisateur"  [routerLink]="['/liste-user/']" >Utilisateurs</ion-button>
-</div>
-  <ion-button color="danger"  size="small" class="deconnect" (click)="deconnect()" >Deconnexion</ion-button><br/><br/>
-  <div class="span1"  *ngIf="grade === 'admin' || grade === 'superadmin'">
-    <ion-button  class="span1"  size="small"   [routerLink]="['/categorie/']" >Categorie</ion-button>
-  </div>
-  <ion-title class="tool2">PINGOPING NEWS</ion-title>
-
-    <br/>
-    <div  style="display: flex;">
-      <ion-label class="h2 light">{{prenom1 | uppercase}}</ion-label>
-      <span style="margin-left: auto;">
-        <ion-button (click)="reloadPage()" class="light" color="light" style="text-align: left;">
-          actualiser
-        </ion-button>
-      </span>
-    </div>
-
-    <br>
-
-</ion-toolbar>
 
 </ion-header>
 
+<div class="arrow-container" #scrollButton  (click)="scrollToTop()" >
+  <ion-icon name="arrow-up-circle" class="red-arrow" style="zoom: 3.0;"></ion-icon>
+</div>
 
-<ion-content padding  class="custom-background"  [fullscreen]="true" style="--offset-bottom: 300px;" >
+<ion-content padding  class="custom-background"  >
+
 <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
   <ion-refresher-content></ion-refresher-content>
 </ion-refresher>
 
-<ion-item class="span" *ngIf="grade === 'admin' || grade === 'superadmin'">
+<!-- Mon toolbar pour les differentes info -->
 
-  <span class="span" color="success">Ajouter une entreprise </span>
-  <ion-icon type="button" [routerLink]="['/ajouterpub/']" name="add-circle-outline" class="icon"></ion-icon>
+<ion-toolbar  class="tool1" >
+    <ion-title class="tool2">PINGOPING NEWS</ion-title>
+      <div  style="display: flex;">
+        <div class="container">
+          <ion-label class="h2 light">{{userData.prenom1 | uppercase}}</ion-label>
+        </div>
+        <span style="margin-left: auto;">
+          <ion-button (click)="reloadPage()" class="light" color="light" style="text-align: left;">
+            actualiser
+          </ion-button>
+        </span>
+      </div>
+  </ion-toolbar>
+
+<!-- Fin  de mon toolbar -->
+<ion-item class="span" *ngIf="userData.grade === 'admin' || userData.grade === 'superadmin'">
+
+<span class="span" color="success">Ajouter une entreprise </span>
+<ion-icon type="button" [routerLink]="['/ajouterpub/']" name="add-circle-outline" class="icon"></ion-icon>
 </ion-item>
 
-<div class="custom-container">
-  <div *ngFor="let pubs of pubs" class="custom-card">
-    <div *ngIf="pubs.countdown !== undefined && pubs.countdown !== null && pubs.countdown.trim() !== 'non'">
-      <ion-label class="deconte" [ngClass]="{'blinking-text': shouldBlink(pubs.countdown)}">  {{ pubs.countdown }}</ion-label>
-    </div>
 
-      <br>  <!-- Pour ne pas deplacer le titre -->
-      <ion-card-header>
-        <ion-card-title class="titre"   *ngIf="pubs.titre.toLowerCase().trim() !== 'non'  && pubs.titre !== null && pubs.titre !== undefined" >{{pubs.titre}}</ion-card-title>
-      </ion-card-header>
+<ion-list *ngIf="pub !== 'erreur_chargement' && pub !== 'aucune_alerte'" class="message-list">
+  <div lines="inset" class="message-item" *ngFor="let pub of pub">
+    <!-- Si l'utilisateur est un admin ou un superadmin, afficher toutes les pubs -->
+    <div *ngIf="userData.grade === 'admin' || userData.grade === 'superadmin'" class="custom-card">
+
+      <!-- Indication visuelle pour les pubs administratives -->
+      <div *ngIf="pub.admin.trim() === 'admin'" class="admin-indicator">
+        <ion-label color="success">ADMIN</ion-label>
+      </div>
+
+
+      <!-- Le reste de votre code d'affichage des pubs -->
+      <div *ngIf="pub.countdown !== undefined && pub.countdown !== null && pub.countdown.trim() !== 'non'">
+        <ion-label class="deconte" [ngClass]="{'blinking-text': shouldBlink(pub.countdown)}">  {{ pub.countdown }}</ion-label>
+      </div>
+      <br>
+
+      <br>
+      <br *ngIf="pub.countdown !== undefined && pub.countdown !== null && pub.countdown.trim() !== 'non'">
+
+      <ion-card-title class="titre" *ngIf="pub.titre.toLowerCase().trim() !== 'non' && pub.titre !== null && pub.titre !== undefined">
+        {{pub.titre}}
+      </ion-card-title>
 
       <!-- Commentaire de la publicité -->
-      <p  [innerHTML]="commentaireService.sanitize(pubs.commentaire)" *ngIf="pubs.commentaire.toLowerCase().trim() !== 'non' && pubs.commentaire !== null && pubs.commentaire !== undefined"  class="commentaire" >{{pubs.commentaire}}</p>
-      <br> <br>
+      <p [innerHTML]="commentaireService.sanitize(pub.commentaire)"
+        *ngIf="pub.commentaire.toLowerCase().trim() !== 'non' && pub.commentaire !== null && pub.commentaire !== undefined"
+        class="commentaire">
+      </p>
 
-      <p class="ligne"></p> <br>
+      <p class="ligne"></p>
+      <br>
 
       <ion-card-content>
-
         <!-- Illustration (image ou vidéo) de la publicité -->
-        <ng-container   *ngIf="(pubs.photo.includes('.jpg') || pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo.trim() !== null && pubs.photo.trim() !== undefined">
-          <ion-img  class="custom-image facebook-style"  [src]="pubs.photo.trim()" ></ion-img>
+        <ng-container *ngIf="isImage(pub.photo)">
+          <ion-img class="custom-image facebook-style" [src]="pub.photo.trim()"></ion-img>
         </ng-container>
 
-        <!-- Votre composant HTML -->
-
-        <ng-container  *ngIf="(!pubs.photo.includes('.jpg') && !pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo !== null && pubs.photo !== undefined" >
-          <video #videoElement class="custom-image video-style" loop muted (click)="handleVideoClick(videoElement)" controls>
-            <source [src]="pubs.photo.trim()" type="video/mp4">
+        <ng-container *ngIf="isVideo(pub.photo)">
+          <video #videoElement class="custom-image video-style" (click)="toggleManualPause(videoElement)" loop muted>
+            <source [src]="pub.photo.trim()">
           </video>
+          <br>
+          <div class="controls">
+            <!-- Play/Pause Icons -->
+            <ion-icon name="play" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="videoElement.paused"></ion-icon>
+            <ion-icon name="pause" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="!videoElement.paused"></ion-icon>
 
-          </ng-container>
+            <!-- Seek Slider -->
+            <input type="range" min="0" [max]="videoElement.duration" [value]="videoElement.currentTime"
+            (input)="seekVideo($event, videoElement)">
+          </div>
+
+            <br>
+            <div class="controls_volume">
+            <!-- Mute/Unmute Icon -->
+            <ion-icon [name]="videoElement.muted ? 'volume-mute' : 'volume-high'"
+                      (click)="toggleMute(videoElement)">
+            </ion-icon>
+
+            <!-- Volume Control Slider -->
+            <input type="range" min="0" max="1" step="0.1" [value]="videoElement.volume"
+            (input)="setVolume($event, videoElement)" >
+            </div>
+
+        </ng-container>
+
 
         <br>
-        <ion-label  class="localisation" *ngIf="pubs.distanceToUser !== undefined && pubs.distanceToUser !== null  && pubs.longitude.toLowerCase().trim() !== 'non' && pubs.latitude.toLowerCase().trim() !== 'non' && pubs.distanceToUser !== NaN " >
-          Vous êtes présentement à : {{ convertMetersToKilometers(pubs.distanceToUser) }} du lieu.
+        <ion-label class="localisation"
+                  *ngIf="pub.distanceToUser !== undefined && pub.distanceToUser !== null && pub.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non' && pub.distanceToUser !== NaN">
+          Vous êtes présentement à : {{ convertMetersToKilometers(pub.distanceToUser) }} du lieu.
         </ion-label>
         <br>
         <p class="ligne"></p>
+        <br>
+        &nbsp;
 
+        <ion-button *ngIf="pub.longitude && pub.latitude && pub.longitude !== undefined && pub.latitude !== undefined && pub.longitude !== null && pub.latitude !== null && pub.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non'"
+                    class="btnpub location" fill="outline"
+                    [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pub.latitude + ',' + pub.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pub.latitude + ',' + pub.longitude">
+          Localiser le lieu
+          &nbsp;
+          <ion-icon name="location-outline"></ion-icon>
+        </ion-button>
+
+        &nbsp;
+        <br>
+
+        <ion-button *ngIf="pub.contact && pub.contact !== '0' && pub.contact !== undefined && pub.contact !== null" class="btnpub contact" fill="outline" [href]="getWhatsAppLink(pub.contact)">
+          Contact-Info
+          &nbsp;
+          <ion-icon class="black" name="logo-whatsapp"></ion-icon>
+        </ion-button>
+        <br>
+        <br>
+
+        <!--  nbr j'aime -->
+        <div class="left-align">
+          <ion-label class="likes_count light">{{ pub.likes_count }}</ion-label>
           <br>
 
-          &nbsp;
+          <div style="display: flex; justify-content: space-between;">
+            <!-- Bouton "J'aime" aligné à gauche -->
+            <ion-button (click)="likepub(pub)" class="likes" fill="outline" [ngClass]="{'vert': hasLiked(pub)}">
+              <ion-icon class="black" name="thumbs-up"></ion-icon>
+              J'aime
+            </ion-button>
 
-        <ion-button *ngIf="pubs.longitude && pubs.latitude  && pubs.longitude !== undefined && pubs.latitude !== undefined  && pubs.longitude !== null && pubs.latitude !== null && pubs.longitude.toLowerCase().trim() !== 'non' && pubs.latitude.toLowerCase().trim() !== 'non' " class="btnpub location" fill="outline" [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pubs.latitude + ',' + pubs.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pubs.latitude + ',' + pubs.longitude">
+            <!-- Bouton "Commentaire" aligné à droite -->
+            <ion-button (click)="CommentPub(pub)" class="likes" fill="outline">
+              <ion-icon class="black" name="chatbox"></ion-icon>
+              Commentaire
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+      <div class="icon-right" *ngIf="userData.grade === 'admin' || userData.grade === 'superadmin'">
+        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/updatepub/',pub.id]"></ion-icon>
+        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(pub.id)"></ion-icon>
+      </div>
+    </div>
+    <!-- Si l'utilisateur est un utilisateur normal, afficher uniquement les pubs non-admin -->
+    <div *ngIf="pub.admin.trim() !== 'admin' && userData.grade !== 'admin' && userData.grade !== 'superadmin'" class="custom-card">
+
+      <br>
+      <!-- Le reste de votre code d'affichage des pubs -->
+      <div *ngIf="pub.countdown !== undefined && pub.countdown !== null && pub.countdown.trim() !== 'non'">
+        <ion-label class="deconte" [ngClass]="{'blinking-text': shouldBlink(pub.countdown)}">  {{ pub.countdown }}</ion-label>
+      </div>
+      <br>
+      <br>
+      <br *ngIf="pub.countdown !== undefined && pub.countdown !== null && pub.countdown.trim() !== 'non'">
+
+      <ion-card-title class="titre" *ngIf="pub.titre.toLowerCase().trim() !== 'non' && pub.titre !== null && pub.titre !== undefined">
+        {{pub.titre}}
+      </ion-card-title>
+
+      <!-- Commentaire de la publicité -->
+      <p [innerHTML]="commentaireService.sanitize(pub.commentaire)"
+        *ngIf="pub.commentaire.toLowerCase().trim() !== 'non' && pub.commentaire !== null && pub.commentaire !== undefined"
+        class="commentaire">
+      </p>
+
+      <p class="ligne"></p>
+      <br>
+
+      <ion-card-content>
+        <!-- Illustration (image ou vidéo) de la publicité -->
+        <ng-container *ngIf="isImage(pub.photo)">
+          <ion-img class="custom-image facebook-style" [src]="pub.photo.trim()"></ion-img>
+        </ng-container>
+
+        <ng-container *ngIf="isVideo(pub.photo)">
+          <video #videoElement class="custom-image video-style" (click)="toggleManualPause(videoElement)" loop muted>
+            <source [src]="pub.photo.trim()">
+          </video>
+          <br>
+          <div class="controls">
+            <ion-icon name="play" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="videoElement.paused"></ion-icon>
+            <ion-icon name="pause" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="!videoElement.paused"></ion-icon>
+            <input type="range" min="0" [max]="videoElement.duration" [value]="videoElement.currentTime" (input)="seekVideo($event, videoElement)">
+          </div>
+        </ng-container>
+
+        <br>
+        <ion-label class="localisation"
+                  *ngIf="pub.distanceToUser !== undefined && pub.distanceToUser !== null && pub.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non' && pub.distanceToUser !== NaN">
+          Vous êtes présentement à : {{ convertMetersToKilometers(pub.distanceToUser) }} du lieu.
+        </ion-label>
+        <br>
+        <p class="ligne"></p>
+        <br>
+        &nbsp;
+
+        <ion-button *ngIf="pub.longitude && pub.latitude && pub.longitude !== undefined && pub.latitude !== undefined && pub.longitude !== null && pub.latitude !== null && pub.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non'"
+                    class="btnpub location" fill="outline"
+                    [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pub.latitude + ',' + pub.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pub.latitude + ',' + pub.longitude">
           Localiser le lieu
           <ion-icon name="location-outline"></ion-icon>
         </ion-button>
 
-         &nbsp; <br>
+        &nbsp;
+        <br>
 
-        <ion-button *ngIf="pubs.contact &&  pubs.contact.trim() !== '0'  &&  pubs.contact !== undefined &&  pubs.contact !== null" class="btnpub contact" fill="outline" [href]="getWhatsAppLink(pubs.contact)">
+        <ion-button *ngIf="pub.contact && pub.contact !== '0' && pub.contact !== undefined && pub.contact !== null" class="btnpub contact" fill="outline" [href]="getWhatsAppLink(pub.contact)">
           <ion-icon class="black" name="logo-whatsapp"></ion-icon>
           Contact-Info
         </ion-button>
-          <br>
-          <br>
-          <!-- Remplacez la section j'aime par ce code -->
-          <div class="left-align">
-            <ion-label class="h2 light"  *ngIf="pubs.likes !== null && pubs.likes !== undefined">{{ pubs.likes }}</ion-label>
-            <br>
-           <!--   <ion-label class="h2 light">{{ pubs.couleur}}</ion-label>-->
-            <span style="margin-left: auto;">
-              <ion-button (click)="LikePub(pubs)" class="likes left-align " fill="outline" [ngClass]="{'vert': pubs.couleur.trim() === 'oui'}">
-                <ion-icon class="black" name="thumbs-up"></ion-icon>
-                J'aime
-              </ion-button>
+        <br>
+        <br>
 
-            </span>
+        <!--  nbr j'aime -->
+        <div class="left-align">
+          <ion-label class="likes_count light">{{ pub.likes_count }}</ion-label>
+          <br>
+
+          <div style="display: flex; justify-content: space-between;">
+            <!-- Bouton "J'aime" aligné à gauche -->
+            <ion-button (click)="likepub(pub)" class="likes" fill="outline" [ngClass]="{'vert': hasLiked(pub)}">
+              <ion-icon class="black" name="thumbs-up"></ion-icon>
+              J'aime
+            </ion-button>
+
+            <!-- Bouton "Commentaire" aligné à droite -->
+            <ion-button (click)="CommentPub(pub)" class="likes" fill="outline">
+              <ion-icon class="black" name="chatbox"></ion-icon>
+              Commentaire
+            </ion-button>
           </div>
-
-        <!-- Bouton "Voir" -->
-        <!--  <ion-button expand="full"  class="couleurBouton">Voir</ion-button>-->
+        </div>
       </ion-card-content>
+    </div>
+  </div>
+</ion-list>
 
-      <div class="icon-right" *ngIf="grade === 'admin' || grade === 'superadmin'">
-        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/updatepub/',pubs.id]"></ion-icon>
-        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(pubs.id)"></ion-icon>
-      </div>
 
+  <br *ngIf="pub == 'erreur_chargement'">
+  <br *ngIf="pub == 'erreur_chargement'">
+  <div *ngIf="pub == 'erreur_chargement'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Erreur de chargement</p>
+    <br>
+    <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+  </div>
+
+  <br *ngIf="pub == 'aucune_alerte'">
+  <br *ngIf="pub == 'aucune_alerte'">
+  <div>
+    <div  *ngIf="pub == 'aucune_alerte'" class="erreur_chargement">
+      <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+      <p>Aucune Pub trouvé</p>
+      <br>
     </div>
   </div>
 
-
-
-
-<!-- <div style="margin-bottom: 50px;"></div>-->
-
-<!-- Tab bar fixe en bas de la page -->
-<!-- Tab bar -->
-
-
-
+<!-- Infinite Scroll -->
+<ion-infinite-scroll [disabled]="infiniteScrollDisabled" threshold="100px" (ionInfinite)="loadMore($event)">
+  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+</ion-infinite-scroll>
 
 </ion-content>
 
-<!-- Tab bar avec hideOnScroll -->
-<ion-tab-bar  class="menu" slot="bottom" hideOnScroll="true">
-<ion-tab-button (click)="acceuil()" tab="account">
-  <ion-icon class="custom-icon" name="home"></ion-icon>
-</ion-tab-button>
-<ion-tab-button (click)="service()" tab="contact">
-  <ion-icon  class="custom-icon" name="apps"></ion-icon>
-</ion-tab-button>
-<ion-tab-button (click)="ping()" tab="settings">
-  <ion-icon class="custom-icon" name="star"></ion-icon>
-</ion-tab-button>
-<ion-tab-button (click)="apropos()" tab="settings">
-  <ion-icon class="custom-icon" name="information-circle"></ion-icon>
-</ion-tab-button>
-</ion-tab-bar>
-<p class="lignemenu"></p>
+
+
+<!-- menu -->
+<app-sidebar></app-sidebar>
+

@@ -1,0 +1,140 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-row class="header-row">
+      <ion-title class="title">ALERTE</ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+
+<div class="arrow-container" #scrollButton  (click)="scrollToTop()" >
+  <ion-icon name="arrow-up-circle" class="red-arrow" style="zoom: 3.0;"></ion-icon>
+</div>
+
+<ion-content class="custom-background">
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+    <ion-item  class="select1" >
+      <ion-select  class="select_alert"  [(ngModel)]="selectedStatus"  (ionChange)="filterAlerts()" placeholder="Catégorie">
+        <ion-select-option value=''>Aucune</ion-select-option>
+        <ion-select-option value="oui">Alerte gérée</ion-select-option>
+        <ion-select-option value="non">Alerte non gérée</ion-select-option>
+      </ion-select>
+
+      &nbsp;
+        <ion-select  (ionChange)="filterAlerts()"   class="select_alert"  [(ngModel)]="service_choisi" placeholder="service">
+          <ion-select-option  value=''>
+            aucune
+          </ion-select-option>
+          <ion-select-option *ngFor="let service of service" [value]="service.valeur">
+            {{ service.nom }}
+          </ion-select-option>
+        </ion-select>
+
+    </ion-item>
+
+  <div *ngIf="recherche_date">
+    <ion-item>
+      <ion-label>De</ion-label>
+      <ion-datetime display-format="YYYY-MM-DD" [(ngModel)]="startDate"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>À</ion-label>
+      <ion-datetime display-format="YYYY-MM-DD" [(ngModel)]="endDate" [min]="startDate" (ionChange)="updateDateFin($event)"></ion-datetime>
+    </ion-item>
+
+    <ion-button (click)="choisir_date()">Appliquer filtre de date</ion-button>
+
+    <ion-button (click)="annuler_date()" color="warning">Annuler</ion-button>
+  </div>
+
+  <ion-button (click)="refreshPage($event)"  color="success" style="padding: 5px; margin: 1px; text-align: center;">Actualiser</ion-button>
+      &nbsp; &nbsp;
+      <ion-button size="small" (click)="date()" color="success" *ngIf="!recherche_date">date</ion-button>
+
+  <ion-list class="message-list" *ngIf="alert !== 'erreur_chargement' && alert !== 'aucune_alerte'" >
+      <div lines="inset" class="message-item" *ngFor="let alert of alert ">
+        <ion-card-header>
+          <h2 color="success"> service : {{ alert.service }}</h2>
+        </ion-card-header>
+        <ion-card-content>
+          <ng-container *ngIf="isImage(alert.image)">
+            <!-- Vérifie si c'est une image -->
+            <ion-img class="custom-image" *ngIf="isImage(alert.image)" [src]="alert.image.trim()"></ion-img>
+          </ng-container>
+
+            <ng-container *ngIf="isVideo(alert.image)" >
+            <!-- Vérifie si c'est une vidéo -->
+            <video #videoElement class="custom-image video-style" (click)="toggleManualPause(videoElement)"  loop muted >
+              <source [src]="alert.image.trim()">
+            </video>
+            <br>
+
+            <div class="controls">
+              <ion-icon name="play" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="videoElement.paused"></ion-icon>
+              <ion-icon name="pause" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="!videoElement.paused"></ion-icon>
+              <input type="range" min="0" [max]="videoElement.duration" [value]="videoElement.currentTime" (input)="seekVideo($event, videoElement)">
+            </div>
+          </ng-container>
+
+          <br>
+          <ion-label class="label-title"> Description :</ion-label>
+          <h2 class="message-content">{{ alert.description }}</h2>
+
+          <br>
+          <ion-label class="label-title">nom alerteur : </ion-label>
+          <h2 class="message-content">{{ alert.nom }}</h2>
+
+          <ion-label class="label-title">prenom alerteur:</ion-label>
+          <h2 class="message-content">{{ alert.prenom }}</h2>
+
+          <ion-label class="label-title">Coordonnées:</ion-label>
+          <h2 class="message-content">{{ alert.latitude }}, {{ alert.longitude }}</h2>
+
+          <ion-label class="label-title">Heure de signalisation:</ion-label>
+          <h2 class="message-content">{{ formatCommentTime(alert.heure_signalisation) }}</h2>
+          <br>
+          <p class="ligne"></p>
+        </ion-card-content>
+        <br>
+        <div>
+          <p class="deconte non-geree" *ngIf="alert.statut !== 'oui'">Alerte n'a pas encore été pris en compte</p>
+          <p class="deconte geree" *ngIf="alert.statut === 'oui'">Votre alerte a été pris en charge par le service {{ alert.categorie }} , merci on s'en charge !</p>
+        </div>
+        <br>
+      </div>
+  </ion-list>
+
+  <br *ngIf="alert == 'erreur_chargement'">
+  <br *ngIf="alert == 'erreur_chargement'">
+  <div *ngIf="alert == 'erreur_chargement'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Erreur de chargement</p>
+    <br>
+    <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+  </div>
+
+  <br *ngIf="alert == 'aucune_alerte'">
+  <br *ngIf="alert == 'aucune_alerte'">
+  <div>
+    <div  *ngIf="alert == 'aucune_alerte'" class="erreur_chargement">
+      <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+      <p>Aucune alerte effectué</p>
+      <br>
+    </div>
+  </div>
+
+
+<!-- Infinite Scroll -->
+<ion-infinite-scroll [disabled]="infiniteScrollDisabled" threshold="100px" (ionInfinite)="getLoadFunction($event)">
+  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+
+</ion-content>

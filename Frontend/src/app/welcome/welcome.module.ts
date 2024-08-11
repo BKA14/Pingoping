@@ -10,6 +10,7 @@ import { WelcomePage } from './welcome.page';
 import { HttpClientModule } from '@angular/common/http';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { CustomFilterPipe } from './custom-filter.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -20,8 +21,7 @@ import { CustomFilterPipe } from './custom-filter.pipe';
     IonicModule,
     WelcomePageRoutingModule,
     HttpClientModule,
-
-
+    SharedModule
 
   ],
   declarations: [WelcomePage,CustomFilterPipe]

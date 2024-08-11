@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <br>
+    <br>
+    <ion-title class="title">Envoyer un Message</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <p class="intro-text">Nous serons ravis de recevoir vos messages, suggestions, et commentaires !</p>
+
+  <br>
+  <br>
+  <p class="ligne"></p>
+  <ion-item>
+    <ion-textarea [(ngModel)]="message" rows="10" maxlength="300" placeholder="Tapez votre message ici..." class="message-box"></ion-textarea>
+  </ion-item>
+  <p class="ligne"></p>
+
+  <div class="button-group">
+    <ion-button expand="block" fill="outline" color="success" (click)="sendMessage()">
+      <ion-icon name="send-outline"></ion-icon>
+      Envoyer
+    </ion-button>
+
+    <ion-button expand="block" fill="outline" color="warning" (click)="clearMessage()">
+      <ion-icon name="trash-outline"></ion-icon>
+      Effacer
+    </ion-button>
+  </div>
+
+</ion-content>

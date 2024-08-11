@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>LOKALIST</name>
-    <description>Application de Localisation</description>
+<widget id="com.pingoping.bf" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>PINGOPING</name>
+    <description>Application de Livraison</description>
     <author email="kevinbambara2000@gmail.com" href="http://ionicframework.com/">Bambara kevin Anderson</author>
     <content src="index.html" />
     <access origin="*" />
@@ -20,7 +20,7 @@
     <preference name="ShowSplashScreen" value="true" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="2500" />
+    <preference name="SplashScreenDelay" value="" />
     <platform name="android">
         <preference name="Scheme" value="http" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -36,7 +36,7 @@
         <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
         <preference name="AndroidWindowSplashScreenBackground" value="#0808f8a9" />
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="" />
-        <preference name="AndroidWindowSplashScreenAnimationDuration" value="2000" />
+        <preference name="AndroidWindowSplashScreenAnimationDuration" value="" />
         <preference name="StatusBarOverlaysWebView" value="true" />
         <preference name="StatusBarBackgroundColor" value="" />
         <preference name="StatusBarStyle" value="lightcontent" />

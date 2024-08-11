@@ -5,3 +5,4 @@ plugins/
 *.sqlite
 *.log
 *.json
+/vendor/
