@@ -1,0 +1,7 @@
+{
+  "name": "Lokaliser",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

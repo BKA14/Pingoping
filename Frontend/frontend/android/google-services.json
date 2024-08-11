@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "991351287389",
+    "project_id": "pingoping",
+    "storage_bucket": "pingoping.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991351287389:android:810f18761419f1841ee7b4",
+        "android_client_info": {
+          "package_name": "com.pingoping.bf"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMGj-RJjfSodpw19AJK3UbKDIV6v2Ub_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

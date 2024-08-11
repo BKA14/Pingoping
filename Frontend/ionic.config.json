@@ -1,0 +1,8 @@
+{
+  "name": "Pingoping",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

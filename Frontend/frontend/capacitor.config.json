@@ -1,0 +1,11 @@
+{
+  "appId": "com.pingoping.bf",
+  "appName": "pingoping",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}

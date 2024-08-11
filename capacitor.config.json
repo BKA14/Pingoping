@@ -1,0 +1,9 @@
+{
+    "appId": "com.pingoping.bf",
+    "appName": "pingoping",
+    "webDir": "www",
+    "server": {
+      "androidScheme": "http"
+    }
+  }
+  
