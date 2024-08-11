@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar color="success" class="tool1">
+    <br/><br/>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="tool2">INFORMATIONS</ion-title>
+    <br/><br>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="custom-background" style="--offset-bottom: 300px;">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list class="list">
+    <form [formGroup]="verifieForm">
+      <div>
+        <ion-label class="label">Nom : &nbsp;</ion-label>
+        <ng-container *ngIf="!isEditingNom">
+          <ion-label class="info">{{info?.nom}}</ion-label>
+        </ng-container>
+        &nbsp; &nbsp;
+        <ion-icon name="create-outline" style="zoom: 1.9;" color="success" slot="end" (click)="editField('nom')"></ion-icon>
+        <ng-container *ngIf="isEditingNom">
+          <ion-input formControlName="nom"></ion-input>
+        </ng-container>
+        <ion-label color="danger" *ngIf="verifieForm.get('nom').touched && verifieForm.get('nom').hasError('required')">Veuillez votre nom</ion-label>
+        <ion-label color="danger" *ngIf="verifieForm.get('nom').touched && verifieForm.get('nom').hasError('minlength')">Verifier votre nom</ion-label>
+        <ion-label color="danger" *ngIf="verifieForm.get('nom').touched && verifieForm.get('nom').hasError('maxlength')">Nom trop grand</ion-label>
+        <br/><br/><br/>
+
+        <ion-label class="label">Prenom : &nbsp;</ion-label>
+        <ng-container *ngIf="!isEditingPrenom">
+          <ion-label class="info">{{info?.prenom}}</ion-label>
+        </ng-container>
+        &nbsp; &nbsp;
+        <ion-icon name="create-outline" style="zoom: 1.9;" color="success" slot="end" (click)="editField('prenom')"></ion-icon>
+        <ng-container *ngIf="isEditingPrenom">
+          <ion-input formControlName="prenom"></ion-input>
+        </ng-container>
+        <ion-label color="danger" *ngIf="verifieForm.get('prenom').touched && verifieForm.get('prenom').hasError('required')">Veuillez votre prenom</ion-label>
+        <ion-label color="danger" *ngIf="verifieForm.get('prenom').touched && verifieForm.get('prenom').hasError('minlength')">Verifier votre prenom</ion-label>
+        <ion-label color="danger" *ngIf="verifieForm.get('prenom').touched && verifieForm.get('prenom').hasError('maxlength')">Prenom trop grand</ion-label>
+        <br/><br/><br/>
+
+        <ion-label class="label">Contact : &nbsp;</ion-label>
+        <ion-label class="info">{{info?.contact}}</ion-label>
+        <br/><br/><br/>
+
+        <ion-label class="label">Email : &nbsp;</ion-label>
+        <ng-container *ngIf="!isEditingEmail">
+          <ion-label class="info">{{info?.email}}</ion-label>
+        </ng-container>
+        &nbsp; &nbsp;
+        <ion-icon name="create-outline" style="zoom: 1.9;" color="success" slot="end" (click)="editField('email')"></ion-icon>
+        <ng-container *ngIf="isEditingEmail">
+          <ion-input formControlName="email"></ion-input>
+        </ng-container>
+        <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').hasError('required')">Veuillez votre email</ion-label>
+        <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').hasError('maxlength')">email trop grand</ion-label>
+        <br/><br/><br/>
+
+      </div>
+      <br/>
+      <ion-button class="list" fill="outline" color="success" (click)="modifier()" [disabled]="!verifieForm.dirty || !verifieForm.valid">
+        <ng-container>
+          Valider
+        </ng-container>
+        &nbsp; <ion-icon name="save-outline"></ion-icon>
+      </ion-button>
+    </form>
+  </ion-list>
+</ion-content>

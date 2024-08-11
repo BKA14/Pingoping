@@ -1,18 +1,18 @@
 
-<ion-header >
-  <ion-toolbar color="success" class="tool1" >
-    <br/>  <br/>
-    <ion-title class="tool2">UTILISATEURS</ion-title>
-      <br/>
-    <div class="item-note"  *ngIf="grade === 'superadmin'">
-      <ion-button color="light"  size="small" class="utilisateur"  [routerLink]="['/welcome/']" >Entreprise</ion-button>
+<ion-header>
+  <ion-toolbar color="success" class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <br>
+    <ion-title class="title">UTILISATEURS</ion-title>
+    <ion-searchbar class="searchbar" type="text" placeholder="Rechercher un utilisateur" [(ngModel)]="term"></ion-searchbar>
+    <div class="container">
+      <ion-label class="username light">{{prenom1 | uppercase}}</ion-label>
     </div>
-    <ion-button color="danger"  size="small" class="deconnect" (click)="deconnect()" >Deconnexion</ion-button>
-    <br/> <br/> <br/>
-    <ion-label class="h2">{{prenom1|uppercase}}</ion-label>
-      <ion-searchbar class="recherche" type="text"  placeholder="Rechercher un utilisateur" [(ngModel)]="term" ></ion-searchbar>
   </ion-toolbar>
 </ion-header>
+
 
 <div  >
   <ion-select
@@ -25,7 +25,17 @@
   </ion-select>
 </div>
 
-<ion-content padding class="tool3" [fullscreen]="true">
+<div class="arrow-container" #scrollButton  (click)="scrollToTop()" >
+  <ion-icon name="arrow-up-circle" class="red-arrow" style="zoom: 3.0;"></ion-icon>
+</div>
+
+<ion-content padding class="tool3">
+
+
+<ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
+
 
   <ion-item class="span" *ngIf="grade === 'admin' || grade === 'superadmin'">
 
@@ -34,14 +44,13 @@
   </ion-item>
   <p class="nombre"> Nombre total d'utilisateur:{{userCount}} </p>
 
-  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-<ion-list class="list">
+
+<ion-list class="list"  *ngIf="users !== 'erreur_chargement' && users !== 'aucune_alerte'">
  <ion-item  button *ngFor="let user of users | customFilter: term">
 
     <ion-label color="dark" [routerLink]="['/info-user/', user.id]">
-    <ion-label class="h2">{{user.email}}</ion-label>
+    <ion-label class="h2"> email : {{user.email}}</ion-label> <br>
+    <ion-label class="h2">grade : {{user.grade}}</ion-label>
   </ion-label>
   <div class="item-note"  *ngIf="grade === 'admin' || grade === 'superadmin'">
     <ion-icon name="create"  style="zoom: 2.0;"  color="success"  [routerLink]="['/update-user/',user.id]"></ion-icon>
@@ -50,4 +59,29 @@
 
 </ion-item>
 </ion-list>
+
+<br *ngIf="users == 'erreur_chargement'">
+<br *ngIf="users == 'erreur_chargement'">
+<div *ngIf="users == 'erreur_chargement'" class="erreur_chargement">
+  <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+  <p>Erreur de chargement</p>
+  <br>
+  <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+</div>
+
+<br *ngIf="users == 'aucune_alerte'">
+<br *ngIf="users == 'aucune_alerte'">
+<div>
+  <div  *ngIf="users == 'aucune_alerte'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Aucune alerte effectué</p>
+    <br>
+  </div>
+</div>
+
+<!-- Infinite Scroll -->
+<ion-infinite-scroll [disabled]="infiniteScrollDisabled" threshold="100px" (ionInfinite)="loadMore($event)">
+  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+
 </ion-content>

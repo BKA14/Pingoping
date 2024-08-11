@@ -1,0 +1,91 @@
+
+<ion-header>
+  <ion-toolbar color="success" class="tool1">
+    <br/>  <br/>
+  <ion-title class="tool2">Menu</ion-title>
+  <br/> <br>
+  </ion-toolbar>
+  </ion-header>
+
+    <ion-content padding  class="custom-background"  style="--offset-bottom: 300px;" >
+
+    <ion-list class="list" >
+      <br>
+
+      <ion-button (click)="signalement()" *ngIf="grade === 'admin' || grade === 'superadmin'"  class="list" fill="outline" color="success">
+        <ion-icon name="warning"></ion-icon> &nbsp;
+         <ng-container >
+          Signalement/admin
+         </ng-container>
+        </ion-button>
+      <br>
+        <ion-button (click)="alerte()" *ngIf="grade === 'admin' || grade === 'superadmin' || grade === 'pompier' || grade === 'onea' || grade === 'hygiene'"  class="list" fill="outline" color="success">
+          <ion-icon name="alert"></ion-icon> &nbsp;
+           <ng-container >
+            Alerte/admin
+           </ng-container>
+          </ion-button>
+      <br>
+      <ion-button (click)="alert_user()"  color="success" class="list" fill="outline" >
+        <ion-icon name="time"></ion-icon> &nbsp;
+         <ng-container >
+          Historique d'Alerte
+         </ng-container>
+        </ion-button>
+    <br>
+
+      <ion-button (click)="userinfo()"  class="list" fill="outline" color="success">
+        <ion-icon name="person"></ion-icon> &nbsp;
+         <ng-container >
+          Vos informations
+         </ng-container>
+        </ion-button>
+      <br>
+      <ion-button (click)="message()"  class="list" fill="outline" color="success">
+        <ion-icon name="mail"></ion-icon> &nbsp;
+         <ng-container >
+          Nous écrire
+         </ng-container>
+        </ion-button>
+        <br>
+        <ion-button (click)="message_admin()" *ngIf="grade === 'admin' || grade === 'superadmin'" class="list" fill="outline" color="success">
+          <ion-icon name="chatbox"></ion-icon> &nbsp;
+           <ng-container >
+            Message recu/admin
+           </ng-container>
+          </ion-button>
+
+          <br *ngIf="grade === 'admin' || grade === 'superadmin'">
+
+        <ion-button (click)="utilisateur()" *ngIf="grade === 'admin' || grade === 'superadmin'"  class="list" fill="outline" color="success">
+          <ion-icon name="people"></ion-icon> &nbsp;
+           <ng-container >
+            Utilisateurs/admin
+           </ng-container>
+          </ion-button>
+          <br *ngIf="grade === 'admin' || grade === 'superadmin'">
+
+        <ion-button (click)="apropos()"  class="list" fill="outline" color="success">
+          <ion-icon name="information-circle"></ion-icon> &nbsp;
+           <ng-container >
+            A propos
+           </ng-container>
+          </ion-button>
+        <br>
+
+          <ion-button class="deconnect"   (click)="deconnect()"   color="danger">
+            <ion-icon name="exit-outline"></ion-icon> &nbsp;
+             <ng-container >
+              Deconnexion
+             </ng-container>
+            </ion-button>
+
+            <br>
+
+
+    </ion-list>
+
+    </ion-content>
+
+   <!-- Menu -->
+   <app-sidebar></app-sidebar>

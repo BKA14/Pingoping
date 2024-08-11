@@ -1,292 +1,87 @@
-ion-content{
-
---ion-background-color:#fdfdfd;
-}
-ion-item{
---background: linear-gradient(#fdfdfd, #fdfdfd) !important;
-font-size: 20px;
-font-style: normal;
-font-family: "Roboto", sans-serif;
-
---padding-start: 0;
-  --padding-end: 0;
-  margin: 0;
-}
-
-
-.itementreprise{
-  background-color:  #42b670;
-  padding: 0.6px;
-
-  width: auto;
-  --padding-start: 0;
-  --padding-end: 0;
-  margin: 0;
-  }
-
-.deconnect{
-  float: right;
-  }
-.utilisateur{
-
-  float: left;
-}
-
-
-.list{
-font-size: 20px;
-font-style: normal;
-  padding: 5;
-}
-
-.tool1{
-
-font-size: 20px;
-font-style: normal;
-font-family: "Roboto", sans-serif;
-  padding: 6;
-  border-radius: 3px;
-}
-.iconsupp{
-  //display: inline-block;
-  color: #f70707a9;
-  }
-
-  .iconmodif{
-  //display: inline-block;
-  color: #0808f8a9;
-
-}
-.checkbox {
-//display: inline-block;
-font-size: 42px;
-color: #0808f8a9;
-//vertical-align: middle;
-float: left;
-
-}
-
-.icon{
-  //display: inline-block;
-  font-size: 42px;
-  color: #2dd36f;
-  vertical-align: middle;
-  float: right;
-
-  }
-
-  .text{
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 16px;
-  font-style: normal;
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-}
-.span{
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 16px;
-  font-style: normal;
-  text-align: center;
-  --ion-background-color:#fdfdfd;
-  font-family: "Roboto", sans-serif;
-
-}
-
-
-.select {
-  font-size: 20px;
-  --ion-background-color:#fafafa;
-  min-width: 200px;
-  font-style: normal;
-  font-family:Verdana, Geneva, Tahoma, sans-serif;
-  height: 29px;
-  padding: 7px;
-  top: 0px;
-  color: #121212;
-  vertical-align: right;
-  width: 150px;
-  text-align: right;
-  }
-
-.toolbar{
-  height: 40px;
-  font-size: 10px;
-  font-style: normal;
-
-  font-family: "Roboto", sans-serif;
-
-}
-
-.span1{
-  width: 100px;
-  text-align: left;
-  font-size: 10px;
-  font-style: normal;
-  --ion-background-color:#fdfdfd;
-  font-family: "Roboto", sans-serif;
-
-}
-
-
-.nombre{
-  //vertical-align: middle;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: bold;
-  font-family: "Roboto", sans-serif;
-}
-
-
-.h2{
-  //vertical-align: middle;
-  font-size: 15px;
-  font-style: normal;
-  padding: 11px;
-  font-family: "Roboto", sans-serif;
-  color: #2a2c2a;
-  --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
-
-  word-spacing: 0px;
-  white-space: normal; /* Permet le retour à la ligne automatique */
-  word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
-
-  font-size: medium;
-  margin: 0;
-
-  --padding-start: 0;
-  --padding-end: 0;
-
-}
-
-.prenom{
-  //vertical-align: middle;
-  font-size: 15px;
-  font-style: normal;
-  padding: 11px;
-  font-family: "Roboto", sans-serif;
-  color: #ffffff;
-  --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
-}
-
-.tool2{
-  --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
-  font-size: 16px;
-  font-style: normal;
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-color: #ffffff;
-padding: 6;
-  }
-
-
-body {
-  font-family: "Roboto", sans-serif;
-}
-
-
-.tool3{
-  font-size: 16px;
-  font-style: normal;
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-color: #ffffff;
-padding: 4;
-overflow-y: auto; /* Autoriser le défilement vertical si nécessaire */
-max-height: 100%; /* Ajustez la valeur en fonction de vos besoins */
-  }
-
-  .tool{
-    //display: inline-block;
-    font-size: 42px;
-    color: #ffffff;
-
-  }
-
-.welcometitle{
-color: #ffffff;
-}
-.logo {
-  text-align: center;
-  font-size: 55px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 38%;
-  //transform: translateY(-50%);
-  color: #ffffff;
-  font-style: normal;
-  font-family: "Roboto", sans-serif;
-}
-
-.recherche {
-  font-size: 20px;
-  line-height: 30px;
-  --ion-background-color:#ffffff;
-  border-radius: 10px;
-}
-
-.log {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #ffffff;
-
-  margin: 0;
-}
-
-body {
-  font-family: "Roboto", sans-serif;
-}
-
-#container a {
-  text-decoration: none;
-  color: #d90a0a;
-}
-
-/* Fixer le tab bar en bas de la page */
-ion-tabs {
-position: fixed;
-bottom: 0;
-width: 100%;
-background-color: white;
-z-index: 1;
-}
-
-/* Ajouter un espace au contenu pour éviter qu'il ne soit caché par le tab bar */
 ion-content {
-margin-bottom: 50px; /* Ajustez la valeur en fonction de la hauteur de votre tab bar */
-}
-ion-tab-button {
---color-selected: #2dd36f; /* Couleur des icônes sélectionnées (en vert) */
---color-unselected: #2dd36f; /* Couleur des icônes non sélectionnées (en vert) */
+  --background: #ffffff;
 }
 
-.menu{
-  border-radius: 12px;
-  height: 32px;
+.title{
+  text-align: center;
+}
+
+ion-card {
+  text-align: center;
+  --ion-background-color: #f9f9f9;
+  --ion-card-border-radius: 15px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+}
+
+ion-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2dd36f;
+  --ion-card-header-color: #ffffff;
+  border-radius: 15px 15px 0 0;
+}
+
+ion-card-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+ion-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em;
+  color: #333;
+}
+
+
+p {
+  font-size: 0.9em;
+}
+
+.ad-banner {
+  --background: #0eeb49;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px;
+}
+
+ion-header {
+  .toolbar {
+    --background: linear-gradient(to right, #0eeb49, #05a83d); /* Ajout d'un dégradé */
+    --ion-toolbar-background: transparent;
+    color: #fff;
+    padding: 0 15px;
   }
 
-  .custom-icon {
-    color: #2dd36f; /* Remplacez "blue" par la couleur de votre choix */
-    font-size: 22px;
-    }
+  .header-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+  }
 
-    .lignemenu {
-      background-color:  #2dd36f;
-      height: 2px; /* Ajustez la largeur de la ligne selon vos préférences */
-      width: auto;
-      --padding-start: 0;
-      --padding-end: 0;
-      margin: 10px;
-    }
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
 
+  .title {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+  }
 
+  .header-icons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
 
-.custom-text {
-  white-space: normal; /* Permet le retour à la ligne automatique */
-  word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
-  text-align: justify;
-  font-size: medium;
+  .icon {
+    font-size: 1.5em;
+    margin-left: 15px;
+  }
 }

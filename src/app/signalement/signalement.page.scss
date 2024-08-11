@@ -1,3 +1,8 @@
+ion-content  {
+  --ion-background-color:#dfe0df
+}
+
+
 .tool2{
   --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
   font-size: 20px;
@@ -19,25 +24,26 @@ overflow-y: auto; /* Autoriser le défilement vertical si nécessaire */
 max-height: 100%; /* Ajustez la valeur en fonction de vos besoins */
 }
 
-.toolbar {
-  --background: #4ca05e;
-}
-
-.title {
-  color: #fff;
-  text-align: center;
-}
 
 .content {
   --offset-bottom: 300px;
 }
 
-.item {
-  border-bottom: 2px solid #eee;
-}
 
 .label {
   padding: 15px;
+}
+
+.message-item {
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  padding: 15px;
+}
+
+.message-list {
+  padding: 0 15px;
 }
 
 .signaleur {
@@ -45,25 +51,27 @@ max-height: 100%; /* Ajustez la valeur en fonction de vos besoins */
   font-weight: bold;
 }
 
-.datetime {
-  color: #777;
-}
+
 
 .target {
   margin-top: 5px;
   color: #4ca05e;
 }
 
-.comment {
-  margin-bottom: 10px;
-  margin-top: 10px;
-  font-style: italic;
+.label-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333333;
+  margin-bottom: 5px;
+  display: block;
 }
 
-.pubid,
-.commentid {
-  margin-top: 5px;
-  color: #777;
+.message-content {
+  font-size: 18px;
+  color: #555555;
+  margin-bottom: 15px;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
 }
 
 .button-rouge {
@@ -80,22 +88,13 @@ max-height: 100%; /* Ajustez la valeur en fonction de vos besoins */
 }
 
 
-.recherche {
-  font-size: 20px;
-  line-height: 30px;
-  --ion-background-color:#ffffff;
-  border-radius: 10px;
-}
-
-
-
 .select {
   font-size: 20px;
   min-width: 200px;
   font-style: normal;
   font-family:Verdana, Geneva, Tahoma, sans-serif;
   height: 29px;
-  padding: 7px;
+  padding: 3px;
   top: 0px;
   color: #fafafa;
   vertical-align: right;
@@ -109,4 +108,92 @@ max-height: 100%; /* Ajustez la valeur en fonction de vos besoins */
 
   .bloquer {
       color: rgb(235, 78, 63);
+    }
+
+    .arrow-container {
+      position: fixed;
+      bottom: 70%;/* Ajustez cette valeur selon vos préférences */
+      right: 12px;  /* Ajustez cette valeur selon vos préférences */
+      color: #7cc571; /* Couleur de l'icône */
+      border-radius: 70%;
+      cursor: pointer;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 1000; /* Assurez-vous que l'icône est au-dessus des autres éléments */
+    }
+
+    .arrow-container.visible {
+      opacity: 1;
+    }
+
+    .erreur_chargement {
+      text-align: center;
+      bottom: 35%;
+    }
+
+
+    .custom-background {
+      font-style: normal;
+      text-align: center;
+      font-family: "Roboto", sans-serif;
+    color: #ffffff;
+    padding: 3px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+
+    ion-header {
+      --padding-top: env(safe-area-inset-top);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-top: 10px; /* Adjust as needed */
+      padding-bottom: 10px; /* Adjust as needed */
+      --background: #4ca05e;
+    }
+
+    .header-row {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 1.5rem; /* Adjust as needed */
+      text-align: center;
+      color: #fff;
+    }
+
+    .search-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px; /* Adjust as needed */
+      background-color:   #2dd36f;
+      height: min-content;
+    }
+
+    .recherche {
+      flex: 1;
+      margin-right: 10px; /* Adjust as needed */
+      border-radius: 14px; /* Ajustez le border-radius si nécessaire */
+      padding: 1px; /* Ajoutez du padding à l'intérieur de l'input */
+      box-shadow: 0px 2px 5px rgba(86, 195, 115, 0.2); /* Optionnel: ajoutez une ombre pour l'effet visuel */
+      border: 1px solid #7d2424; /* Ajoutez une bordure si nécessaire */
+      color: #0e0e0e;
+      background-color: #ffffff;
+    }
+
+    .search-icon {
+      cursor: pointer;
     }

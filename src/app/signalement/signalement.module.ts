@@ -8,14 +8,17 @@ import { SignalementPageRoutingModule } from './signalement-routing.module';
 
 import { SignalementPage } from './signalement.page';
 import { CustomFilterPipe } from './custom-filter.pipe';
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    SignalementPageRoutingModule
-  ],
-  declarations: [SignalementPage, CustomFilterPipe]
+    declarations: [SignalementPage, CustomFilterPipe],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        SignalementPageRoutingModule,
+        SharedModule
+    ]
 })
+
 export class SignalementPageModule {}

@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar class="tool1" color="success">
+    <br  style="padding: 39px;">
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+     <br/> <br/>
+    <ion-title class="tool2">Modifier données Entreprise</ion-title>
+    <br/>
+  </ion-toolbar>
+</ion-header>
+<br/>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <form [formGroup]="verifieForm">
+    <ion-item>
+      <ion-label position="floating" class="h2"> Nom de L'entreprise</ion-label><br/>
+      <ion-input [(ngModel)]="nom_entreprise" formControlName="name" type="text"></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('name').touched && verifieForm.get('name').errors?.required">Veuillez entrer le nom de l'entreprise</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('name').touched && verifieForm.get('name').hasError('minlength')">Verifier votre nom</ion-label>
+    <br/>
+
+    <ion-item>
+      <ion-label position="floating" class="h2"> Description du service</ion-label><br/>
+        <ion-input [(ngModel)]="description"  formControlName="description"  type="text" ></ion-input>
+      </ion-item>
+      <ion-label color="danger" *ngIf="verifieForm.get('description').touched && verifieForm.get('description').errors?.required">Veuillez entrer la description</ion-label>
+      <ion-label color="danger" *ngIf="verifieForm.get('description').touched && verifieForm.get('description').hasError('minlength')">Verifier votre description</ion-label>
+      <br/>
+
+      <ion-item>
+      <ion-label position="floating" class="h2"> Numero du service</ion-label><br/>
+        <ion-input [(ngModel)]="numero"  formControlName="numero"  type="number" ></ion-input>
+      </ion-item>
+      <ion-label color="danger" *ngIf="verifieForm.get('numero').touched && verifieForm.get('numero').errors?.required">Veuillez entrer le numero</ion-label>
+      <ion-label color="danger" *ngIf="verifieForm.get('numero').touched && verifieForm.get('numero').hasError('minlength')">Verifier votre numero</ion-label>
+      <br/>
+
+<ion-col>
+  <br/> <br/>
+  <ion-button type="button" (click)="update_num_service()" [disabled]="!verifieForm.valid" color="success" shape="round" expand="full">
+  Modifier
+</ion-button>
+</ion-col>
+
+</form>
+</ion-content>

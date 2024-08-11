@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Alert } from 'selenium-webdriver';
 import { ApiService } from '../api.service';
-import { AlertController, IonList, LoadingController } from '@ionic/angular';
+import { AlertController, IonContent, IonInfiniteScroll, IonList, LoadingController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { CustomFilterPipe } from './custom-filter.pipe';
@@ -12,61 +12,112 @@ import { CustomFilterPipe } from './custom-filter.pipe';
   styleUrls: ['./liste-user.page.scss'],
 })
 export class ListeUserPage implements OnInit {
-  term;
-  handlerMessage = '';
-  roleMessage = '';
 
-  grade:any;
-  nom:any;
-   users: any = [];
-    navCtrl: any;
-    prenom1:any;
-    rang: any = [];
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-    constructor(public _apiService: ApiService,
-      private alertController: AlertController,
-      private route: ActivatedRoute,
-      private router: Router,
-      private loadingCtrl: LoadingController,
-      public loadingController: LoadingController,
-      )
-    {
-      this.getuser();
-      this.getgrade();
+
+term;
+handlerMessage = '';
+roleMessage = '';
+
+grade:any;
+nom:any;
+users: any = [];
+navCtrl: any;
+prenom1:any;
+rang: any = [];
+list_user: any;
+page: number = 1;
+limit : number = 30;
+infiniteScrollDisabled: boolean = false;
+
+
+constructor(public _apiService: ApiService,
+private alertController: AlertController,
+private route: ActivatedRoute,
+private router: Router,
+private loadingCtrl: LoadingController,
+public loadingController: LoadingController,
+private renderer: Renderer2,
+
+)
+{
+this.getuser();
+this.getgrade();
+}
+getsession(){
+this.grade= (localStorage.getItem('grade'));
+console.log(this.grade);
+}
+getsession1(){
+this.prenom1= (localStorage.getItem('prenom1'));
+console.log(this.prenom1);
+        }
+
+
+getuser(){
+  this.page = 1;
+this.list_user = this.users;
+this._apiService.getuser(this.page, this.limit).subscribe((res:any) => {
+
+console.log("SUCCESS ===",res);
+if (res && res.length < 1) {
+this.users = 'aucune_alerte';
+}
+else {
+this.users = res;
+}
+
+},(error: any) => {
+
+if (this.list_user && this.list_user.length > 0) {
+this.users = this.list_user;
+}
+else { this.users = 'erreur_chargement'; }
+alert('Erreur de connection avec le serveur veillez reessayer');
+
+// this.router.navigateByUrl('/welcome2');
+
+})
+this.getsession();
+this.getsession1();
+}
+
+  async loadMore(event) {
+    this.page++;
+    try {
+      const res : any  = await this._apiService.getuser(this.page, this.limit).toPromise();
+      console.log('SUCCESS ===', res);
+
+      this.users = this.users.concat(res);
+      event.target.complete();
+
+        // Désactiver l'infinite scroll si moins de données retournées que la limite
+    if (res.length < this.limit) {
+      this.infiniteScrollDisabled = true;
     }
-    getsession(){
-     this.grade= (localStorage.getItem('grade'));
-     console.log(this.grade);
+    } catch (error) {
+      console.log('Erreur de chargement', error);
+      if (this.list_user && this.list_user.length > 0) {
+        this.users = this.list_user;
       }
-      getsession1(){
-        this.prenom1= (localStorage.getItem('prenom1'));
-        console.log(this.prenom1);
-         }
-
-  getuser(){
-    this._apiService.getuser().subscribe((res:any) => {
-
-      console.log("SUCCESS ===",res);
-      this.users = res;
-
-     },(error: any) => {
-     alert('Erreur de connection avec le serveur veillez reessayer');
-     //this.navCtrl.setRoot('/welcome2');
-     this.router.navigateByUrl('/welcome2');
-     // console.log("ERREUR ===",error);
-  })
-  this.getsession();
-  this.getsession1();
-
+      else { this.users = 'erreur_chargement'; }
+      event.target.complete();
+    }
   }
 
 
-  refreshPage(e){
-  setTimeout(() => {
-    this.getuser();
-    console.log('rafraichissement de la page');
+  async refreshPage(e: any) {
+
+    // Réinitialiser les données de la page et du tableau pub
+    this.page = 1;
+    this.infiniteScrollDisabled = false; // Réactiver l'infinite scroll
+
+    // Rafraîchir les pubs
+    await this.getuser();
+
+    // Terminer l'animation de rafraîchissement
     e.target.complete();
-  },500);
   }
 
     async deconnect(){
@@ -168,8 +219,6 @@ export class ListeUserPage implements OnInit {
   return alert.present();
   }
 
-
-
   ionViewWillEnter()
   {
     this.getuser();
@@ -191,6 +240,56 @@ get userCount(){
 transform(users: any, term: string, excludes: any = []): any {
   return CustomFilterPipe.filter(users, term, excludes);
 }
+
+
+private hideButtonTimeout: any;
+@ViewChild('scrollButton', { static: false }) scrollButton: ElementRef;
+@ViewChild(IonContent, { static: false }) content: IonContent;
+
+
+ngAfterViewInit() {
+  this.addScrollListener();
+  this.resetHideButtonTimer() ;
+}
+
+scrollToTop() {
+  this.content.scrollToTop(500); // Utiliser la méthode scrollToTop d'Ionic
+}
+
+addScrollListener() {
+  this.content.getScrollElement().then(scrollElement => {
+    this.renderer.listen(scrollElement, 'scroll', () => {
+      this.handleScroll(scrollElement);
+      this.resetHideButtonTimer();
+    });
+  });
+}
+
+
+handleScroll(scrollElement) {
+  const scrollButton = this.scrollButton.nativeElement;
+
+  if (!scrollElement || !scrollButton) return;
+
+  const { scrollTop, scrollHeight, clientHeight } = scrollElement;
+  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+
+  if (scrollTop >= 7000 ) {
+    this.renderer.setStyle(scrollButton, 'display', 'block');
+  } else {
+    this.renderer.setStyle(scrollButton, 'display', 'none');
+  }
+}
+
+resetHideButtonTimer() {
+  if (this.hideButtonTimeout) {
+    clearTimeout(this.hideButtonTimeout);
+  }
+  this.hideButtonTimeout = setTimeout(() => {
+    this.renderer.setStyle(this.scrollButton.nativeElement, 'display', 'none');
+  }, 2000);
+}
+
 
   }
 

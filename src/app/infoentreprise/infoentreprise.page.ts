@@ -56,6 +56,7 @@ export class InfoentreprisePage implements OnInit {
 
   ngOnInit() {
   }
+
   getsession(){
     this.grade= (localStorage.getItem('grade'));
     console.log(this.grade);

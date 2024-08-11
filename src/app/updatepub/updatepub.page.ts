@@ -36,10 +36,11 @@ export class UpdatepubPage implements OnInit {
  selectedcontact: string = 'pas_de_contact'; // Option par défaut pour la contact
  selectedlatitude: string = 'pas_de_latitude'; // Option par défaut pour la latitude
  selectedlongitude: string = 'pas_de_longitude'; // Option par défaut pour la longitude
-
+ selectedadmin : string = 'pub_admin' ;
   entreprises: any = [];
 
   selectedFile: File;
+  admin: any;
 
 
 
@@ -100,6 +101,7 @@ export class UpdatepubPage implements OnInit {
       this.datePublication = pub.date;
       this.datefin = pub.datefin;
       this.photo = pub.photo;
+      this.admin = pub.admin
 
       this.date_deb= pub.date;
       this.date_de_fin = pub.datefin;
@@ -120,6 +122,9 @@ updatecommentaire(event: any) {
 }
 updaterang(event: any) {
   this.selectedrang = event.detail.value;
+}
+updateadmin(event: any) {
+  this.selectedadmin = event.detail.value;
 }
 updatecontact(event: any) {
   this.selectedcontact = event.detail.value;
@@ -219,6 +224,14 @@ updateDateOptiondeb(event: any) {
    else {
      formData.append('rangpub', '50');
    }
+
+    // Pour l'enregistrement du grade
+    if (this.selectedadmin !== 'none') {
+      formData.append('admin', 'admin');
+    }
+    else {
+      formData.append('admin', 'non');
+    }
 
     // Pour l'enregistrement du contact
     if (this.selectedcontact !== 'none') {

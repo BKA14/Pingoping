@@ -14,7 +14,7 @@ import { ApiService } from '../api.service';
 export class UpdateUserPage implements OnInit {
 
   verifieForm: FormGroup;
-  loaderToShow: any; 
+  loaderToShow: any;
 
   id: any;
   nom2:any;
@@ -23,22 +23,23 @@ export class UpdateUserPage implements OnInit {
   grade:any;
   password1: any;
   password2: any;
+  access_app : any;
   genre:any;
   contact:any;
   entreprises: any = [];
 
   navCtrl: any;
   rang: any = [];
-  
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private _apiService : ApiService,
     private loadingCtrl: LoadingController,
     public loadingController: LoadingController
-    
-  ) { 
-   
+
+  ) {
+
     this.route.params.subscribe((param:any) => {
       this.id = param.id;
       console.log(this.id);
@@ -46,20 +47,20 @@ export class UpdateUserPage implements OnInit {
     })
     this.getgrade();
   }
-  
+
 
 showLoader()
-{  
-     this.loaderToShow = this.loadingCtrl.create({  
-       message: 'Loader will Not Hide'  
-     }).then((res) => {   
-       res.present();  
-       res.onDidDismiss().then((dis) => {  
-         console.log('Loading dismissed!');  
-       });  
-     });   
-     
-   }    
+{
+     this.loaderToShow = this.loadingCtrl.create({
+       message: 'Loader will Not Hide'
+     }).then((res) => {
+       res.present();
+       res.onDidDismiss().then((dis) => {
+         console.log('Loading dismissed!');
+       });
+     });
+
+   }
 
    refreshPage(e){
     setTimeout(() => {
@@ -69,7 +70,7 @@ showLoader()
       e.target.complete();
     },500);
     }
-    
+
 
   async updateuser(){
 
@@ -77,12 +78,13 @@ showLoader()
     nom: this.nom2,
     prenom: this.prenom2,
     email: this.email2,
-    grade: this.grade, 
+    grade: this.grade,
     contact: this.contact,
     password: this.password1,
-    password2: this.password2,
     genre: this.genre,
-   
+    access_app: this.access_app,
+
+
 }
 
 const loading = await this.loadingCtrl.create({
@@ -113,8 +115,9 @@ getuser1 (id){
     this.prenom2 = entreprise.prenom;
     this.email2 = entreprise.email;
     this.password1 = entreprise.password;
-    this.password2 = entreprise.password2;
+    this.password2 = entreprise.password;
     this.grade = entreprise.grade;
+    this.access_app = entreprise.access_app;
     this.genre = entreprise.genre;
     this.contact = entreprise.contact;
    },(error: any) => {
@@ -133,7 +136,7 @@ getgrade(){
 
 
 ngOnInit() {
-  
+
   this.verifieForm = new FormGroup({
     email: new FormControl('', [
       Validators.required,
@@ -149,38 +152,31 @@ ngOnInit() {
   nom: new FormControl('', [
     Validators.minLength(2),
   Validators.required,
-  
+
       ]),
 
+      access_app: new FormControl('', [
+      Validators.required,
+
+          ]),
       contact: new FormControl('', [
         Validators.required,
-        Validators.min(10000000), 
+        Validators.min(10000000),
         Validators.max(99999999999999),
-        
+
       ]),
       prenom: new FormControl('', [
         Validators.minLength(2),
-      Validators.required,
+        Validators.required,
           ]),
+
           password: new FormControl('', [
             Validators.minLength(8),
-          Validators.required,
-          Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&#])[a-zA-Z0-9@$!%*?&#]+$'),
-          Validators.minLength(8)
-              ]),
-              password2: new FormControl('', [
-                Validators.minLength(8),
-              Validators.required,
-              Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&#])[a-zA-Z0-9@$!%*?&#]+$'),
-              
-                  ]),
-            
+            Validators.required,
+            Validators.maxLength(100),
+        ]),
           }
-          
-          
           );
-          
-     
 
   }
 }

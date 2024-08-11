@@ -2,7 +2,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthenticationService } from './authentication.service';
+import { authService } from './services/auth.service';
+import { AuthGuard } from './auth.guard';
 
 
 const routes: Routes = [
@@ -16,38 +17,38 @@ const routes: Routes = [
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule),
     data: { preload: true },
-    canActivate: [AuthenticationService] // guard pour empecher la redirection si non authentifier
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'update-entreprise/:id',
     loadChildren: () => import('./update-entreprises/update-entreprise.module').then( m => m.UpdateEntreprisePageModule),
-    canActivate: [AuthenticationService]
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'ajouter-entreprise',
     loadChildren: () => import('./ajouter-entreprise/ajouter-entreprise.module').then( m => m.AjouterEntreprisePageModule),
-    canActivate: [AuthenticationService]
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
 
   {
     path: 'infoentreprise',
     loadChildren: () => import('./infoentreprise/infoentreprise.module').then( m => m.InfoentreprisePageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'info-user/:id',
     loadChildren: () => import('./info-user/info-user.module').then( m => m.InfoUserPageModule),
-    canActivate: [AuthenticationService]
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'welcome2',
     loadChildren: () => import('./welcome2/welcome2.module').then( m => m.Welcome2PageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'welcome3',
     loadChildren: () => import('./welcome3/welcome3.module').then( m => m.Welcome3PageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'login2',
@@ -61,279 +62,281 @@ const routes: Routes = [
   {
     path: 'liste-user',
     loadChildren: () => import('./liste-user/liste-user.module').then( m => m.ListeUserPageModule),
-    canActivate: [AuthenticationService]
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'update-user/:id',
     loadChildren: () => import('./update-user/update-user.module').then( m => m.UpdateUserPageModule),
-    canActivate: [AuthenticationService]
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'categorie',
     loadChildren: () => import('./categorie/categorie.module').then( m => m.CategoriePageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'ajoutcategorie',
     loadChildren: () => import('./ajoutcategorie/ajoutcategorie.module').then( m => m.AjoutcategoriePageModule),
-    canActivate: [AuthenticationService]
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'update-categorie/:id',
     loadChildren: () => import('./update-categorie/update-categorie.module').then( m => m.UpdateCategoriePageModule),
-    canActivate: [AuthenticationService]
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'apropos',
     loadChildren: () => import('./apropos/apropos.module').then( m => m.AproposPageModule),
-    data: { preload: true },
-    canActivate: [AuthenticationService],
+   // data: { preload: true },
+   canActivate: [AuthGuard] // Utilisez AuthGuard ici
 
   },
   {
     path: 'mot-de-passe-oublie',
     loadChildren: () => import('./mot-de-passe-oublie/mot-de-passe-oublie.module').then( m => m.MotDePasseOubliePageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'acceuil',
     loadChildren: () => import('./acceuil/acceuil.module').then( m => m.AcceuilPageModule),
-    data: { preload: true }
+    //data: { preload: true }
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
 
   {
     path: 'ajouterpub',
     loadChildren: () => import('./ajouterpub/ajouterpub.module').then( m => m.AjouterpubPageModule),
-    canActivate: [AuthenticationService]
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'updatepub/:id',
     loadChildren: () => import('./updatepub/updatepub.module').then( m => m.UpdatepubPageModule),
-    canActivate: [AuthenticationService]
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'ping',
     loadChildren: () => import('./ping/ping.module').then( m => m.PingPageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'updatecoupon',
     loadChildren: () => import('./updatecoupon/updatecoupon.module').then( m => m.UpdatecouponPageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'fastfood',
     loadChildren: () => import('./fastfood/fastfood.module').then( m => m.FastfoodPageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'modiffasfood',
     loadChildren: () => import('./modiffasfood/modiffasfood.module').then( m => m.ModiffasfoodPageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'pmu',
     loadChildren: () => import('./pmu/pmu.module').then( m => m.PmuPageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'modifpmu',
     loadChildren: () => import('./modifpmu/modifpmu.module').then( m => m.ModifpmuPageModule),
-    canActivate: [AuthenticationService]
+   // canActivate: [AuthenticationService]
   },
   {
     path: 'depot-retrait',
     loadChildren: () => import('./depot-retrait/depot-retrait.module').then( m => m.DepotRetraitPageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-depot-retrait',
     loadChildren: () => import('./modif-depot-retrait/modif-depot-retrait.module').then( m => m.ModifDepotRetraitPageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'achatalimentation',
     loadChildren: () => import('./achatalimentation/achatalimentation.module').then( m => m.AchatalimentationPageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'modifalimentation',
     loadChildren: () => import('./modifalimentation/modifalimentation.module').then( m => m.ModifalimentationPageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'achatpoule',
     loadChildren: () => import('./achatpoule/achatpoule.module').then( m => m.AchatpoulePageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'updateachatpoule',
     loadChildren: () => import('./updateachatpoule/updateachatpoule.module').then( m => m.UpdateachatpoulePageModule),
-    canActivate: [AuthenticationService]
+    //  canActivate: [AuthenticationService]
   },
   {
     path: 'formation-informatique',
     loadChildren: () => import('./formation-informatique/formation-informatique.module').then( m => m.FormationInformatiquePageModule),
-    canActivate: [AuthenticationService]
+     //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-formation',
     loadChildren: () => import('./modif-formation/modif-formation.module').then( m => m.ModifFormationPageModule),
-    canActivate: [AuthenticationService]
+     //  canActivate: [AuthenticationService]
   },
   {
     path: 'artiste',
     loadChildren: () => import('./artiste/artiste.module').then( m => m.ArtistePageModule),
-    canActivate: [AuthenticationService]
+      //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-artiste',
     loadChildren: () => import('./modif-artiste/modif-artiste.module').then( m => m.ModifArtistePageModule),
-    canActivate: [AuthenticationService]
+    //  canActivate: [AuthenticationService]
   },
   {
     path: 'menuisier',
     loadChildren: () => import('./menuisier/menuisier.module').then( m => m.MenuisierPageModule),
-    canActivate: [AuthenticationService]
+     //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-menuisier',
     loadChildren: () => import('./modif-menuisier/modif-menuisier.module').then( m => m.ModifMenuisierPageModule),
-    canActivate: [AuthenticationService]
+     //  canActivate: [AuthenticationService]
   },
   {
     path: 'coiffeur',
     loadChildren: () => import('./coiffeur/coiffeur.module').then( m => m.CoiffeurPageModule),
-    canActivate: [AuthenticationService]
+     //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-coiffeur',
     loadChildren: () => import('./modif-coiffeur/modif-coiffeur.module').then( m => m.ModifCoiffeurPageModule),
-    canActivate: [AuthenticationService]
+     //  canActivate: [AuthenticationService]
   },
   {
     path: 'livraison',
     loadChildren: () => import('./livraison/livraison.module').then( m => m.LivraisonPageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-livraison',
     loadChildren: () => import('./modif-livraison/modif-livraison.module').then( m => m.ModifLivraisonPageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'vente-informatique',
     loadChildren: () => import('./vente-informatique/vente-informatique.module').then( m => m.VenteInformatiquePageModule),
-    canActivate: [AuthenticationService]
+     //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-vente-informatique',
     loadChildren: () => import('./modif-vente-informatique/modif-vente-informatique.module').then( m => m.ModifVenteInformatiquePageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'gateau',
     loadChildren: () => import('./gateau/gateau.module').then( m => m.GateauPageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-gateau',
     loadChildren: () => import('./modif-gateau/modif-gateau.module').then( m => m.ModifGateauPageModule),
-    canActivate: [AuthenticationService]
+     //  canActivate: [AuthenticationService]
   },
   {
     path: 'taxi',
     loadChildren: () => import('./taxi/taxi.module').then( m => m.TaxiPageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-taxi',
     loadChildren: () => import('./modif-taxi/modif-taxi.module').then( m => m.ModifTaxiPageModule),
-    canActivate: [AuthenticationService]
+    //  canActivate: [AuthenticationService]
   },
   {
     path: 'electricien',
     loadChildren: () => import('./electricien/electricien.module').then( m => m.ElectricienPageModule),
-    canActivate: [AuthenticationService]
+     //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-electricien',
     loadChildren: () => import('./modif-electricien/modif-electricien.module').then( m => m.ModifElectricienPageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-festival',
     loadChildren: () => import('./modif-festival/modif-festival.module').then( m => m.ModifFestivalPageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'festival',
     loadChildren: () => import('./festival/festival.module').then( m => m.FestivalPageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'genie-civil',
     loadChildren: () => import('./genie-civil/genie-civil.module').then( m => m.GenieCivilPageModule),
-    canActivate: [AuthenticationService]
+      //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-genie-civil',
     loadChildren: () => import('./modif-genie-civil/modif-genie-civil.module').then( m => m.ModifGenieCivilPageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'climatiseur',
     loadChildren: () => import('./climatiseur/climatiseur.module').then( m => m.ClimatiseurPageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-climatiseur',
     loadChildren: () => import('./modif-climatiseur/modif-climatiseur.module').then( m => m.ModifClimatiseurPageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'tailleur',
     loadChildren: () => import('./tailleur/tailleur.module').then( m => m.TailleurPageModule),
-    canActivate: [AuthenticationService]
+    //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-tailleur',
     loadChildren: () => import('./modif-tailleur/modif-tailleur.module').then( m => m.ModifTailleurPageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'plomberie',
     loadChildren: () => import('./plomberie/plomberie.module').then( m => m.PlomberiePageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'residence',
     loadChildren: () => import('./residence/residence.module').then( m => m.ResidencePageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-residence',
     loadChildren: () => import('./modif-residence/modif-residence.module').then( m => m.ModifResidencePageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-plomberie',
     loadChildren: () => import('./modif-plomberie/modif-plomberie.module').then( m => m.ModifPlomberiePageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'vin',
     loadChildren: () => import('./vin/vin.module').then( m => m.VinPageModule),
-    canActivate: [AuthenticationService]
+   //  canActivate: [AuthenticationService]
   },
   {
     path: 'modif-vin',
     loadChildren: () => import('./modif-vin/modif-vin.module').then( m => m.ModifVinPageModule),
-    canActivate: [AuthenticationService]
+  //  canActivate: [AuthenticationService]
   },
   {
     path: 'update-apropos',
-    loadChildren: () => import('./update-apropos/update-apropos.module').then( m => m.UpdateAproposPageModule)
+    loadChildren: () => import('./update-apropos/update-apropos.module').then( m => m.UpdateAproposPageModule),
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'paiement',
@@ -346,11 +349,61 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
+    loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'signalement',
-    loadChildren: () => import('./signalement/signalement.module').then( m => m.SignalementPageModule)
+    loadChildren: () => import('./signalement/signalement.module').then( m => m.SignalementPageModule),
+    canActivate: [AuthGuard]
+
+  },
+  {
+    path: 'information',
+    loadChildren: () => import('./information/information.module').then( m => m.InformationPageModule)
+  },
+  {
+    path: 'menu',
+    loadChildren: () => import('./menu/menu.module').then( m => m.MenuPageModule)
+  },
+  {
+    path: 'signalisation',
+    loadChildren: () => import('./signalisation/signalisation.module').then( m => m.SignalisationPageModule),
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+  },
+  {
+    path: 'alerte',
+    loadChildren: () => import('./alerte/alerte.module').then( m => m.AlertePageModule),
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+  },
+  {
+    path: 'alert-user',
+    loadChildren: () => import('./alert-user/alert-user.module').then( m => m.AlertUserPageModule),
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+  },
+  {
+    path: 'numero-service',
+    loadChildren: () => import('./numero-service/numero-service.module').then( m => m.NumeroServicePageModule),
+    canActivate: [AuthGuard]
+
+  },
+  {
+    path: 'ajouter-numero',
+    loadChildren: () => import('./ajouter-numero/ajouter-numero.module').then( m => m.AjouterNumeroPageModule),
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+  },
+  {
+    path: 'update-numero/:id',
+    loadChildren: () => import('./update-numero/update-numero.module').then( m => m.UpdateNumeroPageModule),
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+  },
+  {
+    path: 'message-user',
+    loadChildren: () => import('./message-user/message-user.module').then( m => m.MessageUserPageModule)
+  },
+  {
+    path: 'message-admin',
+    loadChildren: () => import('./message-admin/message-admin.module').then( m => m.MessageAdminPageModule)
   },
 
 

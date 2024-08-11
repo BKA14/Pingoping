@@ -1,0 +1,55 @@
+ion-content  {
+  --ion-background-color:#dfe0df
+}
+
+
+.toolbar {
+  background-color:   #10c938;
+    --ion-toolbar-background: transparent;
+    color: #fff;
+    padding: 0 15px;
+  }
+
+
+.title {
+  text-align: center;
+  width: 100%;
+}
+
+.message-list {
+  padding: 0 15px;
+}
+
+.message-item {
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  padding: 15px;
+}
+
+.label-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.message-content {
+  font-size: 18px;
+  color: #555555;
+  margin-bottom: 15px;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.message-content:last-child {
+  border-bottom: none;
+}
+
+.item-note {
+  margin-top: 10px;
+  font-style: italic;
+  color: #888888;
+}

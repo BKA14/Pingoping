@@ -1,12 +1,13 @@
 <ion-header >
-  
+
   <ion-toolbar class="tool1" color="success">
+    <br  style="padding: 50px;">
     <ion-buttons slot="start">
-      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br/> <br/> 
+    <br/>
       <ion-title class="tool2">Info Utilisateur</ion-title>
-      <br/>  
+      <br/>
     </ion-toolbar>
 </ion-header>
 
@@ -15,24 +16,32 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-<br/> 
+<br/>
 <ion-list class="list">
  <ion-item lines="inset" *ngFor="let user of users">
   <ion-label color="dark">
+    <ion-label  class="h3"> id de l'utilisateur :</ion-label >  <br/>  <h2 class="h2">{{user.id}}</h2>
+      <br/> <br/>
     <ion-label  class="h3"> Nom :</ion-label >  <br/>  <h2 class="h2">{{user.nom}}</h2>
-  <br/> <br/> 
+  <br/> <br/>
   <ion-label  class="h3"> Prenom :</ion-label >   <br/>  <h2 class="h2">{{user.prenom}}</h2>
-      <br/>  <br/> 
+      <br/>  <br/>
       <ion-label  class="h3"> Genre :</ion-label >   <br/>  <h2 class="h2">{{user.genre}}</h2>
-        <br/>  <br/> 
+        <br/>  <br/>
       <ion-label  class="h3"> Email :</ion-label >   <br/>  <h2 class="h2">{{user.email}}</h2>
-        <br/>  <br/> 
+        <br/>  <br/>
       <ion-label  class="h3"> Contact :</ion-label >   <br/>  <h2 class="h2">{{user.contact}}</h2>
-        <br/> <br/>  
-      <!-- <ion-label  class="h3"> Mot de Passe :</ion-label >   <br/> <ion-label  class="h2">{{user.password}}</ion-label >  
-        <br/> <br/> -->
-        <ion-label  class="h3"> Grade :</ion-label >  <br/>   <h2 class="h2">{{user.grade}}</h2>
-          <br/>
+        <br/> <br/>
+      <ion-label  class="h3"> Grade :</ion-label >  <br/>   <h2 class="h2">{{user.grade}}</h2>
+        <br/>
+      <ion-label  class="h3"> Access_app :</ion-label >  <br/>   <h2 class="h2">{{user.access_app}}</h2>
+        <br/>
+      <br/>
+      <ion-label  class="h3"> Date fin de blocage :</ion-label >  <br/>   <h2 class="h2">{{user.datefinblocage}}</h2>
+        <br/>
+        <br/>
+      <ion-label  class="h3"> Date inscription :</ion-label >  <br/>   <h2 class="h2">{{user.date_inscription}}</h2>
+        <br/>
   </ion-label>
   <div class="item-note">
   </div>

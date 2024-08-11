@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <br>
+    <br  style="padding: 45px;">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-row class="header-row">
+      <ion-title class="title">SIGNALISATION</ion-title>
+    </ion-row>
+    <br> <br>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <br>
+  <form [formGroup]="signalementForm" (ngSubmit)="onSubmit()">
+
+    <ion-item>
+      <ion-label class="coord-label">Vos coordonnées géographiques</ion-label>
+      <br>
+      <ion-label class="coord-value" position="stacked">Longitude : {{ signalementForm.get('location')?.value?.longitude }}</ion-label>
+      <ion-label class="coord-value" position="stacked">Latitude : {{ signalementForm.get('location')?.value?.latitude }}</ion-label>
+      <ion-button color="success" class="form-control" (click)="localiser()">Actualiser vos coordonnées</ion-button>
+    </ion-item>
+
+       <!-- Conteneur pour la carte Leaflet, initialement caché -->
+       <div id="map" style="height: 400px; display: none;"></div>
+       <ion-item>
+       <ion-button color="success" class="form-control" *ngIf="mapVisible" (click)="valider()">Valider la position</ion-button>
+       <br *ngIf="mapVisible" >
+      <ion-button color="success" class="form-control" *ngIf="!mapVisible" (click)="enableManualLocationSelection()">Choisir ma position manuellement</ion-button>
+    </ion-item>
+    <br>
+
+    <ion-item class="form-control">
+      <ion-label>Choisir le service</ion-label>
+      <ion-select formControlName="category">
+        <ion-select-option *ngFor="let service of service" [value]="service.valeur">
+          {{ service.nom }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <br>
+    <ion-item class="form-control">
+      <ion-label>Choisir la ville</ion-label>
+      <ion-select formControlName="ville">
+        <ion-select-option *ngFor="let ville of ville" [value]="ville.valeur">
+          {{ ville.nom }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+     <br>
+
+    <ion-item class="form-control">
+      <ion-label position="stacked">Description</ion-label>
+      <ion-textarea formControlName="description" placeholder="Description (optionnelle)"></ion-textarea>
+    </ion-item>
+
+    <br>
+    <p *ngIf="!selectedMedia" class="alert">Prenez ou choisissez une image/vidéo</p>
+    <p color="warning" class="alert">taille max : 100 Mo</p>
+    <ion-item class="form-control">
+    <ion-label>Photo/vidéo</ion-label>
+    <ion-button expand="block" color="success" (click)="selectMedia()">Choisir une photo/vidéo</ion-button>
+    </ion-item>
+    <br>
+    <ion-label *ngIf="selectedMedia">Si l'image choisie ne correspond pas, ou est trop floue, choisissez ou prenez une autre image/vidéo!</ion-label>
+    <br>
+    <img *ngIf="selectedMedia && isImage(selectedMedia)" [src]="selectedMedia" class="custom-image" />
+    <ng-container *ngIf="selectedMedia && !isVideo(selectedMedia)" >
+      <!-- Vérifie si c'est une vidéo -->
+      <video #videoElement class="custom-video video-style" (click)="toggleManualPause(videoElement)"  loop muted >
+        <source [src]="selectedMedia">
+      </video>
+      <br>
+      <div class="controls">
+        <ion-icon name="play" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="videoElement.paused"></ion-icon>
+        <ion-icon name="pause" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="!videoElement.paused"></ion-icon>
+        <input type="range" min="0" [max]="videoElement.duration" [value]="videoElement.currentTime" (input)="seekVideo($event, videoElement)">
+      </div>
+    </ng-container>
+
+
+
+
+
+    <ion-button [disabled]="!signalementForm.get('category').value || !signalementForm.get('image').value  || !signalementForm.get('location').value.longitude  || !signalementForm.get('location').value.latitude" expand="block" color="success" (click)="onSubmit()">Envoyer Signalisation</ion-button>
+  </form>
+</ion-content>

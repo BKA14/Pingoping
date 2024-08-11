@@ -4,7 +4,8 @@
     <ion-buttons slot="start">
       <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
     </ion-buttons>
-    <br/>  <br/> <br>
+    <br/>
+    <br  style="padding: 50px;">
     <ion-title class="tool2">Ajouter une publicité</ion-title>
     <br/>
   </ion-toolbar>
@@ -134,7 +135,6 @@
     <br>
 
 
-
     <ion-item class="itementreprise">
       <ion-segment (ionChange)="updateDateOptiondeb($event)">
         <ion-segment-button value="pas_de_date_debut">
@@ -150,12 +150,13 @@
       <ion-label position="floating" class="h2">Date début</ion-label><br/>
       <ion-datetime
         *ngIf="selectedDateOptiondeb !== 'none'"
+        [min]="minDate"
         [value]="datePublication"
         displayFormat="DD/MM/YYYY"
         (ionChange)="updateDate($event)" name="datedeb"
       ></ion-datetime>
     </ion-item>
- <br> <br>
+    <br><br>
 
     <ion-item class="itementreprise">
       <ion-segment (ionChange)="updateDateOptionfin($event)">
@@ -172,12 +173,14 @@
       <ion-label position="floating" class="h2">Date fin</ion-label><br/>
       <ion-datetime
         *ngIf="selectedDateOptionfin !== 'none'"
+        [min]="datePublication"
         [value]="datefin"
         displayFormat="DD/MM/YYYY"
         (ionChange)="updateDateFin($event)"
         name="datefin"
       ></ion-datetime>
     </ion-item>
+
     <br>
     <br>
 
@@ -197,6 +200,27 @@
     <ion-item *ngIf="selectedrang !== 'none'">
       <ion-label position="floating" class="h2"> Rang de la pub </ion-label><br/>
       <ion-input  ion-keyboard-fix [(ngModel)]="rangpub"  name="rang" type="number" ></ion-input>
+    </ion-item>
+    <br/>
+
+    <br>
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="updateadmin($event)">
+        <ion-segment-button value="pub_admin">
+          <ion-label> Mettre en admin</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selectedadmin !== 'none'">
+      <ion-label position="floating" class="h2"> grade de la pub : admin  </ion-label><br/>
     </ion-item>
     <br/>
 

@@ -2,6 +2,7 @@
 
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 
 @Injectable({
 providedIn: 'root'
@@ -14,10 +15,12 @@ iduser: any;
 numuser: any;
 grade: any;
 
-constructor(private router: Router)
+constructor(private router: Router,
+  private loadingCtrl: LoadingController,
+  public loadingController: LoadingController,
+)
 {
   this.getsession();
-
 }
 
   async ngOnInit() {
@@ -26,6 +29,14 @@ constructor(private router: Router)
 
 
 async getsession(){
+  const loading = await this.loadingCtrl.create({
+    message: 'Rechargement...',
+   spinner:'lines',
+  // showBackdrop:false,
+    cssClass: 'custom-loading',
+  });
+
+  //loading.present();
 
 this.grade= (localStorage.getItem('grade'));
 console.log(this.grade);
@@ -39,18 +50,29 @@ console.log(this.iduser);
 this.numuser= (localStorage.getItem('numuser'));
 console.log(this.numuser);
 
+//loading.dismiss();
   }
 
 
-canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-  // Vérifiez ici si l'utilisateur est connecté
-  // Si l'utilisateur est connecté, retournez true pour autoriser l'accès à la route
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    const loading = await this.loadingController.create({
+      message: 'Loading...',
+      spinner: 'crescent' // Vous pouvez choisir différents types de spinner : "bubbles", "circles", "crescent", etc.
+    });
 
-  if ( this.grade !== undefined && this.grade !== null && this.prenom1 !== undefined && this.prenom1 !== null && this.numuser !== undefined && this.numuser !== null && this.iduser !== undefined && this.iduser !== null && this.grade !== '' && this.grade !== '' && this.prenom1 !== '' && this.prenom1 !== '' && this.numuser !== '' && this.numuser !== '' && this.iduser !== '' && this.iduser !== '') {
-    return true;
-  } else {
-    this.router.navigate(['/login2']);
-    return false;
+    await loading.present();
+
+    if (this.grade && this.prenom1 && this.numuser && this.iduser) {
+      // Arrêter le spinner
+      await loading.dismiss();
+      return true;
+    } else {
+      // Arrêter le spinner
+      await loading.dismiss();
+      this.router.navigate(['/login2']);
+      return false;
+    }
   }
-}
+
+
 }

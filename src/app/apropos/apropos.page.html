@@ -1,22 +1,23 @@
 <ion-header >
 
-<ion-toolbar class="toolbar" color="success">
-
-  <br/> <br/>
+<ion-toolbar class="toolbar">
+  <br  style="padding: 50px;">
+  <ion-buttons slot="start">
+  <ion-back-button defaultHref="/" color="light"></ion-back-button>
+  </ion-buttons>
+<br>
     <ion-title class="tool2">A PROPOS</ion-title>
     <br/>
-
-<div class="item-note"  *ngIf="grade === 'superadmin'">
-  <ion-button color="light"  size="small" class="utilisateur"  [routerLink]="['/liste-user/']" >Utilisateurs</ion-button>
-</div>
-  <ion-button color="danger"  size="small" class="deconnect" (click)="deconnect()" >Deconnexion</ion-button>
-<br>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding class="tool3">
 
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <br>
+
   <div class="centered-div" *ngIf="grade === 'admin' || grade === 'superadmin'">
     <span class="span" color="success">Modification de la page à propos </span> &nbsp;
     <ion-icon name="create" style="zoom: 1.7;" color="success" class="icon" [routerLink]="['/update-apropos/']"></ion-icon>
@@ -24,7 +25,7 @@
 
 <br>
 
-<div class="list">
+<div class="list" *ngIf="a_propos !== 'erreur_chargement' && a_propos !== 'aucune_alerte'">
 
   <div *ngIf="a_propos.logo && a_propos.logo.trim() !== undefined &&  a_propos.logo.trim() !== '' && a_propos.logo.trim() !== 'non' &&  a_propos.logo.trim() !== null " >
     <ion-img class="logo"  [src]="a_propos.logo?.trim()" style="width: 200px; height: auto; margin: 0 auto;"></ion-img>
@@ -72,7 +73,26 @@
 </div>
 
 </div>
+<br *ngIf="a_propos == 'erreur_chargement'">
+<br *ngIf="a_propos == 'erreur_chargement'">
+<div *ngIf="a_propos == 'erreur_chargement'" class="erreur_chargement">
+  <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+  <p>Erreur de chargement</p>
+  <br>
+  <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+</div>
+
+<br *ngIf="a_propos == 'aucune_alerte'">
+<br *ngIf="a_propos == 'aucune_alerte'">
+<div>
+  <div  *ngIf="a_propos == 'aucune_alerte'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Aucune alerte effectué</p>
+    <br>
+  </div>
+</div>
+
 
 </ion-content>
 
-<app-sidebar></app-sidebar>
+

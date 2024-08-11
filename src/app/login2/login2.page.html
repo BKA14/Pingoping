@@ -1,5 +1,6 @@
 <ion-content>
-  <br/> <br/> <br/> <br/>
+  <br  style="padding: 39px;">
+  <br>
   <div class="defile">
     <p class="text_defile"> PAYS DES HOMMES INTEGRES</p>
   </div>
@@ -31,7 +32,7 @@
   <ion-label color="danger" *ngIf="verifieForm.get('password').touched && verifieForm.get('password').hasError('pattern')">Entrer un mot de passe de 8 caractère minimum avec au moins une majuscule,une minuscule,un chiffre et un caractère spécial(@ ou $ ou ! ou % ou * ou ? ou & ou #)</ion-label>
 
 <ion-button color="success" size="full" (click)="login4()" [disabled]="!verifieForm.valid" > Connexion</ion-button>
-<br/>
+<br>
 <h2  class="inscrip" [routerLink]="['/inscription/']" color="success" >s'inscrire</h2>    <br/>
  <h2  class="inscrip" [routerLink]="['/mot-de-passe-oublie/']" color="success" >mot de passe oublié</h2>
 </ion-card-content>

@@ -1,81 +1,35 @@
-
-<ion-header  >
-  <ion-toolbar color="success" class="tool1" >
-    <br/>
-    <br/>
-    <div class="item-note"  *ngIf="grade === 'superadmin'">
-    <ion-button color="light"  size="small" class="utilisateur"  [routerLink]="['/liste-user/']" >Utilisateurs</ion-button>
-  </div>
-
-    <div class="span1"  *ngIf="grade === 'admin' || grade === 'superadmin'">
-      <ion-button  class="span1"  size="small"   [routerLink]="['/categorie/']" >Categorie</ion-button>
-    </div>
-    <ion-title class="tool2">SERVICES</ion-title>
-
-      <br/>
-      <br/>
-    <div  style="display: flex;">
-      <ion-label class="h2 light">{{prenom1 | uppercase}}</ion-label>
-      <span style="margin-left: auto;">
-        <ion-button (click)="reloadPage()" class="light" color="light" style="text-align: left;">
-          actualiser
-        </ion-button>
-
-      </span>
-    </div>
-
-    <ion-searchbar class="recherche" type="text"  placeholder="Rechercher un service"  [(ngModel)]="term"  ></ion-searchbar>
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <br>
+    <ion-row class="header-row">
+      <ion-col>
+        <ion-title class="title">PINGOPING</ion-title>
+      </ion-col>
+      <ion-col size="auto" class="header-icons">
+      </ion-col>
+    </ion-row>
+    <br>
   </ion-toolbar>
-
 </ion-header>
 
-
-  <ion-item>
-    <ion-label>Catégorie</ion-label>
-    <ion-select class="select" [(ngModel)]="term2" placeholder="Sélectionner une catégorie">
-       <!-- Option pour la valeur par défaut (rien de sélectionné) -->
-    <ion-select-option value="">Aucune</ion-select-option>
-    <!-- Options pour les catégories -->
-      <ion-select-option *ngFor="let categorie of categorie" [value]="categorie.nom_categorie">
-        {{categorie.nom_categorie}}
-      </ion-select-option>
-    </ion-select>
-    <ion-icon color="success"  style="zoom: 0.8;" name="search-outline" slot="end"></ion-icon>
-  </ion-item>
-
-
-
-<ion-content padding  class="tool3" [fullscreen]="true" style="--offset-bottom: 56px;">
-  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
-  <ion-item class="span" *ngIf="grade === 'admin' || grade === 'superadmin'">
-
-    <span class="span" color="success">Ajouter une entreprise </span>
-    <ion-icon type="button" [routerLink]="['/ajouter-entreprise/']" name="add-circle-outline" class="icon"></ion-icon>
-  </ion-item>
-
-<ion-list class="list" #maliste>
- <ion-item class="itementreprise" button *ngFor="let entreprise of entreprises | customFilter: term | customFilter: term2">
-  <ion-label color="dark"  [routerLink]="'/' + entreprise.infoservice">
-    <ion-label class="h2">{{entreprise.nom_entreprise}}</ion-label>
-
-  </ion-label>
-  <div class="item-note"  *ngIf="grade === 'admin' || grade === 'superadmin'">
-  <ion-icon name="create"  style="zoom: 2.0;"  color="success"  [routerLink]="'/' + entreprise.lienmodif"></ion-icon>
-  <ion-icon name="trash"  style="zoom: 2.0;"  class="iconsupp" (click)="presentAlert(entreprise.id)"></ion-icon>
-  </div>
-</ion-item>
-</ion-list>
-
-
-<!-- <div style="margin-bottom: 50px;"></div>-->
-
-<!-- Tab bar fixe en bas de la page -->
-  <!-- Tab bar -->
-
+<ion-content padding>
+  <br> <br>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" size-md="4" size-lg="3" *ngFor="let activity of activities">
+        <ion-card [routerLink]="[activity.link]" >
+          <ion-card-header>
+            <ion-card-title>{{ activity.title }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon [name]="activity.icon" style="font-size: 2em; color: var(--ion-color-success);"></ion-icon>
+            <p>{{ activity.description }}</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
- <!-- Menu -->
+<!-- menu -->
 <app-sidebar></app-sidebar>

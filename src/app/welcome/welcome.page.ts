@@ -20,6 +20,15 @@ import { CustomFilterPipe } from './custom-filter.pipe';
 })
 export class WelcomePage implements OnInit {
 
+  activities = [
+    { title: 'Signalisation', icon: 'alert-circle-outline', description: 'Envoyer des alertes aux différentes entreprises de votre ville.', link: '/signalisation'  },
+    { title: 'Évènements à venir/Achat de ticket', icon: 'calendar-outline', description: 'Consultez les prochains événements.' , link: '/signalisation'  },
+    { title: 'Restaurant', icon: 'restaurant', description: 'Découvrez nos fabuleux mets.', link: '/signalisation'  },
+    { title: 'Lien utile', icon: 'link-outline', description: 'Accédez à des liens utiles.', link: '/numero-service' },
+    { title: 'Numéros de service', icon: 'call-outline', description: 'Trouvez des numéros utiles.', link: '/numero-service'  },
+    { title: 'Market', icon: 'cart-outline', description: 'Explorez notre marché.', link: '/signalisation'  }
+  ];
+
 term;
 term2
 handlerMessage = '';
@@ -82,7 +91,7 @@ categorie: any = [];
    },(error: any) => {
    alert('Erreur de connection avec le serveur veillez reessayer');
    //this.navCtrl.setRoot('/welcome2');
-   this.router.navigateByUrl('/welcome2');
+   //this.router.navigateByUrl('/welcome2');
    loading.dismiss();
    // console.log("ERREUR ===",error);
 })
@@ -101,25 +110,32 @@ setTimeout(() => {
 }
 
 
-  async getcategorie(){
+async getcategorie() {
+  const loading = await this.loadingCtrl.create({
+    message: 'Rechargement...',
+    spinner: 'lines',
+    cssClass: 'custom-loading',
+  });
+  await loading.present();
 
-    const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
-     spinner:'lines',
-    // showBackdrop:false,
-      cssClass: 'custom-loading',
-    });
-    loading.present();
-
-    this._apiService.getcategorie().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
-      this.categorie = res;
-      loading.dismiss();
-     },(error: any) => {
-      console.log("Erreur de connection ",error);
-      loading.dismiss();
-  })
+  try {
+    this._apiService.getcategorie().subscribe(
+      (res: any) => {
+        console.log("SUCCESS ===", res);
+        this.categorie = res;
+        loading.dismiss();
+      },
+      (error: any) => {
+        console.log("Erreur de connection ", error);
+        loading.dismiss();
+      }
+    );
+  } catch (error) {
+    console.error('Erreur inattendue :', error);
+    loading.dismiss();
   }
+}
+
 
   async supprimer(id){
 

@@ -1,35 +1,40 @@
 
 <ion-header>
-  <ion-toolbar color="success" class="tool1">
+  <ion-toolbar class="tool1">
+    <br>
+    <br  style="padding: 50px;">
     <ion-buttons  *ngIf="modif!==true" slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
     <ion-title class="tool2" *ngIf="modif!==true && reponse !==true">COMMENTAIRE</ion-title>
+    <br><br>
+    <div id="copy-message" class="copy-message">Texte copié</div>
     <p (click)="annulermodif()" *ngIf="modif==true" class="btnannuler">Annuler</p>
     <p (click)="annulerepondre()" *ngIf="reponse==true" class="btnannuler">Annuler</p>
   </ion-toolbar>
 </ion-header>
 
 
+  <ion-content padding  class="custom-background"  >
 
-  <ion-content padding  class="custom-background"  style="--offset-bottom: 300px;" >
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div class="custom-container">
-    <div *ngFor="let pubs of pubs" class="custom-card">
-      <div *ngIf="pubs.countdown !== undefined && pubs.countdown !== null && pubs.countdown.trim() !== 'non'">
-        <ion-label class="deconte" [ngClass]="{'blinking-text': shouldBlink(pubs.countdown)}">  {{ pubs.countdown }}</ion-label>
+  <div class="custom-container"  *ngIf="pub !== 'erreur_chargement' && pub !== 'aucune_alerte'">
+    <div *ngFor="let pub of pub" class="custom-card">
+      <div *ngIf="pub.countdown !== undefined && pub.countdown !== null && pub.countdown.trim() !== 'non'">
+        <ion-label class="deconte" [ngClass]="{'blinking-text': shouldBlink(pub.countdown)}">  {{ pub.countdown }}</ion-label>
       </div>
 
       <br>  <!-- Pour ne pas deplacer le titre -->
+      <br *ngIf="pub.countdown !== undefined && pub.countdown !== null && pub.countdown.trim() !== 'non'">
 
-          <ion-card-title class="titre"   *ngIf="pubs.titre.toLowerCase().trim() !== 'non'  && pubs.titre !== null && pubs.titre !== undefined" >{{pubs.titre}}</ion-card-title>
+        <ion-card-title class="titre" *ngIf="pub.titre.toLowerCase().trim() !== 'non'  && pub.titre !== null && pub.titre !== undefined" >{{pub.titre}}</ion-card-title>
 
         <!-- Commentaire de la publicité -->
-        <p [innerHTML]="commentaireService.sanitize(pubs.commentaire)"
-        *ngIf="pubs.commentaire.toLowerCase().trim() !== 'non' && pubs.commentaire !== null && pubs.commentaire !== undefined"
+        <p [innerHTML]="commentaireService.sanitize(pub.commentaire)"
+        *ngIf="pub.commentaire.toLowerCase().trim() !== 'non' && pub.commentaire !== null && pub.commentaire !== undefined"
         class="commentaire">
         </p>
 
@@ -38,21 +43,34 @@
         <ion-card-content>
 
           <!-- Illustration (image ou vidéo) de la publicité -->
-          <ng-container   *ngIf="(pubs.photo.includes('.jpg') || pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo.trim() !== null && pubs.photo.trim() !== undefined">
-            <ion-img  class="custom-image facebook-style"  [src]="pubs.photo.trim()" ></ion-img>
+          <ng-container *ngIf="isImage(pub.photo)">
+            <ion-img class="custom-image facebook-style" [src]="pub.photo.trim()"></ion-img>
           </ng-container>
+
 
           <!-- Votre composant HTML -->
 
-          <ng-container  *ngIf="(!pubs.photo.includes('.jpg') && !pubs.photo.includes('.png')) && pubs.photo.toLowerCase().trim() !== 'non' && pubs.photo !== null && pubs.photo !== undefined" >
-            <video #videoElement class="custom-image video-style"   (click)="handleVideoClick(videoElement)" loop muted  controls>
-              <source [src]="pubs.photo.trim()" type="video/mp4">
+          <ng-container *ngIf="isVideo(pub.photo)">
+            <video #videoElement class="custom-image video-style" (click)="toggleManualPause(videoElement)"  loop muted >
+              <source [src]="pub.photo.trim()">
             </video>
+            <!--  <img *ngIf="videoError" [src]="Frontend/src/pingoping_erreur.png" class="custom-image video-style" alt="Video Placeholder">  -->
+            <br>
+            <div class="controls">
+              <ion-icon name="play" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="videoElement.paused"></ion-icon>
+              <ion-icon name="pause" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="!videoElement.paused"></ion-icon>
+              <input type="range" min="0" [max]="videoElement.duration" [value]="videoElement.currentTime" (input)="seekVideo($event, videoElement)">
+              <!--
+              <ion-icon name="expand" style="zoom: 2.5;" (click)="toggleFullScreen(videoElement)" *ngIf="!isFullScreen"></ion-icon>
+              <ion-icon name="contract" style="zoom: 2.5;" (click)="toggleFullScreen(videoElement)" *ngIf="isFullScreen"></ion-icon>
+              -->
+
+            </div>
           </ng-container>
 
           <br>
-          <ion-label  class="localisation" *ngIf="pubs.distanceToUser !== undefined && pubs.distanceToUser !== null  && pubs.longitude.toLowerCase().trim() !== 'non' && pubs.latitude.toLowerCase().trim() !== 'non' && pubs.distanceToUser !== NaN " >
-            Vous êtes présentement à : {{ convertMetersToKilometers(pubs.distanceToUser) }} du lieu.
+          <ion-label  class="localisation" *ngIf="pub.distanceToUser !== undefined && pub.distanceToUser !== null  && pub.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non' && pub.distanceToUser !== NaN " >
+            Vous êtes présentement à : {{ convertMetersToKilometers(pub.distanceToUser) }} du lieu.
           </ion-label>
           <br>
           <p class="ligne"></p>
@@ -60,90 +78,112 @@
 
             &nbsp;
 
-          <ion-button *ngIf="pubs.longitude && pubs.latitude  && pubs.longitude !== undefined && pubs.latitude !== undefined  && pubs.longitude !== null && pubs.latitude !== null && pubs.longitude.toLowerCase().trim() !== 'non' && pubs.latitude.toLowerCase().trim() !== 'non' " class="btnpub location" fill="outline" [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pubs.latitude + ',' + pubs.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pubs.latitude + ',' + pubs.longitude">
+          <ion-button *ngIf="pub.longitude && pub.latitude  && pub.longitude !== undefined && pub.latitude !== undefined  && pub.longitude !== null && pub.latitude !== null && pub.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non' " class="btnpub location" fill="outline" [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pub.latitude + ',' + pub.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pub.latitude + ',' + pub.longitude">
             Localiser le lieu
             <ion-icon name="location-outline"></ion-icon>
           </ion-button>
 
            &nbsp; <br>
 
-          <ion-button *ngIf="pubs.contact &&  pubs.contact.trim() !== '0'  &&  pubs.contact !== undefined &&  pubs.contact !== null" class="btnpub contact" fill="outline" [href]="getWhatsAppLink(pubs.contact)">
+          <ion-button *ngIf="pub.contact &&  pub.contact !== '0'  &&  pub.contact !== undefined &&  pub.contact !== null" class="btnpub contact" fill="outline" [href]="getWhatsAppLink(pub?.contact)">
             <ion-icon class="black" name="logo-whatsapp"></ion-icon>
             Contact-Info
           </ion-button>
             <br>
             <br>
-            <!-- Remplacez la section j'aime par ce code -->
-            <div class="left-align">
-              <ion-label class="h2 light"  *ngIf="pubs.likes !== null && pubs.likes !== undefined">{{ pubs.likes }}</ion-label>
-              <br>
 
-              <div style="display: flex; justify-content: space-between;">
-                <!-- Bouton "J'aime" aligné à gauche -->
-                <ion-button (click)="LikePub(pubs)" class="likes" fill="outline" [ngClass]="{'vert': pubs.couleur.trim() === 'oui'}">
-                  <ion-icon class="black" name="thumbs-up"></ion-icon>
-                  J'aime
-                </ion-button>
+            <!--  nbr j'aime -->
+          <div class="left-align">
+            <ion-label class="h2 light">{{ pub.likes_count  }}</ion-label>
+            <br>
 
-                <!-- Bouton "Commentaire" aligné à droite
-                <ion-button (click)="CommentPub(pubs)" class="likes" fill="outline" >
-                  <ion-icon class="black" name="chatbox"></ion-icon>
-                  Commentaire
-                </ion-button>
-                -->
-              </div>
+            <div style="display: flex; justify-content: space-between;">
+              <!-- Bouton "J'aime" aligné à gauche -->
+              <ion-button (click)="likepub(pub)" class="likes" fill="outline" [ngClass]="{'vert': hasLiked(pub)}">
+                <ion-icon class="black" name="thumbs-up"></ion-icon>
+                J'aime
+            </ion-button>
 
+            </div>
             </div>
         </ion-card-content>
 
       </div>
     </div>
 
-    <div (click)="closeOptions($event)"> <!-- Ajoutez ce div pour détecter les clics en dehors du menu -->
-      <ion-list #commentList>
+    <br *ngIf="pub == 'erreur_chargement'">
+    <br *ngIf="pub == 'erreur_chargement'">
+    <div *ngIf="pub == 'erreur_chargement'" class="erreur_chargement">
+      <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+      <p>Erreur de chargement</p>
+      <br>
+      <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+    </div>
 
-      <ion-item class="itemcommentaire" *ngFor="let commentaire of comment">
-        <ion-label [class]="commentaire.iduser === iduser ? 'my-comment' : 'other-comment'">
+    <br *ngIf="pub == 'aucune_alerte'">
+    <br *ngIf="pub == 'aucune_alerte'">
+    <div>
+      <div  *ngIf="pub == 'aucune_alerte'" class="erreur_chargement">
+        <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+        <p>Aucune alerte effectué</p>
+        <br>
+      </div>
+    </div>
 
-          <!-- Afficher le commentaire parent s'il existe -->
-          <ng-container *ngIf="commentaire.idcommentrepondu">
-            <div class="parent-comment">
-              <strong>{{ findParentComment(commentaire.idcommentrepondu)?.nom }} {{ findParentComment(commentaire.idcommentrepondu)?.prenom }}</strong>
-              <p class="comment-date">{{ formatCommentTime(findParentComment(commentaire.idcommentrepondu)?.heure) }}</p>
-              <p class="reponse">{{ findParentComment(commentaire.idcommentrepondu)?.commentaire }}</p>
+
+      <ion-list >
+        <ion-item *ngFor="let commentaire of comment"  >
+          <ion-label [class]="commentaire.iduser === userData.iduser ? 'my-comment' : 'other-comment'">
+            <div class="container_a">
+              <a class="a_droite" (click)="repondre(commentaire)">Repondre</a>
             </div>
-          </ng-container>
-          <br>
-          <!-- Afficher le commentaire de reponse -->
-          <div >
-            <strong>{{ commentaire.nom }} {{ commentaire.prenom }}</strong>
-            <p class="comment-date">{{ formatCommentTime(commentaire.heure) }}</p>
-            <p class="reponse">{{ commentaire.commentaire }}</p>
-          </div>
-          <!-- Bouton "Plus" pour afficher les options -->
-          <p class="ligne"></p>
-          <ion-icon  style="zoom: 2.6;" name="menu" (click)="toggleOptions(commentaire)" [ngClass]="{ 'active': commentaire.showOptions }"></ion-icon>
-          <!-- Liste des options -->
-          <ul id="comment-options-{{ commentaire.id }}" class="comment-options" [ngClass]="{ 'active': commentaire.showOptions }">
+            <ng-container *ngIf="commentaire.idcommentrepondu">
+              <div class="parent-comment">
+                <strong  class="nom"   [class.admin]="userData.grade === 'admin' || userData.grade === 'superadmin'" > {{ findParentComment(commentaire.idcommentrepondu)?.nom }} {{ findParentComment(commentaire.idcommentrepondu)?.prenom }}</strong>
+                <p class="comment-date">{{ formatCommentTime(findParentComment(commentaire.idcommentrepondu)?.heure) }}</p>
+                <p class="reponse">{{ findParentComment(commentaire.idcommentrepondu)?.commentaire }}</p>
+              </div>
+            </ng-container>
             <br>
-            <div (click)="repondre(commentaire)">Repondre</div> <br>
-            <div *ngIf="commentaire.iduser == iduser" (click)="modifcommentaire(commentaire)">Modifier</div> <br>
-            <div *ngIf="commentaire.iduser == iduser" (click)="presentAlert(commentaire.id)">Supprimer</div> <br>
-            <div (click)="copiercommentaire(commentaire.commentaire)">Copier</div> <br>
-            <div  (click)="signalerCommentaire(commentaire)">Signaler</div> <br>
-          </ul>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+            <div>
+              <strong class="nom" [class.admin]="userData.grade === 'admin' || userData.grade === 'superadmin'">{{ commentaire.nom }} {{ commentaire.prenom }}</strong>
+              <p class="comment-date">{{ formatCommentTime(commentaire.heure) }}</p>
+              <br>
+              <p class="reponse">{{ commentaire.commentaire }}</p>
+            </div>
+            <br>
+            <p class="ligne"></p>
+           <!--  <ion-icon style="zoom: 2.6;" name="menu" (click)="toggleOptions($event,commentaire)" [ngClass]="{ 'active': commentaire.showOptions }"></ion-icon>
+            <ul id="comment-options-{{ commentaire.id }}" class="comment-options" [ngClass]="{ 'active': commentaire.showOptions }"> -->
+              <br>
 
-  </div>
+              <div class="commentaire-actions">
+                <a class="a_commentaire" *ngIf="commentaire.iduser == userData.iduser" (click)="modifcommentaire(commentaire)">Modifier</a>&nbsp;&nbsp;
+                <a class="a_commentaire" *ngIf="commentaire.iduser == userData.iduser" (click)="presentAlert(commentaire.id)">Supprimer</a>&nbsp;&nbsp;
+                <a class="a_commentaire" (click)="copiercommentaire(commentaire.commentaire)">Copier</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="a_commentaire" *ngIf="commentaire.iduser !== userData.iduser" (click)="signalement(commentaire)">Signaler</a>&nbsp;&nbsp;
+            </div>
 
 
-  </ion-content>
+           <!--   </ul>  -->
+          </ion-label>
+        </ion-item>
+      </ion-list>
 
+      <!-- Infinite Scroll -->
+      <ion-infinite-scroll [disabled]="infiniteScrollDisabled" threshold="100px" (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+
+  </ion-content >
 
 
   <ion-footer>
+
+    <div class="arrow-container" #scrollButton  (click)="scrollToTop()" >
+      <ion-icon  name="chevron-down-outline" class="red-arrow" style="zoom: 5.0;"></ion-icon>
+    </div>
+
     <ion-toolbar>
     <ion-item>
       <div *ngIf="!countdownValue">
@@ -154,7 +194,7 @@
            <ng-container *ngIf="!countdownValue">
             Ping
            </ng-container>
-           <span *ngIf="countdownValue && countdownValue !== null && countdownValue !== undefined">(Patientez {{ countdownValue }} seconde{{ countdownValue === 1 ? '' : 's' }}) </span>
+           <span *ngIf="countdownValue && countdownValue !== null && countdownValue !== undefined"> (Patientez {{ countdownValue }} seconde{{ countdownValue === 1 ? '' : 's' }}) </span>
         </ion-button>
 
           <ion-button (click)="modifierCommentaire(newComment)" class="likes1" fill="outline" color="success"  *ngIf="modif==true" [disabled]="!newComment">
@@ -166,10 +206,12 @@
 
             <ion-button (click)="repondrecommentaire(newComment)" class="likes1" fill="outline" color="success"  *ngIf="reponse==true" [disabled]="!newComment">
               <ion-icon name="chatbox"></ion-icon>
-               <ng-container >
+               <ng-container *ngIf="!countdownValue">
                 Repondre
                </ng-container>
-              </ion-button>
+               <span *ngIf="countdownValue && countdownValue !== null && countdownValue !== undefined"> (Patientez {{ countdownValue }} seconde{{ countdownValue === 1 ? '' : 's' }}) pour repondre </span>
+            </ion-button>
+
         </ion-item>
     </ion-toolbar>
   </ion-footer>

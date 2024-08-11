@@ -43,9 +43,9 @@ export class SidebarComponent implements OnInit {
   }
 
 
-  apropos() {
+  menu() {
 
-    this.router.navigateByUrl('/apropos');
+    this.router.navigateByUrl('/menu');
 
   }
 

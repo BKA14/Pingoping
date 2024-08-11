@@ -10,35 +10,36 @@ ion-content{
     }
     .deconnect{
      float: right;
-      } 
+      }
   .utilisateur{
-    
+
       float: left;
-    } 
-  
+    }
+
   .list{
     font-size: 20px;
     font-style: normal;
-      font-family:Verdana, Geneva, Tahoma, sans-serif;
-      padding: 5;
-    } 
-  
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    padding: 5;
+    }
+
   .tool1{
-    
+
     font-size: 20px;
     font-style: normal;
-      font-family:Verdana, Geneva, Tahoma, sans-serif;
-      padding: 6;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    padding: 6;
     }
+
     .iconsupp{
       //display: inline-block;
       color: #f70707a9;
      }
-  
+
      .iconmodif{
       //display: inline-block;
       color: #0808f8a9;
-  
+
     }
     .checkbox {
     //display: inline-block;
@@ -46,26 +47,27 @@ ion-content{
     color: #0808f8a9;
     //vertical-align: middle;
     float: left;
-    
+
    }
-  
+
     .icon{
       //display: inline-block;
       font-size: 42px;
       color: #2dd36f;
       vertical-align: middle;
       float: right;
-      
+
      }
-  
+
      .text{
       display: inline-block;
       vertical-align: middle;
       font-size: 16px;
       font-style: normal;
       text-align: center;
-        font-family:Verdana, Geneva, Tahoma, sans-serif;
+      font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
+
     .span{
       display: inline-block;
       vertical-align: middle;
@@ -73,10 +75,9 @@ ion-content{
       font-style: normal;
       text-align: center;
       --ion-background-color:#fdfdfd;
-        font-family:Verdana, Geneva, Tahoma, sans-serif;
-        
+      font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
-  
+
     .h2{
       //vertical-align: middle;
       font-size: 14px;
@@ -84,6 +85,7 @@ ion-content{
       padding: 15px;
       font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
+
     .select{
       padding: 7px;
       top: 0px;
@@ -99,9 +101,9 @@ ion-content{
       font-style: normal;
       --ion-background-color:#fdfdfd;
         font-family:Verdana, Geneva, Tahoma, sans-serif;
-        
+
     }
-  
+
     .tool2{
       --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
       font-size: 19px;
@@ -111,7 +113,7 @@ ion-content{
     color: #ffffff;
     padding: 6;
       }
-      
+
     .tool3{
       font-size: 16px;
       font-style: normal;
@@ -120,14 +122,14 @@ ion-content{
     color: #ffffff;
     padding: 4;
       }
-      
+
       .tool{
         //display: inline-block;
         font-size: 42px;
         color: #ffffff;
-      
+
       }
-  
+
     .welcometitle{
   color: #ffffff;
     }
@@ -143,24 +145,86 @@ ion-content{
       font-style: normal;
       font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
-    
+
     .recherche {
       font-size: 20px;
       line-height: 26px;
       --ion-background-color:#fafafa;
     }
-    
+
     .log {
       font-size: 16px;
       line-height: 22px;
-    
+
       color: #ffffff;
-    
+
       margin: 0;
     }
-    
+
     #container a {
       text-decoration: none;
       color: #d90a0a;
     }
-    
+
+    .arrow-container {
+      position: fixed;
+      bottom: 70%;/* Ajustez cette valeur selon vos préférences */
+      right: 12px;  /* Ajustez cette valeur selon vos préférences */
+      color: #7cc571; /* Couleur de l'icône */
+      border-radius: 70%;
+      cursor: pointer;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 1000; /* Assurez-vous que l'icône est au-dessus des autres éléments */
+    }
+
+    .arrow-container.visible {
+      opacity: 1;
+    }
+
+    .erreur_chargement {
+      text-align: center;
+      bottom: 35%;
+    }
+
+    ion-header {
+      --padding-top: env(safe-area-inset-top);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 10px; /* Ajustez selon les besoins */
+    }
+
+    .title {
+      font-size: 1.2rem; /* Ajustez selon les besoins */
+      text-align: center;
+      margin-bottom: 10px; /* Ajustez selon les besoins */
+    }
+
+    .deconnect {
+      margin-top: 10px; /* Ajustez selon les besoins */
+      margin-bottom: 10px; /* Ajustez selon les besoins */
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .username {
+      white-space: nowrap;        /* Empêche le retour à la ligne */
+      overflow: hidden;           /* Cache le texte débordant */
+      text-overflow: ellipsis;    /* Ajoute des ellipses pour le texte débordant */
+      max-width: 109px;           /* Ajustez la largeur maximale selon vos besoins */
+      text-align: center;         /* Centre le texte */
+    }
+
+    .searchbar {
+      width: 100%;
+      margin-top: 10px; /* Ajustez selon les besoins */
+    }
