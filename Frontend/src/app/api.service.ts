@@ -9,8 +9,8 @@ providedIn: 'root'
 export class ApiService {
 
 headers : HttpHeaders;
-  adr_web: string='http://localhost:80';
-  adr_mobile: string='http://192.168.1.85:80';
+  adr_web: string='http://localhost:80/Projet_Lokaliser/Backend';
+  adr_mobile: string='http://192.168.1.85:80/Projet_Lokaliser/Backend';
   time: any = 10000
   base_url = this.adr_mobile;
 
@@ -36,106 +36,106 @@ headers : HttpHeaders;
 
 
   sendtoken(data) {
-    return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/sendtoken.php',data)
+    return this.http.post(this.base_url+'/sendtoken.php',data)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
   sendNotification(data) {
-    return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/sendnotification.php',data)
+    return this.http.post(this.base_url+'/sendnotification.php',data)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
   rafraichissement_token(data) {
-      return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/rafraichissement_token.php',data)
+      return this.http.post(this.base_url+'/rafraichissement_token.php',data)
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
     get_time() {
-      return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/serveur_time.php')
+      return this.http.get(this.base_url+'/serveur_time.php')
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
 addentreprise(data) {
-return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/create.php',data)
+return this.http.post(this.base_url+'/create.php',data)
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError));
 }
 
 addpub(formData: FormData) {
-return this.http.post(this.base_url + '/Projet_ Lokaliser/Backend/addpub.php', formData)
+return this.http.post(this.base_url + '/addpub.php', formData)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
 }
 
 addentreprises(data) {
-return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//create.php',data)
+return this.http.post(this.base_url+'//create.php',data)
 .pipe(timeout(this.time))
 }
 
 signalisation(formData) {
-  return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//signalisation.php',formData)
+  return this.http.post(this.base_url+'//signalisation.php',formData)
   .pipe(timeout(this.time))
   }
 
 sendcomment(data) {
-  return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//sendcomment.php',data)
+  return this.http.post(this.base_url+'//sendcomment.php',data)
   .pipe(timeout(this.time))
   }
 
 sendmessage(data) {
-  return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//sendmessage.php',data)
+  return this.http.post(this.base_url+'//sendmessage.php',data)
   .pipe(timeout(this.time))
   }
 
   repondrecommentaire(data) {
-    return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//repondrecommentaire.php',data)
+    return this.http.post(this.base_url+'//repondrecommentaire.php',data)
     .pipe(timeout(this.time))
     }
 
     signalercommentaire(data) {
-      return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//signalercommentaire.php',data)
+      return this.http.post(this.base_url+'//signalercommentaire.php',data)
       .pipe(timeout(this.time))
       }
 
       verifie(data) {
-        return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//verifie.php',data)
+        return this.http.post(this.base_url+'//verifie.php',data)
         .pipe(timeout(this.time))
         }
 
 addetatlikes(data) {
-  return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//addetatlikes.php',data)
+  return this.http.post(this.base_url+'//addetatlikes.php',data)
   .pipe(timeout(this.time))
   }
 
 addcategorie(data) {
-  return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//createcategorie.php',data)
+  return this.http.post(this.base_url+'//createcategorie.php',data)
   .pipe(timeout(this.time))
 }
 
 add_numero(data) {
-  return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend//add_numero.php',data)
+  return this.http.post(this.base_url+'//add_numero.php',data)
   .pipe(timeout(this.time))
 }
 
 getentreprises(){
-return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getentreprises.php')
+return this.http.get(this.base_url+'/getentreprises.php')
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError));
 }
 
 
 getapropos(){
-return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getapropos.php')
+return this.http.get(this.base_url+'/getapropos.php')
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError));
 }
 
 loadalert(page: number, limit: number) {
-  return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/loadalert.php?page=${page}&limit=${limit}`)
+  return this.http.get(`${this.base_url}/loadalert.php?page=${page}&limit=${limit}`)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
 }
@@ -143,7 +143,7 @@ loadalert(page: number, limit: number) {
 
 
     loadalert_id(id, page: number, limit: number): Observable<any> {
-      return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/loadalert_id.php?page=${page}&limit=${limit}&id=${id}`)
+      return this.http.get(`${this.base_url}/loadalert_id.php?page=${page}&limit=${limit}&id=${id}`)
       .pipe(
         timeout(this.time), // Timeout de 15 secondes
         retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -153,7 +153,7 @@ loadalert(page: number, limit: number) {
 
 
       loadalert_search(term, page: number, limit: number): Observable<any> {
-        return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/search_alert.php?page=${page}&limit=${limit}&term=${term}`)
+        return this.http.get(`${this.base_url}/search_alert.php?page=${page}&limit=${limit}&term=${term}`)
         .pipe(
           timeout(this.time), // Timeout de 15 secondes
           retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -164,7 +164,7 @@ loadalert(page: number, limit: number) {
 
 
         load_signalement_search(term, page: number, limit: number): Observable<any> {
-        return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/load_signalement_search.php?page=${page}&limit=${limit}&term=${term}`)
+        return this.http.get(`${this.base_url}/load_signalement_search.php?page=${page}&limit=${limit}&term=${term}`)
         .pipe(
           timeout(this.time), // Timeout de 15 secondes
           retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -185,7 +185,7 @@ loadalert(page: number, limit: number) {
           if (ville) params = params.set('ville', ville);
           if (service) params = params.set('service', service);
 
-          return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/search_all_alert.php`, { params })
+          return this.http.get(`${this.base_url}/search_all_alert.php`, { params })
             .pipe(
               timeout(this.time),
               retry(0),
@@ -206,7 +206,7 @@ loadalert(page: number, limit: number) {
           if (service) params = params.set('service', service);
 
 
-          return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/search_all_alert_user.php`, { params })
+          return this.http.get(`${this.base_url}/search_all_alert_user.php`, { params })
             .pipe(
               timeout(this.time),
               retry(0),
@@ -226,7 +226,7 @@ loadalert(page: number, limit: number) {
 
 
 
-          return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/loadsignalement_search_all.php`, { params })
+          return this.http.get(`${this.base_url}/loadsignalement_search_all.php`, { params })
             .pipe(
               timeout(this.time),
               retry(0),
@@ -237,13 +237,13 @@ loadalert(page: number, limit: number) {
 
 
     numero_id(id){
-      return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/numero_id.php?id='+id)
+      return this.http.get(this.base_url+'/numero_id.php?id='+id)
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
     getpub(page: number, limit: number): Observable<any> {
-      return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/getpub.php?page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/getpub.php?page=${page}&limit=${limit}`)
         .pipe(
           timeout(this.time), // Timeout de 15 secondes
           retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -252,20 +252,20 @@ loadalert(page: number, limit: number) {
       }
 
 getinfo(id){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getinfo.php?id='+id)
+  return this.http.get(this.base_url+'/getinfo.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
 getpubid(id){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getpubid.php?id='+id)
+  return this.http.get(this.base_url+'/getpubid.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(1), catchError(this.handleError))
 }
 
 
 loadcommentairepub(id, page: number, limit: number): Observable<any> {
-  return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/getcomment.php?page=${page}&limit=${limit}&id=${id}`)
+  return this.http.get(`${this.base_url}/getcomment.php?page=${page}&limit=${limit}&id=${id}`)
   .pipe(
     timeout(this.time), // Timeout de 15 secondes
     retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -275,19 +275,19 @@ loadcommentairepub(id, page: number, limit: number): Observable<any> {
 
 
 getlivraison(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getlivraison.php')
+  return this.http.get(this.base_url+'/getlivraison.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
 getpmu(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getpmu.php')
+  return this.http.get(this.base_url+'/getpmu.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
     getmessage(page: number, limit: number): Observable<any> {
-      return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/getmessage.php?page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/getmessage.php?page=${page}&limit=${limit}`)
       .pipe(
       timeout(this.time), // Timeout de 15 secondes
       retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -296,7 +296,7 @@ getpmu(){
       }
 
 loadsignalement(page: number, limit: number): Observable<any> {
-return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/loadsignalement.php?page=${page}&limit=${limit}`)
+return this.http.get(`${this.base_url}/loadsignalement.php?page=${page}&limit=${limit}`)
 .pipe(
 timeout(this.time), // Timeout de 15 secondes
 retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -306,38 +306,38 @@ catchError(this.handleError) // Gestion des erreurs
 
 
 getpubvideo(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getpubvideo.php')
+  return this.http.get(this.base_url+'/getpubvideo.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
   getservice(){
-    return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getservice.php')
+    return this.http.get(this.base_url+'/getservice.php')
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
     getville(){
-      return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getville.php')
+      return this.http.get(this.base_url+'/getville.php')
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
 getcategorie(){
-return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getcategorie.php')
+return this.http.get(this.base_url+'/getcategorie.php')
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError));
 }
 
 getgrade(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getgrade.php')
+  return this.http.get(this.base_url+'/getgrade.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
 
     getuser(page: number, limit: number): Observable<any> {
-      return this.http.get(`${this.base_url}/Projet_ Lokaliser/Backend/getuser.php?page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/getuser.php?page=${page}&limit=${limit}`)
       .pipe(
         timeout(this.time), // Timeout de 15 secondes
         retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -346,242 +346,242 @@ getgrade(){
       }
 
 getentreprisess(){
-return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getentreprisess.php')
+return this.http.get(this.base_url+'/getentreprisess.php')
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError));
 }
 
 getfastfood(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getfastfood.php')
+  return this.http.get(this.base_url+'/getfastfood.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
   getformation(){
-    return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getformation.php')
+    return this.http.get(this.base_url+'/getformation.php')
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
 
 presentAlert(id){
-return this.http.delete(this.base_url+'/Projet_ Lokaliser/Backend/deleteEntreprise.php?id='+id)
+return this.http.delete(this.base_url+'/deleteEntreprise.php?id='+id)
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError))
 }
 
 supprimer_numero(id){
-  return this.http.delete(this.base_url+'/Projet_ Lokaliser/Backend/supprimer_numero.php?id='+id)
+  return this.http.delete(this.base_url+'/supprimer_numero.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
   }
 
 presentAlertpub(id){
-  return this.http.delete(this.base_url+'/Projet_ Lokaliser/Backend/deletePub.php?id='+id)
+  return this.http.delete(this.base_url+'/deletePub.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
   }
 
 presentAlertcommentaire(id){
-  return this.http.delete(this.base_url+'/Projet_ Lokaliser/Backend/deletecommentaire.php?id='+id)
+  return this.http.delete(this.base_url+'/deletecommentaire.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
   }
 
 presentAlertpubvideo(id){
-    return this.http.delete(this.base_url+'/Projet_ Lokaliser/Backend/deletePubvideo.php?id='+id)
+    return this.http.delete(this.base_url+'/deletePubvideo.php?id='+id)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError))
     }
 
 presentAlert2(id){
-  return this.http.delete(this.base_url+'/Projet_ Lokaliser/Backend/delete2Entreprise.php?id='+id)
+  return this.http.delete(this.base_url+'/delete2Entreprise.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
   }
 
 
   presentAlert3(id){
-    return this.http.delete(this.base_url+'/Projet_ Lokaliser/Backend/delete3categorie.php?id='+id)
+    return this.http.delete(this.base_url+'/delete3categorie.php?id='+id)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError))
     }
 getcoupon(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getsinglecoupon.php?id=')
+  return this.http.get(this.base_url+'/getsinglecoupon.php?id=')
   .pipe(timeout(10000))
   .pipe(retry(1), catchError(this.handleError))
 }
 
 
 getentreprisee(id){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getsingleEntreprise.php?id='+id)
+  return this.http.get(this.base_url+'/getsingleEntreprise.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 getpub2(id){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getsinglepub.php?id='+id)
+  return this.http.get(this.base_url+'/getsinglepub.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 getcategorie3(id){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getsinglecategorie.php?id='+id)
+  return this.http.get(this.base_url+'/getsinglecategorie.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 getmenuisier(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getmenuisier.php')
+  return this.http.get(this.base_url+'/getmenuisier.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 getvente(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getvente.php')
+  return this.http.get(this.base_url+'/getvente.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 getcoiffeur(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getcoiffeur.php')
+  return this.http.get(this.base_url+'/getcoiffeur.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 getmanagement(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getmanagement.php')
+  return this.http.get(this.base_url+'/getmanagement.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
   getclimatiseur(){
-    return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getclimatiseur.php')
+    return this.http.get(this.base_url+'/getclimatiseur.php')
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
   getelectricien(){
-    return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getelectricien.php')
+    return this.http.get(this.base_url+'/getelectricien.php')
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
 
 getuser1(id){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getusersingle.php?id='+id)
+  return this.http.get(this.base_url+'/getusersingle.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 getdepotretrait(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getdepotretrait.php?id=')
+  return this.http.get(this.base_url+'/getdepotretrait.php?id=')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 gettaxi(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/gettaxi.php')
+  return this.http.get(this.base_url+'/gettaxi.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
 
 getgateau(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getgateau.php')
+  return this.http.get(this.base_url+'/getgateau.php')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
   getetat(){
-    return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getetat.php')
+    return this.http.get(this.base_url+'/getetat.php')
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
     getetat2(data){
-      return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/getetat2.php',data)
+      return this.http.post(this.base_url+'/getetat2.php',data)
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError))
     }
 
 
     get_genie_civil(){
-    return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/get_genie_civil.php')
+    return this.http.get(this.base_url+'/get_genie_civil.php')
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
 
     getresidence(){
-      return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getresidence.php')
+      return this.http.get(this.base_url+'/getresidence.php')
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
       getplomberie(){
-        return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getplomberie.php')
+        return this.http.get(this.base_url+'/getplomberie.php')
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
         }
 
         getvin(){
-          return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getvin.php')
+          return this.http.get(this.base_url+'/getvin.php')
           .pipe(timeout(this.time))
           .pipe(retry(0), catchError(this.handleError));
           }
 
 
   getfestival(){
-    return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getfestival.php')
+    return this.http.get(this.base_url+'/getfestival.php')
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
     gettailleur(){
-      return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/gettailleur.php')
+      return this.http.get(this.base_url+'/gettailleur.php')
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
       numero_service(){
-        return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/numero_service.php')
+        return this.http.get(this.base_url+'/numero_service.php')
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
         }
 
 
 getalimentation(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getalimentation.php?id=')
+  return this.http.get(this.base_url+'/getalimentation.php?id=')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 achatalimentation(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/achatalimentation.php?id=')
+  return this.http.get(this.base_url+'/achatalimentation.php?id=')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 achatpoule(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/achatpoule.php?id=')
+  return this.http.get(this.base_url+'/achatpoule.php?id=')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 terminer_alerte(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/terminer_alerte.php?id='+id,data)
+  return this.http.put(this.base_url+'/terminer_alerte.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 soumettre_rapport(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/soumettre_rapport.php?id='+id,data)
+  return this.http.put(this.base_url+'/soumettre_rapport.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
@@ -589,107 +589,107 @@ soumettre_rapport(id,data){
 
 
 updatefastfood(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatefastfood.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatefastfood.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 traitement(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/traitement.php?id='+id,data)
+  return this.http.put(this.base_url+'/traitement.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 confirmer(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/confirmer.php?id='+id,data)
+  return this.http.put(this.base_url+'/confirmer.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 debloquer(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/debloquer.php?id='+id,data)
+  return this.http.put(this.base_url+'/debloquer.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 usersignaler(){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/usersignaler.php?id=')
+  return this.http.get(this.base_url+'/usersignaler.php?id=')
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 usersignaler2(id){
-  return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/usersignaler2.php?id='+id)
+  return this.http.get(this.base_url+'/usersignaler2.php?id='+id)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateetatlikes(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateetatlikes.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateetatlikes.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateinfo(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateinfo.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateinfo.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 update_num_service(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/update_num_service.php?id='+id,data)
+  return this.http.put(this.base_url+'/update_num_service.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateetatlikes2(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateetatlikes2.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateetatlikes2.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 disLike(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/disLike.php?id='+id,data)
+  return this.http.put(this.base_url+'/disLike.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatecoiffeur(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatecoiffeur.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatecoiffeur.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updatelivraison(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatelivraison.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatelivraison.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updatelikes(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatelikes.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatelikes.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updateplomberie(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateplomberie.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateplomberie.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateresidence(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateresidence.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateresidence.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatevin(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatevin.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatevin.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
@@ -697,164 +697,164 @@ updatevin(id,data){
 
 
 updatedepotretrait(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatedepotretrait.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatedepotretrait.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatealimentation(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatealimentation.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatealimentation.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatepmu(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatepmu.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatepmu.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updatevente(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatevente.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatevente.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateentreprise(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateEntreprise.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateEntreprise.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updatepub(id, formData) {
-  return this.http.post(`${this.base_url}/Projet_ Lokaliser/Backend/updatepub.php?id=${id}`, formData)
+  return this.http.post(`${this.base_url}/updatepub.php?id=${id}`, formData)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
 }
 
 update_apropos(id, formData) {
-  return this.http.post(`${this.base_url}/Projet_ Lokaliser/Backend/updateapropos.php?id=${id}`, formData)
+  return this.http.post(`${this.base_url}/updateapropos.php?id=${id}`, formData)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
 }
 
 updatecategorie(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatecategorie.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatecategorie.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatenumero(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatenumero.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatenumero.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatecoupon(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatecoupon.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatecoupon.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateformation(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateformation.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateformation.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updateelectricien(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateelectricien.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateelectricien.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateclimatiseur(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateclimatiseur.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateclimatiseur.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatetailleur(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatetailleur.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatetailleur.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 update_genie_civil(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/update_genie_civil.php?id='+id,data)
+  return this.http.put(this.base_url+'/update_genie_civil.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updatefestival(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatefestival.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatefestival.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updatemenuisier(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatemenuisier.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatemenuisier.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updategateau(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updategateau.php?id='+id,data)
+  return this.http.put(this.base_url+'/updategateau.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatemanagement(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatemanagement.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatemanagement.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatetaxi(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updatetaxi.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatetaxi.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updateuser(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/updateuser.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateuser.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 modifierCommentaire(id,data){
-  return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/modifierCommentaire.php?id='+id,data)
+  return this.http.put(this.base_url+'/modifierCommentaire.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 inscription(data) {
-  return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/inscription.php',data)
+  return this.http.post(this.base_url+'/inscription.php',data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
 login(data){
-  return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/login.php',data)
+  return this.http.post(this.base_url+'/login.php',data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
   getlogin(data){
-    return this.http.put(this.base_url+'/Projet_ Lokaliser/Backend/getlogin.php',data)
+    return this.http.put(this.base_url+'/getlogin.php',data)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
     getcategorie1(){
-      return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/getcategorie1.php')
+      return this.http.get(this.base_url+'/getcategorie1.php')
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
