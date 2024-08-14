@@ -436,36 +436,40 @@ formatCommentTime(time: string): string {
     e.target.complete();
   }
 
-
-  async terminer(alert){
-
+  async terminer(alert) {
     const loading = await this.loadingCtrl.create({
       message: 'Rechargement...',
-     spinner:'lines',
-    // showBackdrop:false,
+      spinner: 'lines',
       cssClass: 'custom-loading',
     });
 
-    loading.present();
-    alert.statut = 'oui';
+    try {
+      await loading.present();
 
-    let data = {
-     statut : 'oui',
-     nom_admin : this.userData.nom,
-     prenom_admin : this.userData.prenom,
-     numuser_admin :this.userData.numuser,
-     iduser_admin: this.userData.iduser
+      alert.statut = 'oui';
+      let data = {
+        statut: 'oui',
+        nom_admin: this.userData.nom,
+        prenom_admin: this.userData.prenom1,
+        numuser_admin: this.userData.numuser,
+        iduser_admin: this.userData.iduser,
+      };
+
+      this._apiService.terminer_alerte(alert.id, data).subscribe(
+        (res: any) => {
+          console.log("SUCCESS ===", res);
+          loading.dismiss(); // Success case
+        },
+        (error: any) => {
+          alert("Erreur de connection, réessayer");
+          loading.dismiss(); // Error case
+        }
+      );
+    } catch (err) {
+      console.error("Erreur inattendue : ", err);
+      alert("Une erreur inattendue est survenue.");
+      loading.dismiss(); // Ensure dismiss is called on error
     }
-
-  this._apiService.terminer_alerte(alert.id,data).subscribe((res:any) => {
-    console.log("SUCCESS ===",res);
-
-    loading.dismiss();
-   },(error: any) => {
-    alert("Erreur de connection, reesayer");
-    loading.dismiss();
-  })
-
   }
 
 
@@ -699,8 +703,8 @@ date_normal() {
         const distance = this.distanceCalculatorService.haversineDistance(
           userLatitude,
           userLongitude,
-          publi.latitude,
-          publi.longitude
+          publi?.latitude,
+          publi?.longitude
         );
 
         console.log(`Distance entre l'utilisateur et l'alerte : ${distance} mètres`);

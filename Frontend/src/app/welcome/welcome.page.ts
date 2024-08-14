@@ -8,8 +8,7 @@ import { AlertController, IonList, LoadingController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { CustomFilterPipe } from './custom-filter.pipe';
-
-
+import { NotificationService } from '../notification.service';
 
 
 @Component({
@@ -38,7 +37,7 @@ roleMessage = '';
 grade:any;
 nom:any;
 prenom1:any;
-categorie: any = [];
+
  entreprises: any = [];
  lien: any;
   navCtrl: any;
@@ -51,12 +50,20 @@ categorie: any = [];
     private route: ActivatedRoute,
     private router: Router,
     private loadingCtrl: LoadingController,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private notificationService: NotificationService
     )
   {
 
-    this.getcategorie();
   }
+
+
+  ngOnInit()
+{
+// pour initialiser les notiications push
+this.notificationService.initializePushNotifications();
+}
+
 
   reloadPage() {
     window.location.reload();
@@ -107,33 +114,6 @@ setTimeout(() => {
   console.log('rafraichissement de la page');
   e.target.complete();
 },500);
-}
-
-
-async getcategorie() {
-  const loading = await this.loadingCtrl.create({
-    message: 'Rechargement...',
-    spinner: 'lines',
-    cssClass: 'custom-loading',
-  });
-  await loading.present();
-
-  try {
-    this._apiService.getcategorie().subscribe(
-      (res: any) => {
-        console.log("SUCCESS ===", res);
-        this.categorie = res;
-        loading.dismiss();
-      },
-      (error: any) => {
-        console.log("Erreur de connection ", error);
-        loading.dismiss();
-      }
-    );
-  } catch (error) {
-    console.error('Erreur inattendue :', error);
-    loading.dismiss();
-  }
 }
 
 
@@ -204,10 +184,6 @@ ionViewWillEnter()
   this.getentreprises();
 }
 
-ngOnInit()
-{
-
-}
 
 @ViewChild('maliste', {static: false}) list: IonList;
 

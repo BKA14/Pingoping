@@ -10,7 +10,7 @@ $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 9;
 $start = ($page - 1) * $limit;
 
 // Exécuter la requête SQL pour récupérer les messages, triés par heure d'envoi
-$query = "SELECT * FROM `message_user` ORDER BY heure_message ASC LIMIT $start, $limit";
+$query = "SELECT * FROM `message_user` ORDER BY heure_message DESC LIMIT $start, $limit";
 $result = mysqli_query($con, $query);
 
 // Vérifier si la requête a réussi

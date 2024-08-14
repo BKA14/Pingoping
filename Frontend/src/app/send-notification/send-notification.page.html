@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="title">Envoyer une notification</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="sendNotification()">
+    <ion-item>
+      <ion-label position="floating">Titre</ion-label>
+      <ion-input [(ngModel)]="title" name="title" required></ion-input>
+    </ion-item>
+
+    <ion-label position="floating" class="title" >Message de la notification</ion-label>
+    <br>
+    <p class="ligne"></p>
+    <ion-item>
+      <ion-textarea [(ngModel)]="body" name="message" rows="10" placeholder="Tapez votre message ici..." class="message-box" required></ion-textarea>
+    </ion-item>
+    <p class="ligne"></p>
+
+    <ion-item>
+      <ion-label>Destinataires</ion-label>
+      <ion-select [(ngModel)]="topic" name="recipient" required>
+        <ion-select-option value="alluser">Tous les utilisateurs</ion-select-option>
+        <ion-select-option value="admin">Administrateurs</ion-select-option>
+        <ion-select-option value="user">Utilisateurs</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button color="success" expand="full" type="submit">Envoyer la notification</ion-button>
+  </form>
+</ion-content>

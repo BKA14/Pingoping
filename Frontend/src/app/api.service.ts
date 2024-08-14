@@ -10,9 +10,9 @@ export class ApiService {
 
 headers : HttpHeaders;
   adr_web: string='http://localhost:80';
-  adr_mobile: string='http://192.168.1.74:80';
+  adr_mobile: string='http://192.168.1.85:80';
   time: any = 10000
-  base_url = this.adr_web;
+  base_url = this.adr_mobile;
 
   constructor(public http: HttpClient) {
     this.headers = new HttpHeaders()
@@ -34,11 +34,24 @@ headers : HttpHeaders;
   }
 
 
-rafraichissement_token(data) {
-    return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/rafraichissement_token.php',data)
+
+  sendtoken(data) {
+    return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/sendtoken.php',data)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
+
+  sendNotification(data) {
+    return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/sendnotification.php',data)
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
+    }
+
+  rafraichissement_token(data) {
+      return this.http.post(this.base_url+'/Projet_ Lokaliser/Backend/rafraichissement_token.php',data)
+      .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
+      }
 
     get_time() {
       return this.http.get(this.base_url+'/Projet_ Lokaliser/Backend/serveur_time.php')

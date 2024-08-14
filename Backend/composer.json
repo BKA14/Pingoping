@@ -9,6 +9,9 @@
         "predis/predis": "^2.2",
         "react/event-loop": "^1.5",
         "clue/redis-react": "^2.7",
-        "firebase/php-jwt": "^6.10"
+        "firebase/php-jwt": "^6.10",
+        "google/apiclient": "^2.17",
+        "google/auth": "^1.41",
+        "guzzlehttp/guzzle": "^7.8"
     }
 }

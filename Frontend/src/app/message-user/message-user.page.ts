@@ -69,6 +69,7 @@ export class MessageUserPage implements OnInit {
 
            this.newComment = '';
            this.clearMessage();
+           alert('Commentaire envoyé, merci');
           loading.dismiss();
 
     } catch (error) {

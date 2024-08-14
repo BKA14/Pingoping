@@ -3,6 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
+    <br><br>
     <ion-row class="header-row">
       <ion-title class="title">ALERTE</ion-title>
     </ion-row>
@@ -28,14 +29,14 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-    <ion-item  class="select1" >
+    <ion-item  class="select1"  >
       <ion-select  class="select_alert"  [(ngModel)]="selectedStatus"  (ionChange)="filterAlerts()" placeholder="Catégorie">
         <ion-select-option value=''>Aucune</ion-select-option>
         <ion-select-option value="oui">Alerte gérée</ion-select-option>
         <ion-select-option value="non">Alerte non gérée</ion-select-option>
       </ion-select>
        &nbsp;
-        <ion-select *ngIf="grade === 'admin' || grade === 'superadmin'" class="select_alert" (ionChange)="filterAlerts()"  [(ngModel)]="service_choisi" placeholder="service">
+        <ion-select  class="select_alert" (ionChange)="filterAlerts()"  [(ngModel)]="service_choisi" placeholder="service">
           <ion-select-option  value=''>
             aucune
           </ion-select-option>
@@ -44,7 +45,7 @@
           </ion-select-option>
         </ion-select>
          &nbsp;
-        <ion-select *ngIf="grade === 'admin' || grade === 'superadmin'" class="select1"  (ionChange)="filterAlerts()" [(ngModel)]="ville_choisi" class="select_alert" placeholder="ville">
+        <ion-select  class="select1"  (ionChange)="filterAlerts()" [(ngModel)]="ville_choisi" class="select_alert" placeholder="ville">
           <ion-select-option  value=''>
             aucune
           </ion-select-option>
@@ -111,7 +112,7 @@
           <ion-label class="label-title"> ville concerné : </ion-label>
           <h2 class="message-content">{{ alert.ville }} </h2>
 
-          <ion-label class="label-title" *ngIf="grade === 'admin' || grade === 'superadmin'" >id signalisation : </ion-label>
+          <ion-label class="label-title" *ngIf="userData.grade === 'admin' || userData.grade === 'superadmin'">id signalisation : </ion-label>
           <h2 class="message-content">{{ alert.ville }}</h2>
 
           <ion-label class="label-title">nom alerteur : </ion-label>
@@ -152,9 +153,18 @@
           Vous êtes présentement à :
           </ion-label> <h2 class="message-content"> {{ convertMetersToKilometers(alert.distanceToUser) }} du lieu.</h2>
 
-
           <br>
-          <ion-button color="success" expand="full" (click)="openInMaps(alert.latitude, alert.longitude)">Démarrer la navigation</ion-button>
+          <ion-button color="success" expand="full"
+          *ngIf="alert?.latitude !== undefined
+              && alert?.longitude !== undefined
+              && alert?.latitude !== null
+              && alert?.longitude !== null
+              && !isNaN(alert?.latitude)
+              && !isNaN(alert?.longitude)"
+          (click)="openInMaps(alert.latitude, alert.longitude)">
+          Démarrer la navigation
+        </ion-button>
+
         </ion-card-content>
         <br>
         <ion-button *ngIf="alert.statut !== 'oui'" color="warning" expand="full" (click)="terminer(alert)">Terminer l'alerte</ion-button>
@@ -168,7 +178,7 @@
           </ng-container>
 
           <ng-container *ngIf="isEditingRapport && editingRapportId === alert.id">
-            <ion-textarea [(ngModel)]="modif_rapport" rows="10"></ion-textarea>
+            <ion-textarea [(ngModel)]="modif_rapport" rows="10" maxlength="500" ></ion-textarea>
             <br>
             <ion-button class="list" fill="outline" color="success" (click)="modifier(alert)">
               <ng-container>Modifier rapport</ng-container>

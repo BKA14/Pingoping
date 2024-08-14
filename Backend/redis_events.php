@@ -5,6 +5,11 @@ include "config.php";
 $redis = new Predis\Client();
 $con = new mysqli($host, $user, $password, $dbname, $port);
 
+use Google\Auth\Credentials\ServiceAccountCredentials;
+use GuzzleHttp\Client;
+
+
+
 if ($con->connect_error) {
     die("Connection failed: " . $con->connect_error);
 }
@@ -85,6 +90,77 @@ while (true) {
     sleep(0.1);
     echo "Script running...\n"; // Debug message
 }
+
+/////////////////////////////// Pour les notiications //////////////////////////////////////////////////////
+
+
+// Fonction pour envoyer la notification via FCM
+function sendFCMNotification($title, $body) {
+   // Remplacez par le chemin de votre fichier JSON du compte de service
+$keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
+
+// Scopes requis pour FCM
+$scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
+
+// Créer les informations d'identification
+$credentials = new ServiceAccountCredentials($scopes, $keyFilePath);
+
+// Obtenir le jeton d'accès OAuth 2.0
+$accessToken = $credentials->fetchAuthToken()['access_token'];
+
+// Créer un client HTTP Guzzle
+$client = new Client();
+
+// Récupérer les données de la requête (par exemple, envoyées en JSON)
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+
+// Exemple de réception des données
+$topic = 'admin'; // Récupérer le topic depuis la requête
+
+// Construire la requête pour FCM
+try {
+    $response = $client->post('https://fcm.googleapis.com/v1/projects/pingoping/messages:send', [
+        'headers' => [
+            'Authorization' => 'Bearer ' . $accessToken, // Ajouter le Bearer Token ici
+            'Content-Type' => 'application/json',
+        ],
+        'json' => [
+            'message' => [
+                'topic' => $topic,
+                'notification' => [
+                    'title' => $title,
+                    'body' => $body,
+                ],
+                // Ajouter le TTL ici (en secondes)
+                'android' => [
+                    'ttl' => '7200s', // 2 heures
+                ],
+                'apns' => [
+                    'headers' => [
+                        'apns-expiration' => (string)(time() + 7200),
+                    ],
+                ],
+                'webpush' => [
+                    'headers' => [
+                        'TTL' => '7200',
+                    ],
+                ],
+            ],
+        ],
+    ]);
+
+    // Retourner la réponse de FCM
+    echo $response->getBody()->getContents();
+} catch (Exception $e) {
+    // Gérer les erreurs de requête
+    http_response_code(500);
+    echo json_encode(['error' => 'Échec de l\'envoi de la notification.', 'details' => $e->getMessage()]);
+}
+
+    
+}
+
 
 ///////////////////////// Pour les Likes ///////////////////////////////////
 // Mettre à jour la date de fin de blocage pour les utilisateurs dont la date est dépassée
@@ -217,6 +293,12 @@ function signalisation($con, $redis) {
                 $redis->publish('signalisation_channel', json_encode($event));
                 echo "Published event with ID {$row['id']} to Redis.\n";
 
+                if ($row['action'] === 'insert'){
+                $title = "Nouvelle alerte";
+                $body = "Une nouvelle alerte a été ajoutée avec l'ID: {$row['id']}\n"; // Échapper les données
+                sendFCMNotification($title, $body); // notiication envoyé
+                }
+
                 // Delete the event from the table after processing
                 $con->query("DELETE FROM redis_events_signalisation WHERE id = " . $row['id']);
                 echo "Deleted event with ID {$row['id']} from table signalisation.\n";
@@ -323,7 +405,7 @@ function commentaires($con, $redis) {
 }
 
 
-///////////////////////// Pour la signalement ///////////////////////////////////
+///////////////////////// Pour le signalement ///////////////////////////////////
 function signalement($con, $redis) {
     // Retrieve events to process
     $result_signalement = $con->query("SELECT * FROM redis_events_signalement");
@@ -342,6 +424,12 @@ function signalement($con, $redis) {
                 // Publish the event to Redis
                 $redis->publish('signalement_channel', json_encode($event));
                 echo "Published event with ID {$row['id']} to Redis.\n";
+
+                if ($row['action'] === 'insert'){
+                    $title = "Nouveau signalement";
+                    $body = "Un nouveau signalement a été ajoutée avec l'ID: {$row['id']}\n"; // Échapper les données
+                    sendFCMNotification($title, $body); // notiication envoyé
+                    }
 
                 // Delete the event from the table after processing
                 $con->query("DELETE FROM redis_events_signalement WHERE id = " . $row['id']);

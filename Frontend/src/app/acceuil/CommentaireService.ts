@@ -7,6 +7,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class CommentaireService {
 
   constructor(private sanitizer: DomSanitizer) { }
+
   sanitize(commentaire: string): SafeHtml {
     // Remplacez les occurrences de liens dans le commentaire par des liens stylisés
     const commentaireAvecLiens = commentaire.replace(
@@ -17,5 +18,14 @@ export class CommentaireService {
     // Appliquez la désinfection pour permettre les balises HTML
     return this.sanitizer.bypassSecurityTrustHtml(commentaireAvecLiens);
   }
+
+  truncate(commentaire: string, limit_comment: number): string {
+    if (commentaire.length > limit_comment) {
+      return commentaire.substring(0, limit_comment) + '...';
+    } else {
+      return commentaire;
+    }
+  }
+
 
 }

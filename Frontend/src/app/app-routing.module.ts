@@ -405,6 +405,10 @@ const routes: Routes = [
     path: 'message-admin',
     loadChildren: () => import('./message-admin/message-admin.module').then( m => m.MessageAdminPageModule)
   },
+  {
+    path: 'send-notification',
+    loadChildren: () => import('./send-notification/send-notification.module').then( m => m.SendNotificationPageModule)
+  },
 
 
 ];

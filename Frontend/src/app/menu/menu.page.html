@@ -55,6 +55,14 @@
            </ng-container>
           </ion-button>
 
+          <br>
+          <ion-button (click)="send_notification()" *ngIf="grade === 'admin' || grade === 'superadmin'" class="list" fill="outline" color="success">
+            <ion-icon name="send"></ion-icon> &nbsp;
+             <ng-container >
+              Envoyer notif/admin
+             </ng-container>
+            </ion-button>
+
           <br *ngIf="grade === 'admin' || grade === 'superadmin'">
 
         <ion-button (click)="utilisateur()" *ngIf="grade === 'admin' || grade === 'superadmin'"  class="list" fill="outline" color="success">

@@ -69,6 +69,12 @@ export class MenuPage implements OnInit {
 
   }
 
+  send_notification(){
+
+    this.router.navigateByUrl('/send-notification');
+
+  }
+
   utilisateur() {
 
     this.router.navigateByUrl('/liste-user');

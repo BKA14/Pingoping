@@ -14,7 +14,7 @@ import { Subscription, fromEvent, interval } from 'rxjs';
 import { debounceTime, map, startWith, switchMap } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
 import { authService } from '../services/auth.service';
-
+import { NotificationService } from '../notification.service';
 
 import {
   ActionPerformed,
@@ -86,6 +86,8 @@ event.preventDefault();
     pubid:any;
     idpub: any;
     userData: any = null;
+    limit_comment: number = 180; // Limite des caractères avant le tronquage
+    showFullCommentaire: boolean = false;
 
 
     isLiked = false;
@@ -110,7 +112,7 @@ event.preventDefault();
       private zone: NgZone,
       private appRef: ApplicationRef,
       private routerOutlet: IonRouterOutlet,
-      private commentaireService: CommentaireService,
+      public commentaireService: CommentaireService,
       private el: ElementRef,
       private ngZone: NgZone,
       private navCtrl: NavController,
@@ -118,6 +120,7 @@ event.preventDefault();
       private renderer: Renderer2,
       private userService: UserService,
       private authService: authService,
+      private notificationService: NotificationService
     )
     {
       this.manualPause = false;
@@ -149,47 +152,9 @@ event.preventDefault();
       this.setupIntersectionObserver(); // pour lecture automatic de la video
       this.cdr.detectChanges(); // Détecter et appliquer les changements
 
-       // Pour les pushs notifications
-      console.log('Initializing HomePage');
-      // Request permission to use push notifications
-      // iOS will prompt user and return if they granted permission or not
-      // Android will just grant without prompting
-      PushNotifications.requestPermissions().then(result => {
-        if (result.receive === 'granted') {
-          // Register with Apple / Google to receive push via APNS/FCM
-          PushNotifications.register();
-        } else {
-          console.log('pas de permission ');
-        }
-      });
+      // pour initialiser les notiications push
+      this.notificationService.initializePushNotifications();
 
-      // On success, we should be able to receive notifications
-      PushNotifications.addListener('registration',
-        (token: Token) => {
-         // alert('Push registration success, token: ' + token.value);
-        }
-      );
-
-      // Some issue with our setup and push will not work
-      PushNotifications.addListener('registrationError',
-        (error: any) => {
-          console.log('Error on registration: ' + JSON.stringify(error));
-        }
-      );
-
-      // Show us the notification payload if the app is open on our device
-      PushNotifications.addListener('pushNotificationReceived',
-        (notification: PushNotificationSchema) => {
-          alert('Pingoping: ' + JSON.stringify(notification));
-        }
-      );
-
-      // Method called when tapping on a notification
-      PushNotifications.addListener('pushNotificationActionPerformed',
-        (notification: ActionPerformed) => {
-          console.log('Push action performed: ' + JSON.stringify(notification));
-        }
-      );
       }
 
       ngOnDestroy() {
@@ -261,6 +226,24 @@ async loadMore(event) {
   }
 }
 
+
+toggleCommentaire() {
+  this.showFullCommentaire = !this.showFullCommentaire;
+}
+
+getDisplayedCommentaire(pub): string {
+  if (this.showFullCommentaire || pub.commentaire.length <= this.limit_comment) {
+    return pub.commentaire;
+  } else {
+    return this.commentaireService.truncate(pub.commentaire, this.limit_comment);
+  }
+}
+
+getPlainText(commentaire: string): string {
+  const div = document.createElement('div');
+  div.innerHTML = commentaire;
+  return div.textContent || div.innerText || '';
+}
 
  // Vérification d'appartenance avec Set
  hasLiked(pub: any): boolean {
