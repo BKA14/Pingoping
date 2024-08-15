@@ -75,6 +75,12 @@ export class MenuPage implements OnInit {
 
   }
 
+  statistique(){
+
+    this.router.navigateByUrl('/statistique');
+
+  }
+
   utilisateur() {
 
     this.router.navigateByUrl('/liste-user');

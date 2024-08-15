@@ -409,6 +409,10 @@ const routes: Routes = [
     path: 'send-notification',
     loadChildren: () => import('./send-notification/send-notification.module').then( m => m.SendNotificationPageModule)
   },
+  {
+    path: 'statistique',
+    loadChildren: () => import('./statistique/statistique.module').then( m => m.StatistiquePageModule)
+  },
 
 
 ];

@@ -266,7 +266,6 @@ loadLike() {
             // Vous pouvez ajouter un traitement spécifique si nécessaire
             break;
           case 'update':
-            console.log('Il y a une mise à jour:');
             const updatedIndex = this.pub.findIndex(pub => pub.id === message.idpub);
             if (updatedIndex !== -1) {
               this.pub[updatedIndex].likes_count = message.likes_count;
@@ -314,7 +313,7 @@ loadLike() {
               message.likes_count = 0;
               message.user_ids = [];
               this.pub.unshift(message);
-              console.log('New alert inserted:', message);
+              console.log('New pub inserted:', message);
               break;
             case 'update':
               const updatedIndex = this.pub.findIndex(pub => pub.id === message.old_pub_id);

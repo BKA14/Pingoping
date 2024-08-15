@@ -238,7 +238,7 @@ this.getUserLocation();
 
         }
         else {
-       console.log('Erreur de connection')
+        console.log('Erreur de connection')
           return;
         }
 
@@ -466,13 +466,13 @@ loadLike() {
             // Vous pouvez ajouter un traitement spécifique si nécessaire
             break;
           case 'update':
-            console.log('Il y a une mise à jour like sur la pub:');
+            console.log('Il y a une mise à jour like sur la pub ok:');
             const updatedIndex = this.pub.findIndex(pub => pub.id === message.idpub);
             if (updatedIndex !== -1) {
               this.pub[updatedIndex].likes_count = message.likes_count;
               this.pub[updatedIndex].user_ids = message.user_ids;
-              console.log('Likes_count du pub mis à jour:', message.likes_count);
-              console.log('User_ids du pub mis à jour:', message.user_ids);
+              console.log('Likes_count de la pub mis à jour:', message.likes_count);
+              console.log('User_ids de la pub mis à jour:', message.user_ids);
             }
             break;
           case 'delete':
@@ -516,7 +516,7 @@ loadCommentaires() {
           case 'delete':
             console.log('Il y a une suppression de commentraires:');
             this.comment = this.comment.filter(comment => comment.id !== message.old_commentaires_id);
-            console.log('pub deleted:', message);
+            console.log('commentaire deleted:', message);
             break;
           default:
             console.log('Action inconnue:', message);

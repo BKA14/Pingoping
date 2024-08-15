@@ -9,8 +9,8 @@ providedIn: 'root'
 export class ApiService {
 
 headers : HttpHeaders;
-  adr_web: string='http://localhost:80/Projet_Lokaliser/Backend';
-  adr_mobile: string='http://192.168.1.85:80/Projet_Lokaliser/Backend';
+  adr_web: string='http://localhost:80/Projet_ Lokaliser/Backend';
+  adr_mobile: string='http://192.168.1.65:80/Projet_ Lokaliser/Backend';
   time: any = 10000
   base_url = this.adr_mobile;
 
@@ -140,6 +140,11 @@ loadalert(page: number, limit: number) {
     .pipe(retry(0), catchError(this.handleError));
 }
 
+loadalert_statistique() {
+  return this.http.get(`${this.base_url}/loadalert_statistique.php`)
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
+}
 
 
     loadalert_id(id, page: number, limit: number): Observable<any> {
@@ -854,7 +859,7 @@ login(data){
     }
 
     getcategorie1(){
-      return this.http.get(this.base_url+'/getcategorie1.php')
+      return this.http.get(this.base_url+'/Backend/getcategorie1.php')
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }

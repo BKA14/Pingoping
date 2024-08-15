@@ -233,7 +233,7 @@ class WebSocketServer implements MessageComponentInterface {
         // Récupérer le nombre de likes pour le idpub concerné
         $queryLikes = "SELECT COUNT(*) AS likes_count FROM etatdelikes WHERE idpub = ? AND etat = 'oui'";
         $stmtLikes = $con->prepare($queryLikes);
-        $stmtLikes->bind_param("i", $idpub);
+        $stmtLikes->bind_param("s", $idpub);
         $stmtLikes->execute();
         $resultLikes = $stmtLikes->get_result();
         $rowLikes = $resultLikes->fetch_assoc();
@@ -243,7 +243,7 @@ class WebSocketServer implements MessageComponentInterface {
         // Récupérer les iduser pour le idpub concerné
         $queryUsers = "SELECT iduser FROM etatdelikes WHERE idpub = ? AND etat = 'oui'";
         $stmtUsers = $con->prepare($queryUsers);
-        $stmtUsers->bind_param("i", $idpub);
+        $stmtUsers->bind_param("s", $idpub);
         $stmtUsers->execute();
         $resultUsers = $stmtUsers->get_result();
         $userIds = [];

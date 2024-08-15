@@ -19,17 +19,24 @@
          </ng-container>
         </ion-button>
       <br>
-        <ion-button (click)="alerte()" *ngIf="grade === 'admin' || grade === 'superadmin' || grade === 'pompier' || grade === 'onea' || grade === 'hygiene'"  class="list" fill="outline" color="success">
+        <ion-button (click)="alerte()" *ngIf="grade === 'admin' || grade === 'superadmin'"  class="list" fill="outline" color="success">
           <ion-icon name="alert"></ion-icon> &nbsp;
            <ng-container >
             Alerte/admin
            </ng-container>
           </ion-button>
-      <br>
-      <ion-button (click)="alert_user()"  color="success" class="list" fill="outline" >
-        <ion-icon name="time"></ion-icon> &nbsp;
+          <br>
+          <ion-button (click)="alerte()" *ngIf="grade === 'admin' || grade === 'superadmin'"  class="list" fill="outline" color="success">
+            <ion-icon name="alert"></ion-icon> &nbsp;
+             <ng-container >
+              Alerte/admin
+             </ng-container>
+            </ion-button>
+          <br>
+      <ion-button (click)="statistique()"  *ngIf="grade === 'admin' || grade === 'superadmin'" color="success" class="list" fill="outline" >
+        <ion-icon name="stats-chart"></ion-icon> &nbsp;
          <ng-container >
-          Historique d'Alerte
+          Statistique alerte
          </ng-container>
         </ion-button>
     <br>

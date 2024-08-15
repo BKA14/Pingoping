@@ -6,11 +6,12 @@ $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 $message = array();
 
+
 // Extraire les données de la requête JSON
-$idpub = $data['pubid'];
-$iduser = $data['iduser'];
-$contactuser = $data['contactuser'];
-$etat = $data['etat'];
+$contactuser = mysqli_real_escape_string($con, $data['contactuser']);
+$iduser =  mysqli_real_escape_string($con, $data['iduser']);
+$idpub = mysqli_real_escape_string($con, $data['pubid']);
+$etat = mysqli_real_escape_string($con, $data['etat']);
 
 // Requête SQL sécurisée avec une requête préparée
 $sql = "INSERT INTO etatdelikes (idpub, iduser, contactuser, etat) VALUES (?, ?, ?, ?)";
