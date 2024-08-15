@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header('Content-Type: application/json'); // Modifiez en fonction de vos besoins
 
-$baseUrl = "192.168.1.65";
+$baseUrl = "192.168.1.75";
 
 $host = $baseUrl;
 $user = "kevin";
