@@ -18,7 +18,7 @@ if ($con->connect_error) {
 $DateBlocageInterval = 90; // temps de lancement de la fonction deblocage
 $signalisationInterval = 8; // Interval for signalisation function
 $pubInterval = 8; // Interval for pub function
-$LikesInterval = 0.1 ; // Interval for likes function
+$LikesInterval = 0.4 ; // Interval for likes function
 $CommentairesInterval =  0.5; // Interval for Commentaires function
 $EvenementInterval =  61; 
 $SignalementInterval =  7; 

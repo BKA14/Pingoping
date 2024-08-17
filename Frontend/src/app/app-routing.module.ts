@@ -4,6 +4,8 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { authService } from './services/auth.service';
 import { AuthGuard } from './auth.guard';
+import { AuthAdminGuardService  } from './auth-admin.guard.service';
+
 
 
 const routes: Routes = [
@@ -17,17 +19,17 @@ const routes: Routes = [
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule),
     data: { preload: true },
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthGuard] //  AuthGuard pour les liens ne necessitant pas le grade admin
   },
   {
     path: 'update-entreprise/:id',
     loadChildren: () => import('./update-entreprises/update-entreprise.module').then( m => m.UpdateEntreprisePageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService] //  AuthGuard pour les liens  necessitant  le grade admin
   },
   {
     path: 'ajouter-entreprise',
     loadChildren: () => import('./ajouter-entreprise/ajouter-entreprise.module').then( m => m.AjouterEntreprisePageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
 
   {
@@ -38,7 +40,7 @@ const routes: Routes = [
   {
     path: 'info-user/:id',
     loadChildren: () => import('./info-user/info-user.module').then( m => m.InfoUserPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'welcome2',
@@ -62,12 +64,12 @@ const routes: Routes = [
   {
     path: 'liste-user',
     loadChildren: () => import('./liste-user/liste-user.module').then( m => m.ListeUserPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'update-user/:id',
     loadChildren: () => import('./update-user/update-user.module').then( m => m.UpdateUserPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'categorie',
@@ -77,12 +79,12 @@ const routes: Routes = [
   {
     path: 'ajoutcategorie',
     loadChildren: () => import('./ajoutcategorie/ajoutcategorie.module').then( m => m.AjoutcategoriePageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'update-categorie/:id',
     loadChildren: () => import('./update-categorie/update-categorie.module').then( m => m.UpdateCategoriePageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'apropos',
@@ -106,12 +108,12 @@ const routes: Routes = [
   {
     path: 'ajouterpub',
     loadChildren: () => import('./ajouterpub/ajouterpub.module').then( m => m.AjouterpubPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'updatepub/:id',
     loadChildren: () => import('./updatepub/updatepub.module').then( m => m.UpdatepubPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'ping',
@@ -121,7 +123,7 @@ const routes: Routes = [
   {
     path: 'updatecoupon',
     loadChildren: () => import('./updatecoupon/updatecoupon.module').then( m => m.UpdatecouponPageModule),
-   // canActivate: [AuthenticationService]
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'fastfood',
@@ -131,7 +133,7 @@ const routes: Routes = [
   {
     path: 'modiffasfood',
     loadChildren: () => import('./modiffasfood/modiffasfood.module').then( m => m.ModiffasfoodPageModule),
-   // canActivate: [AuthenticationService]
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'pmu',
@@ -141,7 +143,7 @@ const routes: Routes = [
   {
     path: 'modifpmu',
     loadChildren: () => import('./modifpmu/modifpmu.module').then( m => m.ModifpmuPageModule),
-   // canActivate: [AuthenticationService]
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'depot-retrait',
@@ -336,16 +338,17 @@ const routes: Routes = [
   {
     path: 'update-apropos',
     loadChildren: () => import('./update-apropos/update-apropos.module').then( m => m.UpdateAproposPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'paiement',
     loadChildren: () => import('./paiement/paiement.module').then( m => m.PaiementPageModule),
-    data: { preload: true }
   },
   {
     path: 'commentaire',
-    loadChildren: () => import('./commentaire/commentaire.module').then( m => m.CommentairePageModule)
+    loadChildren: () => import('./commentaire/commentaire.module').then( m => m.CommentairePageModule),
+    canActivate: [AuthGuard]
+
   },
   {
     path: 'admin',
@@ -355,7 +358,7 @@ const routes: Routes = [
   {
     path: 'signalement',
     loadChildren: () => import('./signalement/signalement.module').then( m => m.SignalementPageModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthAdminGuardService]
 
   },
   {
@@ -374,7 +377,7 @@ const routes: Routes = [
   {
     path: 'alerte',
     loadChildren: () => import('./alerte/alerte.module').then( m => m.AlertePageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'alert-user',
@@ -390,28 +393,32 @@ const routes: Routes = [
   {
     path: 'ajouter-numero',
     loadChildren: () => import('./ajouter-numero/ajouter-numero.module').then( m => m.AjouterNumeroPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'update-numero/:id',
     loadChildren: () => import('./update-numero/update-numero.module').then( m => m.UpdateNumeroPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'message-user',
-    loadChildren: () => import('./message-user/message-user.module').then( m => m.MessageUserPageModule)
+    loadChildren: () => import('./message-user/message-user.module').then( m => m.MessageUserPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'message-admin',
-    loadChildren: () => import('./message-admin/message-admin.module').then( m => m.MessageAdminPageModule)
+    loadChildren: () => import('./message-admin/message-admin.module').then( m => m.MessageAdminPageModule),
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'send-notification',
-    loadChildren: () => import('./send-notification/send-notification.module').then( m => m.SendNotificationPageModule)
+    loadChildren: () => import('./send-notification/send-notification.module').then( m => m.SendNotificationPageModule),
+    canActivate: [AuthAdminGuardService]
   },
   {
     path: 'statistique',
-    loadChildren: () => import('./statistique/statistique.module').then( m => m.StatistiquePageModule)
+    loadChildren: () => import('./statistique/statistique.module').then( m => m.StatistiquePageModule),
+    canActivate: [AuthGuard]
   },
 
 

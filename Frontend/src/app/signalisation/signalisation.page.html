@@ -82,10 +82,6 @@
       </div>
     </ng-container>
 
-
-
-
-
     <ion-button [disabled]="!signalementForm.get('category').value || !signalementForm.get('image').value  || !signalementForm.get('location').value.longitude  || !signalementForm.get('location').value.latitude" expand="block" color="success" (click)="onSubmit()">Envoyer Signalisation</ion-button>
   </form>
 </ion-content>

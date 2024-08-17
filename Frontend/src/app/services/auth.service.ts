@@ -137,6 +137,9 @@ export class authService {
         localStorage.setItem('refresh_token', userData.refresh_token);
         localStorage.setItem('access_app', userData.access_app);
 
+        console.log('contact',localStorage.getItem('numuser'));
+        console.log('contact',response.user.contact);
+
         // Mettre à jour d'autres informations utilisateur si nécessaire
         // this.setUserData(userData);
     } catch (error) {
@@ -149,6 +152,11 @@ export class authService {
 
 async access_app(): Promise<string> {
   return localStorage.getItem('access_app');  // Retourne toujours le token actuel
+}
+
+
+async grade(): Promise<string> {
+  return localStorage.getItem('grade');  // Retourne toujours le token actuel
 }
 
 async getValidAccessToken(): Promise<string> {

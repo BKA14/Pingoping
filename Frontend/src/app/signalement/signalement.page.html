@@ -63,7 +63,6 @@
 <ion-button size="small" (click)="date()" color="success" style="padding: 5px;" *ngIf="!recherche_date">date</ion-button>
 
 
-
   <ion-list class="message-list"  *ngIf="signalement !== 'erreur_chargement' && signalement !== 'aucune_alerte'">
     <div lines="inset"  class="message-item " *ngFor="let signalement of signalement  | customFilter: term | customFilter: term2">
       <ion-label color="dark">
@@ -95,7 +94,7 @@
           Signalement
         </ion-button>
 
-        <ion-button (click)="btn()">
+        <ion-button (click)="btn(signalement)">
           bloquer
         </ion-button>
 
@@ -105,7 +104,7 @@
 
 
 
-        <ion-item *ngIf="selectedDateOption">
+        <ion-item *ngIf="signalement.selectedDateOption">
           <ion-label position="floating" class="h1">Date fin blocage</ion-label><br/>
 
           <ion-datetime
@@ -114,7 +113,7 @@
           ></ion-datetime>
         </ion-item>
          <br>
-        <ion-button *ngIf="selectedDateOption" (click)="confirmer(signalement)">
+        <ion-button *ngIf="signalement.selectedDateOption" (click)="confirmer(signalement)">
           confirmer
         </ion-button>
 

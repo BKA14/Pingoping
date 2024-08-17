@@ -15,7 +15,7 @@ import { UpdateCategoriePage } from './update-categorie.page';
     IonicModule,
     UpdateCategoriePageRoutingModule,
     ReactiveFormsModule,
-    Ng2SearchPipeModule 
+   // Ng2SearchPipeModule
   ],
   declarations: [UpdateCategoriePage]
 })

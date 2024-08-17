@@ -74,7 +74,7 @@ export class SignalisationPage implements OnInit {
   this.authService.userData$.subscribe(data => {
     this.userData = data;
   });
-
+  console.log(console.log(this.userData.numuser));
   }
 
 
@@ -299,23 +299,25 @@ async onSubmit() {
           this._apiService.signalisation(formData).subscribe(
               async (res: any) => {
                   console.log('Signalement envoyé avec succès', res);
-                  alert("Signalement bien envoyé, on s'en charge");
+                  alert("alerte bien envoyé, on s'en charge");
                   this.router.navigateByUrl('/alert-user');
                   await loading.dismiss();
               },
               async (error) => {
                   console.error("Erreur lors de l'envoi du signalement", error);
-                  alert("Erreur, signalement non envoyé");
+                  alert("Erreur, alerte non envoyé");
                   await loading.dismiss();
               }
           );
 
       } catch (error) {
           console.error('Erreur de connexion avec le serveur:', error);
+          alert("Problème de connexion avec le serveur, alerte non envoyé");
           await loading.dismiss();
       }
   } else {
       console.error('Form invalid:', this.signalementForm.errors);
+      alert("Problème de connexion avec le serveur, alerte non envoyé");
       await loading.dismiss();
   }
 }

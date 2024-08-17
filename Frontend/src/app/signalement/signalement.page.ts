@@ -23,7 +23,6 @@ term2 : string ;
 term : string ;
 oui_terminer =  'oui';
 non_terminer = 'non';
-selectedDateOption: any;  // Option par défaut pour la date de début
 dateblocage : any;
 userbloquer :any;
 page : number = 1;
@@ -135,6 +134,7 @@ if (res && res.length < 1) {
   }
   else {
     this.signalement = res;
+    this.signalement.selectedDateOption = false;
   }
   loading.dismiss();
 } catch (error) {
@@ -281,9 +281,10 @@ formatCommentTime(time: string): string {
     this.dateblocage = event.detail.value;
   }
 
-  btn() {
-    this.selectedDateOption = !this.selectedDateOption;
-   }
+  btn(signalement: any) {
+    signalement.selectedDateOption = !signalement.selectedDateOption;
+  }
+
 
    confirmer(signalement){
 
@@ -294,14 +295,12 @@ formatCommentTime(time: string): string {
     this._apiService.confirmer(signalement.idusersignaler ,data).subscribe((res:any) => {
       console.log("SUCCESS ===",res);
      alert(' blocage effectué  !');
-     this.selectedDateOption = ! this.selectedDateOption;
+     this.signalement.selectedDateOption  = !this.signalement.selectedDateOption;
      },(error: any) => {
       console.log("Erreur de connection");
       alert(' Erreur de connection ');
     })
-
    }
-
 
   // filtre pour affichage par catégorie
   transform(signalement: any, term: string, excludes: any = []): any {

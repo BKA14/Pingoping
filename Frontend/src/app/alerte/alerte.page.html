@@ -151,7 +151,11 @@
           && alert.latitude !== null
           && alert.longitude !== null">
           Vous êtes présentement à :
-          </ion-label> <h2 class="message-content"> {{ convertMetersToKilometers(alert.distanceToUser) }} du lieu.</h2>
+          </ion-label> <h2 class="message-content"
+          *ngIf="alert.distanceToUser !== undefined
+          && alert.distanceToUser !== null
+          && alert.distanceToUser !== NaN">
+          {{ convertMetersToKilometers(alert.distanceToUser) }} du lieu.</h2>
 
           <br>
           <ion-button color="success" expand="full"
@@ -159,11 +163,11 @@
               && alert?.longitude !== undefined
               && alert?.latitude !== null
               && alert?.longitude !== null
-              && !isNaN(alert?.latitude)
-              && !isNaN(alert?.longitude)"
-          (click)="openInMaps(alert.latitude, alert.longitude)">
-          Démarrer la navigation
-        </ion-button>
+              && alert?.latitude !== NaN
+              && alert?.longitude !== NaN"
+              (click)="openInMaps(alert.latitude, alert.longitude)">
+              Démarrer la navigation
+          </ion-button>
 
         </ion-card-content>
         <br>

@@ -25,7 +25,7 @@ export class WelcomePage implements OnInit {
     { title: 'Restaurant', icon: 'restaurant', description: 'Découvrez nos fabuleux mets.', link: '/signalisation'  },
     { title: 'Lien utile', icon: 'link-outline', description: 'Accédez à des liens utiles.', link: '/numero-service' },
     { title: 'Numéros de service', icon: 'call-outline', description: 'Trouvez des numéros utiles.', link: '/numero-service'  },
-    { title: 'Market', icon: 'cart-outline', description: 'Explorez notre marché.', link: '/signalisation'  }
+    { title: 'PMU', icon: 'analytics-outline', description: 'Pronostic PMU', link: '/signalisation'  }
   ];
 
 term;

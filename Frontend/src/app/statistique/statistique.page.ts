@@ -63,8 +63,8 @@ export class StatistiquePage implements OnInit {
           }
         });
 
-        this.createChart();
-        this.createBarChart();
+        // this.createChart();
+        // this.createBarChart();
         console.log('onction char appelé');
 
       } else {
