@@ -30,8 +30,9 @@
     <br>
   </div>
 
-  <!-- Afficher les statistiques si les alertes sont présentes -->
   <div *ngIf="alert != 'aucune_alerte' && alert != 'erreur_chargement'">
+
+  <!-- Afficher les statistiques si les alertes sont présentes
     <ion-card>
       <ion-card-header>
         <ion-card-title>Statistiques par Ville</ion-card-title>
@@ -45,19 +46,22 @@
         </ion-list>
       </ion-card-content>
     </ion-card>
+  -->
+
 
       <!-- Graphique pour les quantités des 3 différentes entreprises -->
+  <br>
   <ion-card>
-    <ion-card-header>
-      Tendance des entreprises
-    </ion-card-header>
+    <ion-card-title class="title" >
+      Nombre d'alertes par ville
+    </ion-card-title>
     <br>
     <ion-card-content>
       <canvas id="entrepriseChart"></canvas>
     </ion-card-content>
   </ion-card>
 
-
+<!--
     <ion-card>
       <ion-card-header>
         <ion-card-title>Statistiques par Service</ion-card-title>
@@ -71,11 +75,15 @@
         </ion-list>
       </ion-card-content>
     </ion-card>
+ -->
 
     <!-- Ajout du troisième graphique -->
+     <br>
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Graphique des Statistiques</ion-card-title>
+        <ion-card-title class="title">
+          Nombre d'alertes par service
+        </ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <canvas id="statChart"></canvas>

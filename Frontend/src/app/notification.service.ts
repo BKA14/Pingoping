@@ -30,21 +30,21 @@ export class NotificationService {
       if (result.receive === 'granted') {
         PushNotifications.register();
       } else {
-        console.log('Les notifications push ne sont pas autorisées.');
+       alert('Les notifications push ne sont pas autorisées.');
       }
     });
 
     PushNotifications.addListener('registration', (token: Token) => {
-      console.log('Push registration success, token: ' + token.value);
+      alert('Push registration success, token: ' + token.value);
       this.sendTokenToServer(token.value); // Appel de la méthode pour envoyer le token
     });
 
     PushNotifications.addListener('registrationError', (error: any) => {
-      console.log('Error on registration: ' + JSON.stringify(error));
+      alert('Error on registration: ' + JSON.stringify(error));
     });
 
     PushNotifications.addListener('pushNotificationReceived', async (notification: PushNotificationSchema) => {
-      console.log('Notification reçue: ' + JSON.stringify(notification));
+      ('Notification reçue: ' + JSON.stringify(notification));
 
       // Affichage d'une alerte dans l'application
       const alert = await this.alertController.create({
@@ -58,7 +58,7 @@ export class NotificationService {
     });
 
     PushNotifications.addListener('pushNotificationActionPerformed', (notification: ActionPerformed) => {
-      console.log('Action de notification effectuée: ' + JSON.stringify(notification));
+      alert('Action de notification effectuée: ' + JSON.stringify(notification));
       // Logique pour gérer les actions effectuées sur la notification
     });
   }
@@ -73,10 +73,9 @@ export class NotificationService {
     // Vérifier si userData est défini avant d'accéder à grade
     if (this.userData) {
       this._apiService.sendtoken(data).subscribe((res: any) => {
-        alert(res);
+        alert('token envoyé'+ res );
       }, (error: any) => {
-        alert("Erreur de connexion");
-        alert(error);
+        alert("Erreur envoie token" + error);
       });
     }
   }

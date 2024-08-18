@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { Chart } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 
 @Component({
   selector: 'app-statistique',
@@ -17,7 +17,10 @@ export class StatistiquePage implements OnInit {
   constructor(
     private _apiService: ApiService,
     private loadingCtrl: LoadingController,
-  ) { }
+  ) {
+     // Enregistrer les composants nécessaires de Chart.js
+     Chart.register(...registerables);
+  }
 
   ngOnInit() {
     this.loadalert();
@@ -63,9 +66,6 @@ export class StatistiquePage implements OnInit {
           }
         });
 
-        // this.createChart();
-        // this.createBarChart();
-        console.log('onction char appelé');
 
       } else {
         this.alert = 'aucune_alerte';
@@ -81,21 +81,26 @@ export class StatistiquePage implements OnInit {
       console.log('Erreur de chargement', error);
       loading.dismiss();
     }
+    this.createChart();
+    this.createBarChart();
+    console.log('fonction char appelé');
   }
 
-  createChart() {
-    const ctx = document.getElementById('statChart') as HTMLCanvasElement;
-    new Chart(ctx, {
-      type: 'pie', // ou 'line', 'pie', etc.
+
+  createBarChart() {
+    const ctx = document.getElementById('entrepriseChart') as HTMLCanvasElement;
+    const entrepriseChart = new Chart(ctx, {
+      type: 'line',
       data: {
         labels: Object.keys(this.villeStats),
         datasets: [{
-          label: 'Nombre d\'alertes par ville',
+          label: '',
           data: Object.values(this.villeStats),
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+          borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
           borderWidth: 1
         }]
+
       },
       options: {
         scales: {
@@ -108,30 +113,29 @@ export class StatistiquePage implements OnInit {
   }
 
 
-createBarChart() {
-  const ctx = document.getElementById('entrepriseChart') as HTMLCanvasElement;
-  const entrepriseChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: Object.keys(this.villeStats),
-      datasets: [{
-        label: '',
-        data: Object.values(this.villeStats),
-        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
-        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-        borderWidth: 1
-      }]
-
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
+    createChart() {
+      const ctx = document.getElementById('statChart') as HTMLCanvasElement;
+      new Chart(ctx, {
+        type: 'bar', // ou 'line', 'pie', etc.
+        data: {
+          labels: Object.keys(this.serviceStats),
+          datasets: [{
+            label: 'Nombre d\'alertes par services',
+            data: Object.values(this.serviceStats),
+            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
         }
-      }
+      });
     }
-  });
-}
 
 
   async refreshPage(e: any) {

@@ -146,7 +146,7 @@
 
           <div style="display: flex; justify-content: space-between;">
             <!-- Bouton "J'aime" aligné à gauche -->
-            <ion-button (click)="likepub(pub)" class="likes" fill="outline" [ngClass]="{'vert': hasLiked(pub)}">
+            <ion-button (click)="likepub(pub)" class="likes" fill="outline"   [disabled]="pub.isLoading" [ngClass]="{'vert': hasLiked(pub)}">
               <ion-icon class="black" name="thumbs-up"></ion-icon>
               J'aime
             </ion-button>

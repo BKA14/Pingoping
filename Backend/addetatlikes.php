@@ -8,10 +8,10 @@ $message = array();
 
 
 // Extraire les données de la requête JSON
-$contactuser = mysqli_real_escape_string($con, $data['contactuser']);
-$iduser =  mysqli_real_escape_string($con, $data['iduser']);
-$idpub = mysqli_real_escape_string($con, $data['pubid']);
-$etat = mysqli_real_escape_string($con, $data['etat']);
+$contactuser = $data['contactuser'];
+$iduser =  $data['iduser'];
+$idpub =  $data['pubid'];
+$etat = $data['etat'];
 
 // Requête SQL sécurisée avec une requête préparée
 $sql = "INSERT INTO etatdelikes (idpub, iduser, contactuser, etat) VALUES (?, ?, ?, ?)";

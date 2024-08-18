@@ -2,6 +2,7 @@
 include "config.php";
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
+$results = [];
 
 // Récupération du token et du rôle de l'utilisateur depuis la requête
 $token = $data['token'];
@@ -15,6 +16,7 @@ if ($userRole === 'admin' || $userRole === 'superadmin') {
     subscribeToTopic($token, 'user');
     subscribeToTopic($token, 'alluser');
 }
+echo json_encode($results);
 
 function subscribeToTopic($token, $topic) {
     // URL de l'API pour s'abonner à un topic
@@ -46,10 +48,17 @@ function subscribeToTopic($token, $topic) {
 
     // Exécution de la requête et gestion de la réponse
     $result = curl_exec($ch);
+    $successMessage = json_encode(['status' => 'success', 'message' => 'User subscribed to topics successfully']);
+    echo $successMessage;
+
     if ($result === FALSE) {
         error_log('Curl failed: ' . curl_error($ch));
         return false;
     }
+    
+    $errorMessage = json_encode(['status' => 'error', 'message' => 'Failed to subscribe to topics']);
+    echo $errorMessage;
+
 
     // Vérification de la réponse de l'API
     $response = json_decode($result, true);

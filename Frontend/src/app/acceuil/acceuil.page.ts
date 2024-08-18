@@ -89,7 +89,6 @@ event.preventDefault();
     limit_comment: number = 180; // Limite des caractères avant le tronquage
     showFullCommentaire: boolean = false;
 
-
     isLiked = false;
     public countdown: string;
 
@@ -498,60 +497,43 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     }
 
     likepub(pub: any) {
+      if (pub.isLoading) return; // Évite les clics multiples
+
+      pub.isLoading = true;
+
       let data = {
         iduser: this.userData.iduser,
         contactuser: this.userData.numuser,
         pubid: pub.id,
-       }
+      };
 
-       this._apiService.getetat2(data).subscribe((res:any) => {
+      this._apiService.getetat2(data).subscribe((res:any) => {
         console.log("SUCCESS ===",res);
 
-        console.log('resultat',res.result)
-
-        if(res.result === 'oui'){
-
-        if(res.data.etat === 'oui') {
-
-        this.disLike(pub);
-        pub.likes_count = pub.likes_count - 1;
-        pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
-        console.log("dislike",pub.likes_count);
-        console.log("dislike",pub.user_ids);
-        }
-        else if (res.data.etat === 'non')
-        {
-          this.Likes(pub);
-          pub.likes_count = pub.likes_count + 1;
+        if(res.result === 'oui') {
+          if(res.data.etat === 'oui') {
+            this.disLike(pub);
+            pub.likes_count--;
+            pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
+          } else if (res.data.etat === 'non') {
+            this.Likes(pub);
+            pub.likes_count++;
+            pub.user_ids.push(this.userData.iduser);
+          }
+        } else if (res.result === 'non') {
+          this.Likepremier(pub);
+          pub.likes_count++;
           pub.user_ids.push(this.userData.iduser);
-          console.log("like",pub.likes_count);
-          console.log("like",pub.user_ids);
-        }
-        else {
-       console.log('Erreur de connection')
-          return;
         }
 
-        }
-
-        else if (res.result === 'non')
-           {
-
-           this.Likepremier(pub);
-           pub.likes_count = pub.likes_count + 1;
-           pub.user_ids.push(this.userData.iduser);
-           console.log("premier like",pub.user_ids);
-           }
-
-         // Forcer la détection des changements manuelle
-         this.cdr.detectChanges();
-        },(error: any) => {
-
+        pub.isLoading = false;
+        this.cdr.detectChanges();
+      }, (error: any) => {
+        pub.isLoading = false;
         console.log('Erreur de connection  nouveau etat non enregistre');
         console.log("ERROR ===",error);
-       })
-
-         }
+      });
+    }
 
 
     async Likepremier(pub): Promise<void> {
@@ -628,7 +610,6 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
            this.cdr.detectChanges();
 
               }
-
 
 
   getWhatsAppLink(contact: string): string {
@@ -840,7 +821,7 @@ async getUserLocation() {
     this.userlongitude = userLongitude ;
     this.userlatitude = userLatitude;
 
-    console.error('Coordonnées entreprise:', this.latitude, this.longitude);
+   // console.error('Coordonnées entreprise:', this.latitude, this.longitude);
     return { userLatitude, userLongitude };
   } catch (error) {
     console.error('Erreur lors de la récupération des coordonnées:', error);
