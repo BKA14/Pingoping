@@ -7,20 +7,20 @@ $data = json_decode($input, true);
 $message = array();
 
 // Extraire les données de la requête JSON
-$contactuser =  $data['contactuser'];
+//$contactuser =  $data['contactuser'];
 $iduser =   $data['iduser'];
 $idpub =  $data['pubid'];
 $etat =  $data['etat'];
 
 
 // Requête SQL sécurisée avec une requête préparée
-$sql = "UPDATE etatdelikes SET etat = ? WHERE idpub = ? AND iduser = ? AND contactuser = ? LIMIT 1";
+$sql = "UPDATE etatdelikes SET etat = ? WHERE idpub = ? AND iduser = ? LIMIT 1";
 $stmt = mysqli_prepare($con, $sql);
 
 // Vérifier si la préparation de la requête a réussi
 if ($stmt) {
     // Binder les paramètres à la requête préparée
-    mysqli_stmt_bind_param($stmt, "ssss", $etat, $idpub, $iduser, $contactuser);
+    mysqli_stmt_bind_param($stmt, "sss", $etat, $idpub, $iduser);
 
     // Exécuter la requête préparée
     $success = mysqli_stmt_execute($stmt);

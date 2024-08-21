@@ -4,7 +4,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br>
+    <br> <br>
     <ion-title class="title">UTILISATEURS</ion-title>
     <ion-searchbar class="searchbar" type="text" placeholder="Rechercher un utilisateur" [(ngModel)]="term"></ion-searchbar>
     <div class="container">
@@ -46,7 +46,7 @@
 
 
 <ion-list class="list"  *ngIf="users !== 'erreur_chargement' && users !== 'aucune_alerte'">
- <ion-item  button *ngFor="let user of users | customFilter: term">
+ <ion-item class="div_screen" button *ngFor="let user of users | customFilter: term">
 
     <ion-label color="dark" [routerLink]="['/info-user/', user.id]">
     <ion-label class="h2"> email : {{user.email}}</ion-label> <br>

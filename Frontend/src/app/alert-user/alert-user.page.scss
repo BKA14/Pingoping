@@ -149,6 +149,19 @@ margin: 0;
   padding: 15px;
 }
 
+@media (min-width: 768px) {
+  .message-item {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    padding: 15px;
+    width: 55%;
+    margin-left: 18%;
+
+  } }
+
+
 .message-list {
   padding: 0 15px;
 }

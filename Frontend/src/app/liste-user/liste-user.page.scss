@@ -23,6 +23,16 @@ ion-content{
     padding: 5;
     }
 
+    @media (min-width: 768px) {
+      .div_screen {
+        padding-bottom: 0 !important;
+        width: 62%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 18%;
+      }
+    }
   .tool1{
 
     font-size: 20px;

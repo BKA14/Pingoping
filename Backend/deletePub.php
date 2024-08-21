@@ -11,9 +11,14 @@ if(isset($_GET['id'])) {
 
     // Préparer et exécuter la requête DELETE
     $sql = "DELETE FROM pub WHERE id = ?";
+    $sql_etat = "DELETE FROM etatdelikes WHERE idpub = ?";
     $stmt = mysqli_prepare($con, $sql);
+    $stmt_etat = mysqli_prepare($con, $sql_etat);
+
     mysqli_stmt_bind_param($stmt, "s", $id);
+    mysqli_stmt_bind_param($stmt_etat, "s", $id);
     $success = mysqli_stmt_execute($stmt);
+    $success_etat = mysqli_stmt_execute($stmt_etat);
 
     // Vérifier le succès de la requête DELETE
     if($success) {

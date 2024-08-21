@@ -12,7 +12,7 @@ const config: CapacitorConfig = {
       presentationOptions: ["badge", "sound", "alert"],
     },
     SplashScreen: {
-      launchShowDuration: 3000, // Durée d'affichage en millisecondes
+      launchShowDuration: 8000, // Durée d'affichage en millisecondes
       autoHide: false, // Ne pas cacher automatiquement le splashscreen
     },
     Keyboard: {

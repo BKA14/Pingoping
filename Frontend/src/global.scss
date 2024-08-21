@@ -29,8 +29,22 @@
 
 body {
   transition: padding-bottom 0.3s ease-in-out;
+
 }
 
 ion-content {
   padding-bottom: 0 !important;
+}
+
+.custom-alert-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.alert-icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 10px;
 }

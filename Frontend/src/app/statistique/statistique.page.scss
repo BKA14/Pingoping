@@ -20,3 +20,14 @@
   text-align: center;
   height: 1000px;
   }
+
+  @media (min-width: 768px) {
+    .div_screen {
+      padding-bottom: 0 !important;
+      width: 67%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 18%;
+    }
+  }

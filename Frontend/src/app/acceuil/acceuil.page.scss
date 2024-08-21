@@ -17,6 +17,18 @@ ion-card{
     background-color: #ffffff;
   }
 
+  /* Styles spécifiques pour les plateformes natives (ajustez le breakpoint si nécessaire) */
+  @media (min-width: 768px) {
+    .message-item {
+      padding-bottom: 0 !important;
+      width: 55%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 18%;
+    }
+  }
+
   .message-list {
     padding: 0 15px;
   }

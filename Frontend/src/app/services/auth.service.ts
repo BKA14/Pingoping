@@ -24,13 +24,11 @@ export class authService {
 
   {
     this.user_websocket();
-
   }
 
   ngOnInit() {
 
   }
-
 
   private userDataSubject = new BehaviorSubject<any>(this.getUserData());
   userData$ = this.userDataSubject.asObservable();

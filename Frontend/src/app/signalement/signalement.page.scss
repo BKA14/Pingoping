@@ -42,6 +42,17 @@ max-height: 100%; /* Ajustez la valeur en fonction de vos besoins */
   padding: 15px;
 }
 
+@media (min-width: 768px) {
+  .message-item{
+    padding-bottom: 0 !important;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 18%;
+  }
+}
+
 .message-list {
   padding: 0 15px;
 }

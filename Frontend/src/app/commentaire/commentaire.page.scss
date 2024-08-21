@@ -61,6 +61,17 @@ ion-card{
     border-radius: 30px;
   }
 
+  /* Styles spécifiques pour les plateformes natives (ajustez le breakpoint si nécessaire) */
+  @media (min-width: 768px) {
+    .custom-container {
+      padding-bottom: 0 !important;
+      width: 56%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 18%;
+    }
+  }
 
   .custom-card {
     margin-bottom: 20px; /* Espace entre les cartes, ajustez selon vos besoins */

@@ -7,7 +7,7 @@ $data = json_decode($input, true);
 
 // Sécurisation des données d'entrée pour éviter les injections SQL
 $iduser =  $data['iduser'];
-$contactuser = $data['contactuser'];
+//$contactuser = $data['contactuser'];
 $pubid = $data['pubid'];
 
 // Requête SQL pour vérifier l'existence de l'utilisateur et de la publication dans la table etatdelikes

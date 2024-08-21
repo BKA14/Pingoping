@@ -7,7 +7,10 @@ import { authService } from './services/auth.service';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private authService: authService, private router: Router) {}
+  constructor(private authService: authService, private router: Router)
+  {
+
+  }
 
   async canActivate(): Promise<boolean> {
     const accessToken = await this.authService.getValidAccessToken();

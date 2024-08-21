@@ -174,7 +174,7 @@ async getpub() {
   loading.present();
   this.oldpub = this.pub;
 
-  this._apiService.getpub(this.page, this.limit).subscribe((res: any) => {
+  this._apiService.getpub(this.page, this.limit).subscribe(async (res: any) => {
     console.log("SUCCESS == pub", res);
 
     if (res && res.length < 1) {
@@ -182,7 +182,7 @@ async getpub() {
     }
     else {
       this.pub = res;
-      this.openUrl();
+     await this?.openUrl();
     }
     loading.dismiss();
 
@@ -507,21 +507,21 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
         pubid: pub.id,
       };
 
-      this._apiService.getetat2(data).subscribe((res:any) => {
+      this._apiService.getetat2(data).subscribe(async (res:any) => {
         console.log("SUCCESS ===",res);
 
         if(res.result === 'oui') {
           if(res.data.etat === 'oui') {
-            this.disLike(pub);
+           await  this.disLike(pub);
             pub.likes_count--;
             pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
           } else if (res.data.etat === 'non') {
-            this.Likes(pub);
+            await  this.Likes(pub);
             pub.likes_count++;
             pub.user_ids.push(this.userData.iduser);
           }
         } else if (res.result === 'non') {
-          this.Likepremier(pub);
+          await this.Likepremier(pub);
           pub.likes_count++;
           pub.user_ids.push(this.userData.iduser);
         }

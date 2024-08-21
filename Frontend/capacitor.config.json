@@ -8,29 +8,29 @@
   "server": {
     "cleartext": true
   },
-
-    "plugins": {
-      "PushNotifications": {
-        "presentationOptions": ["badge", "sound", "alert"],
-        "SplashScreen": {
-          "launchShowDuration": 3000,
-          "launchAutoHide": false,
-          "launchFadeOutDuration": 1000,
-          "androidSplashResourceName": "splash",
-          "androidScaleType": "CENTER_CROP",
-          "showSpinner": true,
-          "androidSpinnerStyle": "large",
-          "splashFullScreen": true,
-          "splashImmersive": true,
-          "useDialog": true
-        }
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ],
+      "SplashScreen": {
+        "launchShowDuration": 7000,
+        "launchAutoHide": false,
+        "launchFadeOutDuration": 1000,
+        "androidSplashResourceName": "splash",
+        "androidScaleType": "CENTER_CROP",
+        "showSpinner": true,
+        "androidSpinnerStyle": "large",
+        "splashFullScreen": true,
+        "splashImmersive": true,
+        "useDialog": true
       }
-
+    }
   },
   "android": {
     "allowMixedContent": true
   },
   "ios": {}
 }
-
-

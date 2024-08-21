@@ -218,13 +218,13 @@ this.getUserLocation();
         contactuser: this.userData.numuser,
         pubid: pub.id,
        }
-       this._apiService.getetat2(data).subscribe((res:any) => {
+       this._apiService.getetat2(data).subscribe(async (res:any) => {
         console.log("SUCCESS ===",res);
 
         if(res.result === 'oui'){
 
         if(res.data.etat === 'oui') {
-        this.disLike(pub);
+        await this.disLike(pub);
         pub.likes_count = pub.likes_count - 1;
         pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
         console.log("dislike",pub.likes_count);
@@ -232,7 +232,7 @@ this.getUserLocation();
         }
         else if (res.data.etat === 'non')
         {
-          this.Likes(pub);
+          await  this.Likes(pub);
           pub.likes_count = pub.likes_count + 1;
           pub.user_ids.push(this.userData.iduser);
           console.log("like",pub.likes_count);
@@ -246,19 +246,19 @@ this.getUserLocation();
         }
         else if (res.result === 'non')
            {
-           this.Likepremier(pub);
+           await this.Likepremier(pub);
            pub.likes_count = pub.likes_count + 1;
            pub.user_ids.push(this.userData.iduser);
            console.log("like",pub.likes_count);
            console.log("like",pub.user_ids);
            }
 
-         pub.isLoading = true;
-         // Forcer la détection des changements manuelle
+           pub.isLoading = false;
+           // Forcer la détection des changements manuelle
          this.cdr.detectChanges();
         },(error: any) => {
-         pub.isLoading = true;
-        console.log('Erreur de connection  nouveau etat non enregistre');
+          pub.isLoading = false;
+          console.log('Erreur de connection  nouveau etat non enregistre');
         console.log("ERROR ===",error);
        })
 

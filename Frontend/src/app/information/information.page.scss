@@ -16,6 +16,17 @@
      width: auto;
     }
 
+    @media (min-width: 768px) {
+      .div_screen {
+        padding-bottom: 0 !important;
+        width: 62%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 18%;
+      }
+    }
+
   .label{
 font-size:large;
 color: #2dd36f;

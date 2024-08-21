@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { authService } from '../services/auth.service';
+import { LoginServiceReadyService } from '../login-service-ready.service';
 
 @Component({
   selector: 'app-login2',
@@ -24,15 +25,20 @@ export class Login2Page implements OnInit {
     private _apiService: ApiService,
     private loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,
-    private authService: authService
-  ) {
+    private authService: authService,
+    private LoginServiceReadyService: LoginServiceReadyService
+  )
+  {
     this.verifieForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
 
-
+  ionViewDidEnter() {
+    // Informer que la page de login est prête
+    this.LoginServiceReadyService.setLoginPageReady(true);
+  }
 
   isTokenExpired(token: string): boolean {
     const tokenPayload = JSON.parse(atob(token.split('.')[1]));
