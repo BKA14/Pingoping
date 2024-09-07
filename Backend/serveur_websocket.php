@@ -38,6 +38,8 @@ class WebSocketServer implements MessageComponentInterface {
             $this->subscribeToChannel('date_event_channel', 'sendNewDateEvent');
             $this->subscribeToChannel('signalement_channel', 'sendNewSignalement');
             $this->subscribeToChannel('user_channel', 'sendNewUser');
+            $this->subscribeToChannel('notifications_channel', 'sendNewNotifications');
+
         });
 
         // Connexion à la base de données
@@ -107,6 +109,9 @@ class WebSocketServer implements MessageComponentInterface {
 
     private function sendNewCommentaires($data) {
         $this->sendData('commentaires', '', '', $data);
+    }
+    private function sendNewNotifications($data) {
+        $this->sendData('notifications', '', '', $data);
     }
 
     private function sendNewDateEvent($data) {

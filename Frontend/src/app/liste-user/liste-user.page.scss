@@ -23,7 +23,7 @@ ion-content{
     padding: 5;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
       .div_screen {
         padding-bottom: 0 !important;
         width: 62%;
@@ -33,6 +33,7 @@ ion-content{
         margin-left: 18%;
       }
     }
+
   .tool1{
 
     font-size: 20px;

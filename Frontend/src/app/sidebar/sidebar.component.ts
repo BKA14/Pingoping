@@ -1,5 +1,7 @@
+import { authService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NotificationBadgeService } from '../notification-badge.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,20 +11,30 @@ import { Router } from '@angular/router';
 export class SidebarComponent implements OnInit {
 
   grade: any;
+  userData: any;
+  unreadCount: number = 0;
 
   constructor(
     private router: Router,
-  ) {
-    this.getsession();
+    private notificationBadgeService : NotificationBadgeService,
+    private authService : authService
+  )
+  {
   }
 
-  ngOnInit() {}
+  ngOnInit() {
 
+    this.notificationBadgeService.unreadCount$.subscribe((count) => {
+      this.unreadCount = count;
+    });
+  console.log('non lu', this.unreadCount);
+  // S'abonner aux changements de données utilisateur
+  this.authService.userData$.subscribe(data => {
+    this.userData = data;
+  });
 
-  getsession(){
-    this.grade= (localStorage.getItem('grade'));
-    console.log(this.grade);
-     }
+  }
+
 
   acceuil() {
 
@@ -54,5 +66,12 @@ export class SidebarComponent implements OnInit {
     this.router.navigateByUrl('/paiement');
 
   }
+
+  openNotifications() {
+
+    this.router.navigateByUrl('/notifications');
+
+  }
+
 
 }

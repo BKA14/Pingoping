@@ -14,6 +14,7 @@ export class WebSocketService {
   private commentairesMessagesSubject = new Subject<any>();
   private signalementMessagesSubject = new Subject<any>();
   private userMessagesSubject = new Subject<any>();
+  private notificationsMessagesSubject = new Subject<any>();
   public isConnected = false;
   private reconnectAttempts = 0;
   private readonly maxReconnectAttempts = 15;
@@ -58,6 +59,9 @@ export class WebSocketService {
                     else if (message.length > 0 && message[0].type === 'user') {
                       this.userMessagesSubject.next(message);
                     }
+                    else if (message.length > 0 && message[0].type === 'notifications') {
+                      this.notificationsMessagesSubject.next(message);
+                    }
                 } else {
                     // Handle single message
                     if (message.type === 'signalisation') {
@@ -74,6 +78,9 @@ export class WebSocketService {
                     }
                     else if (message.type === 'user') {
                       this.userMessagesSubject.next(message);
+                    }
+                    else if (message.type === 'notifications') {
+                      this.notificationsMessagesSubject.next(message);
                     }
                 }
             } catch (error) {
@@ -126,5 +133,9 @@ export class WebSocketService {
 
   public listenForUserUpdates(): Observable<any> {
     return this.userMessagesSubject.asObservable();
+  }
+
+  public listenForNotificationsUpdates(): Observable<any> {
+    return this.notificationsMessagesSubject.asObservable();
   }
 }

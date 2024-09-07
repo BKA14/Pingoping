@@ -72,11 +72,11 @@ export class MessageUserPage implements OnInit {
            alert('Commentaire envoyé, merci');
           loading.dismiss();
 
-    } catch (error) {
-      console.error("ERROR ===", error);
-      alert('Commentaire non envoyé reessayer plus tard');
-      loading.dismiss();
-    }
+        } catch (error) {
+          console.error("ERROR ===", error);
+          alert('Commentaire non envoyé reessayer plus tard');
+          loading.dismiss();
+        }
   }
 
 

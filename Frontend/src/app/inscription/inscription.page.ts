@@ -4,6 +4,21 @@ import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
+import { authService } from '../services/auth.service';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
+
+// Fonction de validation personnalisée pour vérifier si les deux mots de passe correspondent
+export function passwordsMatchValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const password = control.get('password');
+    const password2 = control.get('password2');
+
+    if (password && password2 && password.value !== password2.value) {
+      return { 'passwordsMismatch': true };
+    }
+    return null;
+  };
+}
 
 @Component({
   selector: 'app-inscription',
@@ -12,7 +27,7 @@ import { ApiService } from '../api.service';
 })
 export class InscriptionPage implements OnInit {
 
-  verifieForm: FormGroup;
+verifieForm: FormGroup;
 showPassword = false;
 nom: any;
 prenom:any;
@@ -20,22 +35,23 @@ email:any;
 contact: any;
 password: any;
 password2:any;
-grade:any;
 grade1:any;
 genre:any;
 rang: any = [];
+userData: any;
+grade: any;
 
   constructor(
      private route: ActivatedRoute,
     private router: Router,
     private _apiService : ApiService,
     private loadingCtrl: LoadingController,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private authService: authService,
+
   ) {
-    this.getgrade();
-    this.getsession();
-  this.grade='utilisateur';
-   }
+    this.grade_user();
+    }
 
 
   login2() {
@@ -85,13 +101,13 @@ rang: any = [];
           }
 
           // Si l'utilisateur a été enregistré avec succès
-          if (this.grade === "superadmin") {
-              alert('Utilisateur enregistré avec succès.');
-              this.router.navigateByUrl('/liste-user');
+          if (this.userData.grade === "superadmin") {
+             // alert('Utilisateur enregistré avec succès.');
+              this.router.navigateByUrl('/verifie-code');
           } else {
-              alert('Utilisateur enregistré avec succès.');
+              //alert('Utilisateur enregistré avec succès.');
               localStorage.clear();
-              this.router.navigateByUrl('/login2');
+              this.router.navigateByUrl('/verifie-code');
           }
 
           loading.dismiss();
@@ -106,76 +122,71 @@ rang: any = [];
   }
 
 
-
-   getgrade(){
-    this._apiService.getgrade().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
-      this.rang = res;
-
-     },(error: any) => {
-      console.log("Erreur de connection",error);
-  })
-  }
-
   ngOnInit() {
+      // S'abonner aux changements de données utilisateur
+  this.authService.userData$.subscribe(data => {
+    this.userData = data;
+  });
 
-    this.verifieForm = new FormGroup({
+  this.verifieForm = new FormGroup({
     email: new FormControl('', [
       Validators.email,
       Validators.required,
       Validators.maxLength(65),
-      //Validators.minLength(6),
-    // Validators.compose([Validators.maxLength(70), Validators.pattern('^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$')]),
-  ]),
-  select: new FormControl('', [
-    Validators.required,
-  ]),
-
-
-  nom: new FormControl('', [
-    Validators.minLength(2),
-    Validators.maxLength(25),
-    Validators.required,
-
-      ]),
-
-       contact: new FormControl('', [
-        Validators.required,
-        Validators.min(10000000),
-        Validators.max(99999999999999),
-        Validators.maxLength(12),
-      ]),
-
-      prenom: new FormControl('', [
-        Validators.minLength(2),
+    ]),
+    select: new FormControl('', [
+      Validators.required,
+    ]),
+    nom: new FormControl('', [
+      Validators.minLength(2),
+      Validators.maxLength(25),
+      Validators.required,
+    ]),
+    contact: new FormControl('', [
+      Validators.required,
+      Validators.min(10000000),
+      Validators.max(99999999999999),
+      Validators.maxLength(12),
+    ]),
+    prenom: new FormControl('', [
+      Validators.minLength(2),
       Validators.required,
       Validators.maxLength(60),
+    ]),
+    password: new FormControl('', [
+      Validators.minLength(4),
+      Validators.maxLength(4),
+      Validators.required,
+      Validators.pattern('^[0-9]{4}$'),  // Exactement 4 chiffres
+    ]),
+    password2: new FormControl('', [
+      Validators.minLength(4),
+      Validators.maxLength(4),
+      Validators.required,
+      Validators.pattern('^[0-9]{4}$'),  // Exactement 4 chiffres
+    ]),
+  }, { validators: passwordsMatchValidator() });
 
-          ]),
 
-          password: new FormControl('', [
-            Validators.minLength(8),
-            Validators.required,
-            Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9@$!%*?&#]{8,40}$'),
-            Validators.maxLength(100),
-        ]),
+    }
 
-        password2: new FormControl('', [
-          Validators.minLength(8),
-        Validators.required,
-        Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9@$!%*?&#]{8,40}$'),
-        Validators.maxLength(100)
-            ]),
 
-          }
-
-          );
-
-  }
 
   togglePasswordVisibility() {
 
     this.showPassword = !this.showPassword;
+  }
+
+  async grade_user() {
+    try{
+      const res: any = await this._apiService.getgrade().toPromise();
+      console.log('grade', res);
+      this.rang = res;
+
+    } catch (error) {
+      alert('Erreur de connexion avec le serveur, veuillez réessayer ou contactez-nous !');
+      console.log("ERROR ===", error);
+    }
   }
 
 }

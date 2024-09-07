@@ -7,6 +7,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { ApiService } from '../api.service';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
+import { timeService } from '../timeservice.service';
 import * as L from 'leaflet';
 // Import the Leaflet CSS
 
@@ -41,6 +42,7 @@ export class SignalisationPage implements OnInit {
   service: any;
   ville: any;
   userData: any;
+  serverTime: string | number | Date;
 
 
   constructor(private fb: FormBuilder,
@@ -51,6 +53,7 @@ export class SignalisationPage implements OnInit {
     private loadingCtrl: LoadingController,
     public loadingController: LoadingController,
     private authService: authService,
+    private timeService: timeService
   ) {
     this.signalementForm = this.fb.group({
       category: ['', Validators.required],
@@ -74,17 +77,22 @@ export class SignalisationPage implements OnInit {
   this.authService.userData$.subscribe(data => {
     this.userData = data;
   });
-  console.log(console.log(this.userData.numuser));
-  }
 
+  this.timeService.getServerTime().subscribe((response) => {
+    this.serverTime = response.serverTime;
+    console.log('serveur time', this.serverTime );
+  });
+
+  console.log(console.log(this.userData.numuser));
+
+  }
 
 
   async getservice(){
 
     const loading = await this.loadingCtrl.create({
       message: 'Rechargement...',
-     spinner:'lines',
-    // showBackdrop:false,
+      spinner:'lines',
       cssClass: 'custom-loading',
     });
     loading.present();
@@ -154,7 +162,7 @@ export class SignalisationPage implements OnInit {
             alert('Format de fichier non pris en charge.');
         }
 
-        alert(this.selectedMedia);
+       // alert(this.selectedMedia);
     } catch (error) {
         console.error('Erreur lors de la sélection du média:', error);
     }
@@ -292,7 +300,7 @@ async onSubmit() {
           formData.append('prenom', combinedData.prenom);
           formData.append('numero', combinedData.numero);
           formData.append('iduser', combinedData.iduser);
-          formData.append('heuredusignalement', new Date().toISOString());
+          formData.append('heuredusignalement', new Date( this.serverTime).toISOString());
 
           console.log('Form data prepared:', formData);
 
@@ -347,7 +355,6 @@ getBlobFromBase64(base64: string, type: string): Blob {
   const byteArray = new Uint8Array(byteNumbers);
   return new Blob([byteArray], { type: `${type}/${this.getFileExtension(base64)}` });
 }
-
 
 
 map: L.Map;

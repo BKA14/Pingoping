@@ -420,6 +420,22 @@ const routes: Routes = [
     loadChildren: () => import('./statistique/statistique.module').then( m => m.StatistiquePageModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'notifications',
+    loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule)
+  },
+  {
+    path: 'verifie-code',
+    loadChildren: () => import('./verifie-code/verifie-code.module').then( m => m.VerifieCodePageModule)
+  },
+  {
+    path: 'verifie-password',
+    loadChildren: () => import('./verifie-password/verifie-password.module').then( m => m.VerifiePasswordPageModule)
+  },
+  {
+    path: 'change-password',
+    loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule)
+  },
 
 
 

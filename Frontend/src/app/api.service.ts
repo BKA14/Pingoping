@@ -10,9 +10,9 @@ export class ApiService {
 
 headers : HttpHeaders;
   adr_web: string='http://localhost:80/Projet_ Lokaliser/Backend';
-  adr_mobile: string='http://192.168.1.75:80/Projet_ Lokaliser/Backend';
+  adr_mobile: string='http://172.20.10.7:80/Projet_ Lokaliser/Backend';
   time: any = 10000
-  base_url = this.adr_mobile;
+  base_url = this.adr_web;
 
   constructor(public http: HttpClient) {
     this.headers = new HttpHeaders()
@@ -33,13 +33,94 @@ headers : HttpHeaders;
     return throwError(errorMessage);
   }
 
-
-
   sendtoken(data) {
     return this.http.post(this.base_url+'/sendtoken.php',data)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
+
+    isread(id: string): Observable<any> {
+      return this.http.get(`${this.base_url}/isread.php?id=${id}`)
+        .pipe(
+          timeout(this.time),
+          retry(0),
+          catchError(this.handleError)
+        );
+    }
+
+
+    user_connecter(): Observable<any> {
+      return this.http.get(`${this.base_url}/user_connecter.php`)
+        .pipe(
+          timeout(this.time),
+          retry(0),
+          catchError(this.handleError)
+        );
+    }
+
+    update_activity(id): Observable<any> {
+      return this.http.get(`${this.base_url}/update_activity.php?id=${id}`)
+        .pipe(
+          timeout(this.time),
+          retry(0),
+          catchError(this.handleError)
+        );
+    }
+
+    deconnexion(id): Observable<any> {
+      return this.http.get(`${this.base_url}/deconnexion.php?id=${id}`)
+        .pipe(
+          timeout(this.time),
+          retry(0),
+          catchError(this.handleError)
+        );
+    }
+
+
+    notification_lu(data) {
+    return this.http.post(this.base_url+'/notification_lu.php',data)
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
+    }
+
+      reinitialise(data) {
+        return this.http.post(this.base_url + '/reinitialise.php', data, {
+          withCredentials: true, // Ajoutez cette ligne
+          headers: this.headers // Si vous utilisez des en-têtes personnalisés
+        })
+        .pipe(timeout(this.time))
+        .pipe(retry(0), catchError(this.handleError));
+      }
+
+
+    verifie_code(data) {
+      return this.http.post(this.base_url + '/verify-code.php', data, {
+        withCredentials: true, // Ajoutez cette ligne
+        headers: this.headers // Si vous utilisez des en-têtes personnalisés
+      })
+      .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
+    }
+
+    verifie_code_two(data) {
+      return this.http.post(this.base_url + '/verifie_code_two.php', data, {
+        withCredentials: true, // Ajoutez cette ligne
+        headers: this.headers // Si vous utilisez des en-têtes personnalisés
+      })
+      .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
+    }
+
+    verifie_code_password(data) {
+      return this.http.post(this.base_url + '/verifie_code_password.php', data, {
+        withCredentials: true, // Ajoutez cette ligne
+        headers: this.headers // Si vous utilisez des en-têtes personnalisés
+      })
+      .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
+    }
+
+
 
   sendNotification(data) {
     return this.http.post(this.base_url+'/sendnotification.php',data)
@@ -81,70 +162,72 @@ signalisation(formData) {
   .pipe(timeout(this.time))
   }
 
-sendcomment(data) {
-  return this.http.post(this.base_url+'//sendcomment.php',data)
-  .pipe(timeout(this.time))
-  }
-
-sendmessage(data) {
-  return this.http.post(this.base_url+'//sendmessage.php',data)
-  .pipe(timeout(this.time))
-  }
-
-  repondrecommentaire(data) {
-    return this.http.post(this.base_url+'//repondrecommentaire.php',data)
+  sendcomment(data) {
+    return this.http.post(this.base_url+'//sendcomment.php',data)
     .pipe(timeout(this.time))
     }
+
+  sendmessage(data) {
+    return this.http.post(this.base_url+'//sendmessage.php',data)
+    .pipe(timeout(this.time))
+    }
+
+    repondrecommentaire(data) {
+      return this.http.post(this.base_url+'//repondrecommentaire.php',data)
+      .pipe(timeout(this.time))
+      }
 
     signalercommentaire(data) {
       return this.http.post(this.base_url+'//signalercommentaire.php',data)
       .pipe(timeout(this.time))
       }
 
-      verifie(data) {
-        return this.http.post(this.base_url+'//verifie.php',data)
+    verifie(data) {
+      return this.http.post(this.base_url+'//verifie.php',data)
+      .pipe(timeout(this.time))
+      }
+
+
+
+    addetatlikes(data) {
+      return this.http.post(this.base_url+'//addetatlikes.php',data)
+      .pipe(timeout(this.time))
+      }
+
+    addcategorie(data) {
+      return this.http.post(this.base_url+'//createcategorie.php',data)
+      .pipe(timeout(this.time))
+    }
+
+    add_numero(data) {
+      return this.http.post(this.base_url+'//add_numero.php',data)
+      .pipe(timeout(this.time))
+    }
+
+    getentreprises(){
+    return this.http.get(this.base_url+'/getentreprises.php')
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
+    }
+
+
+    getapropos(){
+    return this.http.get(this.base_url+'/getapropos.php')
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
+    }
+
+    loadalert(page: number, limit: number) {
+      return this.http.get(`${this.base_url}/loadalert.php?page=${page}&limit=${limit}`)
         .pipe(timeout(this.time))
-        }
+        .pipe(retry(0), catchError(this.handleError));
+    }
 
-addetatlikes(data) {
-  return this.http.post(this.base_url+'//addetatlikes.php',data)
-  .pipe(timeout(this.time))
-  }
-
-addcategorie(data) {
-  return this.http.post(this.base_url+'//createcategorie.php',data)
-  .pipe(timeout(this.time))
-}
-
-add_numero(data) {
-  return this.http.post(this.base_url+'//add_numero.php',data)
-  .pipe(timeout(this.time))
-}
-
-getentreprises(){
-return this.http.get(this.base_url+'/getentreprises.php')
-.pipe(timeout(this.time))
-.pipe(retry(0), catchError(this.handleError));
-}
-
-
-getapropos(){
-return this.http.get(this.base_url+'/getapropos.php')
-.pipe(timeout(this.time))
-.pipe(retry(0), catchError(this.handleError));
-}
-
-loadalert(page: number, limit: number) {
-  return this.http.get(`${this.base_url}/loadalert.php?page=${page}&limit=${limit}`)
-    .pipe(timeout(this.time))
-    .pipe(retry(0), catchError(this.handleError));
-}
-
-loadalert_statistique() {
-  return this.http.get(`${this.base_url}/loadalert_statistique.php`)
-    .pipe(timeout(this.time))
-    .pipe(retry(0), catchError(this.handleError));
-}
+    loadalert_statistique() {
+      return this.http.get(`${this.base_url}/loadalert_statistique.php`)
+        .pipe(timeout(this.time))
+        .pipe(retry(0), catchError(this.handleError));
+    }
 
 
     loadalert_id(id, page: number, limit: number): Observable<any> {
@@ -841,10 +924,33 @@ modifierCommentaire(id,data){
 
 
 inscription(data) {
-  return this.http.post(this.base_url+'/inscription.php',data)
+  return this.http.post(this.base_url + '/inscription2.php', data, {
+    withCredentials: true, // Ajoutez cette ligne
+    headers: this.headers // Si vous utilisez des en-têtes personnalisés
+  })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
-  }
+}
+
+renvoyer_code() {
+  return this.http.get(this.base_url + '/renvoyer_otp.php', {
+    withCredentials: true, // Ajoutez cette ligne
+    headers: this.headers // Si vous utilisez des en-têtes personnalisés
+  })
+  .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError));
+}
+
+
+renvoyer_otp_two() {
+  return this.http.get(this.base_url + '/renvoyer_otp_two.php', {
+    withCredentials: true, // Ajoutez cette ligne
+    headers: this.headers // Si vous utilisez des en-têtes personnalisés
+  })
+  .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError));
+}
+
 
 login(data){
   return this.http.post(this.base_url+'/login.php',data)

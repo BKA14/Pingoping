@@ -9,14 +9,13 @@
   }
 
   .list{
-
     text-align: center;
      margin-top:25%;
      font-size: medium;
      width: auto;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
       .div_screen {
         padding-bottom: 0 !important;
         width: 62%;

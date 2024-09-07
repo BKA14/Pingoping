@@ -17,7 +17,7 @@
 <ion-card-content>
   <ion-item>
     <ion-label position="floating">Email</ion-label>
-    <ion-input type="email" [(ngModel)]="email_entreprise" formControlName="email" ></ion-input>
+    <ion-input type="email" id="email" [(ngModel)]="email_entreprise" formControlName="email" ></ion-input>
   </ion-item>
   <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').hasError('required')">Veuillez votre nom d'utilisareur</ion-label>
   <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').hasError('minlength')">nom d'utilisateur invalide</ion-label>
@@ -25,11 +25,11 @@
   <br/>
   <ion-item>
     <ion-label position="floating" >Mot de Passe</ion-label>
-    <ion-input type="{{showPassword ? 'text' : 'Password'}}" [(ngModel)]="password_entreprise" formControlName="password" ></ion-input>
+    <ion-input id="password" type="{{showPassword ? 'number' : 'Password'}}" [(ngModel)]="password_entreprise" formControlName="password" ></ion-input>
     <ion-icon slot="end" [name]="showPassword ? 'eye-off' :'eye'" (click)="togglePasswordVisibility()"></ion-icon>
   </ion-item>
   <ion-label color="danger" *ngIf="verifieForm.get('password').touched && verifieForm.get('password').hasError('required')">Entrer un mot de passe</ion-label>
-  <ion-label color="danger" *ngIf="verifieForm.get('password').touched && verifieForm.get('password').hasError('pattern')">Entrer un mot de passe de 8 caractère minimum avec au moins une majuscule,une minuscule,un chiffre et un caractère spécial(@ ou $ ou ! ou % ou * ou ? ou & ou #)</ion-label>
+  <ion-label color="danger" *ngIf="verifieForm.get('password').touched && verifieForm.get('password').hasError('pattern')">Le mot de passe doit être composé que de 4 chiffres.</ion-label>
 
 <ion-button color="success" size="full" (click)="login4()" [disabled]="!verifieForm.valid" > Connexion</ion-button>
 <br>

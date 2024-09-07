@@ -2,6 +2,7 @@
 include "config.php";
 require 'vendor/autoload.php'; // Charger l'autoloader de Composer
 
+
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
@@ -43,6 +44,12 @@ if ($row = $result->fetch_object()) {
             "exp" => time() + (30 * 24 * 60 * 60) // 30 jours
         );
         $refreshToken = JWT::encode($refreshTokenPayload, 'your_secret_key', 'HS256');
+
+        // Insérer une nouvelle session utilisateur dans la table user_sessions
+        $userId = $row->id; // Récupérer l'ID de l'utilisateur connecté
+        $loginTime = date('Y-m-d H:i:s');
+        $sql = "INSERT INTO user_sessions (user_id, login_time, last_activity) VALUES ('$userId', '$loginTime', '$loginTime')";
+        mysqli_query($con, $sql);
 
         // Retourner les tokens
         http_response_code(200);

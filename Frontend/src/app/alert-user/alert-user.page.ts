@@ -5,6 +5,7 @@ import { ApiService } from '../api.service';
 import { Subscription } from 'rxjs';
 import { WebSocketService } from '../websocket.service';
 import { authService } from '../services/auth.service';
+import { timeService } from './../timeservice.service';
 
 @Component({
   selector: 'app-alert-user',
@@ -24,6 +25,7 @@ export class AlertUserPage implements OnInit {
   limit: number = 10;
   infiniteScrollDisabled: boolean = false; // Variable pour gérer l'état de l'infinite scroll
   private websocketSubscription: Subscription;
+  serverTime: string | number | Date;
 
 
   private refreshTimeout;
@@ -48,6 +50,7 @@ export class AlertUserPage implements OnInit {
     private renderer: Renderer2,
     private wsService: WebSocketService,
     private authService: authService,
+    private timeService: timeService,
   ) {
 
    }
@@ -62,6 +65,10 @@ export class AlertUserPage implements OnInit {
       this.userData = data;
     });
 
+    this.timeService.getServerTime().subscribe((response) => {
+      this.serverTime = response.serverTime;
+      console.log('serveur time', this.serverTime );
+    });
   }
 
 
@@ -320,10 +327,10 @@ async loadalert_id() {
   }
 
 
-// Fonction pour formater l'heure de publication du commentaire
+//////////// recuperer la date /////////////////////
 formatCommentTime(time: string): string {
   const commentDate = new Date(time);
-  const now = new Date();
+  const now = new Date(this.serverTime); // Utiliser l'heure du serveur
   const diffInSeconds = Math.round((now.getTime() - commentDate.getTime()) / 1000);
 
   if (diffInSeconds < 60) {
@@ -335,10 +342,9 @@ formatCommentTime(time: string): string {
     const hours = Math.round(diffInSeconds / 3600);
     return `Il y a ${hours} heure${hours > 1 ? 's' : ''}`;
   } else {
-    return `Le ${commentDate.toLocaleDateString('fr-FR')} à ${commentDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
+    return commentDate.toLocaleDateString('fr-FR');
   }
 }
-
 
   async refreshPage(e: any) {
 

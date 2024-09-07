@@ -18,7 +18,7 @@ ion-card{
   }
 
   /* Styles spécifiques pour les plateformes natives (ajustez le breakpoint si nécessaire) */
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     .message-item {
       padding-bottom: 0 !important;
       width: 55%;

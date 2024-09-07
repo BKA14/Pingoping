@@ -16,12 +16,13 @@ if ($con->connect_error) {
 // Set the sleep intervals in seconds
 $DateBlocageInterval = 90; // temps de lancement de la fonction deblocage
 $signalisationInterval = 8; // Interval for signalisation function
-$pubInterval = 8; // Interval for pub function
+$pubInterval = 10; // Interval for pub function
 $LikesInterval = 0.5 ; // Interval for likes function
 $CommentairesInterval =  0.5; // Interval for Commentaires function
 $EvenementInterval =  61; 
 $SignalementInterval =  7; 
 $UserInterval =  2; 
+$NotificationsInterval = 5;
 
 // Track the last execution time for each function
 $lastDateBlocageUpdateTime = 0;
@@ -32,6 +33,7 @@ $lastCommentairesTime = 0; // temps de lancement de la fonction recuperation de 
 $lastDateEvenementTime = 0;
 $lastDateSignalementTime = 0;
 $lastDateUserTime = 0;
+$lastDateNotificationsTime = 0;
 
 while (true) {
     $currentTime = time();
@@ -84,6 +86,12 @@ while (true) {
             $lastDateUserTime = $currentTime;
         }
 
+        //notifications in app
+        if ($currentTime - $lastDateNotificationsTime >= $NotificationsInterval) {
+            notifications($con, $redis);
+            $lastDateNotificationsTime = $currentTime;
+        }
+
 
     // Small sleep to prevent the loop from running too fast
     sleep(0.1);
@@ -94,7 +102,7 @@ while (true) {
 
 
 // Fonction pour envoyer la notification via FCM
-function sendFCMNotification($title, $body) {
+function sendFCMNotification($con, $title, $body, $page) {
    // Remplacez par le chemin de votre fichier JSON du compte de service
 $keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
 
@@ -156,9 +164,49 @@ try {
     http_response_code(500);
     echo json_encode(['error' => 'Échec de l\'envoi de la notification.', 'details' => $e->getMessage()]);
 }
+//////////////////////////// envoie dans la base de donnée/////////////////////////////////
 
+
+// Fonction pour insérer la notification dans la base de données
+function insertNotification($con, $title, $body, $page = null) {
+    if ($page) {
+        $sql = "INSERT INTO notifications (title, message, page) VALUES ('$title', '$body', '$page')";
+    }  else {
+        $sql = "INSERT INTO notifications (title, message) VALUES ('$title', '$body')";
+    }
+
+    if (mysqli_query($con, $sql)) {
+        return mysqli_insert_id($con);
+    } else {
+        echo json_encode(['error' => mysqli_error($con)]);
+        exit;
+    }
+}
+
+// Insertion de la notification
+$notificationId = insertNotification($con, $title, $body, $page);
+if ($topic === 'admin' || $topic === 'superadmin') {
+    // Associer la notification aux administrateurs et superadministrateurs
+    $usersSql = "INSERT INTO user_notifications (user_id, notification_id)
+                 SELECT id, '$notificationId' FROM user WHERE grade = 'admin' OR grade = 'superadmin'";
+}
+ else {
+    // Associer la notification à tous les utilisateurs
+    $usersSql = "INSERT INTO user_notifications (user_id, notification_id)
+                 SELECT id, '$notificationId' FROM user";
+}
+
+
+if (mysqli_query($con, $usersSql)) {
+    echo json_encode(['success' => true]);
+} else {
+    echo json_encode(['error' => mysqli_error($con)]);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
     
 }
+
 
 
 ///////////////////////// Pour les Likes ///////////////////////////////////
@@ -240,6 +288,37 @@ function updateCountdownForAds($con, $redis) {
 }
 
 
+///////////////////////// Pour les notifications in app ///////////////////////////////////
+function notifications($con, $redis) {
+    // Retrieve events to process
+    $result = $con->query("SELECT * FROM redis_events_notifications");
+
+    // Check if there are events to process
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $event = [
+                'action' => $row['action'],
+                'notifications_id' => $row['notifications_id'],
+                'old_notifications_id' => $row['old_notifications_id'],
+                'timestamp' => $row['created_at']
+            ];
+
+            try {
+                // Publish the event to Redis
+                $redis->publish('notifications_channel', json_encode($event));
+                echo "Published event with ID {$row['id']} to Redis.\n";
+
+                // Delete the event from the table after processing
+                $con->query("DELETE FROM redis_events_notifications WHERE id = " . $row['id']);
+                echo "Deleted event with ID {$row['id']} from table notifications.\n";
+            } catch (Exception $e) {
+                echo 'Error processing event: ' . $e->getMessage() . "\n";
+            }
+        }
+    }
+}
+
+
 
 ///////////////////////// Pour les modification des donnes user. ///////////////////////////////////
 function user($con, $redis) {
@@ -295,7 +374,8 @@ function signalisation($con, $redis) {
                 if ($row['action'] === 'insert'){
                 $title = "Nouvelle alerte";
                 $body = "Une nouvelle alerte a été ajoutée avec l'ID: {$row['id']}\n"; // Échapper les données
-                sendFCMNotification($title, $body); // notiication envoyé
+                $page = "signalisation";
+                sendFCMNotification($con, $title, $body, $page); // notiication envoyé
                 }
 
                 // Delete the event from the table after processing
@@ -427,8 +507,9 @@ function signalement($con, $redis) {
                 if ($row['action'] === 'insert'){
                     $title = "Nouveau signalement";
                     $body = "Un nouveau signalement a été ajoutée avec l'ID: {$row['id']}\n"; // Échapper les données
-                    sendFCMNotification($title, $body); // notiication envoyé
-                    }
+                    $page = "signalisation";
+                    sendFCMNotification($con, $title, $body, $page); // notiication envoyé
+                }
 
                 // Delete the event from the table after processing
                 $con->query("DELETE FROM redis_events_signalement WHERE id = " . $row['id']);

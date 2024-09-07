@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { BehaviorSubject, interval, Observable, Subscription, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
@@ -15,15 +15,20 @@ export class authService {
   new_acces_token : any;
   private websocketSubscription: Subscription;
   user : any;
+  updateSubscription: Subscription;
+
   constructor(private http: HttpClient,
     private _apiService: ApiService,
     private loadingCtrl: LoadingController,
     private wsService: WebSocketService,
-
   )
 
   {
     this.user_websocket();
+
+    this.updateSubscription = interval(60000).subscribe(async () => {
+      this.nombre_user_app();
+      });
   }
 
   ngOnInit() {
@@ -226,6 +231,23 @@ user_websocket() {
     },
     (err) => console.error('WebSocket Error:', err)
   );
+}
+
+async forgotPassword(email: string) {
+
+}
+
+
+  async nombre_user_app(){
+
+  const id = await localStorage.getItem('iduser');
+
+  try {
+    const response = await this._apiService.update_activity(id).toPromise();
+    console.log('nombre user mis a jour', response);
+  } catch (error) {
+    console.error('nombre user non  mis a jour', error);
+  }
 }
 
 

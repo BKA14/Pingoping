@@ -1,3 +1,4 @@
+import { timeService } from './../timeservice.service';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, NgZone, OnInit, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent, IonInfiniteScroll, LoadingController, NavController } from '@ionic/angular';
@@ -10,7 +11,6 @@ import { interval, Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { authService } from '../services/auth.service';
-
 
 @Component({
   selector: 'app-alerte',
@@ -30,6 +30,8 @@ export class AlertePage implements OnInit {
   service_choisi :  string ;
   search2: boolean = false;
   userData: any;
+  serverTime: string | number | Date;
+
 
   @HostListener('click', ['$event'])
   onClick(event: MouseEvent) {
@@ -85,7 +87,7 @@ export class AlertePage implements OnInit {
     private http: HttpClient,
     private fb: FormBuilder,
     private authService: authService,
-
+    private timeService: timeService,
   ) {
     this.loadalert();
     this.loadInitialAlerts();
@@ -109,6 +111,11 @@ export class AlertePage implements OnInit {
 
       this.authService.userData$.subscribe(data => {
         this.userData = data;
+      });
+
+      this.timeService.getServerTime().subscribe((response) => {
+        this.serverTime = response.serverTime;
+        console.log('serveur time', this.serverTime );
       });
 
       this.cdr.detectChanges(); // Détecter et appliquer les changements
@@ -385,10 +392,12 @@ export class AlertePage implements OnInit {
   }
 
 
-// Fonction pour formater l'heure de publication du commentaire
+
+//////////// recuperer la date /////////////////////
+
 formatCommentTime(time: string): string {
   const commentDate = new Date(time);
-  const now = new Date();
+  const now = new Date(this.serverTime); // Utiliser l'heure du serveur
   const diffInSeconds = Math.round((now.getTime() - commentDate.getTime()) / 1000);
 
   if (diffInSeconds < 60) {
@@ -400,9 +409,10 @@ formatCommentTime(time: string): string {
     const hours = Math.round(diffInSeconds / 3600);
     return `Il y a ${hours} heure${hours > 1 ? 's' : ''}`;
   } else {
-    return `Le ${commentDate.toLocaleDateString('fr-FR')} à ${commentDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
+    return commentDate.toLocaleDateString('fr-FR');
   }
 }
+
 
 
   openInMaps(latitude: number, longitude: number): void {

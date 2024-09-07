@@ -1,0 +1,86 @@
+ion-content  {
+  --ion-background-color:#dfe0df
+}
+
+.tool2{
+  --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+  font-size: 16px;
+  font-style: normal;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  color: #ffffff;
+  padding: 6;
+  }
+
+  .div_screen {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    padding: 25px;
+    justify-content: center;
+    align-items: center;
+    font-size: medium;
+  }
+
+
+
+  .erreur_chargement {
+    text-align: center;
+    bottom: 35%;
+  }
+
+  .notification-list {
+    margin: 10px;
+  }
+
+  .notification-item {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+
+  @media (min-width: 1024px) {
+    .notification-item {
+      width: 62%;
+      margin-left: 18%;
+
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+  }
+
+
+  .notification-item:hover {
+    background-color: #e9ecef;
+  }
+
+  .notification-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .notification-message {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 8px;
+  }
+
+  .notification-timestamp {
+    font-size: 0.85em;
+    color: #999;
+    align-self: flex-end;
+  }

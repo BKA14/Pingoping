@@ -1,3 +1,53 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <br><br> <br>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="tool2">REINITIALISATION</ion-title>
+    <br>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
- 
+
+  <br>
+  <br>
+  <div class="forgot-password-container">
+    <h2>Réinitialiser votre mot de passe</h2>
+    <p>Veuillez entrer votre numero de telephone associé au compte pour la réinitialisation du mot de passe.</p>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="contact">Numéro sans indicatif !</label> &nbsp;
+        <input
+          type="number"
+          id="contact"
+          [(ngModel)]="contact"
+          name="number"
+          class="form-control"
+          placeholder="Entrez votre contact"
+          required
+        />
+      </div>
+
+      <button
+      *ngIf="contact"
+       type="submit"
+       class="btn btn-primary">
+       Envoyer
+      </button>
+    </form>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <a routerLink="/login2" class="back-to-login">Retour à la connexion</a>
+  </div>
+
+
 </ion-content>

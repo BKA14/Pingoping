@@ -43,7 +43,7 @@
     <ion-icon type="button" [routerLink]="['/inscription/']" name="add-circle-outline" class="icon"></ion-icon>
   </ion-item>
   <p class="nombre"> Nombre total d'utilisateur:{{userCount}} </p>
-
+  <p class="nombre"> Nombre total d'utilisateur en ligne :{{user_connect}} </p>
 
 <ion-list class="list"  *ngIf="users !== 'erreur_chargement' && users !== 'aucune_alerte'">
  <ion-item class="div_screen" button *ngFor="let user of users | customFilter: term">

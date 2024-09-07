@@ -6,7 +6,7 @@ import { CustomFilterPipe } from './custom-filter.pipe';
 import { interval, Subscription } from 'rxjs';
 import { WebSocketService } from '../websocket.service';
 import { authService } from '../services/auth.service';
-
+import { timeService } from '../timeservice.service';
 
 @Component({
 selector: 'app-signalement',
@@ -39,6 +39,8 @@ private websocketSubscription: Subscription;
   endDate: string ;
   startDate: string ;
   userData: any;
+  serverTime: string | number | Date;
+
 
 constructor(
 private route: ActivatedRoute,
@@ -51,6 +53,7 @@ private cdr: ChangeDetectorRef,
 private renderer: Renderer2,
 private wsService: WebSocketService,
 private authService: authService,
+private timeService: timeService
 )
 {
 this.loadsignalement();
@@ -68,12 +71,18 @@ ngOnInit() {
     this.userData = data;
   });
 
+  this.timeService.getServerTime().subscribe((response) => {
+    this.serverTime = response.serverTime;
+    console.log('serveur time', this.serverTime );
+  });
+
     this.cdr.detectChanges(); // Détecter et appliquer les changements
     });
 
     this.signalement_websocket();
 
            }
+
 
 
 async refreshPage(e: any) {
@@ -257,24 +266,25 @@ signalement_websocket() {
     }
 
 
-// Fonction pour formater l'heure de publication du commentaire
+//////////// recuperer la date /////////////////////
+
 formatCommentTime(time: string): string {
   const commentDate = new Date(time);
-  const now = new Date();
+  const now = new Date(this.serverTime); // Utiliser l'heure du serveur
   const diffInSeconds = Math.round((now.getTime() - commentDate.getTime()) / 1000);
 
   if (diffInSeconds < 60) {
-  return 'Il y a quelques instants';
+    return 'Il y a quelques instants';
   } else if (diffInSeconds < 3600) {
-  const minutes = Math.round(diffInSeconds / 60);
-  return `Il y a ${minutes} minute${minutes > 1 ? 's' : ''}`;
+    const minutes = Math.round(diffInSeconds / 60);
+    return `Il y a ${minutes} minute${minutes > 1 ? 's' : ''}`;
   } else if (diffInSeconds < 86400) {
-  const hours = Math.round(diffInSeconds / 3600);
-  return `Il y a ${hours} heure${hours > 1 ? 's' : ''}`;
+    const hours = Math.round(diffInSeconds / 3600);
+    return `Il y a ${hours} heure${hours > 1 ? 's' : ''}`;
   } else {
-  return commentDate.toLocaleDateString('fr-FR');
+    return commentDate.toLocaleDateString('fr-FR');
   }
-  }
+}
 
 // date fin blocage
   updateDate(event: any) {

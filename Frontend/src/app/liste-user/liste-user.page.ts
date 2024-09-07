@@ -23,6 +23,7 @@ roleMessage = '';
 grade:any;
 nom:any;
 users: any = [];
+user_connect : any;
 navCtrl: any;
 prenom1:any;
 rang: any = [];
@@ -44,6 +45,7 @@ private renderer: Renderer2,
 {
 this.getuser();
 this.getgrade();
+this.user_connecter();
 }
 getsession(){
 this.grade= (localStorage.getItem('grade'));
@@ -115,6 +117,7 @@ this.getsession1();
 
     // Rafraîchir les pubs
     await this.getuser();
+    this.user_connecter();
 
     // Terminer l'animation de rafraîchissement
     e.target.complete();
@@ -169,6 +172,17 @@ this.getsession1();
       console.log("Erreur de connection",error);
   })
   }
+
+  user_connecter(){
+    this._apiService.user_connecter().subscribe((res:any) => {
+      console.log("SUCCESS ===",res);
+      this.user_connect = res.connected_users;
+
+     },(error: any) => {
+      console.log("Erreur de connection",error);
+  })
+  }
+
 
   async presentAlert2(id) {
     const alert = await this.alertController.create({

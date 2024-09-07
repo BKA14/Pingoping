@@ -18,3 +18,13 @@
   color: #ffffff; /* blanc */
   background-color: #00ff00; /* Vert clair pour l'élément actif */
 }
+
+//// pour mon badge
+.notification-badge {
+  position: absolute;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 13px;
+}

@@ -19,6 +19,7 @@ import { OnDestroy } from '@angular/core';
 import { CountdownService } from '../countdown.service';
 import { WebSocketService } from '../websocket.service';
 import { authService } from '../services/auth.service';
+import { timeService } from '../timeservice.service';
 
 
 
@@ -36,6 +37,7 @@ export class CommentairePage implements OnInit, OnDestroy {
   updateSubscription: Subscription;
   oldpub: any;
   oldcomment: any;
+  serverTime: string | number | Date;
 
 
 @HostListener('click', ['$event'])
@@ -140,6 +142,8 @@ private elementRef: ElementRef,
 private renderer: Renderer2,
 private wsService: WebSocketService,
 private authService: authService,
+private timeService: timeService
+
 )
 {
 this.route.queryParams.subscribe(params => {
@@ -192,6 +196,11 @@ async ngOnInit() {
   });
   });
 
+  this.timeService.getServerTime().subscribe((response) => {
+    this.serverTime = response.serverTime;
+    console.log('serveur time', this.serverTime );
+  });
+
   }
 
 
@@ -199,7 +208,6 @@ restoreScrollPosition() {
   window.scrollTo(0, this.scrollPosition);
   console.log(this.scrollPosition);
 }
-
 
 ionViewWillEnter() {
 this.getpub();
@@ -855,6 +863,7 @@ this.countdownValue = null;
     }
   }
 
+
   scrollTo() {
     // Obtenez une référence à la liste des commentaires par son identifiant unique
     const commentsList = document.getElementById('commentsList');
@@ -869,12 +878,11 @@ this.countdownValue = null;
     }
   }
 
+//////////// recuperer la date /////////////////////
 
-
-// Fonction pour formater l'heure de publication du commentaire
 formatCommentTime(time: string): string {
   const commentDate = new Date(time);
-  const now = new Date();
+  const now = new Date(this.serverTime); // Utiliser l'heure du serveur
   const diffInSeconds = Math.round((now.getTime() - commentDate.getTime()) / 1000);
 
   if (diffInSeconds < 60) {
@@ -886,11 +894,9 @@ formatCommentTime(time: string): string {
     const hours = Math.round(diffInSeconds / 3600);
     return `Il y a ${hours} heure${hours > 1 ? 's' : ''}`;
   } else {
-    return `Le ${commentDate.toLocaleDateString('fr-FR')} à ${commentDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`;
+    return commentDate.toLocaleDateString('fr-FR');
   }
 }
-
-
 
 async supprimerCommentaire(id){
 

@@ -1,7 +1,9 @@
 <?php
-header('Access-Control-Allow-Origin: *');
+//session_start(); // Démarre la session pour toutes les pages qui incluent ce fichier
+header('Access-Control-Allow-Origin: http://localhost:8100');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Allow-Credentials: true'); // Ajoutez cet en-tête
 
 // Répondre à une requête OPTIONS pour le CORS
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -10,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header('Content-Type: application/json'); // Modifiez en fonction de vos besoins
 
-$baseUrl = "192.168.1.75";
+$baseUrl = "localhost";
 
 $host = $baseUrl;
 $user = "kevin";

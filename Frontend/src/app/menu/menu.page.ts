@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { authService } from '../services/auth.service';
+import { ApiService } from '../api.service';
 
 
 @Component({
@@ -11,6 +13,7 @@ import { AlertController, LoadingController, ToastController } from '@ionic/angu
 export class MenuPage implements OnInit {
 
   grade: any;
+  userData: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -18,17 +21,19 @@ export class MenuPage implements OnInit {
     private loadingCtrl: LoadingController,
     public  loadingController: LoadingController,
     private alertController: AlertController,
-    private toastController : ToastController
+    private toastController : ToastController,
+    private authService: authService,
+    public _apiService: ApiService,
   ) { }
 
   ngOnInit() {
-    this.getsession();
-  }
+            // S'abonner aux changements de données utilisateur
+            this.authService.userData$.subscribe(data => {
+              this.userData = data;
+            });
 
-  getsession(){
-    this.grade= (localStorage.getItem('grade'));
-    console.log(this.grade);
-     }
+            this.grade = this.userData.grade;
+  }
 
 
   userinfo() {
@@ -124,13 +129,14 @@ export class MenuPage implements OnInit {
 
     localStorage.clear();
 
-    // Afficher un toast de confirmation
-    const toast = await this.toastController.create({
-      message: 'Vous êtes déconnecté avec succès.',
-      duration: 2000,
-      position: 'top'
-    });
-    toast.present();
+  const id = this.userData.iduser;
+  this._apiService.deconnexion(id).subscribe((res:any)  => {
+    loading.dismiss();
+
+  },(error: any) => {
+    loading.dismiss();
+    alert('Erreur de connection avec le serveur veillez reessayer');
+ })
 
     this.router.navigateByUrl('/login2');
     loading.dismiss();
