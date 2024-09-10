@@ -16,11 +16,11 @@
 
 <ion-card-content>
   <ion-item>
-    <ion-label position="floating">Email</ion-label>
-    <ion-input type="email" id="email" [(ngModel)]="email_entreprise" formControlName="email" ></ion-input>
+    <ion-label position="floating">Email ou Contact</ion-label>
+    <ion-input type="text" id="email" [(ngModel)]="email_entreprise" formControlName="email" ></ion-input>
   </ion-item>
-  <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').hasError('required')">Veuillez votre nom d'utilisareur</ion-label>
-  <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').hasError('minlength')">nom d'utilisateur invalide</ion-label>
+  <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').hasError('required')">Veuillez entrer votre email ou votre contact</ion-label>
+  <ion-label color="danger" *ngIf="verifieForm.get('email').touched && verifieForm.get('email').hasError('minlength')">Veuillez entrer votre email ou votre contact</ion-label>
 
   <br/>
   <ion-item>

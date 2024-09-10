@@ -3,7 +3,10 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
+    <br>
+    <br> <br>
     <ion-title class="title">Vérification</ion-title>
+    <br>
   </ion-toolbar>
 </ion-header>
 
@@ -12,24 +15,28 @@
     <h1 color="success" style="text-align: center;">Un code de vérification vous a été envoyé, entrez-le</h1>
     <br>
 
+    <!-- Champ d'entrée pour le code de vérification -->
     <ion-item lines="full" class="verification-item">
       <ion-label color="success" position="floating">Code de vérification</ion-label>
       <ion-input [(ngModel)]="verificationCode" type="number" class="verification-input" placeholder="Entrez le code"></ion-input>
     </ion-item>
 
-    <ion-button *ngIf="verificationCode" expand="block" color="success" (click)="verifyCode()">
+    <!-- Bouton pour vérifier le code -->
+    <ion-button expand="block" color="success" (click)="verifyCode()" [disabled]="!verificationCode">
       Vérifier
     </ion-button>
 
     <br>
 
-    <ion-button color="success" class="verification-button" (click)="renvoyercode()" [disabled]="isWaiting">
+    <!-- Bouton pour renvoyer le code -->
+    <ion-button expand="block" color="success" (click)="renvoyercode()" [disabled]="isWaiting">
       Réessayer
     </ion-button>
 
-    <!-- Affichage du compte à rebours -->
+    <!-- Affichage du compte à rebours si en attente -->
     <div *ngIf="isWaiting" style="text-align: center; margin-top: 10px;">
       <p>Veuillez attendre : {{ countdown }} secondes avant de réessayer.</p>
     </div>
   </div>
+
 </ion-content>

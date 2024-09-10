@@ -28,7 +28,8 @@ $data = json_decode($input, true);
 $title = mysqli_real_escape_string($con, $data['title']);
 $body = mysqli_real_escape_string($con, $data['body']);
 $topic = mysqli_real_escape_string($con, $data['topic']);
-$page = mysqli_real_escape_string($con, $data['page']);
+//$page = mysqli_real_escape_string($con, $data['page']);
+$page = isset($data['page']) ? trim($data['page']) : '';
 
 // Vérification des champs requis
 if (empty($topic) || empty($title) || empty($body)) {

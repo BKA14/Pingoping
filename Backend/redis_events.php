@@ -100,81 +100,11 @@ while (true) {
 
 /////////////////////////////// Pour les notiications //////////////////////////////////////////////////////
 
-
-// Fonction pour envoyer la notification via FCM
-function sendFCMNotification($con, $title, $body, $page) {
-   // Remplacez par le chemin de votre fichier JSON du compte de service
-$keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
-
-// Scopes requis pour FCM
-$scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
-
-// Créer les informations d'identification
-$credentials = new ServiceAccountCredentials($scopes, $keyFilePath);
-
-// Obtenir le jeton d'accès OAuth 2.0
-$accessToken = $credentials->fetchAuthToken()['access_token'];
-
-// Créer un client HTTP Guzzle
-$client = new Client();
-
-// Récupérer les données de la requête (par exemple, envoyées en JSON)
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
-
-// Exemple de réception des données
-$topic = 'admin'; // Récupérer le topic depuis la requête
-
-// Construire la requête pour FCM
-try {
-    $response = $client->post('https://fcm.googleapis.com/v1/projects/pingoping/messages:send', [
-        'headers' => [
-            'Authorization' => 'Bearer ' . $accessToken, // Ajouter le Bearer Token ici
-            'Content-Type' => 'application/json',
-        ],
-        'json' => [
-            'message' => [
-                'topic' => $topic,
-                'notification' => [
-                    'title' => $title,
-                    'body' => $body,
-                ],
-                // Ajouter le TTL ici (en secondes)
-                'android' => [
-                    'ttl' => '7200s', // 2 heures
-                ],
-                'apns' => [
-                    'headers' => [
-                        'apns-expiration' => (string)(time() + 7200),
-                    ],
-                ],
-                'webpush' => [
-                    'headers' => [
-                        'TTL' => '7200',
-                    ],
-                ],
-            ],
-        ],
-    ]);
-
-    // Retourner la réponse de FCM
-    echo $response->getBody()->getContents();
-} catch (Exception $e) {
-    // Gérer les erreurs de requête
-    http_response_code(500);
-    echo json_encode(['error' => 'Échec de l\'envoi de la notification.', 'details' => $e->getMessage()]);
-}
-//////////////////////////// envoie dans la base de donnée/////////////////////////////////
-
-
 // Fonction pour insérer la notification dans la base de données
-function insertNotification($con, $title, $body, $page = null) {
-    if ($page) {
-        $sql = "INSERT INTO notifications (title, message, page) VALUES ('$title', '$body', '$page')";
-    }  else {
-        $sql = "INSERT INTO notifications (title, message) VALUES ('$title', '$body')";
-    }
-
+// Déplacer la fonction en dehors de sendFCMNotification
+function insertNotification($con, $title, $body, $page) {
+    $sql = "INSERT INTO notifications (title, message, page) VALUES ('$title', '$body', '$page')";
+    
     if (mysqli_query($con, $sql)) {
         return mysqli_insert_id($con);
     } else {
@@ -183,30 +113,90 @@ function insertNotification($con, $title, $body, $page = null) {
     }
 }
 
-// Insertion de la notification
-$notificationId = insertNotification($con, $title, $body, $page);
-if ($topic === 'admin' || $topic === 'superadmin') {
-    // Associer la notification aux administrateurs et superadministrateurs
-    $usersSql = "INSERT INTO user_notifications (user_id, notification_id)
-                 SELECT id, '$notificationId' FROM user WHERE grade = 'admin' OR grade = 'superadmin'";
-}
- else {
-    // Associer la notification à tous les utilisateurs
-    $usersSql = "INSERT INTO user_notifications (user_id, notification_id)
-                 SELECT id, '$notificationId' FROM user";
-}
+function sendFCMNotification($con, $title, $body, $page) {
+    // Remplacez par le chemin de votre fichier JSON du compte de service
+    $keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
 
+    // Scopes requis pour FCM
+    $scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
 
-if (mysqli_query($con, $usersSql)) {
-    echo json_encode(['success' => true]);
-} else {
-    echo json_encode(['error' => mysqli_error($con)]);
+    // Créer les informations d'identification
+    $credentials = new ServiceAccountCredentials($scopes, $keyFilePath);
+
+    // Obtenir le jeton d'accès OAuth 2.0
+    $accessToken = $credentials->fetchAuthToken()['access_token'];
+
+    // Créer un client HTTP Guzzle
+    $client = new Client();
+
+    // Récupérer les données de la requête (par exemple, envoyées en JSON)
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
+
+    // Exemple de réception des données
+    $topic = 'admin'; // Récupérer le topic depuis la requête
+
+    // Construire la requête pour FCM
+    try {
+        $response = $client->post('https://fcm.googleapis.com/v1/projects/pingoping/messages:send', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $accessToken, // Ajouter le Bearer Token ici
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'message' => [
+                    'topic' => $topic,
+                    'notification' => [
+                        'title' => $title,
+                        'body' => $body,
+                    ],
+                    // Ajouter le TTL ici (en secondes)
+                    'android' => [
+                        'ttl' => '7200s', // 2 heures
+                    ],
+                    'apns' => [
+                        'headers' => [
+                            'apns-expiration' => (string)(time() + 7200),
+                        ],
+                    ],
+                    'webpush' => [
+                        'headers' => [
+                            'TTL' => '7200',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        // Retourner la réponse de FCM
+        echo $response->getBody()->getContents();
+    } catch (Exception $e) {
+        // Gérer les erreurs de requête
+        http_response_code(500);
+        echo json_encode(['error' => 'Échec de l\'envoi de la notification.', 'details' => $e->getMessage()]);
+    }
+
+    // Insertion de la notification dans la base de données
+    $notificationId = insertNotification($con, $title, $body, $page); // Appel à la fonction ici
+    if ($topic === 'admin' || $topic === 'superadmin') {
+        // Associer la notification aux administrateurs et superadministrateurs
+        $usersSql = "INSERT INTO user_notifications (user_id, notification_id)
+                     SELECT id, '$notificationId' FROM user WHERE grade = 'admin' OR grade = 'superadmin'";
+    } else {
+        // Associer la notification à tous les utilisateurs
+        $usersSql = "INSERT INTO user_notifications (user_id, notification_id)
+                     SELECT id, '$notificationId' FROM user";
+    }
+
+    if (mysqli_query($con, $usersSql)) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['error' => mysqli_error($con)]);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
     
-}
-
 
 
 ///////////////////////// Pour les Likes ///////////////////////////////////
@@ -373,7 +363,7 @@ function signalisation($con, $redis) {
 
                 if ($row['action'] === 'insert'){
                 $title = "Nouvelle alerte";
-                $body = "Une nouvelle alerte a été ajoutée avec l'ID: {$row['id']}\n"; // Échapper les données
+                $body = "Une nouvelle alerte a été ajoutée avec ID: {$row['id']}\n"; // Échapper les données
                 $page = "signalisation";
                 sendFCMNotification($con, $title, $body, $page); // notiication envoyé
                 }
@@ -486,10 +476,10 @@ function commentaires($con, $redis) {
 
 ///////////////////////// Pour le signalement ///////////////////////////////////
 function signalement($con, $redis) {
-    // Retrieve events to process
+    // Récupérer les événements à traiter
     $result_signalement = $con->query("SELECT * FROM redis_events_signalement");
 
-    // Check if there are events to process
+    // Vérifier si des événements existent
     if ($result_signalement && $result_signalement->num_rows > 0) {
         while ($row = $result_signalement->fetch_assoc()) {
             $event = [
@@ -500,23 +490,29 @@ function signalement($con, $redis) {
             ];
 
             try {
-                // Publish the event to Redis
+                // Publier l'événement sur Redis
                 $redis->publish('signalement_channel', json_encode($event));
                 echo "Published event with ID {$row['id']} to Redis.\n";
 
                 if ($row['action'] === 'insert'){
                     $title = "Nouveau signalement";
-                    $body = "Un nouveau signalement a été ajoutée avec l'ID: {$row['id']}\n"; // Échapper les données
-                    $page = "signalisation";
-                    sendFCMNotification($con, $title, $body, $page); // notiication envoyé
+                    $body = "Un nouveau signalement a été ajouté avec ID: {$row['signalement_id']}\n"; // Utilisation correcte de l'ID du signalement
+                    $page = "signalement";
+                    sendFCMNotification($con, $title, $body, $page); // Notification envoyée
                 }
 
-                // Delete the event from the table after processing
-                $con->query("DELETE FROM redis_events_signalement WHERE id = " . $row['id']);
+                // Supprimer l'événement de la table après traitement (sécurité avec requête préparée)
+                $stmt = $con->prepare("DELETE FROM redis_events_signalement WHERE id = ?");
+                $stmt->bind_param("i", $row['id']);
+                $stmt->execute();
                 echo "Deleted event with ID {$row['id']} from table signalement.\n";
+                $stmt->close();
+                
             } catch (Exception $e) {
                 echo 'Error processing event: ' . $e->getMessage() . "\n";
             }
         }
+    } else {
+        echo "No events to process.\n";
     }
 }

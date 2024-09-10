@@ -1,7 +1,7 @@
 import { CommentaireService } from './CommentaireService';
 import { Component, ElementRef, EventEmitter, HostListener, NgZone, OnInit, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { App } from '@capacitor/app';
-import { AlertController, IonContent, IonInfiniteScroll, IonList, LoadingController } from '@ionic/angular';
+import { AlertController, IonContent, IonInfiniteScroll, IonList, LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
@@ -74,6 +74,7 @@ event.preventDefault();
    pubvideo: any = [];
    page: number = 1;
    limit: number = 10;
+   toastDuration: number = 2000; // Durée du toast
 
    infiniteScrollDisabled: boolean = false; // Variable pour gérer l'état de l'infinite scroll
 
@@ -119,7 +120,8 @@ event.preventDefault();
       private renderer: Renderer2,
       private userService: UserService,
       private authService: authService,
-      private notificationService: NotificationService
+      private notificationService: NotificationService,
+      private toastCtrl: ToastController  // Injecter le ToastController
     )
     {
       this.manualPause = false;
@@ -153,8 +155,20 @@ event.preventDefault();
 
       // pour initialiser les notiications push
       this.notificationService.initializePushNotifications();
-
       }
+
+
+          // Méthode pour afficher un toast
+      async presentToast(message: string, color: string = 'danger') {
+      const toast = await this.toastCtrl.create({
+        message: message,
+        duration: 2000, // Durée d'affichage du toast
+        position: 'top',
+        color: color,
+      });
+      toast.present();
+      }
+
 
       ngOnDestroy() {
         if (this.websocketSubscription) {
@@ -191,7 +205,7 @@ async getpub() {
       this.pub = this.oldpub;
     }
     else { this.pub = 'erreur_chargement'; }
-    alert('Erreur de connexion avec le serveur, veuillez réessayer.');
+    this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
   //  this.router.navigateByUrl('/welcome2');
     loading.dismiss();
   });
@@ -220,7 +234,7 @@ async loadMore(event) {
       this.pub = this.oldpub;
     }
     else { this.pub = 'erreur_chargement'; }
-    alert('Erreur de connexion avec le serveur, veuillez réessayer.');
+    this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
     event.target.complete();
   }
 }
@@ -704,7 +718,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     async supprimer(id){
       const loading = await this.loadingCtrl.create({
         message: 'Rechargement...',
-       spinner:'lines',
+        spinner:'lines',
       // showBackdrop:false,
         cssClass: 'custom-loading',
       });
@@ -719,7 +733,9 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
     },(error: any) => {
       loading.dismiss();
-      alert('Erreur de connection avec le serveur veillez reessayer');
+
+      this.presentToast('Erreur de connection avec le serveur veillez reessayer');
+
       //this.navCtrl.setRoot('/welcome2');
       // console.log("ERREUR ===",error);
    })
@@ -829,7 +845,6 @@ async getUserLocation() {
   }
 
 }
-
 
 
 async getUserLocationAndCompanyId(id) {

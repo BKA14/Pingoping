@@ -46,7 +46,7 @@ export class NotificationsPage implements OnInit {
     this.loadUnreadNotifications();
 
     this.updateSubscription = interval(30000).subscribe(async () => {
-      this.loadUnreadNotifications();
+      this.loadUnreadNotifications_reload();
       this.cdr.detectChanges(); // Détecter et appliquer les changements
       });
 
@@ -63,24 +63,45 @@ export class NotificationsPage implements OnInit {
    // await this.notificationBadgeService.loadUnreadNotifications();
 
     // Obtenir les notifications chargées
+    this.notificationBadgeService.loadUnreadNotifications();
     this.notifications = this.notificationBadgeService.notifications;
 
-    if ((!this.notifications || this.notifications?.length === 0) && localStorage.getItem('notifications')?.length !== 0) {
-        // Si les notifications ne sont pas disponibles, essayez de les récupérer depuis le localStorage
+    if (!this.notifications || this.notifications.length < 1 || this.notifications =='erreur') {
         console.log('notif non recuperé');
-        const storedNotifications = localStorage.getItem('notifications');
-        if (storedNotifications) {
-          this.notifications = JSON.parse(storedNotifications);
-        }
+          this.notifications = 'erreur';
         return; // Sortir de la fonction si les notifications ne sont pas disponibles
     }
 
-    if (this.notifications &&  this.notifications?.length !== 0 ) {
+    if (this.notifications && this.notifications.length !== 0 && this.notifications !=='erreur') {
           // Si des notifications ont été récupérées, les marquer comme lues
-          console.log('classé comme lu');
+          console.log('classé comme lu',this.notifications );
           this.openNotifications();
           localStorage.setItem('notif_lu', 'lu' );
   }
+}
+
+async loadUnreadNotifications_reload() {
+  // const userId = this.userData.iduser; // Récupérer l'ID de l'utilisateur connecté
+
+   // Charger les notifications non lues
+  // await this.notificationBadgeService.loadUnreadNotifications();
+
+   // Obtenir les notifications chargées
+   this.notificationBadgeService.loadUnreadNotifications2();
+   this.notifications = this.notificationBadgeService.notifications;
+
+   if (!this.notifications || this.notifications.length < 1 || this.notifications =='erreur') {
+       console.log('notif non recuperé');
+         this.notifications = 'erreur';
+       return; // Sortir de la fonction si les notifications ne sont pas disponibles
+   }
+
+   if (this.notifications && this.notifications.length !== 0 && this.notifications !=='erreur') {
+         // Si des notifications ont été récupérées, les marquer comme lues
+         console.log('classé comme lu',this.notifications );
+         this.openNotifications();
+         localStorage.setItem('notif_lu', 'lu' );
+ }
 }
 
   openNotifications() {

@@ -39,11 +39,11 @@ headers : HttpHeaders;
     .pipe(retry(0), catchError(this.handleError));
     }
 
-    isread(id: string): Observable<any> {
-      return this.http.get(`${this.base_url}/isread.php?id=${id}`)
+    isread(id: string): Observable<any[]> {
+      return this.http.get<any[]>(`${this.base_url}/isread.php?id=${id}`)
         .pipe(
           timeout(this.time),
-          retry(0),
+          retry(0), // Essaye 1 fois en cas d'échec, ajustez selon vos besoins
           catchError(this.handleError)
         );
     }

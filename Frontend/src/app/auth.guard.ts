@@ -25,7 +25,8 @@ export class AuthGuard implements CanActivate {
         this.router.navigate(['/login2']);
         alert('il semble que vous avez été bloqué, contactez l/équipe pingoping');
         return false;
-    }else {
+    }
+    else {
       // Si aucun token n'est présent ou valide, rediriger vers une autre page (ex : page de login)
       this.router.navigate(['/login2']);
       alert('Session terminé, veuillez vous authentifier s/il vous plait')

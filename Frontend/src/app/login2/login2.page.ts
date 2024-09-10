@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { authService } from '../services/auth.service';
 import { LoginServiceReadyService } from '../login-service-ready.service';
@@ -26,11 +26,12 @@ export class Login2Page implements OnInit {
     private loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,
     private authService: authService,
-    private LoginServiceReadyService: LoginServiceReadyService
+    private LoginServiceReadyService: LoginServiceReadyService,
+    private toastCtrl: ToastController
   )
   {
     this.verifieForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required,  Validators.minLength(4)]],
       password: ['', [Validators.required,
          Validators.minLength(4),
          Validators.maxLength(4),
@@ -43,6 +44,19 @@ export class Login2Page implements OnInit {
     // Informer que la page de login est prête
     this.LoginServiceReadyService.setLoginPageReady(true);
   }
+
+  // Méthode pour afficher un toast
+  async presentToast(message: string, color: string = 'danger') {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 2000, // Durée d'affichage du toast
+      position: 'top',
+      color: color,
+    });
+    toast.present();
+    }
+
+
 
   isTokenExpired(token: string): boolean {
     const tokenPayload = JSON.parse(atob(token.split('.')[1]));
@@ -97,13 +111,13 @@ export class Login2Page implements OnInit {
         this.authService.setUserData(userData);
         this.router.navigateByUrl('/acceuil');
       } else if (res.message === 'incorrect') {
-        alert('Erreur email ou mot de passe incorrect');
+        this.presentToast('Erreur email ou mot de passe incorrect','warning');
       }
       else if (res.message === 'inconnu') {
-        alert('Aucun utilisateur correspondant');
+        this.presentToast('Aucun utilisateur correspondant','warning');
       }
     } catch (error) {
-      alert('Erreur de connexion avec le serveur, veuillez réessayer ou contactez-nous !');
+      this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer ou contactez-nous !");
       console.log("ERROR ===", error);
     } finally {
       loading.dismiss();

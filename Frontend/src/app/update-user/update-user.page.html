@@ -77,9 +77,13 @@
       <ion-input [(ngModel)]="contact" formControlName="contact" type="number"></ion-input>
     </ion-item>
 
+
     <ion-item>
-      <ion-label position="floating" class="h2">access à app</ion-label><br/>
-      <ion-input [(ngModel)]="access_app" formControlName="access_app" type="text"></ion-input>
+      <ion-label position="floating" class="h2">Accès à l'application</ion-label>
+      <ion-select [(ngModel)]="access_app" formControlName="access_app">
+        <ion-select-option value="oui">Oui</ion-select-option>
+        <ion-select-option value="non">Non</ion-select-option>
+      </ion-select>
     </ion-item>
 
 

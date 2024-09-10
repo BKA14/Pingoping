@@ -1,9 +1,7 @@
-import { MessageAdminPage } from './../message-admin/message-admin.page';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
-import { timeService } from '../timeservice.service';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-verifie-code',
@@ -12,44 +10,40 @@ import { timeService } from '../timeservice.service';
 })
 export class VerifieCodePage implements OnInit, OnDestroy {
   verificationCode: string = '';
-  retryCount: number = 0; // Compteur d'essais
-  maxRetries: number = 5; // Nombre maximum d'essais
-  waitTime: number = 30; // Temps d'attente en secondes entre les tentatives
-  additionalWaitTime: number = 600; // Temps d'attente après le nombre maximum d'essais
-  isWaiting: boolean = false; // État d'attente
-  waitEndTime: number = 0; // Moment où l'utilisateur pourra réessayer
-  countdown: number = 0; // Temps restant avant de pouvoir réessayer
-  countdownInterval: any; // Intervalle pour le compte à rebours
-
-  serverTime: string | number | Date;
-  date_now: any;
+  isWaiting: boolean = false;
+  countdown: number = 0;
+  countdownInterval: any;
 
   constructor(
     public _apiService: ApiService,
     private router: Router,
     private loadingCtrl: LoadingController,
-    private timeService: timeService
+    private toastCtrl: ToastController  // Injecter le ToastController
   ) {}
 
-  ngOnInit() {
-    this.timeService.getServerTime().subscribe((response) => {
-      this.serverTime = response.serverTime;
-      console.log('Server time:', this.serverTime);
-    });
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
-    // Nettoyer l'intervalle du compte à rebours si le composant est détruit
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
     }
   }
 
+  // Méthode pour afficher un toast
+  async presentToast(message: string, color: string = 'danger') {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 2000, // Durée d'affichage du toast
+      position: 'bottom',
+      color: color,
+    });
+    toast.present();
+  }
+
   async verifyCode() {
     const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
+      message: 'Vérification...',
       spinner: 'lines',
-      cssClass: 'custom-loading',
     });
     await loading.present();
 
@@ -57,103 +51,73 @@ export class VerifieCodePage implements OnInit, OnDestroy {
 
     this._apiService.verifie_code(data).subscribe(
       (res: any) => {
-        console.log("SUCCESS ===", res);
+        loading.dismiss();
         if (res.status === 'Success') {
           this.verificationCode = '';
           this.router.navigateByUrl('/login2');
-          alert("Inscription validée avec succès");
-        } else if (res.status === 'Error' && res.message === 'invalid_code') {
-          alert("Le code de vérification entré est incorrect");
-          //this.handleInvalidAttempt(); // Gérer l'échec de la tentative
+          this.presentToast('Inscription validée avec succès', 'success');
+        } else {
+          this.presentToast('Le code de vérification est incorrect.');
         }
-        loading.dismiss();
       },
       (error) => {
-        console.error("Erreur ===", error);
-        alert("Un problème est survenu, veuillez réessayer");
         loading.dismiss();
+        console.error('Erreur', error);
+        this.presentToast('Une erreur est survenue, veuillez réessayer.');
       }
     );
   }
 
   async renvoyercode() {
     if (this.isWaiting) {
-      alert(`Veuillez attendre ${this.countdown} secondes avant de réessayer.`);
+      this.presentToast(`Veuillez attendre ${this.countdown} secondes avant de réessayer.`, 'warning');
       return;
     }
 
-    // Vérifiez si l'utilisateur peut réessayer
-    if (this.retryCount >= this.maxRetries) {
-      this.date_now = new Date(this.serverTime);
-      const currentTime = Math.floor(this.date_now.getTime() / 1000); // Heure actuelle en secondes
-      if (currentTime < this.waitEndTime) {
-        const remainingTime = this.waitEndTime - currentTime;
-        this.startCountdown(remainingTime); // Démarrer le compte à rebours
-        alert(`Nombre maximum de tentatives atteint. Veuillez attendre ${Math.ceil(remainingTime)} secondes avant de réessayer.`);
-        return;
-      } else {
-        // Réinitialiser le compteur si le temps d'attente est écoulé
-        this.retryCount = 0;
-      }
-    }
-
-    // Ne pas incrémenter ici si l'envoi échoue
     const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
+      message: 'Renvoi du code...',
       spinner: 'lines',
-      cssClass: 'custom-loading',
     });
     await loading.present();
 
-    // Tentez d'envoyer le code
     this._apiService.renvoyer_code().subscribe(
-      (res: any) => {
-        console.log("SUCCESS ===", res);
-        this.verificationCode = '';
-        alert('Code renvoyé avec succès');
+      async (res: any) => {
         loading.dismiss();
-
-        // Incrémentez le compteur d'essai uniquement en cas de succès
-        this.retryCount++;
-
-        // Démarrer le compte à rebours
-        this.startCountdown(this.waitTime);
+        if (res.status === 'Success') {
+          this.presentToast('Le code de vérification a été renvoyé.', 'success');
+          if(res.remaining_time !== 'non'){
+            await  this.startCountdown(res.remaining_time);
+          }
+        } else if (res.status === 'attendre') {
+          if(res.remaining_time !== 'non'){
+            await  this.startCountdown(res.remaining_time);
+            this.presentToast(res.message, 'danger');
+          }
+        }
       },
       (error) => {
-        console.error("Erreur ===", error);
-        alert("Un problème est survenu, veuillez réessayer");
         loading.dismiss();
-        // Ne pas incrémenter le compteur ici, car l'envoi a échoué
+        console.error('Erreur lors du renvoi du code', error);
+        this.presentToast('Une erreur est survenue, veuillez réessayer.', 'danger');
       }
     );
   }
 
-  handleInvalidAttempt() {
-    this.retryCount++;
-    if (this.retryCount >= this.maxRetries) {
-      this.date_now = new Date(this.serverTime);
-      this.waitEndTime = Math.floor(this.date_now.getTime() / 1000) + this.additionalWaitTime; // Mettre à jour le temps de fin d'attente
-      this.startCountdown(this.additionalWaitTime);
-    }
-  }
+  async startCountdown(duration: number) {
 
-  startCountdown(duration: number) {
+    this.countdown = await duration;
     this.isWaiting = true;
-    this.countdown = duration;
 
-    // Nettoyer l'intervalle précédent s'il existe
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
     }
 
-    // Mettre à jour le compte à rebours toutes les secondes
     this.countdownInterval = setInterval(() => {
       this.countdown--;
       if (this.countdown <= 0) {
         clearInterval(this.countdownInterval);
-        this.isWaiting = false; // Réactive le bouton après le délai
-        alert(`Vous pouvez maintenant réessayer.`);
+        this.isWaiting = false;
       }
-    }, 1000); // Mettre à jour toutes les secondes
+    }, 1000);
   }
 }

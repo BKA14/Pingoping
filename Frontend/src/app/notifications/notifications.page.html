@@ -16,14 +16,14 @@
   </ion-refresher>
 
 
-<div *ngIf="notifications.length === 0" class="erreur_chargement">
+<div *ngIf="notifications.length < 1 ||  notifications =='erreur' " class="erreur_chargement">
     <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
     <p >Pas de nouvelle notifications !</p>
     <br>
 </div>
 
 <br>
-<ion-list *ngIf="notifications.length !== 0" class="notification-list">
+<ion-list *ngIf="notifications.length !== 0 && notifications !=='erreur'" class="notification-list">
   <ion-item *ngFor="let notification of notifications" lines="none">
     <div class="notification-item">
       <ion-label>

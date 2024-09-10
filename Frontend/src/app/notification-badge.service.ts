@@ -15,12 +15,14 @@ export class NotificationBadgeService {
   private unreadCountSubject = new BehaviorSubject<number>(0);
   public unreadCount$ = this.unreadCountSubject.asObservable();
 
-  public notifications ; // Stocker les notifications localement
+  public notifications : any; // Stocker les notifications localement
   userData: any;
   private websocketSubscription: Subscription;
   ancien_valeur: any;
   valeur: string;
   updateSubscription: Subscription;
+  valeur_count: number;
+  old_unreadCount: number;
 
 
   constructor(
@@ -41,8 +43,13 @@ export class NotificationBadgeService {
       this.notifications_websocket();
   }
 
+    // Méthode pour obtenir la valeur ancienne des notif non lu sans souscription
+  async getUnreadCount(): Promise<number> {
+    return await this.unreadCountSubject.getValue(); // Utiliser getValue() sur BehaviorSubject
+  }
 
   async loadUnreadNotifications(): Promise<void> {
+
     const loading = await this.loadingCtrl.create({
       message: 'Rechargement...',
       spinner: 'lines',
@@ -53,38 +60,65 @@ export class NotificationBadgeService {
       await loading.present();
 
       // Charger les notifications non lues
-      this.notifications = await this.getUnreadNotifications(this.userData.iduser);
-      localStorage.setItem('notif_lu', 'non');
+      const notifications = await this.getUnreadNotifications(this.userData.iduser).toPromise();
 
-      if (this.notifications.length > 0) {
-        // Récupérer les notifications existantes depuis le localStorage
-        let storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      if (notifications) {
+        console.log('Notifications récupérées:', notifications);
+        this.notifications = notifications;
+        this.valeur_count = this.notifications.length;
 
-        // Ajouter les nouvelles notifications au début de la liste
-        storedNotifications = [...this.notifications, ...storedNotifications];
+        if (this.valeur_count !== 0) {
+          // Récupérer les notifications existantes depuis le localStorage
+          let storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
 
-        // Garder uniquement les 5 dernières notifications
-        storedNotifications = storedNotifications.slice(0, 5);
+          // Filtrer les notifications reçues qui ne sont pas déjà dans le localStorage
+          const newNotifications = this.notifications.filter((notification) => {
+            return !storedNotifications.some((storedNotification) => storedNotification.id === notification.id);
+          });
 
-        // Mettre à jour le localStorage avec la liste modifiée
-        localStorage.setItem('notifications', JSON.stringify(storedNotifications));
-        this.notifications = storedNotifications;
-      } else {
-        // Charger les notifications depuis le localStorage s'il n'y a pas de nouvelles notifications
-        const storedNotifications = localStorage.getItem('notifications');
-        if (storedNotifications) {
-          this.notifications = JSON.parse(storedNotifications);
-          console.log('Notifications chargées en local:', this.notifications);
-          return;
+          // Ajouter uniquement les nouvelles notifications au début de la liste
+          storedNotifications = [...newNotifications, ...storedNotifications];
+
+          // Garder uniquement les 5 dernières notifications
+          storedNotifications = storedNotifications.slice(0, 5);
+
+          // Mettre à jour le localStorage avec la liste modifiée
+          localStorage.setItem('notifications', JSON.stringify(storedNotifications));
+          this.notifications = storedNotifications;
+
+          console.log('Notifications bien chargées sans doublons:', this.notifications);
         }
+         else {
+          // Charger les notifications depuis le localStorage s'il n'y a pas de nouvelles notifications
+          const storedNotifications = localStorage.getItem('notifications');
+          if (storedNotifications) {
+            this.notifications = JSON.parse(storedNotifications);
+            console.log('Notifications chargées en local:', this.notifications);
+          } else {
+            console.log('Aucune notification trouvée pour cet utilisateur');
+            this.notifications = 'erreur';
+          }
+          return
+        }
+
+      // Appel pour obtenir la valeur actuelle sans souscription
+      this.old_unreadCount = await this.getUnreadCount();
+      console.log('Old unread count:', this.old_unreadCount);
+
+
+       if(this.old_unreadCount !== 0){
+        const unreadCount = this.valeur_count + this.old_unreadCount;
+        // Mettre à jour le nombre de notifications non lues
+        console.log('Nombre de notifications non lues plus ceux recu:', unreadCount);
+        this.updateUnreadCount(unreadCount); // Mise à jour du compteur partagé
+       }else{
+        const unreadCount = await this.valeur_count;
+        // Mettre à jour le nombre de notifications non lues
+        console.log('Nombre de notifications non lues:', unreadCount);
+        this.updateUnreadCount(await unreadCount); // Mise à jour du compteur partagé
+       }
+
       }
-
-      console.log('Notifications chargées avec succès:', this.notifications);
-
-      // Mettre à jour le nombre de notifications non lues
-      const unreadCount = this.notifications.length;
-      console.log('non lu', unreadCount);
-      this.updateUnreadCount(unreadCount); // Mise à jour du compteur partagé
 
     } catch (error) {
       console.error('Erreur lors du chargement des notifications non lues:', error);
@@ -93,50 +127,67 @@ export class NotificationBadgeService {
     }
   }
 
+  async loadUnreadNotifications2(): Promise<void> {
 
-
-  async loadUnreadNotifications2():  Promise<void> {
     try {
       // Charger les notifications non lues
-      this.notifications = await this.getUnreadNotifications(this.userData.iduser);
-      localStorage.setItem('notif_lu', 'non');
+      const notifications = await this.getUnreadNotifications(this.userData.iduser).toPromise();
 
-      if (this.notifications.length > 0) {
-        // Récupérer les notifications existantes depuis le localStorage
-        let storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      if (notifications) {
+        console.log('Notifications récupérées:', notifications);
+        this.notifications = notifications;
+        this.valeur_count = this.notifications.length;
 
-        // Ajouter les nouvelles notifications au début de la liste
-        storedNotifications = [...this.notifications, ...storedNotifications];
+        if (this.valeur_count !== 0) {
+          // Récupérer les notifications existantes depuis le localStorage
+          let storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
 
-        // Garder uniquement les 5 dernières notifications
-        storedNotifications = storedNotifications.slice(0, 5);
+          // Filtrer les notifications reçues qui ne sont pas déjà dans le localStorage
+          const newNotifications = this.notifications.filter((notification) => {
+            return !storedNotifications.some((storedNotification) => storedNotification.id === notification.id);
+          });
 
-        // Mettre à jour le localStorage avec la liste modifiée
-        localStorage.setItem('notifications', JSON.stringify(storedNotifications));
-        this.notifications = storedNotifications;
-      } else {
-        // Charger les notifications depuis le localStorage s'il n'y a pas de nouvelles notifications
-        const storedNotifications = localStorage.getItem('notifications');
-        if (storedNotifications) {
-          this.notifications = JSON.parse(storedNotifications);
-          console.log('Notifications chargées en local:', this.notifications);
-          return;
+          // Ajouter uniquement les nouvelles notifications au début de la liste
+          storedNotifications = [...newNotifications, ...storedNotifications];
 
+          // Garder uniquement les 5 dernières notifications
+          storedNotifications = storedNotifications.slice(0, 5);
 
+          // Mettre à jour le localStorage avec la liste modifiée
+          localStorage.setItem('notifications', JSON.stringify(storedNotifications));
+          this.notifications = storedNotifications;
+
+          console.log('Notifications bien chargées sans doublons:', this.notifications);
         }
+         else {
+          // Charger les notifications depuis le localStorage s'il n'y a pas de nouvelles notifications
+          const storedNotifications = localStorage.getItem('notifications');
+          if (storedNotifications) {
+            this.notifications = JSON.parse(storedNotifications);
+            console.log('Notifications chargées en local:', this.notifications);
+          } else {
+            console.log('Aucune notification trouvée pour cet utilisateur');
+            this.notifications = 'erreur';
+          }
+          return
+        }
+
+        // Appel pour obtenir la valeur actuelle sans souscription
+        this.old_unreadCount = await this.getUnreadCount();
+        console.log('Old unread count:', this.old_unreadCount);
+
+        const unreadCount = await this.valeur_count;
+        // Mettre à jour le nombre de notifications non lues
+        console.log('Nombre de notifications non lues:', unreadCount);
+        this.updateUnreadCount( await unreadCount); // Mise à jour du compteur partagé
+
       }
-
-      console.log('Notifications chargées avec succès:', this.notifications);
-
-      // Mettre à jour le nombre de notifications non lues
-      const unreadCount = this.notifications.length;
-      console.log('non lu', unreadCount);
-      this.updateUnreadCount(unreadCount); // Mise à jour du compteur partagé
 
     } catch (error) {
       console.error('Erreur lors du chargement des notifications non lues:', error);
     }
   }
+
 
 
   openNotifications(data): void {
@@ -153,7 +204,7 @@ export class NotificationBadgeService {
     });
   }
 
-  getUnreadNotifications(userId): Observable<any> {
+  getUnreadNotifications(userId: string): Observable<any[]> {
     return this._apiService.isread(userId);
   }
 
@@ -167,7 +218,7 @@ export class NotificationBadgeService {
 
   notifications_websocket() {
     this.websocketSubscription = this.wsService.listenForNotificationsUpdates().subscribe(
-      (message) => {
+      async (message) => {
         if (Array.isArray(message)) {
           // Chargement initial des alertes (désactivé ici)
           // this.signalement = message;
@@ -175,20 +226,16 @@ export class NotificationBadgeService {
         } else {
           switch (message.action) {
             case 'insert':
-              // Chargement de nouvelles notifications non lues
-              this.updateSubscription = interval(30000).subscribe(async () => {
-                await this.loadUnreadNotifications2();
-              });
+                 console.log('websocket insert 1');
+                 this.loadUnreadNotifications2();
+                 console.log('websocket insert 2');
               break;
 
             case 'update':
               console.log('Mise à jour de notification:', message);
-              let storedNotifications = localStorage.getItem('notifications');
-              if (storedNotifications) {
-                this.notifications = JSON.parse(storedNotifications);
-              }
+              //let storedNotifications = localStorage.getItem('notifications');
 
-              const updatedIndex = this.notifications.findIndex(notif => notif.id === message.old_notifications_id);
+              const updatedIndex = this.notifications.findIndex(async notif => await notif.id  == await message.old_notifications_id);
               if (updatedIndex !== -1) {
                 this.notifications[updatedIndex] = message;
                 localStorage.setItem('notifications', JSON.stringify(this.notifications));
@@ -198,17 +245,19 @@ export class NotificationBadgeService {
               }
               break;
 
-            case 'delete':
-              console.log('Suppression de notification:', message);
-              storedNotifications = localStorage.getItem('notifications');
-              if (storedNotifications) {
-                this.notifications = JSON.parse(storedNotifications);
-              }
+              case 'delete':
+                console.log('Suppression de notification:', message);
 
-              this.notifications = this.notifications.filter(notif => notif.id !== message.notifications_id);
-              localStorage.setItem('notifications', JSON.stringify(this.notifications));
-              console.log('Notification supprimée:', message.notifications_id);
-              break;
+                this.notifications.forEach(notif => {
+                  console.log('Comparaison:', notif.id, message.notifications_id);
+                });
+
+                this.notifications = this.notifications.filter(notif => +notif.id !== +message.notifications_id);
+
+                localStorage.setItem('notifications', JSON.stringify(this.notifications));
+                console.log('Notification supprimée:', message.notifications_id);
+                break;
+
 
             default:
               console.log('Action inconnue:', message);

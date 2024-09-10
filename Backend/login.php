@@ -9,13 +9,19 @@ use Firebase\JWT\Key;
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 $message = array();
-$email = $data['email'];
+$email = $data['email']; // contient soit le numero ou l'email
 $password = $data['password'];
 
-// Préparer la requête SQL pour éviter les injections SQL
-$stmt = $con->prepare("SELECT * FROM user WHERE email = ? LIMIT 1");
-$stmt->bind_param("s", $email);
+// Préparer la requête SQL pour vérifier à la fois l'email et le contact
+$stmt = $con->prepare("SELECT * FROM user WHERE email = ? OR contact = ? LIMIT 1");
+
+// Lier les deux paramètres : une pour l'email et une pour le contact (qui peut aussi être l'email)
+$stmt->bind_param("ss", $email, $email);
+
+// Exécuter la requête
 $stmt->execute();
+
+// Obtenir le résultat
 $result = $stmt->get_result();
 
 if ($row = $result->fetch_object()) {
