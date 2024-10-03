@@ -45,7 +45,7 @@ export class AlertePage implements OnInit {
 
   alert: any;
   page: number = 1;
-  limit: number = 2;
+  limit: number = 10;
   rapport: any;
   isEditingRapport = false;
   recherche_date = false;
@@ -99,28 +99,22 @@ export class AlertePage implements OnInit {
    ngOnInit() {
     this.getservice();
     this.getville();
-    this.updateSubscription = interval(10000).subscribe(async () => {
+    this.updateSubscription = interval(30000).subscribe(async () => {
       await this.openUrl();
       this.cdr.detectChanges(); // Détecter et appliquer les changements
       });
-    this.loadInitialAlerts();
 
-    this.updateSubscription = interval(1000).subscribe(async () => {
-      this.verifie_recherche();
-      //this.verifie_recherche2();
+    this.loadInitialAlerts();
 
       this.authService.userData$.subscribe(data => {
         this.userData = data;
       });
 
+      ////l'heure/////
       this.timeService.getServerTime().subscribe((response) => {
         this.serverTime = response.serverTime;
         console.log('serveur time', this.serverTime );
       });
-
-      this.cdr.detectChanges(); // Détecter et appliquer les changements
-      });
-
   }
 
 
@@ -131,6 +125,7 @@ export class AlertePage implements OnInit {
      spinner:'lines',
     // showBackdrop:false,
       cssClass: 'custom-loading',
+      duration: 8500,
     });
     loading.present();
 
@@ -150,6 +145,7 @@ export class AlertePage implements OnInit {
      spinner:'lines',
     // showBackdrop:false,
       cssClass: 'custom-loading',
+      duration: 8500,
     });
     loading.present();
 
@@ -207,12 +203,15 @@ export class AlertePage implements OnInit {
 
 
     async loadalert() {
+
       this.page = 1;
       this.oldalert = this.alert;
+
       const loading = await this.loadingCtrl.create({
         message: 'Rechargement...',
         spinner: 'lines',
         cssClass: 'custom-loading',
+        duration: 8500,
       });
 
       await loading.present();
@@ -266,12 +265,22 @@ export class AlertePage implements OnInit {
       }
     }
 
-    search_active() {
-      if (this.term.trim() !== '') {
+
+    search_active(event: any) {
+      const searchTerm = event.target.value; // Obtenez la valeur de l'entrée
+
+      if (searchTerm.trim() !== '') {
         this.search = true;
-        this.loadalert_search(event);
+        this.loadalert_search(); // Déclencher la fonction de recherche
+      } else {
+        this.search = false; // Réinitialiser la recherche si le champ est vide
+        this.term = '';
+        this.page = 1;
+        this.infiniteScrollDisabled = false; // Réactiver l'infinite scroll
+        this.loadalert();
       }
     }
+
 
     getLoadFunction(event) {
       if (this.search2) {
@@ -285,28 +294,10 @@ export class AlertePage implements OnInit {
     }
 
 
-    verifie_recherche() {
-      if (this.term === '' ) {
-        this.search = false;
-        if (!this.alertLoaded) {  // Vérification pour n'appeler loadalert() qu'une seule fois
-          this.loadalert();
-          this.alertLoaded = true;  // Marquer que loadalert() a été appelée
-        }
-        this.infiniteScrollDisabled = false;
-      }
-    }
 
-
-    async loadalert_search(event) {
+    async loadalert_search() {
      this.page = 1;
       this.oldalert = this.alert;
-      const loading = await this.loadingCtrl.create({
-        message: 'Rechargement...',
-        spinner: 'lines',
-        cssClass: 'custom-loading',
-      });
-
-      await loading.present();
 
       try {
         const res : any = await this._apiService.loadalert_search(this.term, this.page, this.limit).toPromise();
@@ -320,14 +311,12 @@ export class AlertePage implements OnInit {
            this.openUrl();
         }
 
-        loading.dismiss();
         } catch (error) {
         if (this.oldalert && this.oldalert.length > 0) {
           this.alert = this.oldalert;
         }
         else { this.alert = 'erreur_chargement'; }
         console.log('Erreur de chargement', error);
-        loading.dismiss();
       }
     }
 
@@ -450,6 +439,7 @@ formatCommentTime(time: string): string {
       message: 'Rechargement...',
       spinner: 'lines',
       cssClass: 'custom-loading',
+      duration: 8500,
     });
 
     try {
@@ -489,6 +479,7 @@ formatCommentTime(time: string): string {
      spinner:'lines',
     // showBackdrop:false,
       cssClass: 'custom-loading',
+      duration: 8500,
     });
 
     loading.present();
@@ -594,6 +585,7 @@ async filterAlerts2() {
     message: 'Rechargement...',
     spinner: 'lines',
     cssClass: 'custom-loading',
+    duration: 8500,
   });
 
   await loading.present();

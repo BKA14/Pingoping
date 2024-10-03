@@ -10,8 +10,8 @@ export class ApiService {
 
 headers : HttpHeaders;
   adr_web: string='http://localhost:80/Projet_ Lokaliser/Backend';
-  adr_mobile: string='http://172.20.10.7:80/Projet_ Lokaliser/Backend';
-  time: any = 10000
+  adr_mobile: string='http://192.168.1.89:80/Projet_ Lokaliser/Backend';
+  time: any = 6000
   base_url = this.adr_web;
 
   constructor(public http: HttpClient) {
@@ -152,6 +152,28 @@ return this.http.post(this.base_url + '/addpub.php', formData)
   .pipe(retry(0), catchError(this.handleError));
 }
 
+add_resto(formData: FormData) {
+  return this.http.post(this.base_url + '/add_resto.php', formData)
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
+  }
+
+  add_plat(formData: FormData) {
+    return this.http.post(this.base_url + '/add_plat.php', formData)
+      .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
+    }
+
+    add_commande(formData: FormData) {
+      return this.http.post(this.base_url + '/add_commande.php', formData)
+        .pipe(
+          timeout(this.time),
+          retry(0), // Réessaie 0 fois en cas d'échec
+          catchError(this.handleError)
+        );
+    }
+
+
 addentreprises(data) {
 return this.http.post(this.base_url+'//create.php',data)
 .pipe(timeout(this.time))
@@ -194,6 +216,11 @@ signalisation(formData) {
       .pipe(timeout(this.time))
       }
 
+      addetatlikes_resto(data) {
+        return this.http.post(this.base_url+'//addetatlikes_resto.php',data)
+        .pipe(timeout(this.time))
+        }
+
     addcategorie(data) {
       return this.http.post(this.base_url+'//createcategorie.php',data)
       .pipe(timeout(this.time))
@@ -201,6 +228,11 @@ signalisation(formData) {
 
     add_numero(data) {
       return this.http.post(this.base_url+'//add_numero.php',data)
+      .pipe(timeout(this.time))
+    }
+
+    add_cart(data) {
+      return this.http.post(this.base_url+'//add_panier.php',data)
       .pipe(timeout(this.time))
     }
 
@@ -219,6 +251,36 @@ signalisation(formData) {
 
     loadalert(page: number, limit: number) {
       return this.http.get(`${this.base_url}/loadalert.php?page=${page}&limit=${limit}`)
+        .pipe(timeout(this.time))
+        .pipe(retry(0), catchError(this.handleError));
+    }
+
+    restaurant(page: number, limit: number) {
+      return this.http.get(`${this.base_url}/get_restaurant.php?page=${page}&limit=${limit}`)
+        .pipe(timeout(this.time))
+        .pipe(retry(0), catchError(this.handleError));
+    }
+
+    getCart(id) {
+      return this.http.get(`${this.base_url}/get_panier.php?id=${id}`)
+        .pipe(timeout(this.time))
+        .pipe(retry(0), catchError(this.handleError));
+    }
+
+    plat_resto(id, page: number, limit: number) {
+      return this.http.get(`${this.base_url}/get_plat.php?id=${id}&page=${page}&limit=${limit}`)
+        .pipe(timeout(this.time))
+        .pipe(retry(0), catchError(this.handleError));
+    }
+
+    get_commande(page: number, limit: number) {
+      return this.http.get(`${this.base_url}/load_commande.php?page=${page}&limit=${limit}`)
+        .pipe(timeout(this.time))
+        .pipe(retry(0), catchError(this.handleError));
+    }
+
+    get_commande_user(id, page: number, limit: number) {
+      return this.http.get(`${this.base_url}/load_commande_user.php?id=${id}&page=${page}&limit=${limit}`)
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
     }
@@ -250,6 +312,26 @@ signalisation(formData) {
         }
 
 
+        load_search_resto(term, page: number, limit: number): Observable<any> {
+          return this.http.get(`${this.base_url}/load_search_resto.php?page=${page}&limit=${limit}&term=${term}`)
+          .pipe(
+            timeout(this.time), // Timeout de 15 secondes
+            retry(0), // Nombre de tentatives de retry en cas d'échec
+            catchError(this.handleError) // Gestion des erreurs
+          );
+          }
+
+
+
+        load_search_commande(term, page: number, limit: number): Observable<any> {
+          return this.http.get(`${this.base_url}/load_search_commande.php?page=${page}&limit=${limit}&term=${term}`)
+          .pipe(
+            timeout(this.time), // Timeout de 15 secondes
+            retry(0), // Nombre de tentatives de retry en cas d'échec
+            catchError(this.handleError) // Gestion des erreurs
+          );
+          }
+
 
         load_signalement_search(term, page: number, limit: number): Observable<any> {
         return this.http.get(`${this.base_url}/load_signalement_search.php?page=${page}&limit=${limit}&term=${term}`)
@@ -260,6 +342,14 @@ signalisation(formData) {
         );
         }
 
+        load_numero_search(term, page: number, limit: number): Observable<any> {
+          return this.http.get(`${this.base_url}/load_numero_search.php?page=${page}&limit=${limit}&term=${term}`)
+          .pipe(
+            timeout(this.time),
+            retry(0),
+            catchError(this.handleError)
+          );
+          }
 
 
         loadalert_search_all(startDate: string, endDate: string, selectedStatus: string, service: string, ville: string, page: number, limit: number): Observable<any> {
@@ -338,6 +428,15 @@ signalisation(formData) {
           catchError(this.handleError) // Gestion des erreurs
         );
       }
+
+      getpub_evenement(page: number, limit: number): Observable<any> {
+        return this.http.get(`${this.base_url}/get_pub_evenement.php?page=${page}&limit=${limit}`)
+          .pipe(
+            timeout(this.time), // Timeout de 15 secondes
+            retry(0), // Nombre de tentatives de retry en cas d'échec
+            catchError(this.handleError) // Gestion des erreurs
+          );
+        }
 
 getinfo(id){
   return this.http.get(this.base_url+'/getinfo.php?id='+id)
@@ -464,6 +563,30 @@ supprimer_numero(id){
   .pipe(retry(0), catchError(this.handleError))
   }
 
+  supprimer_resto(id){
+    return this.http.delete(this.base_url+'/supprimer_restaurant.php?id='+id)
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError))
+    }
+
+    delete_all_cart(id){
+      return this.http.delete(this.base_url+'/supprimer_panier.php?id='+id)
+      .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError))
+      }
+
+    delete_cart(id){
+      return this.http.delete(this.base_url+'/supprimer_du_panier.php?id='+id)
+      .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError))
+      }
+
+    supprimer_plat(id){
+      return this.http.delete(this.base_url+'/supprimer_plat.php?id='+id)
+      .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError))
+      }
+
 presentAlertpub(id){
   return this.http.delete(this.base_url+'/deletePub.php?id='+id)
   .pipe(timeout(this.time))
@@ -513,6 +636,18 @@ getpub2(id){
   .pipe(retry(0), catchError(this.handleError))
 }
 
+
+getresto(id){
+  return this.http.get(this.base_url+'/get_single_resto.php?id='+id)
+  .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError))
+}
+
+getplat(id){
+  return this.http.get(this.base_url+'/get_single_plat.php?id='+id)
+  .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError))
+}
 
 getcategorie3(id){
   return this.http.get(this.base_url+'/getsinglecategorie.php?id='+id)
@@ -596,6 +731,13 @@ getgateau(){
       .pipe(retry(0), catchError(this.handleError))
     }
 
+    get_etat_resto(data){
+      return this.http.post(this.base_url+'/get_etat_resto.php',data)
+      .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError))
+    }
+
+
 
     get_genie_civil(){
     return this.http.get(this.base_url+'/get_genie_civil.php')
@@ -629,24 +771,24 @@ getgateau(){
     .pipe(retry(0), catchError(this.handleError));
     }
 
-    gettailleur(){
-      return this.http.get(this.base_url+'/gettailleur.php')
+  gettailleur(){
+    return this.http.get(this.base_url+'/gettailleur.php')
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
+    }
+
+
+  numero_service(page: number, limit: number) {
+    return this.http.get(`${this.base_url}/numero_service.php?page=${page}&limit=${limit}`)
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
-      }
+  }
 
-      numero_service(){
-        return this.http.get(this.base_url+'/numero_service.php')
-        .pipe(timeout(this.time))
-        .pipe(retry(0), catchError(this.handleError));
-        }
-
-
-getalimentation(){
-  return this.http.get(this.base_url+'/getalimentation.php?id=')
-  .pipe(timeout(this.time))
-  .pipe(retry(0), catchError(this.handleError))
-}
+  getalimentation(){
+    return this.http.get(this.base_url+'/getalimentation.php?id=')
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError))
+  }
 
 
 achatalimentation(){
@@ -725,6 +867,18 @@ updateinfo(id,data){
   .pipe(retry(0), catchError(this.handleError))
 }
 
+updatepmu(id,data){
+  return this.http.put(this.base_url+'/updatepmu.php?id='+id,data)
+  .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError))
+}
+
+update_commande(id: number, data: any) {
+  return this.http.post(`${this.base_url}/update_commande.php`, data)
+  .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError));
+}
+
 update_num_service(id,data){
   return this.http.put(this.base_url+'/update_num_service.php?id='+id,data)
   .pipe(timeout(this.time))
@@ -739,6 +893,12 @@ updateetatlikes2(id,data){
 
 disLike(id,data){
   return this.http.put(this.base_url+'/disLike.php?id='+id,data)
+  .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError))
+}
+
+disLike_resto(id,data){
+  return this.http.put(this.base_url+'/disLike_resto.php?id='+id,data)
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
@@ -796,11 +956,7 @@ updatealimentation(id,data){
   .pipe(retry(0), catchError(this.handleError))
 }
 
-updatepmu(id,data){
-  return this.http.put(this.base_url+'/updatepmu.php?id='+id,data)
-  .pipe(timeout(this.time))
-  .pipe(retry(0), catchError(this.handleError))
-}
+
 
 
 updatevente(id,data){
@@ -818,6 +974,18 @@ updateentreprise(id,data){
 
 updatepub(id, formData) {
   return this.http.post(`${this.base_url}/updatepub.php?id=${id}`, formData)
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
+}
+
+update_resto(id, formData) {
+  return this.http.post(`${this.base_url}/update_resto.php?id=${id}`, formData)
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
+}
+
+update_plat(id, formData) {
+  return this.http.post(`${this.base_url}/update_plat.php?id=${id}`, formData)
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
 }

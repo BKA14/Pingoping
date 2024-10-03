@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="success" class="tool1">
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <br>
+    <ion-title class="tool2">PANIER</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ng-container *ngIf="cart?.length > 0; else emptyCart">
+    <ion-list class="cart-list">
+      <ion-item *ngFor="let plat of cart; let i = index" class="cart-item">
+        <div class="cart-item-content">
+          <ion-label class="plat-info">
+            <h3 class="plat-nom">{{ plat.nom_restaurant }}</h3>
+            <p class="restaurant-nom">{{ plat.nom_plat }}</p>
+            <p class="plat-prix">{{ plat.prix }} fr</p>
+          </ion-label>
+
+          <ion-button (click)="removeFromCart(plat.id)" color="danger" fill="clear">
+            <ion-icon name="trash-outline" style="zoom: 2;"></ion-icon>
+          </ion-button>
+
+          <div class="quantity-controls">
+            <ion-button (click)="decreaseQuantity(i)" color="danger" style="zoom: 1.7;" fill="outline">-</ion-button>
+            <ion-input [(ngModel)]="plat.quantity" type="number" class="qty-input" readonly></ion-input>
+            <ion-button (click)="increaseQuantity(i)" color="success"  style="zoom: 1.7;" fill="outline">+</ion-button>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <ion-item class="total-item">
+      <ion-label class="total-label"><strong>Total :</strong> {{ total }} fr</ion-label>
+    </ion-item>
+
+    <ion-button expand="full" color="medium" (click)="vider_panier()">Vider le panier</ion-button>
+    <ion-button expand="full" color="success" (click)="validateOrder()">Passer la commande</ion-button>
+
+  </ng-container>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart-container">
+      <ion-icon name="cart-outline" class="empty-cart-icon"></ion-icon>
+      <p class="empty-cart-message">
+        Aucun plat ajouté pour le moment.<br>
+        Faites-vous plaisir en ajoutant vos plats préférés !
+      </p>
+    </div>
+  </ng-template>
+</ion-content>

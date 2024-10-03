@@ -6,7 +6,7 @@ $mot = $_GET['term'] ?? '';
 
 // Obtenir les paramètres de pagination
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 32;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 12;
 $start = ($page - 1) * $limit;
 
 // Ajouter les caractères de pourcentage pour la recherche avec LIKE

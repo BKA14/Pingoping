@@ -1,62 +1,93 @@
-<ion-header >
-
+<ion-header>
   <ion-toolbar class="tool1" color="success">
-    <br/>
+    <br  style="padding: 50px;">
     <ion-buttons slot="start">
-      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br/> <br/>
-      <ion-title class="tool2">INFORMATION</ion-title>
-      <br/>
-    </ion-toolbar>
+    <br><br>
+    <ion-title class="tool2">PMU</ion-title>
+    <br><br>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="custom-background"  [fullscreen]="true">
+
+<ion-content padding class="custom-background" [fullscreen]="true">
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-<br/>
-<ion-list >
+  <ion-list >
+    <div class="list" >
+      <form class="form" [formGroup]="verifieForm">
 
- <ion-item  class="custom-background" lines="inset" *ngFor="let pmu of pmu">
-  <ion-label color="dark">
-    <h2 class="commentaire1">{{pmu.commentaire1}}</h2 >  <br/><br/><br/>
+        <ion-item>
+          <!-- Nombre de partants -->
+        <ng-container *ngIf="!isEditingCommentaire1">
+          <ion-label  class="info"> {{pmu.num2}}</ion-label>
+        </ng-container>
+          <ion-icon name="create-outline" slot="end" color="success" (click)="editField('num2')" *ngIf="grade === 'admin' || grade === 'superadmin'"></ion-icon>
+          <ng-container *ngIf="isEditingNum2">
+            <ion-input formControlName="num2"></ion-input>
+          </ng-container>
+        </ion-item>
 
+        <br>
+        <ion-item>
+          <!-- Commentaire 1 -->
+          <ng-container *ngIf="!isEditingCommentaire1">
+            <ion-label class="info">{{pmu.commentaire1}}</ion-label>
+          </ng-container>
+          <ion-icon name="create-outline" slot="end" color="success" (click)="editField('commentaire1')" *ngIf="grade === 'admin' || grade === 'superadmin'"></ion-icon>
+          <ng-container *ngIf="isEditingCommentaire1">
+            <ion-input formControlName="commentaire1"></ion-input>
+          </ng-container>
+        </ion-item>
 
-      <ion-label >Nombre de partant: {{pmu.nbrpartant}}</ion-label>
+        <ion-item>
+          <!-- Nombre de partants -->
+          <ion-label  class="info">Nombre de partants : {{pmu.nbrpartant}}</ion-label>
+          <ion-icon name="create-outline" slot="end" color="success" (click)="editField('nbrpartant')" *ngIf="grade === 'admin' || grade === 'superadmin'"></ion-icon>
+          <ng-container *ngIf="isEditingNbrpartant">
+            <ion-input formControlName="nbrpartant"></ion-input>
+          </ng-container>
+        </ion-item>
 
-      <br/><br/><br/>
+        <ion-item>
+          <!-- Type de course -->
+          <ion-label  class="info">Type de course : {{pmu.typecourse}}</ion-label>
+          <ion-icon name="create-outline" slot="end" color="success" (click)="editField('typecourse')" *ngIf="grade === 'admin' || grade === 'superadmin'"></ion-icon>
+          <ng-container *ngIf="isEditingTypecourse">
+            <ion-input formControlName="typecourse"></ion-input>
+          </ng-container>
+        </ion-item>
 
-      <ion-label >Type de course : {{pmu.typecourse}}</ion-label>
+        <ion-item>
+          <!-- Numéro du jour -->
+          <ng-container *ngIf="!isEditingNumdujour">
+            <ion-label class="info">{{pmu.numdujour}}</ion-label>
+          </ng-container>
+          <ion-icon name="create-outline" slot="end" color="success" (click)="editField('numdujour')" *ngIf="grade === 'admin' || grade === 'superadmin'"></ion-icon>
+          <ng-container *ngIf="isEditingNumdujour">
+            <ion-input formControlName="numdujour"></ion-input>
+          </ng-container>
+        </ion-item>
 
-      <br/><br/><br/>
-
-      <ion-label class="numpmu">{{pmu.numdujour}}</ion-label>
-
-      <br/><br/><br/>
-
-      <ion-label >{{pmu.num2}}</ion-label>
-
-
-      <br/><br/><br/><br/>
-
-  <ion-label class="ion-text-small">{{pmu.commentaire2}}</ion-label >  <br/>
-
-    <ion-col>
-      <a href="https://t.me/votregroupe" target="_blank">
-        <ion-button color="success" shape="round" expand="full">
-          Rejoindre le groupe de paris pmu whatsapp
-          <ion-icon name="share-social-outline" style="zoom: 1.5;"></ion-icon>
+      <ion-item>
+          <!-- Commentaire 2 -->
+          <ng-container *ngIf="!isEditingCommentaire2">
+          <ion-label class="info">{{pmu.commentaire2}}</ion-label>
+        </ng-container>
+        <ion-icon name="create-outline" slot="end" color="success" (click)="editField('commentaire2')" *ngIf="grade === 'admin' || grade === 'superadmin'"></ion-icon>
+        <ng-container *ngIf="isEditingCommentaire2">
+          <ion-input formControlName="commentaire2"></ion-input>
+        </ng-container>
+      </ion-item>
+      <br>
+        <ion-button expand="block" fill="outline" color="success" (click)="modifier()" [disabled]="verifieForm.invalid">
+          Valider &nbsp; <ion-icon name="save-outline"></ion-icon>
         </ion-button>
-      </a>
-    </ion-col>
-    <br> <br>
-    <div *ngIf="copied" class="copied-message">Texte copié avec succès!</div>
-  </ion-label>
-  <div class="item-note">
-  </div>
-</ion-item>
-</ion-list>
 
+      </form>
+    </div>
+  </ion-list>
 </ion-content>

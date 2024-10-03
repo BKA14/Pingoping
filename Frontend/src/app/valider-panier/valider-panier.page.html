@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <br  style="padding: 45px;">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-row class="header-row">
+      <ion-title class="title">Commande</ion-title>
+    </ion-row>
+    <br> <br>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <br>
+  <form [formGroup]="signalementForm" >
+
+
+    <ion-item>
+      <ion-label class="coord-label" style="text-align: center;" >Vos coordonnées géographiques</ion-label>
+      <br>
+      <ion-label class="coord-value" position="stacked">Longitude : {{ signalementForm.get('location')?.value?.longitude }}</ion-label>
+      <ion-label class="coord-value" position="stacked">Latitude : {{ signalementForm.get('location')?.value?.latitude }}</ion-label>
+      <ion-button color="success" class="form-control" (click)="localiser()">Actualiser vos coordonnées</ion-button>
+    </ion-item>
+
+       <!-- Conteneur pour la carte Leaflet, initialement caché -->
+       <div id="map" style="height: 400px; display: none; width: 60%; margin: 0 auto"></div>
+       <ion-item>
+       <ion-button color="success" class="form-control" *ngIf="mapVisible" (click)="valider()">Valider la position</ion-button>
+       <br *ngIf="mapVisible" >
+      <ion-button color="success" class="form-control" *ngIf="!mapVisible" (click)="enableManualLocationSelection()">Choisir ma position manuellement</ion-button>
+    </ion-item>
+    <br>
+
+    <!-- Message de confirmation de la commande -->
+    <div class="confirmation-container">
+      <p class="confirmation-message">
+        Montant total de la commande : {{ total }}
+      </p>
+      <ion-icon name="checkmark-circle-outline" class="confirmation-icon"></ion-icon>
+      <p class="confirmation-message">
+        Le paiement se fera à la livraison.<br>
+        Confirmer la commande, et vous serez livré dans un délai de 20 minutes.
+      </p>
+    </div>
+
+    <!-- Bouton de validation -->
+    <ion-button [disabled]="!signalementForm.get('location').value.longitude || !signalementForm.get('location').value.latitude" (click)="confirmOrder()"  expand="block" color="success">
+      Confirmer la commande
+    </ion-button>
+
+  </form>
+</ion-content>

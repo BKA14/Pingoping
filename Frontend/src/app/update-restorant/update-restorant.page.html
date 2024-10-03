@@ -1,0 +1,331 @@
+<ion-header>
+
+  <ion-toolbar  color="success" class="tool1" >
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+    </ion-buttons>
+    <br/>
+    <br  style="padding: 50px;">
+    <ion-title class="tool2">update restaurant</ion-title>
+    <br/>
+  </ion-toolbar>
+</ion-header>
+
+
+<br/>
+
+
+<ion-content  keyboard-attach>
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <form >
+ <br>
+    <ion-item class="itementreprise" >
+      <ion-segment (ionChange)="updatenom($event)">
+        <ion-segment-button value="pas_de_nom">
+          <ion-label> Mettre un nom</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+    <ion-item *ngIf="selectednom !== 'none'" >
+      <ion-label position="floating" class="h2"> nom du resto</ion-label><br/>
+      <ion-input [(ngModel)]="nom_resto"  name="titre"  type="text" ></ion-input>
+    </ion-item>
+    <br/>
+    <br>
+
+    <ion-item class="itementreprise" >
+      <ion-segment (ionChange)="update_description($event)">
+        <ion-segment-button value="pas_de_description">
+          <ion-label> Mettre une description</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+    <ion-item style="text-align: center;" *ngIf="selected_description !== 'none'">
+      <ion-label position="floating" class="h2"> description du restaurant</ion-label><br/>
+      <ion-input [(ngModel)]="description" name="commentaire" type="text" ></ion-input>
+      <br>
+    </ion-item>
+    <ion-label  color="warning">Si vous avez un lien de redirection,
+      mettez le lien complet dans le commentaire</ion-label>
+    <br/>
+    <br>
+
+
+    <ion-item class="itementreprise">
+
+      <p > Photo de la publicité :</p> <br> <br>
+      <ion-segment (ionChange)="updatephoto($event)">
+        <ion-segment-button value="nouvelle">
+          <ion-label>Nouvelle </ion-label>
+        </ion-segment-button> &nbsp;
+        <ion-segment-button value="garder_photo">
+          <ion-label>Garder </ion-label>
+        </ion-segment-button> &nbsp;
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+    <ion-item *ngIf="selectedphoto !== 'none' && selectedphoto !== 'garder_photo'">
+      <ion-label  position="floating" class="h2">Lien illustratif (photo)</ion-label><br/>
+      <input   type="file" accept="image/*"   (change)="onFileSelected($event)" />
+    </ion-item>
+
+    <br>
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="updatelongitude($event)">
+        <ion-segment-button value="pas_de_longitude">
+          <ion-label> Mettre la longitude</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+    <ion-item *ngIf="selectedlongitude !== 'none'">
+      <ion-label position="floating" class="h2"> Longitude </ion-label><br/>
+      <ion-input [(ngModel)]="longitude" name="longitude"  type="text" ></ion-input>
+    </ion-item>
+
+    <br>
+    <br/>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="updatelatitude($event)">
+        <ion-segment-button value="pas_de_latitude">
+          <ion-label> Mettre la latitude</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selectedlatitude !== 'none'">
+      <ion-label position="floating" class="h2"> Latitude </ion-label><br/>
+      <ion-input [(ngModel)]="latitude" name="latitude" type="text" ></ion-input>
+    </ion-item>
+    <br/>
+    <br>
+
+    <ion-item class="itementreprise" >
+      <ion-segment (ionChange)="updatecontact($event)">
+        <ion-segment-button value="pas_de_contact">
+          <ion-label> Mettre le contact WhatsApp</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selectedcontact!== 'none'">
+      <ion-label position="floating" class="h2"> Contact </ion-label><br/>
+      <ion-input keyboard-attach [(ngModel)]="contact" name="contact" type="number" ></ion-input>
+    </ion-item>
+
+    <br/>
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="update_etiquette($event)">
+        <ion-segment-button value="pas_etiquette">
+          <ion-label> Mettre une etiquette</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <br/>
+
+    <ion-item *ngIf="selected_etiquette !== 'none'">
+      <ion-label position="floating" class="h2"> Etiquette </ion-label><br/>
+      <ion-input [(ngModel)]="etiquette" name="etiquette" type="text" ></ion-input>
+    </ion-item>
+
+    <br>
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="update_commentaire($event)">
+        <ion-segment-button value="pas_commentaire">
+          <ion-label> Mettre un commentaire</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <br/>
+
+    <ion-item *ngIf="selected_commentaire !== 'none'">
+      <ion-label position="floating" class="h2"> Commentaire </ion-label><br/>
+      <ion-input [(ngModel)]="commentaire" name="commentaire" type="text" ></ion-input>
+    </ion-item>
+
+    <br>
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="update_ville($event)">
+        <ion-segment-button value="pas_de_ville">
+          <ion-label> Mettre la ville</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <br/>
+
+    <ion-item *ngIf="selected_ville !== 'none'">
+      <ion-label position="floating" class="h2"> ville </ion-label><br/>
+      <ion-input [(ngModel)]="ville" name="ville" type="text" ></ion-input>
+    </ion-item>
+
+    <br>
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="update_supprimer($event)">
+        <ion-segment-button value="pas_supprimer">
+          <ion-label> Mettre en supprimer</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <br/>
+
+    <ion-item style="text-align: center;" >
+      <ion-label position="floating" class="h2"> supprimer ? : {{ supprimer }} </ion-label><br/>
+    </ion-item>
+
+    <br>
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="update_date_deb($event)">
+        <ion-segment-button value="pas_de_date_deb">
+          <ion-label> Mettre la date deb</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selected_date_deb !== 'none'">
+      <ion-label position="floating" class="h2"> Date ouverture </ion-label><br/>
+      <ion-input  ion-keyboard-fix [(ngModel)]="date_deb"  name="date_deb" type="text" ></ion-input>
+    </ion-item>
+
+
+    <br/>
+    <br>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="update_date_fin($event)">
+        <ion-segment-button value="pas_de_date_fin">
+          <ion-label> Mettre la date de fin</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selected_date_fin !== 'none'">
+      <ion-label position="floating" class="h2"> Date fermeture </ion-label><br/>
+      <ion-input  ion-keyboard-fix [(ngModel)]="date_fin"  name="date_fin" type="text" ></ion-input>
+    </ion-item>
+
+    <br/>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="update_contact_admin($event)">
+        <ion-segment-button value="pas_de_contact_admin">
+          <ion-label> Mettre le contact admin</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selected_contact_admin !== 'none'">
+      <ion-label position="floating" class="h2"> Contact Admin</ion-label><br/>
+      <ion-input  ion-keyboard-fix [(ngModel)]="contact_admin"  name="contact_admin" type="number" ></ion-input>
+    </ion-item>
+
+    <br/>
+
+    <ion-item class="itementreprise">
+      <ion-segment (ionChange)="updaterang($event)">
+        <ion-segment-button value="pas_de_rang">
+          <ion-label> Mettre le rang</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="none">
+          <ion-label >Non</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    <br/>
+
+
+    <ion-item *ngIf="selectedrang !== 'none'">
+      <ion-label position="floating" class="h2"> Rang de la pub </ion-label><br/>
+      <ion-input  ion-keyboard-fix [(ngModel)]="rang"  name="rang" type="number" ></ion-input>
+    </ion-item>
+
+    <br/>
+    <br>
+
+
+
+<ion-col>
+  <br/> <br/>
+<ion-button type="button" (click)="updateresto()"   color="success" shape="round" expand="full">
+  mise à jour
+</ion-button>
+</ion-col>
+
+</form>
+</ion-content>
+
+

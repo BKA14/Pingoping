@@ -3,7 +3,7 @@ include "config.php";
 
 // Obtenir les paramètres de pagination
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 25;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 12;
 $start = ($page - 1) * $limit;
 
 // Requête SELECT pour récupérer les données paginées de la table signalisation

@@ -436,6 +436,50 @@ const routes: Routes = [
     path: 'change-password',
     loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule)
   },
+  {
+    path: 'evenement',
+    loadChildren: () => import('./evenement/evenement.module').then( m => m.EvenementPageModule)
+  },
+  {
+    path: 'restaurant',
+    loadChildren: () => import('./restaurant/restaurant.module').then( m => m.RestaurantPageModule)
+  },
+  {
+    path: 'ajouter-restaurant',
+    loadChildren: () => import('./ajouter-restaurant/ajouter-restaurant.module').then( m => m.AjouterRestaurantPageModule)
+  },
+  {
+    path: 'update-restorant/:id',
+    loadChildren: () => import('./update-restorant/update-restorant.module').then( m => m.UpdateRestorantPageModule)
+  },
+  {
+    path: 'list-plat/:id/:contact_admin/:nom_resto',
+    loadChildren: () => import('./list-plat/list-plat.module').then( m => m.ListPlatPageModule)
+  },
+  {
+    path: 'ajouter-plat/:id/:contact_admin/:nom_resto',
+    loadChildren: () => import('./ajouter-plat/ajouter-plat.module').then( m => m.AjouterPlatPageModule)
+  },
+  {
+    path: 'update-plat/:id',
+    loadChildren: () => import('./update-plat/update-plat.module').then( m => m.UpdatePlatPageModule)
+  },
+  {
+    path: 'panier',
+    loadChildren: () => import('./panier/panier.module').then( m => m.PanierPageModule)
+  },
+  {
+    path: 'valider-panier',
+    loadChildren: () => import('./valider-panier/valider-panier.module').then( m => m.ValiderPanierPageModule)
+  },
+  {
+    path: 'get-commande',
+    loadChildren: () => import('./get-commande/get-commande.module').then( m => m.GetCommandePageModule)
+  },
+  {
+    path: 'get-commande-user',
+    loadChildren: () => import('./get-commande-user/get-commande-user.module').then( m => m.GetCommandeUserPageModule)
+  },
 
 
 

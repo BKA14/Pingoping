@@ -68,6 +68,7 @@ export class AproposPage implements OnInit {
    spinner:'lines',
   // showBackdrop:false,
     cssClass: 'custom-loading',
+    duration: 8500,
   });
   loading.present();
 

@@ -40,6 +40,7 @@ export class ChangePasswordPage implements OnInit {
             message: 'Rechargement...',
             spinner: 'lines',
             cssClass: 'custom-loading',
+            duration: 8500,
         });
         loading.present();
 

@@ -1,0 +1,268 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <!-- Bouton de retour à gauche -->
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+
+    <!-- Titre centré -->
+    <ion-title class="title">LISTE DES PLATS</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="toolbar">
+    <!-- Recherche centrée -->
+    <div class="search-container">
+      <ion-input class="recherche" type="text" placeholder="Rechercher nom de resto,..." [(ngModel)]="term" (ionInput)="onSearch($event)"></ion-input>
+    </div>
+  </ion-toolbar>
+
+  <ion-toolbar class="toolbar">
+    <!-- Boutons sur une nouvelle ligne -->
+    <ion-buttons slot="start">
+      <ion-button (click)="reloadPage()" class="light" color="light">
+        Actualiser
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/panier']" class="cart-button" color="primary">
+        <ion-icon name="cart-outline" class="cart-icon"></ion-icon>
+        <ion-badge class="cart-badge" *ngIf="cart?.length > 0">{{ cart.length }}</ion-badge>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<div class="arrow-container" #scrollButton  (click)="scrollToTop()" >
+  <ion-icon name="arrow-up-circle" class="red-arrow" style="zoom: 3.0;"></ion-icon>
+</div>
+
+
+<ion-content class="custom-background" >
+  <br>
+
+  <!-- Section visible uniquement pour admin/superadmin -->
+   <div style="text-align: center;" *ngIf="grade === 'admin' || grade === 'superadmin' || userData.numuser == contact_admin">
+  <ion-item class="span"  lines="none">
+    <span  color="success">Ajouter un plat </span>
+    <ion-icon type="button" class="icon" [routerLink]="['/ajouter-plat/', id, contact_admin, nom_resto]" style="zoom: 1.1;" name="add-circle-outline" class="icon"></ion-icon>
+  </ion-item>
+   </div>
+
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list class="message-list" *ngIf="resto !== 'erreur_chargement' && resto !== 'aucune_alerte'" >
+    <div lines="inset" class="message-item" *ngFor="let resto of resto | customFilter: term">
+
+      <!-- affiche tout les resto pour l'admin ou le superadmin -->
+      <div *ngIf="grade === 'admin' || grade === 'superadmin'">
+
+      <div *ngIf="resto.etiquette !== undefined && resto.etiquette !== null && resto.etiquette.trim() !== 'non'">
+        <ion-label class="deconte" > {{ resto.etiquette }}</ion-label>
+      </div>
+      <br *ngIf="resto.etiquette !== undefined && resto.etiquette !== null && resto.etiquette.trim() !== 'non'">
+
+      <!-- Indication visuelle pour les resto supprimé -->
+      <div *ngIf="grade === 'admin' || grade === 'superadmin'"
+      class="admin-indicator"
+      [ngClass]="{'supprime-oui': resto.supprimer === 'oui', 'supprime-non': resto.supprimer !== 'oui'}">
+      <ion-label>supprimé ? : {{ resto.supprimer }}</ion-label>
+      </div>
+
+      <br>
+
+      <ion-card-content>
+        <!-- image Display -->
+        <ng-container *ngIf="isImage(resto.image)">
+          <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+        </ng-container>
+        <br>
+        <p class="ligne"></p>
+        <br>
+
+      <!-- Indication visuelle pour les resto supprimé -->
+      <div>
+        <ion-label class="label-title"> Nom restaurant :</ion-label>
+        <h2 class="message-content"> {{ resto.nom_restaurant }}</h2>
+      </div>
+
+      <!-- nom du plat -->
+      <div *ngIf="resto.nom_plat !== undefined && resto.nom_plat !== null && resto.nom_plat.trim() !== 'non'">
+        <ion-label class="label-title"> Nom du plat :</ion-label>
+        <h2 *ngIf="resto.nom_plat" class="message-content">{{ resto.nom_plat }}</h2>
+      </div>
+        <br>
+
+          <!-- Indication visuelle pour les resto supprimé -->
+        <div  *ngIf="grade === 'admin' || grade === 'superadmin'">
+          <ion-label class="label-title"> Rang affichage plat :</ion-label>
+          <h2 class="message-content"> {{ resto.rang }}</h2>
+        </div>
+
+        <br>
+
+      <!-- description -->
+      <div *ngIf="resto.description !== undefined && resto.description !== null && resto.description.trim() !== 'non'">
+        <ion-label class="label-title"> Description :</ion-label>
+        <h2 *ngIf="resto.description" class="message-content">{{ resto.description }}</h2>
+        </div>
+
+          <!-- contact_admin -->
+          <div  *ngIf="grade === 'admin' || grade === 'superadmin'">
+            <ion-label class="label-title"> contact_admin :</ion-label>
+          <h2  class="message-content">{{ contact_admin }}</h2>
+        </div>
+
+
+        <!-- ville -->
+      <div *ngIf="resto.prix !== undefined && resto.prix !== null && resto.prix.trim() !== 'non'">
+          <ion-label class="label-title"> Prix :</ion-label>
+        <h2 *ngIf="resto.prix" class="message-content">{{ resto.prix }} fr</h2>
+      </div>
+
+        <p class="ligne"></p>
+
+        <br>
+
+       <div class="left-align">
+        <ion-button
+        class="btnpub contact"
+        [color]="isInCart(resto) ? 'warning' : 'medium'"
+        fill="outline"
+        (click)="ajouterAuPanier(resto)">
+        ajouter au panier
+        <ion-icon name="chevron-forward"></ion-icon>
+      </ion-button>
+
+
+      </div>
+
+      </ion-card-content>
+
+      <!-- Actions pour Admin/SuperAdmin -->
+      <div class="icon-right" *ngIf="grade === 'admin' || grade === 'superadmin'">
+        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/update-plat/', resto.id]"></ion-icon>
+        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(resto)"></ion-icon>
+      </div>
+    </div>
+
+
+    <!-- affiche les resto non supprimé pour les user -->
+    <div *ngIf="grade !== 'admin' && grade !== 'superadmin' && resto.supprimer !=='oui'">
+
+     <!-- affiche tout les resto pour l'admin ou le superadmin -->
+     <div >
+
+      <div *ngIf="resto.etiquette !== undefined && resto.etiquette !== null && resto.etiquette.trim() !== 'non'">
+        <ion-label class="deconte" > {{ resto.etiquette }}</ion-label>
+      </div>
+      <br *ngIf="resto.etiquette !== undefined && resto.etiquette !== null && resto.etiquette.trim() !== 'non'">
+
+      <!-- Indication visuelle pour les resto supprimé -->
+      <div
+      class="admin-indicator"
+      *ngIf="userData.numuser === contact_admin"
+      [ngClass]="{'supprime-oui': resto.supprimer === 'oui', 'supprime-non': resto.supprimer !== 'oui'}">
+      <ion-label>supprimé ? : {{ resto.supprimer }}</ion-label>
+      </div>
+
+    </div>
+      <br>
+
+      <ion-card-content>
+        <!-- image Display -->
+        <ng-container *ngIf="isImage(resto.image)">
+          <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+        </ng-container>
+
+        <br>
+        <br>
+
+      <!-- nom du plat -->
+      <div *ngIf="resto.nom_plat !== undefined && resto.nom_plat !== null && resto.nom_plat.trim() !== 'non'">
+        <ion-label class="label-title"> Nom du plat :</ion-label>
+        <h2 *ngIf="resto.nom_plat" class="message-content">{{ resto.nom_plat }}</h2>
+      </div>
+        <br>
+
+        <!-- description -->
+         <div *ngIf="resto.description !== undefined && resto.description !== null && resto.description.trim() !== 'non'">
+        <ion-label class="label-title"> Description :</ion-label>
+        <h2 *ngIf="resto.description" class="message-content">{{ resto.description }}</h2>
+        </div>
+
+        <!-- ville -->
+        <div *ngIf="resto.prix !== undefined && resto.prix !== null && resto.prix.trim() !== 'non'">
+          <ion-label class="label-title"> Prix :</ion-label>
+        <h2 *ngIf="resto.prix" class="message-content">{{ resto.prix }} fr</h2>
+      </div>
+       <br>
+
+       <br>
+
+       <!-- Indication visuelle pour les resto supprimé -->
+     <div *ngIf="userData.numuser === contact_admin">
+       <ion-label class="label-title"> Rang affichage plat :</ion-label>
+       <h2 class="message-content"> {{ resto.rang }}</h2>
+     </div>
+
+     <br>
+
+          <p class="ligne"></p>
+          <br>
+
+         <!--  nbr j'aime -->
+         <div class="left-align">
+
+          <ion-button
+          [color]="isInCart(resto) ? 'warning' : 'medium'"
+          fill="outline"
+          (click)="ajouterAuPanier(resto)">
+          ajouter au panier
+          <ion-icon name="chevron-forward"></ion-icon>
+        </ion-button>
+
+      </div>
+
+      </ion-card-content>
+    </div>
+
+      <!-- Actions pour Admin/SuperAdmin -->
+      <div class="icon-right" *ngIf="userData.numuser === contact_admin">
+        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/update-plat/', resto.id]"></ion-icon>
+        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(resto)"></ion-icon>
+      </div>
+
+  </div>
+  </ion-list>
+
+  <br *ngIf="resto == 'erreur_chargement'">
+  <br *ngIf="resto == 'erreur_chargement'">
+  <div *ngIf="resto == 'erreur_chargement'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Erreur de chargement</p>
+    <br>
+    <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+  </div>
+
+  <br *ngIf="resto == 'aucune_alerte'">
+  <br *ngIf="resto == 'aucune_alerte'">
+  <div>
+    <div  *ngIf="resto == 'aucune_alerte'" class="erreur_chargement">
+      <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+      <p>Aucun plat trouvé, réessayer </p>
+      <br>
+    </div>
+  </div>
+
+
+  <ion-infinite-scroll threshold="100px" [disabled]="infiniteScrollDisabled" (ionInfinite)="getLoadFunction($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Chargement...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

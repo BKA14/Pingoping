@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
-import { IonContent, LoadingController } from '@ionic/angular';
+import { IonContent, LoadingController, ToastController } from '@ionic/angular';
 
 
 
@@ -51,10 +51,22 @@ export class AjouterpubPage implements OnInit {
   private _apiService : ApiService,
   private loadingCtrl: LoadingController,
   public loadingController: LoadingController,
-
+  private toastCtrl: ToastController  // Injecter le ToastController
 ) {
 
   }
+
+
+  // Méthode pour afficher un toast
+  async presentToast(message: string, color: string = 'danger') {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 2000, // Durée d'affichage du toast
+      position: 'top',
+      color: color,
+    });
+    toast.present();
+    }
 
 
    // Ajoutez cette méthode pour gérer la sélection de fichier
@@ -141,6 +153,7 @@ async addpub() {
     message: 'Rechargement...',
     spinner: 'lines',
     cssClass: 'custom-loading',
+    duration: 8500,
   });
   loading.present();
 
@@ -179,7 +192,7 @@ async addpub() {
   formData.append('commentaire', commentaire);
   formData.append('photo', photo);
   formData.append('rangpub', rangpub);
-  formData.append('admin', 'admin');
+  formData.append('admin', admin);
   formData.append('contact', contact);
   formData.append('longitude', longitude);
   formData.append('latitude', latitude);
@@ -202,10 +215,11 @@ async addpub() {
       loading.dismiss();
       this.router.navigateByUrl('/acceuil');
       alert('pub ajoutée avec succès');
+      this.presentToast('pub ajoutée avec succès', 'success');
     },
     (error: any) => {
       loading.dismiss();
-      alert('Erreur de connexion, pub non enregistrée.');
+      this.presentToast("Erreur de connexion, pub non enregistrée,");
       console.log('ERROR ===', error);
     }
   );
@@ -254,12 +268,15 @@ async addpub2() {
       formData.append('rangpub', '50');
     }
 
-      // Pour si admin
-      if (this.selectedadmin !== 'none') {
-        formData.append('admin', 'admin');
+      // Pour si la pub est admin
+      if (this.selectedadmin == 'evenement') {
+        formData.append('admin', 'evenement');
+      }
+      else if (this.selectedadmin == 'none') {
+        formData.append('admin', 'non');
       }
       else {
-        formData.append('admin', 'non');
+        formData.append('admin', 'admin');
       }
 
      // Pour l'enregistrement du contact

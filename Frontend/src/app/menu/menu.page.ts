@@ -56,6 +56,24 @@ export class MenuPage implements OnInit {
 
   }
 
+  panier(){
+
+    this.router.navigateByUrl('/panier');
+
+  }
+
+  commande(){
+
+    this.router.navigateByUrl('/get-commande');
+
+  }
+
+  commande_user(){
+
+    this.router.navigateByUrl('/get-commande-user');
+
+  }
+
   alert_user(){
 
     this.router.navigateByUrl('/alert-user');

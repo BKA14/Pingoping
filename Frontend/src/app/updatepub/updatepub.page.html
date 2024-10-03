@@ -12,6 +12,10 @@
 <br/>
 <ion-content  keyboard-attach>
 
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <form >
 
     <br>
@@ -212,7 +216,6 @@
 
     <br/> <br>
 
-
     <ion-item *ngIf="selectedrang !== 'none'">
       <ion-label position="floating" class="h2"> Rang de la pub </ion-label><br/>
       <ion-input ion-keyboard-fix [(ngModel)]="rangpub"  name="rang" type="number" ></ion-input>
@@ -226,6 +229,9 @@
         <ion-segment-button value="pub_admin">
           <ion-label> Mettre en admin</ion-label>
         </ion-segment-button>
+        <ion-segment-button value="evenement">
+          <ion-label >mettre dans évènement</ion-label>
+        </ion-segment-button>
         <ion-segment-button value="none">
           <ion-label >Non</ion-label>
         </ion-segment-button>
@@ -234,20 +240,19 @@
     <br/>
 
 
-    <ion-item *ngIf="selectedadmin !== 'none'">
-      <ion-label position="floating" class="h2"> grade de la pub : admin </ion-label><br/>
-      <ion-label name="admin" > {{ admin }}</ion-label>
+    <ion-item >
+      <ion-label position="floating" class="h2"> grade de la pub : {{admin}} </ion-label><br/>
     </ion-item>
     <br/>
 
-  <ion-col>
-  <br/> <br/>
-  <ion-button type="button" (click)="updatepub()"   color="success" shape="round" expand="full">
-   Modifier
-  </ion-button>
-  </ion-col>
+    <ion-col>
+    <br/> <br/>
+    <ion-button type="button"  (click)="updatepub()"   color="success" shape="round" expand="full">
+    Modifier
+    </ion-button>
+    </ion-col>
 
-</form>
-</ion-content>
+  </form>
+  </ion-content>
 
 

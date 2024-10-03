@@ -21,12 +21,13 @@ export class WelcomePage implements OnInit {
 
   activities = [
     { title: 'Signalisation', icon: 'alert-circle-outline', description: 'Envoyer des alertes aux différentes entreprises de votre ville.', link: '/signalisation'  },
-    { title: 'Évènements à venir/Achat de ticket', icon: 'calendar-outline', description: 'Consultez les prochains événements.' , link: '/signalisation'  },
-    { title: 'Restaurant', icon: 'restaurant', description: 'Découvrez nos fabuleux mets.', link: '/signalisation'  },
-    { title: 'Lien utile', icon: 'link-outline', description: 'Accédez à des liens utiles.', link: '/numero-service' },
-    { title: 'Numéros de service', icon: 'call-outline', description: 'Trouvez des numéros utiles.', link: '/numero-service'  },
-    { title: 'PMU', icon: 'analytics-outline', description: 'Pronostic PMU', link: '/signalisation'  }
+    { title: 'Évènements à venir', icon: 'calendar-outline', description: 'Consultez les prochains événements.' , link: '/evenement'  },
+    { title: 'Restaurant', icon: 'restaurant-outline', description: 'Dégusté les fabuleux mets de vos restaurants préférés.', link: '/restaurant'  },
+    { title: 'Market', icon: 'bag-outline', description: 'Découvrez nos différents produits.', link: '/numero-service' },
+    { title: 'Professionnels à proximité', icon: 'call-outline', description: 'Besoin d\'un service ?.', link: '/numero-service'  },
+    { title: 'PMU', icon: 'analytics-outline', description: 'Pronostic PMU.', link: '/pmu'  }
   ];
+
 
 term;
 term2

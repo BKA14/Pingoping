@@ -19,6 +19,35 @@ justify-content: center;
 align-items: center;
 }
 
+h2.centered-heading {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #315c28;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.span{
+  display: inline-block;
+  vertical-align: middle;
+  font-style: normal;
+  text-align: center;
+  --ion-background-color:#fdfdfd;
+  font-family: "Roboto", sans-serif;
+  --background: linear-gradient(#e0ede4, #afcab0) !important;
+  padding: 3px;
+}
+
+.icon{
+  //display: inline-block;
+  font-size: 42px;
+  color: #2dd36f;
+  vertical-align: middle;
+  float: right;
+  }
+
 .service-card {
 margin: 10px;
 margin-top: 9px;
@@ -51,16 +80,6 @@ float: right; /* Aligne l'icône à droite */
 color: #f70707a9;
 }
 
-
-.icon{
-//display: inline-block;
-font-size: 42px;
-color: #2dd36f;
-vertical-align: middle;
-float: right;
-}
-
-
 .span{
 display: inline-block;
 vertical-align: middle;
@@ -70,4 +89,31 @@ text-align: center;
 font-family: "Roboto", sans-serif;
 --background: linear-gradient(#e0ede4, #afcab0) !important;
 padding: 8px;
+}
+
+
+
+.arrow-container {
+  position: fixed;
+  bottom: 70%;/* Ajustez cette valeur selon vos préférences */
+  right: 12px;  /* Ajustez cette valeur selon vos préférences */
+  color: #7cc571; /* Couleur de l'icône */
+  border-radius: 70%;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1000; /* Assurez-vous que l'icône est au-dessus des autres éléments */
+}
+
+
+.recherche {
+  flex: 1;
+  margin-right: 10px;
+  flex: 1;
+  border-radius: 14px; /* Ajustez le border-radius si nécessaire */
+  margin-right: 6px; /* Ajoutez une marge à droite pour l'espacement avec l'icône */
+  padding: 1px; /* Ajoutez du padding à l'intérieur de l'input */
+  box-shadow: 0px 2px 5px rgba(86, 195, 115, 0.2); /* Optionnel: ajoutez une ombre pour l'effet visuel */
+  border: 1px solid #7d2424; /* Ajoutez une bordure si nécessaire */
+  color: #0e0e0e;
+  background-color: #ffffff;
 }

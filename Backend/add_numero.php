@@ -21,10 +21,9 @@ function generateUniqueID($con) {
     return $id;
 }
 
-// Générer un ID unique
-$id = generateUniqueID($con);
 
-
+ // Générer un identifiant unique pour le panier (CHAR 32)
+ $id = bin2hex(random_bytes(16)); // Génère un identifiant de 32 caractères hexadécimaux
 
 // Extraire les données du commentaire à partir des données JSON
 $nom = $data['nom'];

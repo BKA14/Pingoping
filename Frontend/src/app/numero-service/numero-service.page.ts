@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, IonContent, IonInfiniteScroll, LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { CustomFilterPipe } from './custom-filter.pipe';
@@ -12,6 +12,10 @@ import { CustomFilterPipe } from './custom-filter.pipe';
   styleUrls: ['./numero-service.page.scss'],
 })
 export class NumeroServicePage implements OnInit {
+
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
+  infiniteScrollDisabled: boolean = false;
   number: any;
   grade: any;
   prenom1: string;
@@ -19,6 +23,11 @@ export class NumeroServicePage implements OnInit {
   numuser: string;
   idpub: string;
   term: any;
+  oldnumber: any;
+  page: number = 1;
+  limit: number = 28;
+  search: boolean = false;
+
 
   constructor(
     private http: HttpClient,
@@ -29,55 +38,96 @@ export class NumeroServicePage implements OnInit {
     private alertController: AlertController,
     private loadingCtrl: LoadingController,
     private cdr: ChangeDetectorRef,
-  ) { }
+    private renderer: Renderer2,
+  ) {
+
+
+    }
+
 
   ngOnInit() {
 
-    setInterval(() => {
-
-      this.numero() ;
-       this.cdr.detectChanges(); // Détecter et appliquer les changements
-
-      // this.openUrl() ;
-       }, 5000);
-     this.numero() ;
      this.getsessionuser();
+
+     this.numero() ;
+     this.cdr.detectChanges(); // Détecter et appliquer les changements
+     this.numero() ;
   }
 
 
   getsessionuser(){
 
-    this.prenom1= (localStorage.getItem('prenom1'));
-    console.log(this.prenom1);
-
     this.grade= (localStorage.getItem('grade'));
     console.log(this.grade);
-
-    this.iduser= (localStorage.getItem('iduser'));
-    console.log(this.iduser);
-
-    this.numuser= (localStorage.getItem('numuser'));
-    console.log(this.numuser);
-
-    this.idpub= (localStorage.getItem('idpub'));
-    console.log(this.numuser);
 
      }
 
 
-  async numero() {
-    try {
-    const res = await this._apiService.numero_service().toPromise();
-    console.log('SUCCESS ===', res);
+    async numero() {
 
-    this.number = res;
+      const loading = await this.loadingCtrl.create({
+        message: 'Rechargement...',
+        spinner: 'lines',
+        cssClass: 'custom-loading',
+        duration: 8500,
+      });
 
-    } catch (error) {
-    console.log('erreur de chargement', error);
-    // Gérez les erreurs de chargement de manière appropriée
+      this.page = 1;
+      this.oldnumber = this.number;
+
+      try {
+      const res : any = await this._apiService.numero_service(this.page, this.limit).toPromise();
+      console.log('SUCCESS ===', res);
+
+      if (res && res.length < 1) {
+        this.number = 'aucune_alerte';
+      } else {
+        this.number =  res;
+      }
+
+      loading.dismiss();
+
+      } catch (error) {
+      console.log('erreur de chargement', error);
+      if (this.oldnumber && this.oldnumber.length > 0) {
+        this.number = this.oldnumber;
+      }
+      else { this.number = 'erreur_chargement'; }
+      console.log('Erreur de chargement', error);
+      loading.dismiss();
     }
 
+      }
+
+
+
+    async loadMore(event) {
+
+      this.page++;
+      this.oldnumber = this.number;
+
+      try {
+        const res : any  = await this._apiService.numero_service(this.page, this.limit).toPromise();
+        console.log('SUCCESS ===', res);
+
+        this.number = this.number.concat(res);
+        event.target.complete();
+
+          // Désactiver l'infinite scroll si moins de données retournées que la limite
+      if (res.length < this.limit) {
+        this.infiniteScrollDisabled = true;
+      }
+      } catch (error) {
+        console.log('Erreur de chargement', error);
+        if (this.oldnumber && this.oldnumber.length > 0) {
+          this.number = this.oldnumber;
+        }
+        else { this.number = 'erreur_chargement'; }
+        event.target.complete();
+      }
     }
+
+
 
 
     appeler(numero: string) {
@@ -153,6 +203,140 @@ export class NumeroServicePage implements OnInit {
   transform(number: any, term: string, excludes: any = []): any {
     return CustomFilterPipe.filter(number, term, excludes);
   }
+
+
+
+
+  ////////////////fleche scroll haut ////////////////////////////
+
+private hideButtonTimeout: any;
+@ViewChild('scrollButton', { static: false }) scrollButton: ElementRef;
+@ViewChild(IonContent, { static: false }) content: IonContent;
+
+
+ngAfterViewInit() {
+  this.addScrollListener();
+  this.resetHideButtonTimer() ;
+}
+
+scrollToTop() {
+  this.content.scrollToTop(500); // Utiliser la méthode scrollToTop d'Ionic
+}
+
+addScrollListener() {
+  this.content.getScrollElement().then(scrollElement => {
+    this.renderer.listen(scrollElement, 'scroll', () => {
+      this.handleScroll(scrollElement);
+      this.resetHideButtonTimer();
+    });
+  });
+}
+
+
+handleScroll(scrollElement) {
+  const scrollButton = this.scrollButton.nativeElement;
+
+  if (!scrollElement || !scrollButton) return;
+
+  const { scrollTop, scrollHeight, clientHeight } = scrollElement;
+  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+
+  if (scrollTop >= 7000 ) {
+    this.renderer.setStyle(scrollButton, 'display', 'block');
+  } else {
+    this.renderer.setStyle(scrollButton, 'display', 'none');
+  }
+}
+
+resetHideButtonTimer() {
+  if (this.hideButtonTimeout) {
+    clearTimeout(this.hideButtonTimeout);
+  }
+  this.hideButtonTimeout = setTimeout(() => {
+    this.renderer.setStyle(this.scrollButton.nativeElement, 'display', 'none');
+  }, 2000);
+}
+////////////////////////////////
+
+
+
+search_active(event) {
+  const searchTerm = event.target.value; // Obtenez la valeur de l'entrée
+
+  if (searchTerm.trim() !== '') {
+    this.search = true;
+    this.load_numero_search(event);
+  }else {
+    this.search = false;
+    this.term = '';
+    this.page = 1;
+    this.infiniteScrollDisabled = false; // Réactiver l'infinite scroll
+    this.numero();
+  }
+}
+
+
+getLoadFunction(event) {
+
+ if (this.search){
+    this.load_more_search(event);
+  }
+  else {
+    this.loadMore(event);
+  }
+}
+
+
+
+async load_numero_search(event) {
+ this.page = 1;
+  this.oldnumber = this.number;
+
+  try {
+    const res : any = await this._apiService.load_numero_search(this.term, this.page, this.limit).toPromise();
+    console.log('SUCCESS ===', res);
+
+    if (res && res.length < 1) {
+      this.number = 'aucune_alerte';
+    }
+    else {
+       this.number = res;
+    }
+
+    } catch (error) {
+    if (this.oldnumber && this.oldnumber.length > 0) {
+      this.number = this.oldnumber;
+    }
+    else { this.number = 'erreur_chargement'; }
+    console.log('Erreur de chargement', error);
+  }
+}
+
+
+async load_more_search(event) {
+  this.page++;
+  this.oldnumber = this.number;
+  try {
+    const res : any  = await this._apiService.load_numero_search(this.term, this.page, this.limit).toPromise();
+    console.log('SUCCESS ===', res);
+
+    this.number = this.number.concat(res);
+    event.target.complete();
+
+      // Désactiver l'infinite scroll si moins de données retournées que la limite
+  if (res.length < this.limit) {
+    this.infiniteScrollDisabled = true;
+    this.search = false ;
+  }
+  } catch (error) {
+    console.log('Erreur de chargement', error);
+    if (this.oldnumber && this.oldnumber.length > 0) {
+      this.number= this.oldnumber;
+    }
+    else { this.number = 'erreur_chargement'; }
+    event.target.complete();
+  }
+}
 
 
 }

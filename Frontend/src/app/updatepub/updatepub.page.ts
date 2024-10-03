@@ -62,20 +62,6 @@ export class UpdatepubPage implements OnInit {
    }
 
 
-    getentreprises(){
-     this._apiService.getentreprises().subscribe((res:any) => {
-
-       console.log("SUCCESS ===",res);
-
-
-      },(error: any) => {
-      alert('Erreur de connection avec le serveur veillez reessayer');
-      //this.navCtrl.setRoot('/welcome2');
-      this.router.navigateByUrl('/welcome2');
-      // console.log("ERREUR ===",error);
-   })
-   }
-
    refreshPage(e){
     setTimeout(() => {
       this.getpub2(this.id);
@@ -225,13 +211,16 @@ updateDateOptiondeb(event: any) {
      formData.append('rangpub', '50');
    }
 
-    // Pour l'enregistrement du grade
-    if (this.selectedadmin !== 'none') {
-      formData.append('admin', 'admin');
-    }
-    else {
-      formData.append('admin', 'non');
-    }
+   // Pour si la pub est admin ou evenement
+   if (this.selectedadmin == 'evenement') {
+    formData.append('admin', 'evenement');
+  }
+  else if (this.selectedadmin == 'none') {
+    formData.append('admin', 'non');
+  }
+  else {
+    formData.append('admin', 'admin');
+  }
 
     // Pour l'enregistrement du contact
     if (this.selectedcontact !== 'none') {

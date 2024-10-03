@@ -30,7 +30,7 @@ constructor(private router: Router,
 
 async getsession(){
   const loading = await this.loadingCtrl.create({
-    message: 'Rechargement...',
+    message: 'kevin ...',
    spinner:'lines',
   // showBackdrop:false,
     cssClass: 'custom-loading',

@@ -368,6 +368,7 @@ async getpub(){
    spinner:'lines',
   // showBackdrop:false,
     cssClass: 'custom-loading',
+    duration: 8500,
   });
 
    loading.present();
@@ -589,7 +590,8 @@ async performLogout() {
 const loading = await this.loadingCtrl.create({
 message: 'Déconnexion en cours...',
 spinner: 'lines',
-cssClass: 'custom-loading'
+cssClass: 'custom-loading',
+duration: 8500,
 });
 loading.present();
 
@@ -732,6 +734,7 @@ async loadcommentairepub(pubId: string) {
     spinner:'lines',
    // showBackdrop:false,
      cssClass: 'custom-loading',
+     duration: 8500,
    });
 
     loading.present();
@@ -789,6 +792,7 @@ this.countdownValue = null;
       message: 'Rechargement...',
       spinner:'lines',
       cssClass: 'custom-loading',
+      duration: 8500,
     });
 
     loading.present();
@@ -905,6 +909,7 @@ message: 'Rechargement...',
 spinner:'lines',
 // showBackdrop:false,
 cssClass: 'custom-loading',
+duration: 8500,
 });
 
 loading.present();
@@ -969,6 +974,7 @@ message: 'Rechargement...',
 spinner:'lines',
 // showBackdrop:false,
 cssClass: 'custom-loading',
+duration: 8500,
 });
 
 loading.present();
@@ -1040,6 +1046,7 @@ async signalerCommentaire(commentaire) {
     spinner:'lines',
     // showBackdrop:false,
     cssClass: 'custom-loading',
+    duration: 8500,
     });
 
     loading.present();
@@ -1138,6 +1145,7 @@ async signalement(commentaire) {
         spinner:'lines',
         // showBackdrop:false,
         cssClass: 'custom-loading',
+        duration: 8500,
         });
 
       loading.present();

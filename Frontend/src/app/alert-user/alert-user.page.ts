@@ -17,9 +17,7 @@ export class AlertUserPage implements OnInit {
 
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-
   alert: any;
-
   recherche_date: any;
   page: number = 1;
   limit: number = 10;
@@ -40,6 +38,7 @@ export class AlertUserPage implements OnInit {
   service: any;
   userData: any;
 
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -53,7 +52,7 @@ export class AlertUserPage implements OnInit {
     private timeService: timeService,
   ) {
 
-   }
+    }
 
   ngOnInit() {
     this.loadalert_id();
@@ -78,6 +77,7 @@ async loadalert_id() {
     message: 'Rechargement...',
     spinner: 'lines',
     cssClass: 'custom-loading',
+    duration: 8500,
   });
 
   loading.present();
@@ -227,6 +227,7 @@ async loadalert_id() {
       message: 'Rechargement...',
       spinner: 'lines',
       cssClass: 'custom-loading',
+      duration: 8500,
     });
 
     await loading.present();
@@ -313,6 +314,7 @@ async loadalert_id() {
      spinner:'lines',
     // showBackdrop:false,
       cssClass: 'custom-loading',
+      duration: 8500,
     });
     loading.present();
 

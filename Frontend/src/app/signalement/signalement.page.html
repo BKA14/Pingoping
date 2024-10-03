@@ -9,8 +9,7 @@
     </ion-row>
   </ion-toolbar>
   <div class="search-container">
-    <ion-input class="recherche" type="text" placeholder="Rechercher id, nom, prenom,..." [(ngModel)]="term"></ion-input>
-    <ion-icon name="search" class="search-icon" color="light" style="zoom: 1.9;" (click)="search_active()"></ion-icon>
+    <ion-input class="recherche" type="text" placeholder="Rechercher id, nom, prenom,..." [(ngModel)]="term" (ionInput)="search_active($event)"></ion-input>
   </div>
 </ion-header>
 

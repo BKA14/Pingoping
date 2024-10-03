@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 
 @Component({
@@ -27,10 +27,25 @@ export class AjouterNumeroPage implements OnInit {
   private router: Router,
   private _apiService : ApiService,
   private loadingCtrl: LoadingController,
-  public loadingController: LoadingController
+  public loadingController: LoadingController,
+  private toastCtrl: ToastController  // Injecter le ToastController
+
 ) {
 
   }
+
+
+  // Méthode pour afficher un toast
+  async presentToast(message: string, color: string = 'danger') {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 2000, // Durée d'affichage du toast
+      position: 'top',
+      color: color,
+    });
+    toast.present();
+    }
+
 
   async addNumero(){
     let data = {
@@ -52,11 +67,11 @@ export class AjouterNumeroPage implements OnInit {
       this.nom_entreprise ='';
       //window.location.reload();
       loading.dismiss();
-      this.router.navigateByUrl('/welcome');
-      alert('Entreprise et numero ajoute avec success');
+      this.router.navigateByUrl('/numero-service');
+      this.presentToast('Entreprise et numero ajoute avec success', 'success');
     },(error: any) => {
       loading.dismiss();
-     alert('Erreur de connection entreprise non enregistre');
+     this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
      console.log("ERROR ===",error);
     })
    }

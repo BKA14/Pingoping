@@ -10,6 +10,8 @@ import { Capacitor } from '@capacitor/core';
 import { Router } from '@angular/router';
 import { LoginServiceReadyService } from './login-service-ready.service';
 import { FirebaseService } from './firebase-init.service';
+import { catchError, finalize, take, timeout } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -73,35 +75,61 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.platform.ready().then(async () => {
       // Présenter le loading dès que la plateforme est prête
       const loading = await this.loadingCtrl.create({
-        message: 'Rechargement...',
+        message: 'Rechargement',
         spinner: 'lines',
         cssClass: 'custom-loading',
       });
 
       await loading.present();
 
+      // Configurer le status bar et le back button service
       this.statusBar.styleDefault();
       this.backButtonService.init();
 
-      if (Capacitor.isNativePlatform()) {
-      this.LoginServiceReadyService.isLoginPageReady$.subscribe(isReady => {
-        if (isReady) {
-          this.hideSplashScreen();
-          loading.dismiss(); // Masquer le loading lorsque la page de login est prête
+      try {
+        // Vérification de la plateforme pour éviter les problèmes sur le web
+        if (Capacitor.getPlatform() !== 'web') {
+          // Observable avec timeout pour suivre l'état de readiness de la page de login
+          this.LoginServiceReadyService.isLoginPageReady$.pipe(
+            take(1),  // Prendre la première valeur
+            timeout(10000),  // Timeout après 10 secondes
+            catchError((err) => {
+              console.error('Erreur ou timeout pendant la préparation de la page de login:', err);
+              return of(false);  // Retourne 'false' en cas de problème
+            }),
+            finalize(() => {
+              loading.dismiss();  // Masquer le loading dans tous les cas
+            })
+          ).subscribe({
+            next: (isReady) => {
+              if (isReady) {
+                this.hideSplashScreen();
+              } else {
+                console.warn("La page de login n'a pas été prête dans le délai imparti.");
+                this.hideSplashScreen();  // On masque le splash malgré tout
+              }
+            }
+          });
+        } else {
+          // Masquer le loading si l'on est sur le web
+          await loading.dismiss();
         }
-      });
-    } else {
-      loading.dismiss();
-    }
+      } catch (error) {
+        console.error('Erreur lors de l\'initialisation de l\'application :', error);
+        await loading.dismiss();  // Assurez-vous que le loading est masqué en cas d'erreur
+      }
     });
-
   }
 
-
+  // Masquer le splash screen avec gestion des erreurs
   async hideSplashScreen() {
-
-    await SplashScreen.hide();
+    try {
+      await SplashScreen.hide();
+    } catch (error) {
+      console.error('Erreur lors du masquage du splash screen :', error);
+    }
   }
+
 
 
   lekeyboard(){

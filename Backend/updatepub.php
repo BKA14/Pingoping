@@ -25,8 +25,6 @@ if (isset($_POST['photo']) && strtolower(trim($_POST['photo'])) == 'non') {
 } elseif (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     $file_tmp = $_FILES['photo']['tmp_name'];
 
-    // Générez un nom de fichier unique
-    //$file_name = uniqid(20) . "." . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
 
     function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

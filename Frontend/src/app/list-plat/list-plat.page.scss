@@ -1,0 +1,391 @@
+.toolbar {
+  --background: linear-gradient(to right, #0eeb49, #05a83d); /* Dégradé vert */
+  --ion-toolbar-background: transparent;
+  color: #fff;
+  padding: 0 15px;
+}
+
+.title {
+  text-align: center;
+  width: 100%;
+  font-weight: bold;
+}
+
+.header-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+h2.centered-heading {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #12230e;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.span{
+  display: inline-block;
+  vertical-align: middle;
+  font-style: normal;
+  text-align: center;
+  --ion-background-color:#fdfdfd;
+  font-family: "Roboto", sans-serif;
+  --background: linear-gradient(#e0ede4, #afcab0) !important;
+  padding: 3px;
+}
+
+.icon{
+  //display: inline-block;
+  font-size: 42px;
+  color: #2dd36f;
+  vertical-align: middle;
+  float: right;
+  }
+
+
+.nom {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.commentaire {
+  font-size: 18px;
+}
+
+ion-card-content p {
+  color: #666;
+}
+
+.label_admin{
+  color: #b3b14a;
+}
+
+.icon-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.iconsupp {
+  color: #f70707a9;
+  margin-left: 15px;
+}
+
+
+.span {
+  display: inline-block;
+  text-align: center;
+  background: linear-gradient(#e0ede4, #afcab0);
+  padding: 8px;
+  font-family: "Roboto", sans-serif;
+  border-radius: 5px;
+}
+
+
+/* Dans votre fichier CSS ou SCSS */
+.custom-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-radius: 8px;
+}
+
+.erreur_chargement {
+  text-align: center;
+  bottom: 35%;
+}
+
+.arrow-container {
+  position: fixed;
+  bottom: 70%;/* Ajustez cette valeur selon vos préférences */
+  right: 12px;  /* Ajustez cette valeur selon vos préférences */
+  color: #7cc571; /* Couleur de l'icône */
+  border-radius: 70%;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1000; /* Assurez-vous que l'icône est au-dessus des autres éléments */
+}
+
+
+.ligne{
+  background-color:  #4ca05e;
+  padding: 0.6px;
+  width: auto;
+  --padding-start: 0;
+  --padding-end: 0;
+  margin: 0;
+  }
+
+  .message-item {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    padding: 15px;
+  }
+
+  @media (min-width: 1024px) {
+    .message-item {
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+      background-color: #ffffff;
+      padding: 15px;
+      width: 55%;
+      margin-left: 18%;
+
+    }
+  }
+
+  .message-list {
+    padding: 0 15px;
+  }
+
+  .custom-background {
+    font-style: normal;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+  color: #ffffff;
+  padding: 3px;
+  }
+
+  ion-card-content p {
+    margin: 8px 0 0 0;
+  }
+
+
+  .message-content {
+    font-size: 18px;
+    color: #555555;
+    margin-bottom: 15px;
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .label-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333333;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+
+  .heure_deb{
+  color: #51bf70;
+  }
+
+  .heure_fin{
+    color: #b3342b;
+  }
+
+
+  .btnpub {
+    margin-bottom: 10px; /* Ajoute un espacement entre les boutons */
+  }
+
+  /* Styliser le bouton de localisation */
+  .btnpub.location {
+    background-color: #fbf9f8;
+    color: #4ca05e;
+    --border-color: #4ca05e;
+  }
+
+  /* Styliser le bouton de contact WhatsApp */
+  .btnpub.contact {
+    background-color: #fbf9f8;
+    color: #4ca05e;
+    --border-color: #4ca05e;
+  }
+
+
+  .localisation{
+    //vertical-align: middle;
+    font-size: medium;
+    font-style: normal;
+    padding: 3px;
+    font-family: "Roboto", sans-serif;
+    color: #080a09;
+    --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+
+    white-space: normal; /* Permet le retour à la ligne automatique */
+    word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
+    text-align: justify;
+    margin: 0;
+
+    --padding-start: 0;
+    --padding-end: 0;
+    }
+
+
+    .deconte {
+      float: right; /* Aligne l'icône à droite */
+      background-color: #8ee092; /* Couleur de fond verte */
+      color: rgb(24, 23, 23); /* Couleur du texte blanche */
+      padding: 5px; /* Espacement intérieur pour plus de visibilité */
+      border-radius: 1px; /* Coins arrondis */
+      font-size: 18px; /* Taille de la police */
+      margin: 10px;
+      }
+
+      .admin-indicator {
+        color: white;
+        float: left;
+        padding: 2px;
+        border-radius: 3px;
+        margin-bottom: 10px;
+      }
+
+      .supprime-oui {
+        background-color: rgb(231, 51, 51);
+      }
+
+      .supprime-non {
+        background-color: rgb(231, 219, 51);
+      }
+
+      .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px; /* Ajustez selon les besoins */
+      }
+
+      .recherche {
+        flex: 1;
+        margin-right: 10px;
+        flex: 1;
+        border-radius: 14px; /* Ajustez le border-radius si nécessaire */
+        margin-right: 6px; /* Ajoutez une marge à droite pour l'espacement avec l'icône */
+        padding: 1px; /* Ajoutez du padding à l'intérieur de l'input */
+        box-shadow: 0px 2px 5px rgba(86, 195, 115, 0.2); /* Optionnel: ajoutez une ombre pour l'effet visuel */
+        border: 1px solid #7d2424; /* Ajoutez une bordure si nécessaire */
+        color: #0e0e0e;
+        background-color: #ffffff;
+      }
+
+      .search-icon {
+        cursor: pointer;
+      }
+
+      .menu {
+        bottom: 0;
+        width: 100%;
+        background-color: transparent; /* Transparent background */
+        border: 2px solid #4ca05e; /* Outline en vert */
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+        box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+        padding: 7px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        transition: background-color 0.3s, color 0.3s; /* Transition douce */
+      }
+
+      /* Quand on passe la souris dessus, le fond devient vert pâle */
+      .menu:hover {
+        background-color: #e0f5ec;
+      }
+
+      /* Quand on clique sur le bouton, le fond devient vert */
+      .menu:active {
+        background-color: #50cd82;
+        color: white;
+      }
+
+      /* Si tu veux gérer le changement de couleur au clic dans Angular, utilise une classe active */
+      .menu.active {
+        background-color: #4ca05e;
+        color: white;
+      }
+
+      .button_adore {
+        color: #4ca05e;
+        font-size: 38px;
+        transition: color 0.3s; /* Transition douce pour le changement de couleur */
+      }
+
+      .button_adore_white {
+        color: white;
+        font-size: 38px;
+        transition: color 0.3s; /* Transition douce pour le changement de couleur */
+      }
+
+
+      /* Change la couleur de l'icône quand on clique */
+      .menu:active .button_adore {
+        color: white;
+      }
+
+      ion-card-content {
+        position: relative;
+        min-height: 200px;
+        padding: 7px;
+
+      }
+
+
+      /* Style pour placer le bouton à gauche */
+      .left-align {
+        text-align: left; /* Ajustez la marge à gauche selon vos besoins */
+      }
+
+
+      .vert {
+        background-color: #4ca05e;
+      }
+
+
+      .likes_count {
+        //vertical-align: middle;
+        font-size: medium;
+        font-style: normal;
+        padding: 11px;
+        color: #151716;
+        font-family: "Roboto", sans-serif;
+      }
+
+
+      .cart-button {
+        position: relative;
+        font-size: 16px;
+        font-weight: bold;
+        background: #f0f0f0; /* Light background */
+        border-radius: 10px;
+        padding: 5px 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+      }
+
+      .cart-button:hover {
+        background: #e0e0e0; /* Hover background */
+      }
+
+      .cart-icon {
+        font-size: 32px;
+        margin-right: 5px;
+      }
+
+      .cart-badge {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        font-size: 14px;
+        background-color: #ff3b30; /* Red badge color */
+        color: white;
+        border-radius: 50%;
+        padding: 3px 7px;
+        min-width: 20px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+

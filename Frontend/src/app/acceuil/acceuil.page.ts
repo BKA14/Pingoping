@@ -163,7 +163,7 @@ event.preventDefault();
       const toast = await this.toastCtrl.create({
         message: message,
         duration: 2000, // Durée d'affichage du toast
-        position: 'top',
+        position: 'middle',
         color: color,
       });
       toast.present();
@@ -176,42 +176,65 @@ event.preventDefault();
         }
       }
 
-// Function to get the initial pubs from the API
-async getpub() {
-  this.page = 1;
-  const loading = await this.loadingCtrl.create({
-    message: 'Rechargement...',
-    spinner: 'lines',
-    cssClass: 'custom-loading',
-  });
+      async getpub() {
+        this.page = 1;
 
-  loading.present();
-  this.oldpub = this.pub;
+        let loading: HTMLIonLoadingElement;
 
-  this._apiService.getpub(this.page, this.limit).subscribe(async (res: any) => {
-    console.log("SUCCESS == pub", res);
+        try {
+          // Créer et afficher le loader
+          loading = await this.loadingCtrl.create({
+            message: 'Actualisation...',
+            spinner: 'lines',
+            cssClass: 'custom-loading',
+            duration: 8500, // Timeout de 8,5 secondes
+          });
 
-    if (res && res.length < 1) {
-      this.pub = 'aucune_alerte';
-    }
-    else {
-      this.pub = res;
-     await this?.openUrl();
-    }
-    loading.dismiss();
+          await loading.present();
 
-  }, (error: any) => {
-    if (this.oldpub && this.oldpub.length > 0) {
-      this.pub = this.oldpub;
-    }
-    else { this.pub = 'erreur_chargement'; }
-    this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
-  //  this.router.navigateByUrl('/welcome2');
-    loading.dismiss();
-  });
+          this.oldpub = this.pub;
 
-  this.cdr.detectChanges();
-}
+          // Appel API pour récupérer les pubs
+          this._apiService.getpub(this.page, this.limit).subscribe(
+            async (res: any) => {
+              console.log("SUCCESS == pub", res);
+
+              if (res && res.length < 1) {
+                this.pub = 'aucune_alerte';
+              } else {
+                this.pub = res;
+                await this.openUrl();
+              }
+
+              await loading.dismiss(); // Fermer le chargement après succès
+            },
+            async (error: any) => {
+              console.error("ERROR == pub", error);
+
+              // Restaurer les anciennes données si échec de chargement
+              if (this.oldpub && this.oldpub.length > 0) {
+                this.pub = this.oldpub;
+              } else {
+                this.pub = 'erreur_chargement';
+              }
+
+              await this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
+              await loading.dismiss(); // Fermer le chargement en cas d'erreur
+            }
+          );
+        } catch (e) {
+          await this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
+
+          if (loading) {
+            await loading.dismiss(); // S'assurer que le loader est fermé en cas d'erreur
+          }
+
+          await this.presentToast("Une erreur inattendue s'est produite, veuillez réessayer.");
+        } finally {
+          this.cdr.detectChanges(); // Actualiser l'affichage après la mise à jour des données
+        }
+      }
+
 
 async loadMore(event) {
   this.page++;
@@ -721,6 +744,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
         spinner:'lines',
       // showBackdrop:false,
         cssClass: 'custom-loading',
+        duration: 8500,
       });
 
       loading.present();
@@ -802,22 +826,16 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
   }
 
-  acceuil() {
-
-    this.router.navigateByUrl('/acceuil');
-
+  evenement() {
+    this.router.navigateByUrl('/evenement');
   }
 
   service() {
-
     this.router.navigateByUrl('/welcome');
-
   }
 
   apropos() {
-
     this.router.navigateByUrl('/apropos');
-
   }
 
   ping() {
@@ -848,6 +866,7 @@ async getUserLocation() {
 
 
 async getUserLocationAndCompanyId(id) {
+
 try {
   const coordinates = await Geolocation.getCurrentPosition();
   const userLatitude = coordinates.coords.latitude;

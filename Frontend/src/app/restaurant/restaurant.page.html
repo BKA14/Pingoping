@@ -1,0 +1,371 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <br><br>
+    <ion-row class="header-row">
+      <ion-title class="title"> RESTAURANT</ion-title>
+    </ion-row>
+    <br>
+    <div class="search-container">
+      <ion-input class="recherche" type="text" placeholder="Rechercher nom de resto,..." [(ngModel)]="term" (ionInput)="onSearch($event)"></ion-input>
+    </div>
+  </ion-toolbar>
+  <ion-toolbar class="toolbar">
+    <!-- Boutons sur une nouvelle ligne -->
+
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/panier']" class="light" color="light">
+        Voir le panier
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<div class="arrow-container" #scrollButton  (click)="scrollToTop()" >
+  <ion-icon name="arrow-up-circle" class="red-arrow" style="zoom: 3.0;"></ion-icon>
+</div>
+
+
+<ion-content class="custom-background" >
+  <br>
+
+  <!-- Section visible uniquement pour admin/superadmin -->
+   <div style="text-align: center;" *ngIf="grade === 'admin' || grade === 'superadmin'">
+  <ion-item class="span"  lines="none">
+    <span  color="success">Ajouter une restaurant </span>
+    <ion-icon type="button" class="icon" [routerLink]="['/ajouter-restaurant/']" style="zoom: 1.1;" name="add-circle-outline" class="icon"></ion-icon>
+  </ion-item>
+   </div>
+
+
+  <h2 class="centered-heading">
+    Craquez pour un plat délicieux ! Commandez en ligne et savourez-le chez vous en quelques minutes.
+  </h2>
+
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list class="message-list" *ngIf="resto !== 'erreur_chargement' && resto !== 'aucune_alerte'" >
+    <div lines="inset" class="message-item" *ngFor="let resto of resto | customFilter: term">
+
+      <!-- affiche tout les resto pour l'admin ou le superadmin -->
+      <div *ngIf="grade === 'admin' || grade === 'superadmin'">
+
+      <div *ngIf="resto.etiquette !== undefined && resto.etiquette !== null && resto.etiquette.trim() !== 'non'">
+        <ion-label class="deconte" > {{ resto.etiquette }}</ion-label>
+      </div>
+      <br *ngIf="resto.etiquette !== undefined && resto.etiquette !== null && resto.etiquette.trim() !== 'non'">
+
+      <!-- Indication visuelle pour les resto supprimé -->
+      <div *ngIf="grade === 'admin' || grade === 'superadmin'"
+      class="admin-indicator"
+      [ngClass]="{'supprime-oui': resto.supprimer === 'oui', 'supprime-non': resto.supprimer !== 'oui'}">
+      <ion-label>supprimé ? : {{ resto.supprimer }}</ion-label>
+      </div>
+
+
+      <br>
+      <ion-card-header *ngIf="resto.nom_resto !== undefined && resto.nom_resto !== null && resto.nom_resto.trim() !== 'non'">
+        <ion-label class="nom" color="success" *ngIf="resto.nom_resto" >{{ resto.nom_resto }}</ion-label>
+      </ion-card-header>
+
+      <br>
+      <p [innerHTML]="commentaireService.sanitize(getDisplayedCommentaire(resto))"
+      *ngIf="resto.commentaire !== 'non' && resto.commentaire !== null && resto.commentaire !== undefined"
+      class="commentaire">
+      </p>
+      <a *ngIf="getPlainText(resto.commentaire).length > limit_comment" (click)="toggleCommentaire()" class="see-more-link">
+        {{ showFullCommentaire ? 'Voir moins' : 'Voir plus' }}
+      </a>
+
+      <br>
+
+      <ion-card-content>
+        <!-- image Display -->
+        <ng-container *ngIf="isImage(resto.image)">
+          <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+        </ng-container>
+        <br>
+
+
+          <!-- Indication visuelle pour les resto supprimé -->
+        <div  *ngIf="grade === 'admin' || grade === 'superadmin'">
+          <ion-label class="label-title"> Rang affichage resto :</ion-label>
+          <h2 class="message-content"> {{ resto.rang }}</h2>
+        </div>
+
+        <br>
+
+      <!-- description -->
+      <div *ngIf="resto.description !== undefined && resto.description !== null && resto.description.trim() !== 'non'">
+        <ion-label class="label-title"> Description :</ion-label>
+        <h2 *ngIf="resto.description" class="message-content">{{ resto.description }}</h2>
+        </div>
+
+          <!-- ville -->
+          <div *ngIf="resto.ville !== undefined && resto.ville !== null && resto.ville.trim() !== 'non'">
+            <ion-label class="label-title"> Ville :</ion-label>
+          <h2 *ngIf="resto.ville" class="message-content">{{ resto.ville }}</h2>
+        </div>
+
+        <br>
+
+        <!-- contact_admin -->
+        <div>
+            <ion-label class="label-title"> contact_admin :</ion-label>
+          <h2  class="message-content">{{ resto.contact_admin }}</h2>
+        </div>
+        <p class="ligne"></p>
+
+        <!-- Horaire section -->
+          <div class="horaire-row" *ngIf="resto.heure_deb !== undefined
+          && resto.heure_deb !== null
+          && resto.heure_deb.trim() !== 'non'
+          && resto.heure_fin !== undefined
+          && resto.heure_fin !== null
+          && resto.heure_fin.trim() !== 'non'">
+          <ion-row class="ion-justify-content-center ion-align-items-center">
+            <ion-col size="auto">
+              <ion-label class="label-title">Horaire :</ion-label>
+            </ion-col>
+            <ion-col size="auto">
+              <h2 *ngIf="resto.heure_deb" class="heure_deb">{{ resto.heure_deb }} </h2>
+            </ion-col>
+            <ion-col size="auto">
+              <h2 *ngIf="resto.heure_deb">à</h2>
+            </ion-col>
+            <ion-col size="auto">
+              <h2 *ngIf="resto.heure_fin" class="heure_fin">{{ resto.heure_fin }}</h2>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <br>
+        <!-- Localisation -->
+        <ion-label  class="localisation">
+          Vous êtes présentement à : {{ convertMetersToKilometers(resto.distanceToUser) }} du lieu.
+        </ion-label>
+         <br>
+
+         <p class="ligne"></p>
+         <br>
+        <!-- Boutons -->
+        <ion-button *ngIf="resto.longitude && resto.latitude" class="btnpub location" fill="outline"
+          [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + resto.latitude + ',' + resto.longitude + '&travelmode=driving'">
+          Localiser le lieu
+          <ion-icon name="location-outline"></ion-icon>
+        </ion-button>
+         <br>
+        <ion-button *ngIf="resto.contact && resto.contact !== '0'" class="btnpub contact" fill="outline" [href]="getWhatsAppLink(resto.contact)">
+          WhatsApp
+          <ion-icon name="logo-whatsapp"></ion-icon>
+        </ion-button>
+
+        <br>
+        <br>
+        <br>
+         <!--  nbr j'aime -->
+         <div class="left-align">
+
+          <ion-label class="likes_count light">
+            {{ resto.likes_count === 0
+                ? 'Aucune personne n\'adore ce restaurant'
+                : resto.likes_count === 1
+                ? '1 personne adore ce restaurant'
+                : formatLikesCount(resto.likes_count) + ' personnes adorent ce restaurant' }}
+          </ion-label>
+
+         <!--  bouton like-->
+        <ion-card-content>
+          <div class="menu"
+            [ngClass]="{'vert': hasLiked(resto)}"
+            (click)="like_resto(resto)">
+
+            <ion-icon class="button_adore"
+              [ngClass]="{'button_adore_white': hasLiked(resto)}"
+              name="heart">
+              J'adore
+            </ion-icon>
+
+          </div>
+        </ion-card-content>
+
+        <ion-button class="btnpub contact" fill="outline" [routerLink]="['/list-plat/', resto.id, resto.contact_admin, resto.nom_resto]" aria-label="Entrer dans le restaurant">
+          Entrer
+          <ion-icon name="chevron-forward"></ion-icon>
+        </ion-button>
+
+      </div>
+
+      </ion-card-content>
+
+      <!-- Actions pour Admin/SuperAdmin -->
+      <div class="icon-right" *ngIf="grade === 'admin' || grade === 'superadmin'">
+        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/update-restorant/', resto.id]"></ion-icon>
+        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(resto)"></ion-icon>
+      </div>
+    </div>
+
+
+    <!-- affiche les resto non supprimé pour les user -->
+    <div *ngIf="grade !== 'admin' && grade !== 'superadmin' && resto.supprimer !=='oui'">
+
+      <div *ngIf="resto.etiquette !== undefined && resto.etiquette !== null && resto.etiquette.trim() !== 'non'">
+        <ion-label class="deconte" >{{ resto.etiquette }}</ion-label>
+      </div>
+
+      <br *ngIf="resto.etiquette !== undefined && resto.etiquette !== null && resto.etiquette.trim() !== 'non'">
+      <br>
+      <ion-card-header>
+        <ion-label class="nom" color="success" *ngIf="resto.nom_resto" >{{ resto.nom_resto }}</ion-label>
+      </ion-card-header>
+
+      <br>
+      <p [innerHTML]="commentaireService.sanitize(getDisplayedCommentaire(resto))"
+      *ngIf="resto.commentaire !== 'non' && resto.commentaire !== null && resto.commentaire !== undefined"
+      class="commentaire">
+      </p>
+      <a *ngIf="getPlainText(resto.commentaire).length > limit_comment" (click)="toggleCommentaire()" class="see-more-link">
+        {{ showFullCommentaire ? 'Voir moins' : 'Voir plus' }}
+      </a>
+
+      <br>
+
+      <ion-card-content>
+        <!-- image Display -->
+        <ng-container *ngIf="isImage(resto.image)">
+          <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+        </ng-container>
+        <br>
+
+
+        <!-- description -->
+         <div *ngIf="resto.description !== undefined && resto.description !== null && resto.description.trim() !== 'non'">
+        <ion-label class="label-title"> Description :</ion-label>
+        <h2 *ngIf="resto.description" class="message-content">{{ resto.description }}</h2>
+        </div>
+
+        <!-- ville -->
+        <div *ngIf="resto.ville !== undefined && resto.ville !== null && resto.ville.trim() !== 'non'">
+          <ion-label class="label-title"> Ville :</ion-label>
+        <h2 *ngIf="resto.ville" class="message-content">{{ resto.ville }}</h2>
+      </div>
+       <br>
+        <!-- Horaire section -->
+          <div class="horaire-row" *ngIf="resto.heure_deb !== undefined
+           && resto.heure_deb !== null
+           && resto.heure_deb.trim() !== 'non'
+           && resto.heure_fin !== undefined
+           && resto.heure_fin !== null
+           && resto.heure_fin.trim() !== 'non'">
+          <ion-row class="ion-justify-content-center ion-align-items-center">
+            <ion-col size="auto">
+              <ion-label class="label-title">Horaire :</ion-label>
+            </ion-col>
+            <ion-col size="auto">
+              <h2 *ngIf="resto.heure_deb" class="heure_deb">{{ resto.heure_deb }} </h2>
+            </ion-col>
+            <ion-col size="auto">
+              <h2 *ngIf="resto.heure_deb">à</h2>
+            </ion-col>
+            <ion-col size="auto">
+              <h2 *ngIf="resto.heure_fin" class="heure_fin">{{ resto.heure_fin }}</h2>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <br>
+        <!-- Localisation -->
+        <ion-label  class="localisation">
+          Vous êtes présentement à : {{ convertMetersToKilometers(resto.distanceToUser) }} du lieu.
+        </ion-label>
+          <br>
+
+          <p class="ligne"></p>
+          <br>
+        <!-- Boutons -->
+        <ion-button *ngIf="resto.longitude && resto.latitude" class="btnpub location" fill="outline"
+          [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + resto.latitude + ',' + resto.longitude + '&travelmode=driving'">
+          Localiser le lieu
+          <ion-icon name="location-outline"></ion-icon>
+        </ion-button>
+          <br>
+        <ion-button *ngIf="resto.contact && resto.contact !== '0'" class="btnpub contact" fill="outline" [href]="getWhatsAppLink(resto.contact)">
+          WhatsApp
+          <ion-icon name="logo-whatsapp"></ion-icon>
+        </ion-button>
+
+        <br>
+
+        <br>
+        <br>
+         <!--  nbr j'aime -->
+         <div class="left-align">
+
+          <ion-label class="likes_count light">
+            {{ resto.likes_count === 0
+                ? 'Aucune personne n\'adore ce restaurant'
+                : resto.likes_count === 1
+                ? '1 personne adore ce restaurant'
+                : formatLikesCount(resto.likes_count) + ' personnes adorent ce restaurant' }}
+          </ion-label>
+
+         <!--  bouton like-->
+        <ion-card-content>
+          <div class="menu"
+            [ngClass]="{'vert': hasLiked(resto)}"
+            (click)="like_resto(resto)">
+
+            <ion-icon class="button_adore"
+              [ngClass]="{'button_adore_white': hasLiked(resto)}"
+              name="heart">
+              J'adore
+            </ion-icon>
+
+          </div>
+        </ion-card-content>
+
+        <ion-button class="btnpub contact" fill="outline" [routerLink]="['/list-plat/', resto.id, resto.contact_admin, resto.nom_resto]" aria-label="Entrer dans le restaurant">
+          Entrer
+          <ion-icon name="chevron-forward"></ion-icon>
+        </ion-button>
+
+
+      </div>
+
+      </ion-card-content>
+    </div>
+  </div>
+  </ion-list>
+
+
+  <br *ngIf="resto == 'erreur_chargement'">
+  <br *ngIf="resto == 'erreur_chargement'">
+  <div *ngIf="resto == 'erreur_chargement'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Erreur de chargement</p>
+    <br>
+    <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+  </div>
+
+  <br *ngIf="resto == 'aucune_alerte'">
+  <br *ngIf="resto == 'aucune_alerte'">
+  <div>
+    <div  *ngIf="resto == 'aucune_alerte'" class="erreur_chargement">
+      <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+      <p>Aucun restorant trouvé, réessayer </p>
+      <br>
+    </div>
+  </div>
+
+
+  <ion-infinite-scroll threshold="100px" [disabled]="infiniteScrollDisabled" (ionInfinite)="getLoadFunction($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Chargement...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

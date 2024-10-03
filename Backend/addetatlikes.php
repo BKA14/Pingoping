@@ -13,14 +13,29 @@ $iduser =  $data['iduser'];
 $idpub =  $data['pubid'];
 $etat = $data['etat'];
 
+// Fonction pour générer un ID unique
+function generateUniqueID($con) {
+    do {
+        $id = uniqid();
+        $query = mysqli_query($con, "SELECT * FROM `pub` WHERE `id` = '$id'");
+    } while (mysqli_num_rows($query) > 0);
+    
+    return $id;
+}
+
+
+
+ // Générer un identifiant unique pour le panier (CHAR 32)
+ $id = bin2hex(random_bytes(16)); // Génère un identifiant de 32 caractères hexadécimaux
+
 // Requête SQL sécurisée avec une requête préparée
-$sql = "INSERT INTO etatdelikes (idpub, iduser, etat) VALUES (?, ?, ?)";
+$sql = "INSERT INTO etatdelikes (id, idpub, iduser, etat) VALUES (?, ?, ?, ?)";
 $stmt = mysqli_prepare($con, $sql);
 
 // Vérifier si la préparation de la requête a réussi
 if ($stmt) {
     // Binder les paramètres à la requête préparée
-    mysqli_stmt_bind_param($stmt, "sss", $idpub, $iduser, $etat);
+    mysqli_stmt_bind_param($stmt, "ssss", $id, $idpub, $iduser, $etat);
 
     // Exécuter la requête préparée
     $success = mysqli_stmt_execute($stmt);

@@ -208,8 +208,11 @@
 
     <ion-item class="itementreprise">
       <ion-segment (ionChange)="updateadmin($event)">
-        <ion-segment-button value="pub_admin">
+        <ion-segment-button value="admin">
           <ion-label> Mettre en admin</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="evenement">
+          <ion-label >mettre dans évènement</ion-label>
         </ion-segment-button>
         <ion-segment-button value="none">
           <ion-label >Non</ion-label>
@@ -219,7 +222,12 @@
     <br/>
 
 
-    <ion-item *ngIf="selectedadmin !== 'none'">
+    <ion-item *ngIf="selectedadmin !== 'none' && selectedadmin !== 'evenement'">
+      <ion-label position="floating" class="h2"> grade de la pub : admin  </ion-label><br/>
+    </ion-item>
+    <br/>
+
+    <ion-item *ngIf="selectedadmin !== 'none' && selectedadmin !== 'admin'">
       <ion-label position="floating" class="h2"> grade de la pub : admin  </ion-label><br/>
     </ion-item>
     <br/>

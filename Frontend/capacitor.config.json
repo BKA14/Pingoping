@@ -6,7 +6,8 @@
   "webDir": "www",
   "cordova": {},
   "server": {
-    "cleartext": true
+    "cleartext": true,
+    "url": "http://192.168.137.93:8101"
   },
   "plugins": {
     "PushNotifications": {

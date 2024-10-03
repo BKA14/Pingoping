@@ -5,6 +5,8 @@ import { LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { authService } from '../services/auth.service';
 import { LoginServiceReadyService } from '../login-service-ready.service';
+import { timeService } from '../timeservice.service';
+
 
 @Component({
   selector: 'app-login2',
@@ -19,6 +21,8 @@ export class Login2Page implements OnInit {
   password_entreprise: any;
   errorMessage: string;
   userData: any;
+  serverTime: string | number | Date;
+
 
   constructor(
     private router: Router,
@@ -26,8 +30,9 @@ export class Login2Page implements OnInit {
     private loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,
     private authService: authService,
-    private LoginServiceReadyService: LoginServiceReadyService,
-    private toastCtrl: ToastController
+    private loginServiceReadyService: LoginServiceReadyService,
+    private toastCtrl: ToastController,
+    private timeService: timeService
   )
   {
     this.verifieForm = this.formBuilder.group({
@@ -42,15 +47,14 @@ export class Login2Page implements OnInit {
 
   ionViewDidEnter() {
     // Informer que la page de login est prête
-    this.LoginServiceReadyService.setLoginPageReady(true);
+    this.loginServiceReadyService.setLoginPageReady(true);
   }
-
   // Méthode pour afficher un toast
   async presentToast(message: string, color: string = 'danger') {
     const toast = await this.toastCtrl.create({
       message: message,
       duration: 2000, // Durée d'affichage du toast
-      position: 'top',
+      position: 'middle',
       color: color,
     });
     toast.present();
@@ -61,7 +65,8 @@ export class Login2Page implements OnInit {
   isTokenExpired(token: string): boolean {
     const tokenPayload = JSON.parse(atob(token.split('.')[1]));
     const expiry = tokenPayload.exp;
-    const now = Math.floor(new Date().getTime() / 1000);
+    const date_jour = new Date(this.serverTime);
+    const now = Math.floor(date_jour.getTime() / 1000);
     return now > expiry;
   }
 
@@ -69,8 +74,6 @@ export class Login2Page implements OnInit {
     const token = localStorage.getItem('access_token');
     if (token) {
       this.router.navigateByUrl('/acceuil');
-    } else {
-      this.router.navigateByUrl('/login2');
     }
   }
 
@@ -82,7 +85,7 @@ export class Login2Page implements OnInit {
     };
 
     const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
+      message: 'connexion.....',
       spinner: 'lines',
       cssClass: 'custom-loading',
     });
@@ -124,16 +127,19 @@ export class Login2Page implements OnInit {
     }
   }
 
-
-
   ionViewWillEnter() {
     this.login();
   }
 
   async ngOnInit() {
+    this.timeService.getServerTime().subscribe((response) => {
+      this.serverTime = response.serverTime;
+      console.log('serveur time', this.serverTime );
+    });
   }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+
 }

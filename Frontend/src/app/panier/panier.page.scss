@@ -1,0 +1,117 @@
+.tool2 {
+  --background: linear-gradient(rgb(255, 255, 255), rgb(227, 227, 231)) !important;
+  font-size: 16px;
+  font-style: normal;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  color: #ffffff;
+  padding: 6;
+}
+
+ion-toolbar.tool1 {
+  --background: #28a745;
+  --color: white;
+}
+
+ion-title.tool2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+
+.cart-list {
+  padding: 30px 10px;
+  margin: 30px ;
+
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.plat-info {
+  flex: 1;
+  margin-right: 15px;
+  text-align: left;
+}
+
+.plat-nom {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.restaurant-nom {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.plat-prix {
+  font-size: 1rem;
+  color: #333;
+  margin-top: 5px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+}
+
+.qty-input {
+  width: 40px;
+  text-align: center;
+  font-size: 1.1rem;
+  margin: 0 10px;
+}
+
+.total-item {
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.total-label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: right;
+}
+
+.order-button {
+  margin-top: 20px;
+}
+
+.empty-cart-container {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.empty-cart-icon {
+  font-size: 4rem;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.empty-cart-message {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+ion-item {
+  --background: transparent;
+}
+
+ion-button {
+  --border-radius: 12px;
+}
+

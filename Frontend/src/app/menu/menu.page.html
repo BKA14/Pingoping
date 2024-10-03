@@ -19,13 +19,40 @@
          </ng-container>
         </ion-button>
       <br>
-        <ion-button (click)="alert_user()" *ngIf="grade === 'admin' || grade === 'superadmin'"  class="list" fill="outline" color="success">
+        <ion-button (click)="alert_user()"  class="list" fill="outline" color="success">
           <ion-icon name="alert"></ion-icon> &nbsp;
            <ng-container >
             Alerte
            </ng-container>
           </ion-button>
           <br>
+
+          <ion-button (click)="panier()"  class="list" fill="outline" color="success">
+            <ion-icon name="cart-outline"></ion-icon> &nbsp;
+             <ng-container >
+              Panier
+             </ng-container>
+            </ion-button>
+            <br>
+
+            <ion-button (click)="commande()" *ngIf="grade === 'admin' || grade === 'superadmin' || grade === 'admin_resto'" class="list" fill="outline" color="success">
+              <ion-icon name="clipboard-outline"></ion-icon> &nbsp;
+               <ng-container >
+                Historique commande / admin
+               </ng-container>
+              </ion-button>
+
+          <br>
+
+            <ion-button (click)="commande_user()"  class="list" fill="outline" color="success">
+              <ion-icon name="clipboard-outline"></ion-icon> &nbsp;
+                <ng-container >
+                Historique commande
+                </ng-container>
+              </ion-button>
+
+            <br>
+
           <ion-button (click)="alerte()" *ngIf="grade === 'admin' || grade === 'superadmin'"  class="list" fill="outline" color="success">
             <ion-icon name="alert"></ion-icon> &nbsp;
              <ng-container >

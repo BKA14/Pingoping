@@ -26,7 +26,7 @@ non_terminer = 'non';
 dateblocage : any;
 userbloquer :any;
 page : number = 1;
-limit : number = 2;
+limit : number = 15;
 oldsignalement: any;
 olduser: any;
 infiniteScrollDisabled: boolean = false;
@@ -62,11 +62,7 @@ this.user();
 
 ngOnInit() {
 
-  this.updateSubscription = interval(1000).subscribe(async () => {
-    this.verifie_recherche();
-    //this.verifie_recherche2();
-
-            // S'abonner aux changements de données utilisateur
+// S'abonner aux changements de données utilisateur
   this.authService.userData$.subscribe(data => {
     this.userData = data;
   });
@@ -76,10 +72,7 @@ ngOnInit() {
     console.log('serveur time', this.serverTime );
   });
 
-    this.cdr.detectChanges(); // Détecter et appliquer les changements
-    });
-
-    this.signalement_websocket();
+  this.signalement_websocket();
 
            }
 
@@ -426,10 +419,18 @@ resetHideButtonTimer() {
 }
 
 
-search_active() {
-  if (this.term.trim() !== '') {
+search_active(event) {
+  const searchTerm = event.target.value; // Obtenez la valeur de l'entrée
+
+  if (searchTerm.trim() !== '') {
     this.search = true;
     this.load_signalement_search(event);
+  }else {
+    this.search = false;
+    this.term = '';
+    this.page = 1;
+    this.infiniteScrollDisabled = false; // Réactiver l'infinite scroll
+    this.loadsignalement();
   }
 }
 
@@ -445,28 +446,11 @@ getLoadFunction(event) {
   }
 }
 
-verifie_recherche() {
-  if (this.term === '' ) {
-    this.search = false;
-    if (!this.signalementLoaded) {  // Vérification pour n'appeler loadalert() qu'une seule fois
-      this.loadsignalement();
-      this.signalementLoaded = true;  // Marquer que loadalert() a été appelée
-    }
-    this.infiniteScrollDisabled = false;
-  }
-}
 
 
 async load_signalement_search(event) {
  this.page = 1;
   this.oldsignalement = this.signalement;
-  const loading = await this.loadingCtrl.create({
-    message: 'Rechargement...',
-    spinner: 'lines',
-    cssClass: 'custom-loading',
-  });
-
-  await loading.present();
 
   try {
     const res : any = await this._apiService.load_signalement_search(this.term, this.page, this.limit).toPromise();
@@ -479,14 +463,12 @@ async load_signalement_search(event) {
        this.signalement = res;
     }
 
-    loading.dismiss();
     } catch (error) {
     if (this.oldsignalement && this.oldsignalement.length > 0) {
       this.signalement = this.oldsignalement;
     }
     else { this.signalement = 'erreur_chargement'; }
     console.log('Erreur de chargement', error);
-    loading.dismiss();
   }
 }
 

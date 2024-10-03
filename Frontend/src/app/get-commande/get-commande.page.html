@@ -1,0 +1,182 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <!-- Bouton de retour à gauche -->
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <br>
+    <!-- Titre centré -->
+    <ion-title class="title">Gestion des Commandes</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="toolbar">
+    <!-- Recherche centrée -->
+    <div class="search-container">
+      <ion-input class="recherche" type="text" placeholder="Rechercher id, prenom + nom , contact,..." [(ngModel)]="term" (ionInput)="onSearch($event)"></ion-input>
+    </div>
+  </ion-toolbar>
+
+  <ion-toolbar class="toolbar">
+    <!-- Boutons sur une nouvelle ligne -->
+    <ion-buttons slot="end">
+      <ion-button (click)="reloadPage()" class="light" color="light">
+        Actualiser
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+
+  <ion-toolbar class="toolbar">
+    <ion-buttons style="justify-content: center;">
+      <ion-button (click)="filterByStatus('toutes')">Toutes</ion-button> &nbsp; &nbsp;
+      <ion-button (click)="filterByStatus('en attente')">En Attente</ion-button> &nbsp; &nbsp;
+      <ion-button (click)="filterByStatus('validée')">Validées</ion-button> &nbsp; &nbsp;
+      <ion-button (click)="filterByStatus('livrée')">Livrées</ion-button> &nbsp;
+    </ion-buttons>
+
+
+    <ion-label [routerLink]="['/panier']" class="cart-label" slot="start">
+     en attente
+     &nbsp;
+     <ion-badge class="cart-badge" *ngIf="nbr_en_cours > 0">{{ nbr_en_cours }}</ion-badge>
+    </ion-label>
+
+   &nbsp;
+
+    <ion-label [routerLink]="['/panier']" class="cart-label" slot="end">
+      en cours de livraison
+      &nbsp;
+      <ion-badge class="cart-badge" *ngIf="nbr_attente > 0">{{ nbr_attente }}</ion-badge>
+    </ion-label>
+
+  </ion-toolbar>
+
+
+</ion-header>
+
+
+<div class="arrow-container" #scrollButton  (click)="scrollToTop()" >
+  <ion-icon name="arrow-up-circle" class="red-arrow" style="zoom: 3.0;"></ion-icon>
+</div>
+
+<ion-content class="custom-background">
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+<div *ngIf="grade === 'admin' || grade === 'superadmin' || grade === 'admin_resto'">
+  <ion-list *ngIf="commande !== 'erreur_chargement' && commande !== 'aucune_alerte'">
+    <!-- Regrouper par commande -->
+    <ion-card *ngFor="let commande of commande | customFilter: term">
+
+      <p class="ligne"></p>
+
+      <ion-label [ngClass]="{'statut-warning': commande.statut !== 'validée' && commande.statut !== 'livrée', 'statut-valid': commande.statut === 'validée' || commande.statut === 'livrée'}">
+        {{ commande.statut }}
+      </ion-label>
+
+      <ion-card-header>
+        <br>
+        <ion-card-title>Commande ID: {{ commande.commande_id }}</ion-card-title>
+        <br>
+        <ion-label>Client : {{ commande.nom_user }} {{ commande.prenom_user }}</ion-label>
+        <ion-label>Contact : {{ commande.contact_user }}</ion-label>
+        <ion-label>Heure de commande :{{ formatCommentTime(commande.date_commande) }}</ion-label>
+        <br>
+        <ion-label>Total : {{ commande.total }} fr</ion-label>
+      </ion-card-header>
+
+      <ion-card-content>
+        <!-- Affichage des plats commandés sous forme de tableau -->
+        <ion-grid>
+          <ion-row>
+            <ion-col size="4"><strong>Restaurant</strong></ion-col>
+            <ion-col size="4"><strong>Plat</strong></ion-col>
+            <ion-col size="2"><strong>Quantité</strong></ion-col>
+          </ion-row>
+          <ion-row *ngFor="let plat of commande.plats">
+            <ion-col size="4">{{ plat.nom_restaurant }}</ion-col>
+            <ion-col size="4">{{ plat.nom_plat }}</ion-col>
+            <ion-col size="2">{{ plat.quantity }}</ion-col>
+          </ion-row>
+        </ion-grid>
+
+
+  <!-- Erreurs ou aucun résultat -->
+  <div *ngIf="commande == 'erreur_chargement'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Erreur de chargement</p>
+    <ion-button color="success" (click)="refreshPage($event)">Réessayer</ion-button>
+  </div>
+
+  <div *ngIf="commande == 'aucune_alerte'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Aucune commande trouvée</p>
+  </div>
+
+    <br>
+    <!-- Localisation -->
+    <ion-label  class="localisation">
+      Vous êtes présentement à : {{ convertMetersToKilometers(commande.distanceToUser) }} du lieu.
+    </ion-label>
+      <br>
+
+      <p class="ligne"></p>
+      <br>
+    <!-- Boutons -->
+    <ion-button *ngIf="commande.longitude && commande.latitude" class="btnpub location" fill="outline"
+      [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + commande.latitude + ',' + commande.longitude + '&travelmode=driving'">
+      Localiser le lieu
+      <ion-icon name="location-outline"></ion-icon>
+    </ion-button>
+      <br>
+      &nbsp;
+
+    <ion-button (click)="appeler(commande.contact_user)" color="success" fill="outline">
+      appeler commandeur
+      <ion-icon name="call-outline"></ion-icon>
+    </ion-button>
+    &nbsp;
+
+ <ion-button (click)="update(commande.commande_id, 'validée')" color="success">
+   marquer Valider
+  </ion-button>
+    &nbsp;
+ <ion-button (click)="update(commande.commande_id, 'en cours de livraison')" color="success">
+  marquer en cours de livraison
+ </ion-button>
+  &nbsp;
+  <ion-button (click)="update(commande.commande_id, 'livrée')" color="success">
+    marquer Livrée
+  </ion-button>
+
+ </ion-card-content>
+</ion-card>
+</ion-list>
+</div>
+  <br *ngIf="commande == 'erreur_chargement'">
+  <br *ngIf="commande == 'erreur_chargement'">
+  <div *ngIf="commande == 'erreur_chargement'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Erreur de chargement</p>
+    <br>
+    <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
+  </div>
+
+  <br *ngIf="commande == 'aucune_alerte'">
+  <br *ngIf="commande == 'aucune_alerte'">
+  <div>
+    <div  *ngIf="commande == 'aucune_alerte'" class="erreur_chargement">
+      <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+      <p>Aucune commande trouvé, réessayer </p>
+      <br>
+    </div>
+  </div>
+
+
+  <ion-infinite-scroll threshold="100px" [disabled]="infiniteScrollDisabled" (ionInfinite)="getLoadFunction($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Chargement...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+

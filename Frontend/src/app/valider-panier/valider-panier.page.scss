@@ -1,0 +1,45 @@
+.toolbar {
+  --background: #28a745;
+  --color: white;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+
+.coord-label {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.coord-value {
+  color: #333;
+}
+
+.confirmation-container {
+  text-align: center;
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-icon {
+  font-size: 3rem;
+  color: #28a745;
+  margin-bottom: 10px;
+}
+
+.confirmation-message {
+  font-size: 1.2rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.form-control {
+  margin-top: 15px;
+}

@@ -25,6 +25,15 @@
           <ion-button (click)="reloadPage()" class="light" color="light" style="text-align: left;">
             actualiser
           </ion-button>
+
+          &nbsp;
+
+          <span style="margin-right: auto;" *ngIf="userData.grade === 'admin' || userData.grade === 'superadmin'">
+            <ion-button (click)="evenement()" class="light" color="light" style="text-align: left;">
+              evenement
+            </ion-button>
+          </span>
+
         </span>
       </div>
   </ion-toolbar>

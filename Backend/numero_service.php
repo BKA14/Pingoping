@@ -1,12 +1,27 @@
 <?php
-include"config.php";
+include "config.php";
+
+
+// Obtenir les paramètres de pagination
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 25;
+$start = ($page - 1) * $limit;
+
 $data = array();
-//$q = mysqli_query($con, "SELECT * FROM 'entreprise'");
-$q = mysqli_query($con, "SELECT * FROM `numero_service` ORDER BY nom_service ASC");
-//SELECT `id`, `year`, `entrepriseOne`, `entrepriseTwo` FROM `entreprise` WHERE 1
 
-while ($row = mysqli_fetch_object($q)){
-    $data[]= $row;
+// Requête SQL avec pagination
+$stmt = $con->prepare("SELECT * FROM `numero_service` ORDER BY `nom_service` ASC LIMIT ?, ?");
+$stmt->bind_param("ii", $start, $limit);
+$stmt->execute();
+$result = $stmt->get_result();
 
-}echo json_encode($data);
+while ($row = $result->fetch_object()) {
+    $data[] = $row;
+}
+
+echo json_encode($data);
+
+
+// Afficher les erreurs SQL (pour le débogage)
 echo mysqli_error($con);
+

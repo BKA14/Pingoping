@@ -4,20 +4,19 @@ include "config.php";
 
 // Fonction pour générer un ID unique
 function generateUniqueID($con) {
-    $unique = false;
-    while (!$unique) {
+    do {
         $id = uniqid();
         $query = mysqli_query($con, "SELECT * FROM `pub` WHERE `id` = '$id'");
-        if (mysqli_num_rows($query) == 0) {
-            $unique = true;
-        }
-    }
+    } while (mysqli_num_rows($query) > 0);
+    
     return $id;
 }
 
-// Générer un ID unique
-$id = generateUniqueID($con);
 
+
+
+ // Générer un identifiant unique pour le panier (CHAR 32)
+ $id = bin2hex(random_bytes(16)); // Génère un identifiant de 32 caractères hexadécimaux
 
 // Obtenez les autres données du formulaire (non fichiers) à partir de $_POST
 
