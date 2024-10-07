@@ -1,11 +1,11 @@
-
 <ion-header>
-  <ion-toolbar color="success" class="tool1">
-    <br/>  <br/>
-  <ion-title class="tool2">Menu</ion-title>
-  <br/> <br>
+  <ion-toolbar >
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title >MENU</ion-title>
   </ion-toolbar>
-  </ion-header>
+</ion-header>
 
     <ion-content padding  class="custom-background"  style="--offset-bottom: 300px;" >
 
@@ -33,7 +33,7 @@
               Panier
              </ng-container>
             </ion-button>
-            <br>
+            <br *ngIf="grade === 'admin' || grade === 'superadmin'">
 
             <ion-button (click)="commande()" *ngIf="grade === 'admin' || grade === 'superadmin' || grade === 'admin_resto'" class="list" fill="outline" color="success">
               <ion-icon name="clipboard-outline"></ion-icon> &nbsp;
@@ -59,14 +59,16 @@
               Alerte/admin
              </ng-container>
             </ion-button>
-          <br>
+            <br *ngIf="grade === 'admin' || grade === 'superadmin'">
+
+
       <ion-button (click)="statistique()"  *ngIf="grade === 'admin' || grade === 'superadmin'" color="success" class="list" fill="outline" >
         <ion-icon name="stats-chart"></ion-icon> &nbsp;
          <ng-container >
           Statistique alerte
          </ng-container>
         </ion-button>
-    <br>
+        <br *ngIf="grade === 'admin' || grade === 'superadmin'">
 
       <ion-button (click)="userinfo()"  class="list" fill="outline" color="success">
         <ion-icon name="person"></ion-icon> &nbsp;
@@ -89,7 +91,8 @@
            </ng-container>
           </ion-button>
 
-          <br>
+          <br *ngIf="grade === 'admin' || grade === 'superadmin'">
+
           <ion-button (click)="send_notification()" *ngIf="grade === 'admin' || grade === 'superadmin'" class="list" fill="outline" color="success">
             <ion-icon name="send"></ion-icon> &nbsp;
              <ng-container >

@@ -1,17 +1,12 @@
 <ion-header>
-  <ion-toolbar class="toolbar">
-    <br  style="padding: 45px;">
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br>
-    <br>
-    <ion-row class="header-row">
-      <ion-title class="title">SIGNALISATION</ion-title>
-    </ion-row>
-    <br> <br>
+    <ion-title >SIGNALISATION</ion-title>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content padding>
   <br>
@@ -36,7 +31,7 @@
 
     <ion-item class="form-control">
       <ion-label>Choisir le service</ion-label>
-      <ion-select formControlName="category">
+      <ion-select formControlName="service">
         <ion-select-option *ngFor="let service of service" [value]="service.valeur">
           {{ service.nom }}
         </ion-select-option>
@@ -69,20 +64,7 @@
     <br>
     <ion-label *ngIf="selectedMedia">Si l'image choisie ne correspond pas, ou est trop floue, choisissez ou prenez une autre image/vidéo!</ion-label>
     <br>
-    <img *ngIf="selectedMedia && isImage(selectedMedia)" [src]="selectedMedia" class="custom-image" />
-    <ng-container *ngIf="selectedMedia && !isVideo(selectedMedia)" >
-      <!-- Vérifie si c'est une vidéo -->
-      <video #videoElement class="custom-video video-style" (click)="toggleManualPause(videoElement)"  loop muted >
-        <source [src]="selectedMedia">
-      </video>
-      <br>
-      <div class="controls">
-        <ion-icon name="play" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="videoElement.paused"></ion-icon>
-        <ion-icon name="pause" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="!videoElement.paused"></ion-icon>
-        <input type="range" min="0" [max]="videoElement.duration" [value]="videoElement.currentTime" (input)="seekVideo($event, videoElement)">
-      </div>
-    </ng-container>
 
-    <ion-button [disabled]="!signalementForm.get('category').value || !signalementForm.get('image').value  || !signalementForm.get('location').value.longitude  || !signalementForm.get('location').value.latitude" expand="block" color="success" (click)="onSubmit()">Envoyer Signalisation</ion-button>
+    <ion-button [disabled]="!signalementForm.get('ville').value  || !signalementForm.get('service').value || !signalementForm.get('image').value  || !signalementForm.get('location').value.longitude  || !signalementForm.get('location').value.latitude" expand="block" color="success" (click)="onSubmit()">Envoyer Signalisation</ion-button>
   </form>
 </ion-content>

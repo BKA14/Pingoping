@@ -3,23 +3,30 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br><br>
-    <ion-row class="header-row">
-      <ion-title class="title"> RESTAURANT</ion-title>
-    </ion-row>
-    <br>
+    <ion-title >RESTAURANT</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="toolbar">
+    <!-- Recherche centrée -->
     <div class="search-container">
       <ion-input class="recherche" type="text" placeholder="Rechercher nom de resto,..." [(ngModel)]="term" (ionInput)="onSearch($event)"></ion-input>
     </div>
   </ion-toolbar>
+  
   <ion-toolbar class="toolbar">
-    <!-- Boutons sur une nouvelle ligne -->
-
     <ion-buttons slot="end">
-      <ion-button [routerLink]="['/panier']" class="light" color="light">
-        Voir le panier
+      <ion-button [routerLink]="['/panier']" class="cart-button" color="primary">
+        <ion-icon name="cart-outline" class="cart-icon"></ion-icon>
+        <ion-badge class="cart-badge" *ngIf="cart?.length > 0">{{ cart.length }}</ion-badge>
       </ion-button>
     </ion-buttons>
+
+    <span style="margin-left: auto;">
+      <ion-button (click)="restaurant_2()" class="light" color="light" style="text-align: left;">
+        actualiser
+      </ion-button>
+    </span>
+
   </ion-toolbar>
 </ion-header>
 
@@ -41,9 +48,9 @@
    </div>
 
 
-  <h2 class="centered-heading">
+  <h3 class="centered-heading">
     Craquez pour un plat délicieux ! Commandez en ligne et savourez-le chez vous en quelques minutes.
-  </h2>
+  </h3>
 
 
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">

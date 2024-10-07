@@ -1,18 +1,15 @@
 <ion-header>
   <ion-toolbar class="toolbar">
-    <!-- Bouton de retour à gauche -->
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-
-    <!-- Titre centré -->
-    <ion-title class="title">LISTE DES PLATS</ion-title>
+    <ion-title >LISTE DES PLATS</ion-title>
   </ion-toolbar>
 
   <ion-toolbar class="toolbar">
     <!-- Recherche centrée -->
     <div class="search-container">
-      <ion-input class="recherche" type="text" placeholder="Rechercher nom de resto,..." [(ngModel)]="term" (ionInput)="onSearch($event)"></ion-input>
+      <ion-input class="recherche" type="text" placeholder="Rechercher nom plat,..." [(ngModel)]="term" (ionInput)="onSearch($event)"></ion-input>
     </div>
   </ion-toolbar>
 

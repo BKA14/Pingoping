@@ -1,16 +1,17 @@
 <ion-header>
-  <ion-toolbar color="success" class="toolbar">
+  <ion-toolbar class="toolbar">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <ion-row class="header-row">
-      <br>
-      <ion-title class="title">SIGNALEMENT</ion-title>
-    </ion-row>
+    <ion-title >SIGNALEMENT</ion-title>
   </ion-toolbar>
-  <div class="search-container">
-    <ion-input class="recherche" type="text" placeholder="Rechercher id, nom, prenom,..." [(ngModel)]="term" (ionInput)="search_active($event)"></ion-input>
-  </div>
+
+  <ion-toolbar class="toolbar">
+    <!-- Recherche centrée -->
+    <div class="search-container">
+      <ion-input class="recherche" type="text" placeholder="Rechercher id, nom, prenom,..." [(ngModel)]="term" (ionInput)="search_active($event)"></ion-input>
+    </div>
+  </ion-toolbar>
 </ion-header>
 
 

@@ -1,56 +1,85 @@
 <ion-header>
-  <ion-toolbar class="toolbar">
+
+  <ion-toolbar class="tool1" >
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br>
-    <br> <br>
-    <ion-title class="title">Message recu</ion-title>
-    <br>
+    <ion-title class="tool2">Message recu</ion-title>
   </ion-toolbar>
+
+  <ion-toolbar class="tool1" >
+    <div class="search-container">
+      <ion-input class="recherche" type="text" placeholder="Rechercher..." [(ngModel)]="term" (ionInput)="onSearch($event)"></ion-input>
+    </div>
+  </ion-toolbar>
+
+  <ion-toolbar class="toolbar" >
+  <ion-buttons style="justify-content: center;">
+    <ion-button (click)="filterByStatus('toutes')">Toutes</ion-button> &nbsp; &nbsp;
+    <ion-button (click)="filterByStatus('oui')">Lu</ion-button> &nbsp; &nbsp;
+    <ion-button (click)="filterByStatus('non')">Non lu</ion-button> &nbsp; &nbsp;
+  </ion-buttons>
+</ion-toolbar>
+
 </ion-header>
 
+<div class="arrow-container" #scrollButton (click)="scrollToTop()">
+  <ion-icon name="arrow-up-circle" class="red-arrow"></ion-icon>
+</div>
 
 <ion-content>
-
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-content>
-    <br>
-    <br>
-    <ion-list class="message-list">
-      <div lines="inset" *ngFor="let message of message" class="message-item">
-        <ion-label color="dark">
-          <ion-label class="label-title">ID de l'utilisateur :</ion-label>
-          <h2 class="message-content">{{message.iduser}}</h2>
+  <br> <br>
+  <ion-list class="message-list">
+    <div lines="inset" *ngFor="let message of message | customFilter: term" class="message-item">
+      <ion-label>
+        <div class="message-detail">
+          <span class="label-title">ID de l'utilisateur :</span>
+          <span class="message-content">{{message.iduser}}</span>
+        </div>
+        <div class="message-detail">
+          <span class="label-title">Nom :</span>
+          <span class="message-content">{{message.nom}}</span>
+        </div>
+        <div class="message-detail">
+          <span class="label-title">Prénom :</span>
+          <span class="message-content">{{message.prenom}}</span>
+        </div>
+        <div class="message-detail">
+          <span class="label-title">Contact :</span>
+          <span class="message-content">{{message.contact}}</span>
+        </div>
+        <div class="message-detail">
+          <span class="label-title">Message :</span>
+          <span class="message-content">{{message.message}}</span>
+        </div>
+        <div class="message-detail">
+          <span class="label-title">Heure :</span>
+          <span class="message-content">{{message.heure_message}}</span>
+        </div>
+      </ion-label>
 
-          <ion-label class="label-title">Nom :</ion-label>
-          <h2 class="message-content">{{message.nom}}</h2>
+      <ion-button [color]="message.lu === 'oui' ? 'success' : 'danger'" (click)="marquer_lu(message)">
+        Marquer comme lu
+      </ion-button>
+    </div>
+  </ion-list>
 
-          <ion-label class="label-title">Prénom :</ion-label>
-          <h2 class="message-content">{{message.prenom}}</h2>
+  <div *ngIf="message == 'erreur_chargement'" class="error-container">
+    <ion-icon name="alert-circle" class="error-icon" color="success"></ion-icon>
+    <p>Erreur de chargement</p>
+    <ion-button color="success" (click)="refreshPage($event)">Réessayer</ion-button>
+  </div>
 
-          <ion-label class="label-title">Contact :</ion-label>
-          <h2 class="message-content">{{message.contact}}</h2>
+  <div *ngIf="message == 'aucune_alerte'" class="no-message-container">
+    <ion-icon name="alert-circle" class="error-icon" color="success"></ion-icon>
+    <p>Aucun message trouvé, réessayer</p>
+  </div>
 
-          <ion-label class="label-title">Message :</ion-label>
-          <h2 class="message-content">{{message.message}}</h2>
-
-          <ion-label class="label-title">Message :</ion-label>
-          <h2 class="message-content">{{message.heure_message}}</h2>
-
-        </ion-label>
-        <div class="item-note"></div>
-      </div>
-    </ion-list>
-
-
-<!-- Infinite Scroll -->
-<ion-infinite-scroll [disabled]="infiniteScrollDisabled" threshold="100px" (ionInfinite)="loadMore($event)">
-  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
-</ion-infinite-scroll>
-
-  </ion-content>
-
+  <ion-infinite-scroll threshold="100px" [disabled]="infiniteScrollDisabled" (ionInfinite)="getLoadFunction($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Chargement..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

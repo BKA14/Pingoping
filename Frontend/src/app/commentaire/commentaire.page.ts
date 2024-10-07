@@ -170,6 +170,11 @@ async ngOnInit() {
   this.cdr.detectChanges(); // Détecter et appliquer les changements
   });
 
+  this.timeService.getServerTime().subscribe((response) => {
+    this.serverTime = response.serverTime;
+    console.log('serveur time', this.serverTime );
+  });
+
   // S'abonner aux changements de données utilisateur
   this.authService.userData$.subscribe(data => {
     this.userData = data;
@@ -194,11 +199,6 @@ async ngOnInit() {
   window.addEventListener('click', (event) => {
   this.comment.forEach(commentaire => {
   });
-  });
-
-  this.timeService.getServerTime().subscribe((response) => {
-    this.serverTime = response.serverTime;
-    console.log('serveur time', this.serverTime );
   });
 
   }

@@ -1,19 +1,14 @@
 <ion-header>
-  <ion-toolbar class="toolbar">
-    <br> <br> <br>
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <ion-row class="header-row">
-      <ion-title class="title">ANNUAIRE</ion-title>
-    </ion-row>
-    <br>
-    <div class="search-container">
-      <ion-input class="recherche" type="text" placeholder=" Rechercher un service..." [(ngModel)]="term" (ionInput)="search_active($event)"></ion-input>
-    </div>  </ion-toolbar>
+    <ion-title >ANNUAIRE</ion-title>
+  </ion-toolbar>
+<ion-toolbar>
+ <ion-input class="recherche" type="text" placeholder="Rechercher un service..." [(ngModel)]="term" (ionInput)="search_active($event)"></ion-input>
+  </ion-toolbar>
 </ion-header>
-
-<br>
 
   <!-- Section visible uniquement pour admin/superadmin -->
   <div style="text-align: center;" *ngIf="grade === 'admin' || grade === 'superadmin'">
@@ -31,11 +26,11 @@
 
 <ion-content>
 
-  <h2 class="centered-heading">
+  <h3 class="centered-heading" *ngIf="number !== 'erreur_chargement' || number !== 'aucune_alerte'">
     Besoin d'un service ?
     Notre annuaire vous met en relation avec des
     professionnels de confiance pour tous vos besoins.
-  </h2>
+  </h3>
   <br>
 
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">

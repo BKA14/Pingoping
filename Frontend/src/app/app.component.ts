@@ -102,12 +102,15 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             })
           ).subscribe({
             next: (isReady) => {
-              if (isReady) {
-                this.hideSplashScreen();
-              } else {
-                console.warn("La page de login n'a pas été prête dans le délai imparti.");
-                this.hideSplashScreen();  // On masque le splash malgré tout
-              }
+              setTimeout(() => {
+                // Délai de 2 secondes avant de masquer le splash screen
+                if (isReady) {
+                  this.hideSplashScreen();
+                } else {
+                  console.warn("La page de login n'a pas été prête dans le délai imparti.");
+                  this.hideSplashScreen();  // On masque le splash malgré tout
+                }
+              }, 2000); // Délai de 2 secondes
             }
           });
         } else {
@@ -120,6 +123,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       }
     });
   }
+
 
   // Masquer le splash screen avec gestion des erreurs
   async hideSplashScreen() {

@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewChild 
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, IonContent, IonInfiniteScroll, LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { CallNumber } from '@ionic-native/call-number/ngx';
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 import { Geolocation } from '@capacitor/geolocation';
 import { CustomFilterPipe } from './custom-filter.pipe';
 import { interval, Subscription } from 'rxjs';
@@ -109,7 +109,7 @@ export class GetCommandePage implements OnInit {
       const toast = await this.toastCtrl.create({
         message: message,
         duration: this.duration, // Durée d'affichage du toast
-        position: 'top',
+        position: 'bottom',
         color: color,
       });
       toast.present();
@@ -172,7 +172,6 @@ export class GetCommandePage implements OnInit {
 
 
     async get_commande_2() {
-
 
       this.page = 1; // Assure-toi que la pagination est correcte
       this.oldcommande = this.commande; // Sauvegarde de l'ancienne liste de commandes

@@ -10,9 +10,9 @@ export class ApiService {
 
 headers : HttpHeaders;
   adr_web: string='http://localhost:80/Projet_ Lokaliser/Backend';
-  adr_mobile: string='http://192.168.1.89:80/Projet_ Lokaliser/Backend';
+  adr_mobile: string='http://192.168.1.79:80/Projet_ Lokaliser/Backend';
   time: any = 6000
-  base_url = this.adr_web;
+  base_url = this.adr_mobile;
 
   constructor(public http: HttpClient) {
     this.headers = new HttpHeaders()
@@ -173,7 +173,6 @@ add_resto(formData: FormData) {
         );
     }
 
-
 addentreprises(data) {
 return this.http.post(this.base_url+'//create.php',data)
 .pipe(timeout(this.time))
@@ -302,6 +301,8 @@ signalisation(formData) {
       }
 
 
+
+
       loadalert_search(term, page: number, limit: number): Observable<any> {
         return this.http.get(`${this.base_url}/search_alert.php?page=${page}&limit=${limit}&term=${term}`)
         .pipe(
@@ -321,6 +322,15 @@ signalisation(formData) {
           );
           }
 
+
+          load_message_search(term, page: number, limit: number): Observable<any> {
+            return this.http.get(`${this.base_url}/load_message_search.php?page=${page}&limit=${limit}&term=${term}`)
+            .pipe(
+              timeout(this.time), // Timeout de 15 secondes
+              retry(0), // Nombre de tentatives de retry en cas d'échec
+              catchError(this.handleError) // Gestion des erreurs
+            );
+            }
 
 
         load_search_commande(term, page: number, limit: number): Observable<any> {
@@ -816,6 +826,11 @@ soumettre_rapport(id,data){
   .pipe(retry(0), catchError(this.handleError))
 }
 
+marquer_lu_message(id,data){
+  return this.http.put(this.base_url+'/update_message.php?id='+id,data)
+  .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError))
+}
 
 
 updatefastfood(id,data){

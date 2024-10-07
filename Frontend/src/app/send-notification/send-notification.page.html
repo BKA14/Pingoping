@@ -1,16 +1,15 @@
 <ion-header>
-  <ion-toolbar class="toolbar">
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br> <br>
-    <ion-title class="title">Envoyer une notification</ion-title>
-    <br>
+    <ion-title >Envoyer une notification</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <form (ngSubmit)="sendNotification()">
+
     <ion-item>
       <ion-label position="floating">Titre</ion-label>
       <ion-input [(ngModel)]="title" name="title" required></ion-input>

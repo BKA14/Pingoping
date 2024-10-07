@@ -57,6 +57,7 @@ export class authService {
     this.userDataSubject.next(data);
   }
 
+
   getUserData() {
     return {
       access_token: localStorage.getItem('access_token'),
@@ -74,6 +75,7 @@ export class authService {
       token_expiry: localStorage.getItem('token_expiry')
     };
   }
+
 
   updateUserField(field: string, value: any) {
     localStorage.setItem(field, value);
@@ -105,6 +107,9 @@ export class authService {
     const expiry = Number(localStorage.getItem('token_expiry'));
     try {
       const serverTime = await this.getServerTime();
+      console.log('serveur time', serverTime)
+      console.log('expiry time', expiry)
+
       return serverTime > expiry;
     } catch (error) {
       console.error("Erreur lors de la récupération de l'heure du serveur", error);
@@ -139,9 +144,8 @@ export class authService {
         localStorage.setItem('token_expiry', userData.token_expiry);
         localStorage.setItem('refresh_token', userData.refresh_token);
         localStorage.setItem('access_app', userData.access_app);
+        localStorage.setItem('grade', userData.grade);
 
-        console.log('contact',localStorage.getItem('numuser'));
-        console.log('contact',response.user.contact);
 
         // Mettre à jour d'autres informations utilisateur si nécessaire
         // this.setUserData(userData);
@@ -163,7 +167,7 @@ async grade(): Promise<string> {
 }
 
 async getValidAccessToken(): Promise<string> {
-    if (this.isTokenExpired()) {
+    if (await this.isTokenExpired()) {
         await this.refreshAccessToken();  // Rafraîchit le token si expiré
     }
     return localStorage.getItem('access_token');  // Retourne toujours le token actuel

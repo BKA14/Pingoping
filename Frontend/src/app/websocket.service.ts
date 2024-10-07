@@ -16,8 +16,6 @@ export class WebSocketService {
   private userMessagesSubject = new Subject<any>();
   private notificationsMessagesSubject = new Subject<any>();
   public isConnected = false;
-  private reconnectAttempts = 0;
-  private readonly maxReconnectAttempts = 15;
 
   constructor() {
     this.connect();
@@ -27,89 +25,75 @@ export class WebSocketService {
     this.socket$ = new WebSocketSubject('ws://localhost:8081');
 
     this.socket$.pipe(
-        retryWhen(errors =>
-            errors.pipe(
-                tap(() => {
-                    this.reconnectAttempts++;
-                    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-                        throw new Error('Maximum reconnect attempts reached');
-                    }
-                }),
-                delay(2000)
-            )
+      retryWhen(errors =>
+        errors.pipe(
+          tap(() => {
+            console.log('Tentative de reconnexion...');
+          }),
+          delay(3000) // Délai de 3 secondes avant la prochaine tentative
         )
+      )
     ).subscribe(
-        (message) => {
-            try {
-                 console.log(message);
-                if (Array.isArray(message)) {
-                    // Handle initial data array
-                    if (message.length > 0 && message[0].type === 'signalisation') {
-                        this.signalisationMessagesSubject.next(message);
-                    } else if (message.length > 0 && message[0].type === 'pub') {
-                        this.pubMessagesSubject.next(message);
-                    } else if (message.length > 0 && message[0].type === 'etatdelikes') {
-                      this.likesMessagesSubject.next(message);
-                    } else if (message.length > 0 && message[0].type === 'commentaires') {
-                      this.commentairesMessagesSubject.next(message);
-                    }
-                       else if (message.length > 0 && message[0].type === 'signalement') {
-                      this.signalementMessagesSubject.next(message);
-                    }
-                    else if (message.length > 0 && message[0].type === 'user') {
-                      this.userMessagesSubject.next(message);
-                    }
-                    else if (message.length > 0 && message[0].type === 'notifications') {
-                      this.notificationsMessagesSubject.next(message);
-                    }
-                } else {
-                    // Handle single message
-                    if (message.type === 'signalisation') {
-                        this.signalisationMessagesSubject.next(message);
-                    } else if (message.type === 'pub') {
-                        this.pubMessagesSubject.next(message);
-                    } else if (message.type === 'etatdelikes') {
-                      this.likesMessagesSubject.next(message);
-                    } else if (message.type === 'commentaires') {
-                      this.commentairesMessagesSubject.next(message);
-                    }
-                    else if (message.type === 'signalement') {
-                      this.signalementMessagesSubject.next(message);
-                    }
-                    else if (message.type === 'user') {
-                      this.userMessagesSubject.next(message);
-                    }
-                    else if (message.type === 'notifications') {
-                      this.notificationsMessagesSubject.next(message);
-                    }
-                }
-            } catch (error) {
-                console.error('Error parsing JSON:', error);
+      (message) => {
+        try {
+          console.log(message);
+          if (Array.isArray(message)) {
+            // Gérer le tableau de données initial
+            if (message.length > 0 && message[0].type === 'signalisation') {
+              this.signalisationMessagesSubject.next(message);
+            } else if (message.length > 0 && message[0].type === 'pub') {
+              this.pubMessagesSubject.next(message);
+            } else if (message.length > 0 && message[0].type === 'etatdelikes') {
+              this.likesMessagesSubject.next(message);
+            } else if (message.length > 0 && message[0].type === 'commentaires') {
+              this.commentairesMessagesSubject.next(message);
+            } else if (message.length > 0 && message[0].type === 'signalement') {
+              this.signalementMessagesSubject.next(message);
+            } else if (message.length > 0 && message[0].type === 'user') {
+              this.userMessagesSubject.next(message);
+            } else if (message.length > 0 && message[0].type === 'notifications') {
+              this.notificationsMessagesSubject.next(message);
             }
-        },
-        (err) => {
-            console.error('WebSocket Error:', err);
-            this.isConnected = false;
-        },
-        () => {
-            console.log('WebSocket connection closed, reconnecting...');
-            this.isConnected = false;
-            this.reconnect();
+          } else {
+            // Gérer le message unique
+            if (message.type === 'signalisation') {
+              this.signalisationMessagesSubject.next(message);
+            } else if (message.type === 'pub') {
+              this.pubMessagesSubject.next(message);
+            } else if (message.type === 'etatdelikes') {
+              this.likesMessagesSubject.next(message);
+            } else if (message.type === 'commentaires') {
+              this.commentairesMessagesSubject.next(message);
+            } else if (message.type === 'signalement') {
+              this.signalementMessagesSubject.next(message);
+            } else if (message.type === 'user') {
+              this.userMessagesSubject.next(message);
+            } else if (message.type === 'notifications') {
+              this.notificationsMessagesSubject.next(message);
+            }
+          }
+        } catch (error) {
+          console.error('Error parsing JSON:', error);
         }
+      },
+      (err) => {
+        console.error('WebSocket Error:', err);
+        this.isConnected = false;
+      },
+      () => {
+        console.log('WebSocket connection closed, reconnecting...');
+        this.isConnected = false;
+        this.reconnect();
+      }
     );
-}
-
-
-  private reconnect(): void {
-    if (this.reconnectAttempts < this.maxReconnectAttempts) {
-      setTimeout(() => {
-        this.connect();
-      }, 2000);
-    } else {
-      console.error('Maximum reconnect attempts reached. Stopping reconnect attempts.');
-    }
   }
 
+  private reconnect(): void {
+    // Appel continu à la méthode connect() pour une reconnexion permanente
+    setTimeout(() => {
+      this.connect();
+    }, 2000); // Délai de 2 secondes avant de tenter une nouvelle connexion
+  }
 
   public listenForSignalisationUpdates(): Observable<any> {
     return this.signalisationMessagesSubject.asObservable();

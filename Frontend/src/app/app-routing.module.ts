@@ -480,6 +480,10 @@ const routes: Routes = [
     path: 'get-commande-user',
     loadChildren: () => import('./get-commande-user/get-commande-user.module').then( m => m.GetCommandeUserPageModule)
   },
+  {
+    path: 'market',
+    loadChildren: () => import('./market/market.module').then( m => m.MarketPageModule)
+  },
 
 
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 import { LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -41,7 +40,6 @@ export class PmuPage implements OnInit {
     private _apiService : ApiService,
     private loadingCtrl: LoadingController,
     public loadingController: LoadingController,
-    private call: CallNumber,
     private authService: authService,
   )
    {

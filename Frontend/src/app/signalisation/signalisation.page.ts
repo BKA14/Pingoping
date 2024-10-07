@@ -56,7 +56,7 @@ export class SignalisationPage implements OnInit {
     private timeService: timeService
   ) {
     this.signalementForm = this.fb.group({
-      category: ['', Validators.required],
+      service: ['', Validators.required],
       description: [''],
       image: ['', Validators.required],
       ville: ['', Validators.required],
@@ -282,18 +282,20 @@ async onSubmit() {
       console.log('Combined data:', combinedData);
 
       try {
-          if (!this.selectedMedia) {
-              console.error('Aucune image ou vidéo sélectionnée');
-              await loading.dismiss();
-              return;
-          }
+
+        if (!this.selectedMedia) {
+          ('Aucune image ou vidéo sélectionnée');
+            await loading.dismiss();
+            return;
+        }
 
           const mediaType = this.getMediaType(this.selectedMedia);
           const mediaBlob = this.getBlobFromBase64(this.selectedMedia, mediaType);
 
           const formData = new FormData();
           formData.append(mediaType === 'video' ? 'video' : 'image', mediaBlob, `${mediaType}.${this.getFileExtension(this.selectedMedia)}`);
-          formData.append('category', combinedData.category);
+          formData.append('service', combinedData.service);
+          formData.append('ville', combinedData.ville);
           formData.append('description', combinedData.description);
           formData.append('location', JSON.stringify(combinedData.location));
           formData.append('nom', combinedData.nom);

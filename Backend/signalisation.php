@@ -21,8 +21,9 @@ $nom = $_POST['nom'];
 $iduser = $_POST['iduser'];
 $contactuser = $_POST['numero'];
 $prenom = $_POST['prenom'];
-$description = $_POST['description'];
-$categorie = $_POST['category'];
+$description = $_POST['description']?? 'non';
+$service = $_POST['service'];
+$ville = $_POST['ville'];
 $statut = 'non';
 $rapport = 'non';
 $statut_rapport = 'non';
@@ -33,7 +34,7 @@ $longitude = $location['longitude'];
 $latitude = $location['latitude'];
 
 // Vérifier que les données de longitude et latitude sont présentes
-if (!isset($longitude) || !isset($latitude) || !isset($nom) || !isset($prenom) || !isset($iduser) || !isset($contactuser)  || !isset($description) || !isset($categorie)) {
+if (!isset($longitude) || !isset($latitude) || !isset($nom) || !isset($prenom) || !isset($iduser) || !isset($contactuser)  || !isset($description) ) {
     http_response_code(422);
     $message['status'] = "Error";
     $message['message'] = "Données non présentes";
@@ -73,11 +74,11 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
-$q = mysqli_query($con, "INSERT INTO `signalisation` (`id`, `iduser`, `image`, `numuser`, `nom`, `prenom`, `longitude`, `latitude`, `description`, `categorie`, `statut`, `rapport`, `statut_rapport`) 
-    VALUES ('$id', '$iduser', '$target_path', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$categorie', '$statut', '$rapport', '$statut_rapport')");
+$q = mysqli_query($con, "INSERT INTO `signalisation` (`id`, `iduser`, `image`, `numuser`, `nom`, `prenom`, `longitude`, `latitude`, `description`, `service`, `statut`, `rapport`, `statut_rapport`, `ville`) 
+    VALUES ('$id', '$iduser', '$target_path', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$service', '$statut', '$rapport', '$statut_rapport' , '$ville')");
 
-$qq = mysqli_query($con, "INSERT INTO `signalisation_stockage` (`id`, `iduser`, `image`, `numuser`, `nom`, `prenom`, `longitude`, `latitude`, `description`, `categorie`, `statut`, `rapport`, `statut_rapport`) 
-    VALUES ('$id', '$iduser', '$target_path', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$categorie', '$statut', '$rapport', '$statut_rapport')");
+$qq = mysqli_query($con, "INSERT INTO `signalisation_stockage` (`id`, `iduser`, `image`, `numuser`, `nom`, `prenom`, `longitude`, `latitude`, `description`, `service`, `statut`, `rapport`, `statut_rapport`, `ville`) 
+    VALUES ('$id', '$iduser', '$target_path', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$service', '$statut', '$rapport', '$statut_rapport', '$ville')");
 
 if ($q && $qq) {
     http_response_code(201);

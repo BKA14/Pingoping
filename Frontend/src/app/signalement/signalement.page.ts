@@ -137,6 +137,7 @@ if (res && res.length < 1) {
   else {
     this.signalement = res;
     this.signalement.selectedDateOption = false;
+    this.user();
   }
   loading.dismiss();
 } catch (error) {
@@ -148,6 +149,69 @@ if (this.oldsignalement && this.oldsignalement.length > 0) {
 }
 loading.dismiss();
 }
+
+
+async loadsignalement_2() {
+  this.page = 1;
+   const loading = await this.loadingCtrl.create({
+     message: 'Rechargement...',
+     spinner: 'lines',
+     cssClass: 'custom-loading',
+   });
+
+   loading.present();
+ this.oldsignalement = this.signalement;
+ try {
+ const res : any = await this._apiService.loadsignalement(this.page, this.limit).toPromise();
+ console.log('SUCCESS ===', res);
+
+ if (res && res.length < 1) {
+   this.signalement = 'aucune_alerte';
+   }
+   else {
+     this.syncCommandes(res) ;
+     this.signalement.selectedDateOption = false;
+     this.user();
+   }
+   loading.dismiss();
+ } catch (error) {
+ console.log('erreur de chargement', error);
+ if (this.oldsignalement && this.oldsignalement.length > 0) {
+   this.signalement =  this.oldsignalement;
+ }
+   else { this.signalement = 'erreur_chargement'; }
+ }
+ loading.dismiss();
+ }
+
+
+ syncCommandes(nouvelles_signalement: any[]) {
+   // Gérer l'ajout, la mise à jour et la suppression des commandes
+   const updatedSignalement = [...this.signalement]; // Copie de l'ancienne liste pour comparaison
+
+   // 1. Gérer les ajouts et les mises à jour
+   nouvelles_signalement.forEach(nouvelles_signalement => {
+     const index = updatedSignalement.findIndex(c => c.id === nouvelles_signalement.id);
+
+     if (index === -1) {
+       // Ajout en tête si c'est une nouvelle commande
+       updatedSignalement.unshift(nouvelles_signalement);
+     } else {
+       // Mise à jour de la commande existante
+       updatedSignalement[index] = nouvelles_signalement;
+     }
+   });
+
+   // 2. Gérer les suppressions
+   this.signalement = updatedSignalement.filter(signalement =>
+     nouvelles_signalement.some(nouvelles_signalement => nouvelles_signalement.id === signalement.id)
+   );
+
+   // 3. Mettre à jour la liste des commandes
+   if (this.signalement.length === 0) {
+     this.signalement = 'aucune_alerte'; // Aucun élément dans la liste
+   }
+ }
 
 
 async loadMore(event) {
@@ -225,6 +289,7 @@ signalement_websocket() {
       signalement.admin_nom = this.userData.nom;
       signalement.admin_prenom = this.userData.prenom1;
       signalement.traitement = 'oui';
+      this.loadsignalement_2();
       alert(' Signalement traité !');
      },(error: any) => {
       console.log("Erreur de connection");
@@ -297,8 +362,9 @@ formatCommentTime(time: string): string {
 
     this._apiService.confirmer(signalement.idusersignaler ,data).subscribe((res:any) => {
       console.log("SUCCESS ===",res);
-     alert(' blocage effectué  !');
-     this.signalement.selectedDateOption  = !this.signalement.selectedDateOption;
+      this.signalement.selectedDateOption  = !this.signalement.selectedDateOption;
+      this.loadsignalement_2();
+      alert(' blocage effectué  !');
      },(error: any) => {
       console.log("Erreur de connection");
       alert(' Erreur de connection ');
@@ -361,6 +427,7 @@ debloquer(signalement){
 
   this._apiService.debloquer(signalement.idusersignaler ,data).subscribe((res:any) => {
     console.log("SUCCESS ===",res);
+    this.loadsignalement_2();
    alert(' deblocage effectué  !');
    },(error: any) => {
     console.log("Erreur de connection");

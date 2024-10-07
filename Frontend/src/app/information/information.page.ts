@@ -105,10 +105,13 @@ export class InformationPage implements OnInit {
     this._apiService.updateinfo(this.userData.iduser, data).subscribe((res: any) => {
       loading.dismiss();
       console.log("SUCCESS ===", res);
+      alert('modification effectué');
       this.getinfo();
     }, (error: any) => {
       loading.dismiss();
       console.log("Erreur de connection", error);
+      alert('Erreur veuillez reesayer');
+
     });
 
     this.resetEditing();

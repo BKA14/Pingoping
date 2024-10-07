@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewChild 
 import { Router } from '@angular/router';
 import { AlertController, IonContent, IonInfiniteScroll, LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { CallNumber } from '@ionic-native/call-number/ngx';
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 import { CustomFilterPipe } from './custom-filter.pipe';
 import { Geolocation } from '@capacitor/geolocation';
 import { interval, Subscription } from 'rxjs';
@@ -11,6 +11,7 @@ import { CommentaireService } from './CommentaireService';
 import { DistanceCalculatorService } from './distance-calculator.service';
 import { authService } from '../services/auth.service';
 import { WebSocketService } from '../websocket.service';
+import { CartService } from '../services/cart.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class RestaurantPage implements OnInit {
   term: any;
   oldresto: any;
   page: number = 1;
-  limit: number = 12;
+  limit: number = 14;
   userlongitude: any;
   userlatitude: any;
   duration = 2000;
@@ -40,6 +41,7 @@ export class RestaurantPage implements OnInit {
   showFullCommentaire: boolean = false;
   userData: any;
   private websocketSubscription: Subscription;
+  cart = [];
 
 
   constructor(
@@ -57,15 +59,12 @@ export class RestaurantPage implements OnInit {
     private distanceCalculatorService: DistanceCalculatorService,
     private authService: authService,
     private wsService: WebSocketService,
+    private cartService: CartService
+
   ) {
 
-    this.getsessionuser();
     this.restaurant()  ;
 
-    // S'abonner aux changements de données utilisateur
-    this.authService.userData$.subscribe(data => {
-      this.userData = data;
-    });
     }
 
   ngOnInit() {
@@ -75,10 +74,20 @@ export class RestaurantPage implements OnInit {
     this.cdr.detectChanges(); // Détecter et appliquer les changements
     });
 
+  // S'abonner aux changements de données utilisateur
+  this.authService.userData$.subscribe(data => {
+    this.userData = data;
+  });
+
+  // S'abonner aux changements du panier
+  this.cartService.cart$.subscribe(cart => {
+    this.cart = cart;
+  });
+
     this.loadLike() ;
+    this.getsessionuser();
 
   }
-
 
 
     // Méthode pour afficher un toast
@@ -95,7 +104,7 @@ export class RestaurantPage implements OnInit {
 
     getsessionuser(){
 
-      this.grade= (localStorage.getItem('grade'));
+      this.grade= this.userData.grade;
       console.log(this.grade);
 
       }
@@ -139,6 +148,63 @@ export class RestaurantPage implements OnInit {
     }
 
 
+    async restaurant_2() {
+
+      this.page = 1;
+      this.oldresto = this.resto;
+
+      try {
+      const res : any = await this._apiService.restaurant(this.page, this.limit).toPromise();
+
+      if (res && res.length < 1) {
+        this.resto = 'aucune_alerte';
+      } else {
+        this.resto =  res;
+        this.syncCommandes(res);
+        this.openUrl();
+      }
+
+      } catch (error) {
+      console.log('erreur de chargement', error);
+      if (this.oldresto && this.oldresto.length > 0) {
+        this.resto = this.oldresto;
+
+      }
+      else { this.resto = 'erreur_chargement'; }
+      console.log('Erreur de chargement', error);
+    }
+      }
+
+
+      syncCommandes(nouveauResto: any[]) {
+        // Gérer l'ajout, la mise à jour et la suppression des commandes
+        const updatedResto = [...this.resto]; // Copie de l'ancienne liste pour comparaison
+
+        // 1. Gérer les ajouts et les mises à jour
+        nouveauResto.forEach(nouveauResto => {
+          const index = updatedResto.findIndex(c => c.id === nouveauResto.id);
+
+          if (index === -1) {
+            // Ajout en tête si c'est une nouvelle commande
+            updatedResto.unshift(nouveauResto);
+          } else {
+            // Mise à jour de la commande existante
+            updatedResto[index] = nouveauResto;
+          }
+        });
+
+        // 2. Gérer les suppressions
+        this.resto = updatedResto.filter(resto =>
+          nouveauResto.some(nouveauResto => nouveauResto.id === resto.id)
+        );
+
+        // 3. Mettre à jour la liste des commandes
+        if (this.resto.length === 0) {
+          this.resto = 'aucune_alerte'; // Aucun élément dans la liste
+        }
+      }
+
+
     async loadMore(event) {
 
       this.page++;
@@ -147,14 +213,15 @@ export class RestaurantPage implements OnInit {
       try {
         const res : any  = await this._apiService.restaurant(this.page, this.limit).toPromise();
 
-        this.resto = this.resto.concat(res);
-         this.openUrl();
-        event.target.complete();
-
           // Désactiver l'infinite scroll si moins de données retournées que la limite
       if (res.length < this.limit) {
+        this.resto = this.resto.concat(res);
+        this.openUrl();
+        event.target.complete();
+      }else {
         this.infiniteScrollDisabled = true;
       }
+
       } catch (error) {
         console.log('Erreur de chargement', error);
         if (this.oldresto && this.oldresto.length > 0) {
@@ -244,9 +311,10 @@ export class RestaurantPage implements OnInit {
 
       this._apiService.supprimer_resto(resto.id).subscribe((res:any)  => {
 
+        this.restaurant_2() ;
         loading.dismiss();
 
-        this.restaurant() ;
+
 
       },async (error: any) => {
         loading.dismiss();
@@ -605,6 +673,7 @@ async Likepremier(resto): Promise<void> {
 
       }
 
+
      async Likes(resto): Promise<void> {
 
       let data = {
@@ -630,6 +699,7 @@ async Likepremier(resto): Promise<void> {
        this.cdr.detectChanges();
 
           }
+
 
      async disLike(resto): Promise<void> {
 

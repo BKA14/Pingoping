@@ -133,7 +133,6 @@ event.preventDefault();
     async ngOnInit() {
 
       this.updateSubscription = interval(12000).subscribe(async () => {
-      this.setupIntersectionObserver();
       await this.openUrl();
       this.cdr.detectChanges(); // Détecter et appliquer les changements
       });
@@ -177,6 +176,7 @@ event.preventDefault();
       }
 
       async getpub() {
+
         this.page = 1;
 
         let loading: HTMLIonLoadingElement;
@@ -187,7 +187,7 @@ event.preventDefault();
             message: 'Actualisation...',
             spinner: 'lines',
             cssClass: 'custom-loading',
-            duration: 8500, // Timeout de 8,5 secondes
+            duration: 8000, // Timeout de 8,5 secondes
           });
 
           await loading.present();

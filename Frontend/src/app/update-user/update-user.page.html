@@ -1,13 +1,12 @@
 <ion-header>
-  <ion-toolbar class="tool1" color="success">
+  <ion-toolbar >
     <ion-buttons slot="start">
-      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-     <br/> <br/>
-    <ion-title class="tool2">Modifier les donnees</ion-title>
-    <br/>
+    <ion-title >Mise a jour donnée</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <br/>
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">

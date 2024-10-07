@@ -23,7 +23,7 @@ export class WelcomePage implements OnInit {
     { title: 'Signalisation', icon: 'alert-circle-outline', description: 'Envoyer des alertes aux différentes entreprises de votre ville.', link: '/signalisation'  },
     { title: 'Évènements à venir', icon: 'calendar-outline', description: 'Consultez les prochains événements.' , link: '/evenement'  },
     { title: 'Restaurant', icon: 'restaurant-outline', description: 'Dégusté les fabuleux mets de vos restaurants préférés.', link: '/restaurant'  },
-    { title: 'Market', icon: 'bag-outline', description: 'Découvrez nos différents produits.', link: '/numero-service' },
+    { title: 'Market', icon: 'bag-outline', description: 'Découvrez nos différents produits.', link: '/market' },
     { title: 'Professionnels à proximité', icon: 'call-outline', description: 'Besoin d\'un service ?.', link: '/numero-service'  },
     { title: 'PMU', icon: 'analytics-outline', description: 'Pronostic PMU.', link: '/pmu'  }
   ];

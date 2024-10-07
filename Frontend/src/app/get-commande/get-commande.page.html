@@ -1,22 +1,20 @@
 <ion-header>
-  <ion-toolbar class="toolbar">
-    <!-- Bouton de retour à gauche -->
+
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br>
-    <!-- Titre centré -->
-    <ion-title class="title">Gestion des Commandes</ion-title>
+    <ion-title >Gestion des Commandes</ion-title>
   </ion-toolbar>
 
-  <ion-toolbar class="toolbar">
+  <ion-toolbar >
     <!-- Recherche centrée -->
     <div class="search-container">
       <ion-input class="recherche" type="text" placeholder="Rechercher id, prenom + nom , contact,..." [(ngModel)]="term" (ionInput)="onSearch($event)"></ion-input>
     </div>
   </ion-toolbar>
 
-  <ion-toolbar class="toolbar">
+  <ion-toolbar >
     <!-- Boutons sur une nouvelle ligne -->
     <ion-buttons slot="end">
       <ion-button (click)="reloadPage()" class="light" color="light">
@@ -26,14 +24,7 @@
 
   </ion-toolbar>
 
-  <ion-toolbar class="toolbar">
-    <ion-buttons style="justify-content: center;">
-      <ion-button (click)="filterByStatus('toutes')">Toutes</ion-button> &nbsp; &nbsp;
-      <ion-button (click)="filterByStatus('en attente')">En Attente</ion-button> &nbsp; &nbsp;
-      <ion-button (click)="filterByStatus('validée')">Validées</ion-button> &nbsp; &nbsp;
-      <ion-button (click)="filterByStatus('livrée')">Livrées</ion-button> &nbsp;
-    </ion-buttons>
-
+  <ion-toolbar >
 
     <ion-label [routerLink]="['/panier']" class="cart-label" slot="start">
      en attente
@@ -48,6 +39,14 @@
       &nbsp;
       <ion-badge class="cart-badge" *ngIf="nbr_attente > 0">{{ nbr_attente }}</ion-badge>
     </ion-label>
+
+    <br>
+    <ion-buttons style="justify-content: center;">
+      <ion-button (click)="filterByStatus('toutes')">Toutes</ion-button> &nbsp; &nbsp;
+      <ion-button (click)="filterByStatus('en attente')">En Attente</ion-button> &nbsp; &nbsp;
+      <ion-button (click)="filterByStatus('validée')">Validées</ion-button> &nbsp; &nbsp;
+      <ion-button (click)="filterByStatus('livrée')">Livrées</ion-button> &nbsp;
+    </ion-buttons>
 
   </ion-toolbar>
 

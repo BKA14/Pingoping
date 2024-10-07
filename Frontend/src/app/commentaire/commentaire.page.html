@@ -1,13 +1,11 @@
 
 <ion-header>
-  <ion-toolbar class="tool1">
-    <br>
-    <br  style="padding: 50px;">
-    <ion-buttons  *ngIf="modif!==true" slot="start">
+  <ion-toolbar >
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title class="tool2" *ngIf="modif!==true && reponse !==true">COMMENTAIRE</ion-title>
-    <br><br>
+    <ion-title >COMMENTAIRE</ion-title>
+
     <div id="copy-message" class="copy-message">Texte copié</div>
     <p (click)="annulermodif()" *ngIf="modif==true" class="btnannuler">Annuler</p>
     <p (click)="annulerepondre()" *ngIf="reponse==true" class="btnannuler">Annuler</p>

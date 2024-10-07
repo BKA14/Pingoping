@@ -56,12 +56,8 @@ export class NotificationService {
       const alert = await this.alertController.create({
         header: 'Notification',
         subHeader: notification.title,
-        message: `
-          <div class="custom-alert-content">
-            <img src="../assets/notif_icon.png" />
-            <p>${notification.body}</p>
-          </div>
-        `,
+        message:
+            notification.body,
         buttons: [
           {
             text: 'Voir',

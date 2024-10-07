@@ -1,5 +1,30 @@
+<ion-header>
+  
+ <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title >EVENEMENTS</ion-title>
+  </ion-toolbar>
 
-<ion-header  >
+    <ion-toolbar >
+    <ion-buttons slot="start">
+      <ion-button (click)="acceuil()" class="light" color="light">
+        acceuil
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="reloadPage()" class="light" color="light">
+        Actualiser
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+
+  <ion-toolbar>
+      <ion-label class="h2 light">{{userData.prenom1 | uppercase}}</ion-label>
+  </ion-toolbar>
 
 </ion-header>
 
@@ -13,34 +38,7 @@
   <ion-refresher-content></ion-refresher-content>
 </ion-refresher>
 
-<!-- Mon toolbar pour les differentes info -->
 
-<ion-toolbar  class="tool1" >
-  <br  style="padding: 39px;">
-  <ion-buttons slot="start">
-  <ion-back-button defaultHref="/" color="light"></ion-back-button>
-  </ion-buttons>
-    <ion-title class="tool2">EVENEMENT</ion-title>
-      <div  style="display: flex;">
-        <div class="container">
-          <ion-label class="h2 light">{{userData.prenom1 | uppercase}}</ion-label>
-        </div>
-        <span style="margin-left: auto;">
-          <ion-button (click)="reloadPage()" class="light" color="light" style="text-align: left;">
-            actualiser
-          </ion-button>
-
-          &nbsp;
-
-          <span style="margin-right: auto;" *ngIf="userData.grade === 'admin' || userData.grade === 'superadmin'">
-            <ion-button (click)="acceuil()" class="light" color="light" style="text-align: left;">
-              acceuil
-            </ion-button>
-          </span>
-
-        </span>
-      </div>
-  </ion-toolbar>
 
 <!-- Fin  de mon toolbar -->
 <ion-item class="span" *ngIf="userData.grade === 'admin' || userData.grade === 'superadmin'">

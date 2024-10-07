@@ -145,8 +145,9 @@ export class MenuPage implements OnInit {
     });
     loading.present();
 
-    localStorage.clear();
+    await  localStorage.removeItem('access_token');
 
+    await localStorage.clear();
   const id = this.userData.iduser;
   this._apiService.deconnexion(id).subscribe((res:any)  => {
     loading.dismiss();

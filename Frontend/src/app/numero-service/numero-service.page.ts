@@ -3,8 +3,8 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewChild 
 import { Router } from '@angular/router';
 import { AlertController, IonContent, IonInfiniteScroll, LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 import { CustomFilterPipe } from './custom-filter.pipe';
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 
 @Component({
   selector: 'app-numero-service',
@@ -51,7 +51,6 @@ export class NumeroServicePage implements OnInit {
 
      this.numero() ;
      this.cdr.detectChanges(); // Détecter et appliquer les changements
-     this.numero() ;
   }
 
 
@@ -126,8 +125,6 @@ export class NumeroServicePage implements OnInit {
         event.target.complete();
       }
     }
-
-
 
 
     appeler(numero: string) {

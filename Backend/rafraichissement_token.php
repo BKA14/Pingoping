@@ -30,7 +30,7 @@ try {
             "contact" => $row->contact,
             "datefinblocage" => $row->datefinblocage,
             "date_inscription" => $row->date_inscription,
-            "exp" => time() + (1 * 60) // 2 minutes
+            "exp" => time() + (24 * 60 * 60) // 24 heures
         );
         $accessToken = JWT::encode($accessTokenPayload, 'your_secret_key', 'HS256');
 

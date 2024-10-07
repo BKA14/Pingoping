@@ -1,20 +1,22 @@
-
 <ion-header>
-  <ion-toolbar color="success" class="toolbar">
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br> <br>
-    <ion-title class="title">UTILISATEURS</ion-title>
+    <ion-title >UTILISATEURS</ion-title>
+  </ion-toolbar>
+  
+ <ion-toolbar>
     <ion-searchbar class="searchbar" type="text" placeholder="Rechercher un utilisateur" [(ngModel)]="term"></ion-searchbar>
-    <div class="container">
+    </ion-toolbar>
+
+    <ion-toolbar>
       <ion-label class="username light">{{prenom1 | uppercase}}</ion-label>
-    </div>
   </ion-toolbar>
 </ion-header>
 
 
-<div  >
+<div>
   <ion-select
   class="select"
     interface="popover"

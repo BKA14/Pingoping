@@ -1,12 +1,36 @@
 
+ion-header {
+  ion-toolbar {
+    height: 56px;  /* Hauteur recommandée pour les en-têtes sur mobile */
+    display: flex;
+    align-items: center;  /* Centrer verticalement les éléments */
+    --background: linear-gradient(to right, #0eeb49, #05a83d) !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  ion-title {
+    font-size: 1.2rem;  /* Taille du texte adaptable */
+    text-align: center;
+    color: white;
 
-.toolbar {
---background: linear-gradient(to right, #0eeb49, #05a83d); /* Ajout d'un dégradé */
---ion-toolbar-background: transparent;
-color: #fff;
-padding: 0 15px;
+  }
+
+  ion-back-button {
+    --color: light;  /* Couleur spécifique du bouton retour */
+  }
 }
 
+  .search-container {
+    padding: 10px 16px;  /* Ajoutez un padding pour que l'input ne soit pas collé aux bords */
+  }
+
+  ion-input.recherche {
+    width: 100%;  /* Prendre toute la largeur disponible */
+    font-size: 1rem;
+    border-radius: 8px;  /* Un léger arrondi des coins pour un style plus moderne */
+    background-color: #fff;  /* Fond blanc pour rendre l'input distinct du toolbar */
+    padding: 8px 12px;
+  }
 
 .title {
 text-align: center;
@@ -24,7 +48,7 @@ h2.centered-heading {
   font-family: Arial, sans-serif;
   color: #315c28;
   background-color: #f9f9f9;
-  padding: 20px;
+  padding: 15px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

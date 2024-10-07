@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewChild 
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, IonContent, IonInfiniteScroll, LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 import { CustomFilterPipe } from './custom-filter.pipe';
 import { Geolocation } from '@capacitor/geolocation';
 import { interval, Subscription } from 'rxjs';
@@ -49,7 +48,6 @@ export class ListPlatPage implements OnInit {
     private _apiService: ApiService,
     private loadingController: LoadingController,
     private router: Router,
-    private callNumber: CallNumber,
     private alertController: AlertController,
     private loadingCtrl: LoadingController,
     private cdr: ChangeDetectorRef,
@@ -77,7 +75,6 @@ export class ListPlatPage implements OnInit {
     this.cdr.detectChanges(); // Détecter et appliquer les changements
     });
 
-    this.getsessionuser();
 
       // Charger le panier initial à partir du serveur
       this.cartService.loadCart(this.cartService.userData.iduser);
@@ -91,6 +88,8 @@ export class ListPlatPage implements OnInit {
     this.authService.userData$.subscribe(data => {
       this.userData = data;
     });
+
+    this.getsessionuser();
 
     this.restaurant(this.id)  ;
 
@@ -181,7 +180,7 @@ export class ListPlatPage implements OnInit {
 
     getsessionuser(){
 
-      this.grade= (localStorage.getItem('grade'));
+      this.grade= this.userData.grade;
       console.log(this.grade);
 
       }
@@ -261,11 +260,7 @@ export class ListPlatPage implements OnInit {
     }
 
 
-    appeler(numero: string) {
-      this.callNumber.callNumber(numero, true)
-        .then(res => console.log('Launched dialer!', res))
-        .catch(err => console.log('Error launching dialer', err));
-    }
+
 
 
     isImage(photo: string): boolean {

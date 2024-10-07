@@ -10,7 +10,7 @@ export class BackButtonService {
   private timePeriodToAction = 2000;
 
   init() {
-    this.platform.backButton.subscribeWithPriority(10, async () => {
+    this.platform.backButton.subscribeWithPriority(100, async () => {
       const currentUrl = this.router.url;
       if (currentUrl === "/login2") {
         this.withDoublePress("appuyez à nouveau pour quitter", () => {

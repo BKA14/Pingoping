@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { MessageAdminPageRoutingModule } from './message-admin-routing.module';
 
 import { MessageAdminPage } from './message-admin.page';
+import { CustomFilterPipe } from './custom-filter.pipe';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { MessageAdminPage } from './message-admin.page';
     IonicModule,
     MessageAdminPageRoutingModule
   ],
-  declarations: [MessageAdminPage]
+  declarations: [MessageAdminPage, CustomFilterPipe]
 })
 export class MessageAdminPageModule {}

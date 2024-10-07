@@ -30,9 +30,7 @@ export class PanierPage implements OnInit {
       this.loadCart(); // Charger le panier chaque fois que userData change
     });
   }
-
   async loadCart() {
-
     const loading = await this.loadingCtrl.create({
       message: 'Chargement du panier...',
       spinner: 'lines',
@@ -43,8 +41,9 @@ export class PanierPage implements OnInit {
 
     this.cartService.loadCart(this.userData.iduser).subscribe({
       next: (cart: any[]) => {
-        this.cart = cart || []; // Assurez-vous que cart est toujours un tableau
-        this.calculateTotal();   // Recalculer le total du panier
+        this.cart = Array.isArray(cart) ? cart : []; // Assurez-vous que cart est toujours un tableau
+        console.log('Contenu du panier:', this.cart); // Logguez le contenu du panier
+        this.calculateTotal(); // Recalculer le total du panier
       },
       error: (error) => {
         console.error('Erreur lors du chargement du panier:', error);
@@ -154,10 +153,17 @@ isValidItem(plat: any): boolean {
 
 // Calculer le prix total en excluant les plats incomplets
 calculateTotal() {
+
+  if (!Array.isArray(this.cart)) {
+    console.error('this.cart n\'est pas un tableau:', this.cart);
+    return; // Sortir de la fonction si ce n'est pas un tableau
+  }
+
   this.total = this.cart
     .filter(plat => this.isValidItem(plat))  // Filtrer les plats valides
     .reduce((acc, plat) => acc + plat.prix * plat.quantity, 0);
 }
+
 
   increaseQuantity(index: number) {
     if (this.cart[index].quantity < 10) { // Limiter la quantité à 10 par exemple

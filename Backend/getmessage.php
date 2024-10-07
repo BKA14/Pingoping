@@ -4,32 +4,50 @@ include "config.php";
 // Initialiser un tableau pour stocker les données
 $data = array();
 
-// Obtenir les paramètres de pagination
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 9;
+// Obtenir les paramètres de pagination avec validation
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 30;
 $start = ($page - 1) * $limit;
 
-// Exécuter la requête SQL pour récupérer les messages, triés par heure d'envoi
-$query = "SELECT * FROM `message_user` ORDER BY heure_message DESC LIMIT $start, $limit";
-$result = mysqli_query($con, $query);
+// Utiliser des requêtes préparées pour éviter les injections SQL
+$query = "SELECT * FROM `message_user` ORDER BY heure_message DESC LIMIT ?, ?";
+$stmt = $con->prepare($query);
 
-// Vérifier si la requête a réussi
-if ($result) {
-    // Parcourir les résultats et les ajouter au tableau $data
-    while ($row = mysqli_fetch_object($result)) {
-        $data[] = $row;
+if ($stmt) {
+    // Lier les paramètres pour la requête préparée
+    $stmt->bind_param("ii", $start, $limit);
+    
+    // Exécuter la requête
+    if ($stmt->execute()) {
+        // Récupérer les résultats
+        $result = $stmt->get_result();
+
+        // Parcourir les résultats et les ajouter au tableau $data
+        while ($row = $result->fetch_object()) {
+            $data[] = $row;
+        }
+
+        // Envoyer les données au format JSON
+        echo json_encode($data);
+    } else {
+        // En cas d'erreur lors de l'exécution de la requête
+        echo json_encode(array(
+            "status" => "Error",
+            "message" => "Erreur lors de l'exécution de la requête.",
+            "error" => $stmt->error
+        ));
     }
 
-    // Envoyer les données au format JSON
-    echo json_encode($data);
+    // Fermer le statement
+    $stmt->close();
 } else {
-    // En cas d'erreur, envoyer un message d'erreur JSON
+    // En cas d'erreur lors de la préparation de la requête
     echo json_encode(array(
         "status" => "Error",
-        "message" => "Erreur lors de l'exécution de la requête.",
-        "error" => mysqli_error($con)
+        "message" => "Erreur lors de la préparation de la requête.",
+        "error" => $con->error
     ));
 }
 
 // Fermer la connexion à la base de données
-mysqli_close($con);
+$con->close();

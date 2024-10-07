@@ -16,6 +16,7 @@ import { NavController } from '@ionic/angular';
 import { authService } from '../services/auth.service';
 import { NotificationService } from '../notification.service';
 
+
 import {
   ActionPerformed,
   PushNotificationSchema,
@@ -133,7 +134,6 @@ event.preventDefault();
     async ngOnInit() {
 
       this.updateSubscription = interval(12000).subscribe(async () => {
-      this.setupIntersectionObserver();
       await this.openUrl();
       this.cdr.detectChanges(); // Détecter et appliquer les changements
       });

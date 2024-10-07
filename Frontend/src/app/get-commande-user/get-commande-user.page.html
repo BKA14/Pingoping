@@ -1,24 +1,15 @@
 <ion-header>
-  <ion-toolbar class="toolbar">
-    <!-- Bouton de retour à gauche -->
+  <ion-toolbar >
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br>
-    <!-- Titre centré -->
-    <ion-title class="title">Gestion des Commandes</ion-title>
-  </ion-toolbar>
-
-  <ion-toolbar class="toolbar">
-    <!-- Boutons sur une nouvelle ligne -->
+    <ion-title >Gestion des Commandes</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="reloadPage()" class="light" color="light">
         Actualiser
       </ion-button>
     </ion-buttons>
-
   </ion-toolbar>
-
 </ion-header>
 
 
@@ -67,6 +58,14 @@
         </ion-grid>
 
 
+      <br>
+      <ion-button (click)="appeler(commande.contact_user)" color="success">
+        un souci ? appeler nous
+        <ion-icon name="call-outline"></ion-icon>
+      </ion-button>
+      &nbsp;
+
+
   <!-- Erreurs ou aucun résultat -->
   <div *ngIf="commande == 'erreur_chargement'" class="erreur_chargement">
     <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
@@ -79,12 +78,6 @@
     <p>Aucune commande trouvée</p>
   </div>
 
-    <br>
-    <ion-button (click)="appeler(commande.contact_user)" color="success">
-     un souci ? appeler nous
-      <ion-icon name="call-outline"></ion-icon>
-    </ion-button>
-    &nbsp;
 
  </ion-card-content>
 </ion-card>
