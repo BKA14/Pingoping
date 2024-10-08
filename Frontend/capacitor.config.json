@@ -7,8 +7,7 @@
   "cordova": {},
   "server": {
     "cleartext": true,
-    "url": "http://localhost:8101",
-    "originalUrl": "http://192.168.137.93:8101"
+    "url": "http://localhost:8100"
   },
   "plugins": {
     "PushNotifications": {
@@ -18,8 +17,8 @@
         "alert"
       ],
       "SplashScreen": {
-        "launchShowDuration": 7000,
-        "launchAutoHide": false,
+        "launchShowDuration": 3000,
+        "launchAutoHide": true,
         "launchFadeOutDuration": 1000,
         "androidSplashResourceName": "splash",
         "androidScaleType": "CENTER_CROP",

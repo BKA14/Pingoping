@@ -153,9 +153,6 @@ this.loadcommentairepub(this.pubid);
 }
 });
 
-this.getpub();
-this.getUserLocation();
-this.loadcommentairepub(this.pubid);
 }
 
 

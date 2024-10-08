@@ -74,10 +74,12 @@ this.notificationService.initializePushNotifications();
    this.grade= (localStorage.getItem('grade'));
    console.log(this.grade);
     }
-    getsession1(){
-      this.prenom1= (localStorage.getItem('prenom1'));
-      console.log(this.prenom1);
-       }
+
+
+  getsession1(){
+    this.prenom1= (localStorage.getItem('prenom1'));
+    console.log(this.prenom1);
+      }
 
 
   async getentreprises(){

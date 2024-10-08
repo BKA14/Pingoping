@@ -208,6 +208,9 @@ async loadalert_id() {
     }
   }
 
+  Acceuil(){
+    this.router.navigateByUrl('/acceuil');
+  }
 
   filterAlerts() {
 

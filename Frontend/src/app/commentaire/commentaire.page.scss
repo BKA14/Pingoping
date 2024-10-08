@@ -73,13 +73,12 @@ ion-card{
     color: gray;
   }
 
-
   .custom-container {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     background-color: #dfe0df; /* Couleur de fond verte, ajustez selon vos besoins */
-    margin: 55px;
+    margin: 38px;
     border-radius: 30px;
   }
 
@@ -778,8 +777,8 @@ text-align: center;
       }
 
       .admin {
-      color : hsla(93, 77%, 41%, 0.799);
-      }
+        color: hsl(127, 73%, 52%); /* Un jaune lumineux comme couleur intermédiaire entre le vert et le rouge */
+    }
 
 
       .video-container {

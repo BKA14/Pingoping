@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Geolocation } from '@capacitor/geolocation';
 import { ApiService } from '../api.service';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
 import { timeService } from '../timeservice.service';
 import * as L from 'leaflet';
@@ -38,11 +38,13 @@ L.Marker.prototype.options.icon = L.icon({
 })
 export class SignalisationPage implements OnInit {
   signalementForm: FormGroup;
-  selectedMedia: string | undefined;
+  photo:  any;
   service: any;
   ville: any;
   userData: any;
   serverTime: string | number | Date;
+  selectedFile: File;
+  recuperer_location: string;
 
 
   constructor(private fb: FormBuilder,
@@ -53,27 +55,31 @@ export class SignalisationPage implements OnInit {
     private loadingCtrl: LoadingController,
     public loadingController: LoadingController,
     private authService: authService,
-    private timeService: timeService
+    private timeService: timeService,
+    private toastCtrl: ToastController
+
   ) {
+
+    }
+
+  ngOnInit(): void {
+
     this.signalementForm = this.fb.group({
       service: ['', Validators.required],
       description: [''],
-      image: ['', Validators.required],
+      photo: ['', Validators.required],
       ville: ['', Validators.required],
       location: this.fb.group({
         latitude: [0],
         longitude: [0]
       })
     });
-  }
 
-  ngOnInit(): void {
-    // Initialize any additional logic here if necessary
-    this.getLocation();
+
     this.getservice();
     this.getville();
 
-        // S'abonner aux changements de données utilisateur
+   // S'abonner aux changements de données utilisateur
   this.authService.userData$.subscribe(data => {
     this.userData = data;
   });
@@ -131,82 +137,58 @@ export class SignalisationPage implements OnInit {
     this.getLocation();
   }
 
-  async selectMedia(): Promise<void> {
-    try {
-        const media = await Camera.getPhoto({
-            quality: 90,
-            allowEditing: false,
-            resultType: CameraResultType.Uri, // Utiliser Uri pour obtenir le chemin du fichier
-            source: CameraSource.Prompt // Permet à l'utilisateur de choisir entre la caméra et la galerie
-        });
+  imagePreview: string | null | null; // Ajoutez ceci en haut de votre classe
 
-        const fileUri = media.webPath!;
-        const fileType = media.format;
-        const base64Data = await this.readAsBase64(fileUri);
+   // Ajoutez cette méthode pour gérer la sélection de fichier
+   errorMessage: string | null = null; // Ajoutez ceci en haut de votre classe
 
-        // Vérifier la taille du fichier
-        const fileSizeInBytes = this.getFileSize(base64Data);
-        const maxVideoSizeInBytes = 100 * 1024 * 1024; // Limite de taille de 100 Mo pour les vidéos
+   onFileSelected(event: any): void {
+       const files: FileList = event.target.files;
 
-        if (['jpeg', 'png', 'gif', 'bmp'].includes(fileType) && fileSizeInBytes <= maxVideoSizeInBytes) {
-            // C'est une image
-            this.selectedMedia = `data:image/${fileType};base64,${base64Data}`;
-            this.signalementForm.patchValue({ image: this.selectedMedia });
-        } else if (['mp4', 'webm', 'ogg'].includes(fileType) && fileSizeInBytes <= maxVideoSizeInBytes) {
-            // C'est une vidéo et elle est dans la limite de taille
-            this.selectedMedia = fileUri; // Utiliser le chemin URI de la vidéo
-            this.signalementForm.patchValue({ image: fileUri });
-        } else if (fileSizeInBytes > maxVideoSizeInBytes) {
-            alert('La taille du fichier dépasse la limite autorisée de 100 Mo.');
-        } else {
-            alert('Format de fichier non pris en charge.');
-        }
+       if (files.length > 0) {
+           this.selectedFile = files[0];
+           this.photo = this.selectedFile.name;
 
-       // alert(this.selectedMedia);
-    } catch (error) {
-        console.error('Erreur lors de la sélection du média:', error);
-    }
-}
+           if (this.selectedFile.size > 100 * 1024 * 1024) {
+               this.errorMessage = 'La taille du fichier ne doit pas dépasser 100 Mo.'; // Stockez le message d'erreur
+               this.signalementForm.patchValue({ photo: null });
+               this.imagePreview = null;
+               return;
+           } else {
+               this.errorMessage = null; // Réinitialisez le message d'erreur
+           }
 
-private async readAsBase64(path: string): Promise<string> {
-    const response = await fetch(path);
-    const blob = await response.blob();
-    return await this.convertBlobToBase64(blob) as string;
-}
+           this.signalementForm.patchValue({
+               photo: this.photo
+           });
 
-private convertBlobToBase64 = (blob: Blob): Promise<string | ArrayBuffer | null> => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-        resolve(reader.result);
-    };
-    reader.readAsDataURL(blob);
-});
+           const reader = new FileReader();
+           reader.onload = (e: any) => {
+               this.imagePreview = e.target.result as string;
+               console.log('Aperçu de l\'image:', this.imagePreview);
+           };
+           reader.readAsDataURL(this.selectedFile);
+       }
+   }
 
-private getFileSize(base64String: string): number {
-    const stringLength = base64String.length - 'data:;base64,'.length;
-    const sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812; // taille en octets
-    return sizeInBytes;
-}
 
 
 isImage(photo: string): boolean {
-  if (!photo) {
-    return false;
-  }
+  if (!photo?.trim()) return false; // Retourne false si la photo est vide ou null
+
   const trimmedPhoto = photo.trim().toLowerCase();
   const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
-  return imageExtensions.some(ext => trimmedPhoto.endsWith(ext)) && trimmedPhoto !== 'non';
+  return imageExtensions.some(ext => trimmedPhoto.endsWith(ext));
 }
 
 isVideo(photo: string): boolean {
-  if (!photo) {
-    return false;
-  }
+  if (!photo?.trim()) return false; // Retourne false si la photo est vide ou null
+
   const trimmedPhoto = photo.trim().toLowerCase();
   const videoExtensions = ['.mp4', '.webm', '.ogg'];
-  return videoExtensions.some(ext => trimmedPhoto.endsWith(ext)) && trimmedPhoto !== 'non';
+  return videoExtensions.some(ext => trimmedPhoto.endsWith(ext));
 }
+
 
 @ViewChildren('videoElement') videoElements: QueryList<ElementRef<HTMLVideoElement>>;
 
@@ -255,6 +237,8 @@ async quitter(id) {
    return alert.present();
 }
 
+
+
 async onSubmit() {
   const loading = await this.loadingController.create({
       message: 'Envoi en cours...',
@@ -264,8 +248,8 @@ async onSubmit() {
   await loading.present();
   console.log('Loading presented');
 
-  let userData = {
-      nom:  this.userData.nom,
+  const userData = {
+      nom: this.userData.nom,
       prenom: this.userData.prenom1,
       numero: this.userData.numuser,
       iduser: this.userData.iduser,
@@ -282,18 +266,17 @@ async onSubmit() {
       console.log('Combined data:', combinedData);
 
       try {
-
-        if (!this.selectedMedia) {
-          ('Aucune image ou vidéo sélectionnée');
-            await loading.dismiss();
-            return;
-        }
-
-          const mediaType = this.getMediaType(this.selectedMedia);
-          const mediaBlob = this.getBlobFromBase64(this.selectedMedia, mediaType);
+          if (!this.selectedFile) {
+              alert('Aucune image ou vidéo sélectionnée');
+              await loading.dismiss();
+              return;
+          }
 
           const formData = new FormData();
-          formData.append(mediaType === 'video' ? 'video' : 'image', mediaBlob, `${mediaType}.${this.getFileExtension(this.selectedMedia)}`);
+          if (this.selectedFile) {
+            formData.append('image', this.selectedFile);
+          }
+                  // Ajout des autres données au formulaire
           formData.append('service', combinedData.service);
           formData.append('ville', combinedData.ville);
           formData.append('description', combinedData.description);
@@ -302,62 +285,46 @@ async onSubmit() {
           formData.append('prenom', combinedData.prenom);
           formData.append('numero', combinedData.numero);
           formData.append('iduser', combinedData.iduser);
-          formData.append('heuredusignalement', new Date( this.serverTime).toISOString());
+          formData.append('heuredusignalement', new Date(this.serverTime).toISOString());
 
           console.log('Form data prepared:', formData);
 
           this._apiService.signalisation(formData).subscribe(
               async (res: any) => {
                   console.log('Signalement envoyé avec succès', res);
-                  alert("alerte bien envoyé, on s'en charge");
-                  this.router.navigateByUrl('/alert-user');
+                  alert("Alerte bien envoyée, on s'en charge");
                   await loading.dismiss();
+                  this.router.navigateByUrl('/alert-user');
               },
               async (error) => {
                   console.error("Erreur lors de l'envoi du signalement", error);
-                  alert("Erreur, alerte non envoyé");
+                  alert("Erreur, alerte non envoyée");
                   await loading.dismiss();
               }
           );
 
       } catch (error) {
           console.error('Erreur de connexion avec le serveur:', error);
-          alert("Problème de connexion avec le serveur, alerte non envoyé");
+          alert("Problème de connexion avec le serveur, alerte non envoyée");
           await loading.dismiss();
       }
   } else {
       console.error('Form invalid:', this.signalementForm.errors);
-      alert("Problème de connexion avec le serveur, alerte non envoyé");
+      alert("Formulaire invalide, veuillez vérifier les informations");
       await loading.dismiss();
   }
 }
 
-getMediaType(base64: string): string {
-  const matches = base64.match(/^data:(video|image)\/([A-Za-z-+\/]+);base64/);
-  if (matches && matches.length > 1) {
-      return matches[1];
+// Méthode pour afficher un toast
+async presentToast(message: string, color: string = 'danger') {
+  const toast = await this.toastCtrl.create({
+    message: message,
+    duration: 2000, // Durée d'affichage du toast
+    position: 'top',
+    color: color,
+  });
+  toast.present();
   }
-  return 'image'; // Par défaut, si le type n'est pas reconnu
-}
-
-getFileExtension(base64: string): string {
-  const matches = base64.match(/^data:(video|image)\/([A-Za-z-+\/]+);base64/);
-  if (matches && matches.length > 2) {
-      return matches[2];
-  }
-  return 'jpeg'; // Par défaut, si le type n'est pas reconnu
-}
-
-getBlobFromBase64(base64: string, type: string): Blob {
-  const byteCharacters = atob(base64.split(',')[1]);
-  const byteNumbers = new Array(byteCharacters.length);
-  for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-  }
-  const byteArray = new Uint8Array(byteNumbers);
-  return new Blob([byteArray], { type: `${type}/${this.getFileExtension(base64)}` });
-}
-
 
 map: L.Map;
 marker: L.Marker;
@@ -373,8 +340,11 @@ async getLocation() {
       }
     });
     this.updateMapLocation(coordinates.coords.latitude, coordinates.coords.longitude);
+    this.recuperer_location = 'oui';
+
   } catch (error) {
-    alert('Impossible de récupérer vos coordonnées, verifier votre connexion et assurez-vous d\'activer les services de localisation sur votre mobile. Si le problème persiste contacté Pingoping depuis les paramètres. ');
+    await this.presentToast('Impossible de récupérer vos coordonnées.');
+    this.recuperer_location = 'non';
   }
 }
 

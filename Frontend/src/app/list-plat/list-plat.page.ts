@@ -192,7 +192,7 @@ export class ListPlatPage implements OnInit {
       message: 'Rechargement...',
       spinner: 'lines',
       cssClass: 'custom-loading',
-      duration: 8500,
+      duration: 7500,
     });
 
     loading.present();

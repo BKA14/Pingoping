@@ -23,7 +23,7 @@
     "@angular/router": "^16.2.10",
     "@awesome-cordova-plugins/call-number": "^6.9.0",
     "@awesome-cordova-plugins/network": "^5.46.0",
-    "@awesome-cordova-plugins/splash-screen": "^5.45.0",
+    "@awesome-cordova-plugins/splash-screen": "^5.46.0",
     "@awesome-cordova-plugins/status-bar": "^5.45.0",
     "@capacitor/android": "^5.0.0",
     "@capacitor/app": "^5.0.0",

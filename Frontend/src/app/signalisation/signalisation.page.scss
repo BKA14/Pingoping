@@ -10,7 +10,7 @@ ion-header {
     --background: linear-gradient(to right, #0eeb49, #05a83d) !important;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
   ion-title {
     font-size: 1.2rem;  /* Taille du texte adaptable */
     text-align: center;
@@ -69,36 +69,53 @@ img {
 }
 
 
-/* Dans votre fichier CSS ou SCSS */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* S'assure que le conteneur prend toute la largeur */
+}
+
 .custom-image {
   width: 40%;
   height: 40%;
-  object-fit: cover; /* Cela garantit que l'image couvre entièrement le conteneur, sans déformation */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  text-align: center;
+  object-fit: cover;
+  border-radius: 8px;
 }
-
-.custom-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Cela garantit que l'image couvre entièrement le conteneur, sans déformation */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  text-align: center;
-}
-
 
 .video-style {
-  width: 100%;
+  width: 0%;
   height: auto;
+  justify-content: center;
+  align-items: center;
   box-shadow: 7px 7px 7px  rgba(52, 204, 100, 0.1); /* Ombre, ajustez selon vos besoins */
   object-fit: cover; /* ou object-fit: contain; en fonction de votre besoin */
 }
+
+
+.controls {
+  position: relative;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(69, 206, 78, 0.5);
+  padding: 2px;
+  border-radius: 7px;
+}
+
+.controls ion-icon, .controls input[type="range"] {
+  background:  rgb(249, 250, 250);
+  border: none;
+  color: rgb(72, 210, 132);
+}
+
+.controls input[type="range"] {
+  flex: 1;
+  margin: 0 10px;
+}
+
+
 
 .alert {
   text-align: center;

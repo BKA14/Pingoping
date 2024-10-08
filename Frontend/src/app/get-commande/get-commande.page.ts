@@ -130,7 +130,7 @@ export class GetCommandePage implements OnInit {
       message: 'Rechargement...',
       spinner: 'lines',
       cssClass: 'custom-loading',
-      duration: 8500,
+      duration: 7000,
     });
 
     loading.present();
@@ -430,6 +430,15 @@ async load_search() {
   this.page = 1;
    this.oldcommande = this.commande;
 
+   const loading = await this.loadingCtrl.create({
+    message: 'Rechargement...',
+    spinner: 'lines',
+    cssClass: 'custom-loading',
+    duration: 7000,
+  });
+
+  loading.present();
+
    try {
      const res : any = await this._apiService.load_search_commande(this.term, this.page, this.limit).toPromise();
      console.log('SUCCESS ===', res);
@@ -442,7 +451,7 @@ async load_search() {
         await this.openUrl();
 
      }
-
+     loading.dismiss();
      } catch (error) {
      if (this.oldcommande && this.oldcommande.length > 0) {
        this.commande = this.oldcommande;
@@ -450,6 +459,8 @@ async load_search() {
      else { this.commande = 'erreur_chargement'; }
      console.log('Erreur de chargement', error);
    }
+
+   loading.dismiss();
 
  }
 

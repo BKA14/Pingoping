@@ -75,10 +75,10 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 }
 
 $q = mysqli_query($con, "INSERT INTO `signalisation` (`id`, `iduser`, `image`, `numuser`, `nom`, `prenom`, `longitude`, `latitude`, `description`, `service`, `statut`, `rapport`, `statut_rapport`, `ville`) 
-    VALUES ('$id', '$iduser', '$target_path', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$service', '$statut', '$rapport', '$statut_rapport' , '$ville')");
+    VALUES ('$id', '$iduser', '$file_name', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$service', '$statut', '$rapport', '$statut_rapport' , '$ville')");
 
 $qq = mysqli_query($con, "INSERT INTO `signalisation_stockage` (`id`, `iduser`, `image`, `numuser`, `nom`, `prenom`, `longitude`, `latitude`, `description`, `service`, `statut`, `rapport`, `statut_rapport`, `ville`) 
-    VALUES ('$id', '$iduser', '$target_path', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$service', '$statut', '$rapport', '$statut_rapport', '$ville')");
+    VALUES ('$id', '$iduser', '$file_name', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$service', '$statut', '$rapport', '$statut_rapport', '$ville')");
 
 if ($q && $qq) {
     http_response_code(201);

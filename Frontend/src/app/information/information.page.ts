@@ -40,7 +40,6 @@ export class InformationPage implements OnInit {
     this.userData = data;
   });
 
-
     this.verifieForm = new FormGroup({
       nom: new FormControl(this.info?.nom, [
         Validators.minLength(2),

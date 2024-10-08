@@ -125,13 +125,15 @@ event.preventDefault();
       private toastCtrl: ToastController  // Injecter le ToastController
     )
     {
-      this.manualPause = false;
-      this.getUserLocation();
-      this.getpub();
+
     }
 
 
     async ngOnInit() {
+
+      this.manualPause = false;
+      this.getUserLocation();
+      this.getpub();
 
       this.updateSubscription = interval(12000).subscribe(async () => {
       await this.openUrl();

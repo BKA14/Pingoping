@@ -82,14 +82,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
       await loading.present();
 
-      // Configurer le status bar et le back button service
-      this.statusBar.styleDefault();
+
+      // Appliquer le style de la barre de statut noire translucide
+      this.statusBar.show();
       this.backButtonService.init();
 
       try {
         // Vérification de la plateforme pour éviter les problèmes sur le web
         if (Capacitor.getPlatform() !== 'web') {
-          // Observable avec timeout pour suivre l'état de readiness de la page de login
           this.LoginServiceReadyService.isLoginPageReady$.pipe(
             take(1),  // Prendre la première valeur
             timeout(10000),  // Timeout après 10 secondes
@@ -102,20 +102,19 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             })
           ).subscribe({
             next: (isReady) => {
-              setTimeout(() => {
-                // Délai de 2 secondes avant de masquer le splash screen
-                if (isReady) {
-                  this.hideSplashScreen();
-                } else {
-                  console.warn("La page de login n'a pas été prête dans le délai imparti.");
-                  this.hideSplashScreen();  // On masque le splash malgré tout
-                }
-              }, 2000); // Délai de 2 secondes
+              // Délai de 2 secondes avant de masquer le splash screen
+              if (isReady) {
+                setTimeout(() => this.hideSplashScreen(), 3000); // Délai avant masquage
+              } else {
+                console.warn("La page de login n'a pas été prête dans le délai imparti.");
+                setTimeout(() => this.hideSplashScreen(), 4500);  // On masque le splash malgré tout
+              }
             }
           });
         } else {
           // Masquer le loading si l'on est sur le web
           await loading.dismiss();
+          await this.hideSplashScreen(); // Masquer le splash screen pour le web
         }
       } catch (error) {
         console.error('Erreur lors de l\'initialisation de l\'application :', error);

@@ -135,6 +135,8 @@ export class NumeroServicePage implements OnInit {
 
 
       refreshPage(e: any) {
+        this.term= '';
+        this.page=1;
         this.numero();
         // Log pour indiquer le rafraîchissement
         console.log('Rafraîchissement de la page');

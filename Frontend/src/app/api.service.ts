@@ -10,7 +10,7 @@ export class ApiService {
 
 headers : HttpHeaders;
   adr_web: string='http://localhost:80/Projet_ Lokaliser/Backend';
-  adr_mobile: string='http://192.168.1.79:80/Projet_ Lokaliser/Backend';
+  adr_mobile: string='http://192.168.11.102:80/Projet_ Lokaliser/Backend';
   time: any = 6000
   base_url = this.adr_mobile;
 

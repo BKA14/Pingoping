@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { AlertController, LoadingController } from '@ionic/angular';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 
 @Component({
   selector: 'app-apropos',

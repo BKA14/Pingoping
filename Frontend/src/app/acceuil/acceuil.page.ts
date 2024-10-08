@@ -124,20 +124,22 @@ event.preventDefault();
       private toastCtrl: ToastController  // Injecter le ToastController
     )
     {
-      this.manualPause = false;
-      this.getUserLocation();
-      this.getpub();
+
     }
 
 
     async ngOnInit() {
+
+      this.manualPause = false;
+      this.getUserLocation();
+      this.getpub();
 
       this.updateSubscription = interval(12000).subscribe(async () => {
       await this.openUrl();
       this.cdr.detectChanges(); // Détecter et appliquer les changements
       });
 
-      this.updateSubscription = interval(100).subscribe(async () => {
+      this.updateSubscription = interval(600).subscribe(async () => {
       this.setupIntersectionObserver();
       this.cdr.detectChanges(); // Détecter et appliquer les changements
       });
@@ -149,7 +151,6 @@ event.preventDefault();
 
       this.loadInitialPub();
       this.loadLike() ;
-      this.setupIntersectionObserver(); // pour lecture automatic de la video
       this.cdr.detectChanges(); // Détecter et appliquer les changements
 
       // pour initialiser les notiications push
@@ -179,18 +180,15 @@ event.preventDefault();
 
         this.page = 1;
 
-        let loading: HTMLIonLoadingElement;
-
         try {
-          // Créer et afficher le loader
-          loading = await this.loadingCtrl.create({
+          const loading = await this.loadingCtrl.create({
             message: 'Actualisation...',
             spinner: 'lines',
             cssClass: 'custom-loading',
-            duration: 8000, // Timeout de 8,5 secondes
+            duration: 7000,
           });
 
-          await loading.present();
+          loading.present();
 
           this.oldpub = this.pub;
 
@@ -224,11 +222,6 @@ event.preventDefault();
           );
         } catch (e) {
           await this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
-
-          if (loading) {
-            await loading.dismiss(); // S'assurer que le loader est fermé en cas d'erreur
-          }
-
           await this.presentToast("Une erreur inattendue s'est produite, veuillez réessayer.");
         } finally {
           this.cdr.detectChanges(); // Actualiser l'affichage après la mise à jour des données

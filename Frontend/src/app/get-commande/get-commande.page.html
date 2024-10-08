@@ -26,7 +26,7 @@
 
   <ion-toolbar >
 
-    <ion-label [routerLink]="['/panier']" class="cart-label" slot="start">
+    <ion-label  class="cart-label" slot="start">
      en attente
      &nbsp;
      <ion-badge class="cart-badge" *ngIf="nbr_en_cours > 0">{{ nbr_en_cours }}</ion-badge>
@@ -34,20 +34,20 @@
 
    &nbsp;
 
-    <ion-label [routerLink]="['/panier']" class="cart-label" slot="end">
+    <ion-label  class="cart-label" slot="end">
       en cours de livraison
       &nbsp;
       <ion-badge class="cart-badge" *ngIf="nbr_attente > 0">{{ nbr_attente }}</ion-badge>
     </ion-label>
+  </ion-toolbar>
 
-    <br>
+  <ion-toolbar>
     <ion-buttons style="justify-content: center;">
       <ion-button (click)="filterByStatus('toutes')">Toutes</ion-button> &nbsp; &nbsp;
       <ion-button (click)="filterByStatus('en attente')">En Attente</ion-button> &nbsp; &nbsp;
       <ion-button (click)="filterByStatus('validée')">Validées</ion-button> &nbsp; &nbsp;
       <ion-button (click)="filterByStatus('livrée')">Livrées</ion-button> &nbsp;
     </ion-buttons>
-
   </ion-toolbar>
 
 

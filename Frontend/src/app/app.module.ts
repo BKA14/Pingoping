@@ -11,7 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
 import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
-import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';  // Importer CallNumber ici
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 import { IntersectionDirective } from './intersection.directive';
 import { WebSocketService } from './websocket.service';
 import { AngularFireModule } from '@angular/fire/compat';
@@ -31,7 +31,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
     SplashScreen,CallNumber,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, WebSocketService,
     CallNumber
-
   ],
   bootstrap: [AppComponent]
 })

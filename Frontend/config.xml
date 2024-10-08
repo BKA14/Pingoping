@@ -18,9 +18,9 @@
     <preference name="FadeSplashScreenDuration" value="500" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="ShowSplashScreen" value="true" />
-    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="" />
+    <preference name="SplashScreenDelay" value="3500" />
     <platform name="android">
         <preference name="Scheme" value="http" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -38,7 +38,7 @@
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="" />
         <preference name="AndroidWindowSplashScreenAnimationDuration" value="" />
         <preference name="StatusBarOverlaysWebView" value="true" />
-        <preference name="StatusBarBackgroundColor" value="" />
+        <preference name="StatusBarBackgroundColor" value="#ffffff00" />
         <preference name="StatusBarStyle" value="lightcontent" />
     </platform>
     <platform name="ios">
