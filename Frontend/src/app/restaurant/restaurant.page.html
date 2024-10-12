@@ -12,7 +12,7 @@
       <ion-input class="recherche" type="text" placeholder="Rechercher nom de resto,..." [(ngModel)]="term" (ionInput)="onSearch($event)"></ion-input>
     </div>
   </ion-toolbar>
-  
+
   <ion-toolbar class="toolbar">
     <ion-buttons slot="end">
       <ion-button [routerLink]="['/panier']" class="cart-button" color="primary">
@@ -48,9 +48,9 @@
    </div>
 
 
-  <h3 class="centered-heading">
+  <h4 class="centered-heading">
     Craquez pour un plat délicieux ! Commandez en ligne et savourez-le chez vous en quelques minutes.
-  </h3>
+  </h4>
 
 
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">

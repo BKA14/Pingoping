@@ -85,7 +85,7 @@ async loadalert_id() {
 
   let id =  await this.userData.iduser;
   try {
-  const res = await this._apiService.loadalert_id(id,this.page, this.limit).toPromise();
+  const res : any = await this._apiService.loadalert_id(id,this.page, this.limit).toPromise();
   console.log('SUCCESS ===', res);
 
   if (res && res.length < 1) {

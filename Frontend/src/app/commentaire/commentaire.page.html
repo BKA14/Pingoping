@@ -129,7 +129,7 @@
     </div>
 
 
-      <ion-list >
+      <div  #commentContainer >
         <ion-item *ngFor="let commentaire of comment"  >
           <ion-label [class]="commentaire.iduser === userData.iduser ? 'my-comment' : 'other-comment'">
             <div class="container_a">
@@ -156,17 +156,17 @@
               <br>
 
               <div class="commentaire-actions">
-                <a class="a_commentaire" *ngIf="commentaire.iduser == userData.iduser" (click)="modifcommentaire(commentaire)">Modifier</a>&nbsp;&nbsp;
-                <a class="a_commentaire" *ngIf="commentaire.iduser == userData.iduser" (click)="presentAlert(commentaire.id)">Supprimer</a>&nbsp;&nbsp;
-                <a class="a_commentaire" (click)="copiercommentaire(commentaire.commentaire)">Copier</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a class="a_commentaire" *ngIf="commentaire.iduser !== userData.iduser" (click)="signalement(commentaire)">Signaler</a>&nbsp;&nbsp;
+                <a class="cart-label" *ngIf="commentaire.iduser == userData.iduser" (click)="modifcommentaire(commentaire)">Modifier</a>&nbsp;&nbsp;
+                <a class="cart-label" *ngIf="commentaire.iduser == userData.iduser" (click)="presentAlert(commentaire.id)">Supprimer</a>&nbsp;&nbsp;
+                <a class="cart-label" (click)="copiercommentaire(commentaire.commentaire)">Copier</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="cart-label" *ngIf="commentaire.iduser !== userData.iduser" (click)="signalement(commentaire)">Signaler</a>&nbsp;&nbsp;
             </div>
 
 
            <!--   </ul>  -->
           </ion-label>
         </ion-item>
-      </ion-list>
+      </div>
 
       <!-- Infinite Scroll -->
       <ion-infinite-scroll [disabled]="infiniteScrollDisabled" threshold="100px" (ionInfinite)="loadMore($event)">

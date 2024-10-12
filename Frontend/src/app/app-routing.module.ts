@@ -101,10 +101,8 @@ const routes: Routes = [
   {
     path: 'acceuil',
     loadChildren: () => import('./acceuil/acceuil.module').then( m => m.AcceuilPageModule),
-    //data: { preload: true }
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthGuard]
   },
-
   {
     path: 'ajouterpub',
     loadChildren: () => import('./ajouterpub/ajouterpub.module').then( m => m.AjouterpubPageModule),

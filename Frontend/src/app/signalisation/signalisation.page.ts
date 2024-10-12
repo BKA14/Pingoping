@@ -238,7 +238,6 @@ async quitter(id) {
 }
 
 
-
 async onSubmit() {
   const loading = await this.loadingController.create({
       message: 'Envoi en cours...',
@@ -255,7 +254,6 @@ async onSubmit() {
       iduser: this.userData.iduser,
   };
 
-  await this.getLocation();
 
   if (this.signalementForm.valid) {
       const combinedData = {
@@ -330,27 +328,39 @@ map: L.Map;
 marker: L.Marker;
 mapVisible = false;
 
-async getLocation() {
-  try {
-    const coordinates = await Geolocation.getCurrentPosition();
-    this.signalementForm.patchValue({
-      location: {
-        latitude: coordinates.coords.latitude,
-        longitude: coordinates.coords.longitude
-      }
-    });
-    this.updateMapLocation(coordinates.coords.latitude, coordinates.coords.longitude);
-    this.recuperer_location = 'oui';
 
-  } catch (error) {
-    await this.presentToast('Impossible de récupérer vos coordonnées.');
-    this.recuperer_location = 'non';
-  }
-}
+
+
 
 ngAfterViewInit() {
   this.getLocation();  // Obtenez la position de l'utilisateur dès que la vue est initialisée
 }
+
+async getLocation() {
+  try {
+    // Obtenir la position actuelle
+    const { coords } = await Geolocation.getCurrentPosition();
+
+    // Mettre à jour le formulaire avec les coordonnées
+    this.signalementForm.patchValue({
+      location: {
+        latitude: coords.latitude,
+        longitude: coords.longitude
+      }
+    });
+
+    // Mettre à jour la carte avec la nouvelle position
+    this.updateMapLocation(coords.latitude, coords.longitude);
+    this.recuperer_location = 'oui'; // Indiquer que la récupération a réussi
+
+  } catch (error) {
+    // Gérer les erreurs lors de la récupération de la position
+    console.error('Erreur lors de la récupération de la position:', error);
+    await this.presentToast('Impossible de récupérer vos coordonnées.');
+    this.recuperer_location = 'non'; // Indiquer que la récupération a échoué
+  }
+}
+
 
 actualiser_carte() {
   this.map.invalidateSize();

@@ -109,7 +109,7 @@ export class GetCommandePage implements OnInit {
       const toast = await this.toastCtrl.create({
         message: message,
         duration: this.duration, // Durée d'affichage du toast
-        position: 'bottom',
+        position: 'middle',
         color: color,
       });
       toast.present();
@@ -123,6 +123,16 @@ export class GetCommandePage implements OnInit {
 
       }
 
+
+
+      ngOnDestroy() {
+        if (this.websocketSubscription) {
+          this.websocketSubscription.unsubscribe();
+        }
+        if (this.updateSubscription) {
+          this.updateSubscription.unsubscribe();
+        }
+      }
 
   async get_commande() {
 
@@ -590,38 +600,39 @@ async getUserLocation(): Promise<{ userLatitude: number, userLongitude: number }
 
 
 async openUrl() {
-
-  //const userLocationData = await this.getUserLocationAndCompanyId(id);
-
   const userLocationData = await this.getUserLocation();
 
   if (userLocationData) {
-
     const { userLatitude, userLongitude } = userLocationData;
 
-    this.commande.forEach(async (publi) => {
-      console.log('coordonné', publi.latitude, publi.longitude);
-      const distance = this.distanceCalculatorService.haversineDistance(
-        userLatitude,
-        userLongitude,
-        publi.latitude,
-        publi.longitude,
-      );
+    this.commande.forEach((publi) => {
+      // Vérifiez si les coordonnées ne sont pas 'non'
+      if (publi.latitude !== 'non' && publi.longitude !== 'non') {
+        const distance = this.distanceCalculatorService.haversineDistance(
+          userLatitude,
+          userLongitude,
+          parseFloat(publi.latitude), // Assurez-vous de convertir en nombre si nécessaire
+          parseFloat(publi.longitude)
+        );
 
-      if (!isNaN(distance)) {
-        publi.distanceToUser = distance;
-        console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
+        console.log(`Distance entre l'utilisateur et l'alerte : ${distance} mètres`);
+
+        if (!isNaN(distance)) {
+          publi.distanceToUser = distance;
+          console.log(`Distance entre l'utilisateur et l'alerte : ${publi.distanceToUser} mètres`);
+        } else {
+          publi.distanceToUser = 'Coordonnées invalides';
+          console.error('Coordonnées invalides pour l\'alerte:', publi);
+        }
       } else {
-        console.error('La distance calculée est NaN. Veuillez vérifier les coordonnées.');
+        publi.distanceToUser = 'Coordonnées non disponibles';
+        console.log('Coordonnées non disponibles pour cette commande');
       }
-
     });
-
   } else {
     console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
   }
-
-  }
+}
 
 
   convertMetersToKilometers(meters: number | string): string {

@@ -76,7 +76,6 @@ export class NumeroServicePage implements OnInit {
 
       try {
       const res : any = await this._apiService.numero_service(this.page, this.limit).toPromise();
-      console.log('SUCCESS ===', res);
 
       if (res && res.length < 1) {
         this.number = 'aucune_alerte';
@@ -107,7 +106,6 @@ export class NumeroServicePage implements OnInit {
 
       try {
         const res : any  = await this._apiService.numero_service(this.page, this.limit).toPromise();
-        console.log('SUCCESS ===', res);
 
         this.number = this.number.concat(res);
         event.target.complete();

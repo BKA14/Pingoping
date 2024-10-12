@@ -38,7 +38,7 @@
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="" />
         <preference name="AndroidWindowSplashScreenAnimationDuration" value="" />
         <preference name="StatusBarOverlaysWebView" value="true" />
-        <preference name="StatusBarBackgroundColor" value="#ffffff00" />
+        <preference name="StatusBarBackgroundColor" value="#FFFFFF00" />
         <preference name="StatusBarStyle" value="lightcontent" />
     </platform>
     <platform name="ios">

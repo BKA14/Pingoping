@@ -694,6 +694,7 @@ date_normal() {
     }
   }
 
+
   async openUrl() {
     const userLocationData = await this.getUserLocation();
 

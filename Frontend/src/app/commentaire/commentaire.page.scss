@@ -258,12 +258,12 @@ float: left;
 
   .btnannuler{
     font-size: 25px;
-    background-color: rgb(243, 238, 243);
+    background-color: rgba(204, 234, 52, 0.911);
     font-style: normal;
     text-align: center;
     font-family: "Roboto", sans-serif;
     text-align: center;
-    color: #8cd2a4;
+    color: #0e0f0e;
     margin: 8px;
 
     }
@@ -287,7 +287,24 @@ float: left;
       display: block;
     }
 
+    .cart-label {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      background-color: #f9f9f9; /* Light background */
+      border-radius: 20px; /* Rounded label */
+      font-size: 16px;
+      font-weight: bold;
+      color: #333; /* Dark text */
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
 
+      &:hover {
+        background-color: #e0e0e0; /* Slightly darker on hover */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+      }
+    }
 
   /* Dans votre fichier CSS ou SCSS */
 .custom-background {

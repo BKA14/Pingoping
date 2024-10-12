@@ -61,8 +61,7 @@ prenom1:any;
 
   ngOnInit()
 {
-// pour initialiser les notiications push
-this.notificationService.initializePushNotifications();
+
 }
 
 
@@ -160,7 +159,7 @@ async presentAlert(id) {
         role: 'confirm',
         handler: () => {
 
-          this.supprimer(id);
+        this.supprimer(id);
 
       },
       },
@@ -184,7 +183,6 @@ async showLoading() {
 
 ionViewWillEnter()
 {
-  this.getentreprises();
 }
 
 
@@ -219,7 +217,6 @@ ping() {
   this.router.navigateByUrl('/ping');
 
 }
-
 
 
 transform(entreprises: any, term: string, excludes: any = []): any {

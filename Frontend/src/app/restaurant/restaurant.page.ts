@@ -21,7 +21,6 @@ import { CartService } from '../services/cart.service';
 })
 export class RestaurantPage implements OnInit {
 
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   infiniteScrollDisabled: boolean = false;
   resto: any = [];
@@ -33,9 +32,10 @@ export class RestaurantPage implements OnInit {
   userlongitude: any;
   userlatitude: any;
   duration = 2000;
-  limit_comment: number = 180; // Limite des caractères avant le tronquage
+  limit_comment: number = 180;
   search: boolean = false;
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   private updateSubscription: Subscription;
   showFullCommentaire: boolean = false;
@@ -54,7 +54,7 @@ export class RestaurantPage implements OnInit {
     private loadingCtrl: LoadingController,
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
-    private toastCtrl: ToastController,  // Injecter le ToastController
+    private toastCtrl: ToastController,
     public commentaireService: CommentaireService,
     private distanceCalculatorService: DistanceCalculatorService,
     private authService: authService,
@@ -63,32 +63,38 @@ export class RestaurantPage implements OnInit {
 
   ) {
 
-    this.restaurant()  ;
 
     }
 
   ngOnInit() {
 
-  this.updateSubscription = interval(15000).subscribe(async () => {
-    await this.openUrl();
-    this.cdr.detectChanges(); // Détecter et appliquer les changements
-    });
-
-  // S'abonner aux changements de données utilisateur
-  this.authService.userData$.subscribe(data => {
-    this.userData = data;
-  });
-
-  // S'abonner aux changements du panier
-  this.cartService.cart$.subscribe(cart => {
-    this.cart = cart;
-  });
-
-    this.loadLike() ;
-    this.getsessionuser();
+    this.fonction_abonnement();
 
   }
 
+
+  async fonction_abonnement() {
+
+    this.updateSubscription = interval(30000).subscribe(async () => {
+       this.openUrl();
+      this.cdr.detectChanges(); // Détecter et appliquer les changements
+      });
+
+    // S'abonner aux changements de données utilisateur
+    this.authService.userData$.subscribe(data => {
+      this.userData = data;
+    });
+
+    // S'abonner aux changements du panier
+    this.cartService.cart$.subscribe(cart => {
+      this.cart = cart;
+    });
+
+      await this.restaurant();
+      this.loadLike() ;
+      this.getsessionuser();
+
+    }
 
     // Méthode pour afficher un toast
     async presentToast(message: string, color: string = 'danger') {
@@ -110,6 +116,15 @@ export class RestaurantPage implements OnInit {
       }
 
 
+      ngOnDestroy() {
+        if (this.websocketSubscription) {
+          this.websocketSubscription.unsubscribe();
+        }
+        if (this.updateSubscription) {
+          this.updateSubscription.unsubscribe();
+        }
+      }
+
   async restaurant() {
 
     const loading = await this.loadingCtrl.create({
@@ -127,11 +142,12 @@ export class RestaurantPage implements OnInit {
     try {
     const res : any = await this._apiService.restaurant(this.page, this.limit).toPromise();
 
-    if (res && res.length < 1) {
+    if (res && res.length > 0) {
+      this.resto = res;
+      this.openUrl();
+    }
+    else {
       this.resto = 'aucune_alerte';
-    } else {
-      this.resto =  res;
-       this.openUrl();
     }
 
     loading.dismiss();
@@ -161,8 +177,13 @@ export class RestaurantPage implements OnInit {
       } else {
         this.resto =  res;
         this.syncCommandes(res);
-        this.openUrl();
-      }
+        try {
+          // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
+          await this.openUrl();
+        } catch (err) {
+          console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
+        }
+            }
 
       } catch (error) {
       console.log('erreur de chargement', error);
@@ -216,8 +237,13 @@ export class RestaurantPage implements OnInit {
           // Désactiver l'infinite scroll si moins de données retournées que la limite
       if (res.length < this.limit) {
         this.resto = this.resto.concat(res);
-        this.openUrl();
-        event.target.complete();
+        try {
+          // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
+          await this.openUrl();
+        } catch (err) {
+          console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
+        }
+                event.target.complete();
       }else {
         this.infiniteScrollDisabled = true;
       }
@@ -350,40 +376,39 @@ export class RestaurantPage implements OnInit {
 
 
 
-async openUrl() {
+  async openUrl() {
+    const userLocationData = await this.getUserLocation();
 
-  //const userLocationData = await this.getUserLocationAndCompanyId(id);
+    if (userLocationData) {
+      const { userLatitude, userLongitude } = userLocationData;
 
-  const userLocationData = await this.getUserLocation();
+      this.resto.forEach((publi) => {
+        // Vérifiez si les coordonnées ne sont pas 'non'
+        if (publi.latitude !== 'non' && publi.longitude !== 'non') {
+          const distance = this.distanceCalculatorService.haversineDistance(
+            userLatitude,
+            userLongitude,
+            parseFloat(publi.latitude), // Assurez-vous de convertir en nombre si nécessaire
+            parseFloat(publi.longitude)
+          );
 
-  if (userLocationData) {
+          console.log(`Distance entre l'utilisateur et l'alerte : ${distance} mètres`);
 
-    const { userLatitude, userLongitude } = userLocationData;
-
-    this.resto.forEach(async (publi) => {
-      console.log('coordonné', publi.latitude, publi.longitude);
-      const distance = this.distanceCalculatorService.haversineDistance(
-        userLatitude,
-        userLongitude,
-        publi.latitude,
-        publi.longitude,
-      );
-
-      console.log(`Distance entre l'utilisateur et l'entreprise : ${distance} mètres`);
-
-      if (!isNaN(distance)) {
-        publi.distanceToUser = distance;
-        console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
-      } else {
-        console.error('La distance calculée est NaN. Veuillez vérifier les coordonnées.');
-      }
-
-    });
-
-  } else {
-    console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
-  }
-
+          if (!isNaN(distance)) {
+            publi.distanceToUser = distance;
+            console.log(`Distance entre l'utilisateur et l'alerte : ${publi.distanceToUser} mètres`);
+          } else {
+            publi.distanceToUser = 'Coordonnées invalides';
+            console.error('Coordonnées invalides pour l\'alerte:', publi);
+          }
+        } else {
+          publi.distanceToUser = 'Coordonnées non disponibles';
+          console.log('Coordonnées non disponibles pour cet resto');
+        }
+      });
+    } else {
+      console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
+    }
   }
 
 
@@ -514,8 +539,14 @@ async loadalert_search() {
      }
      else {
         this.resto = res;
-        this.openUrl();
-     }
+
+        try {
+          // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
+          await this.openUrl();
+        } catch (err) {
+          console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
+        }
+            }
 
      } catch (error) {
      if (this.oldresto && this.oldresto.length > 0) {
@@ -548,6 +579,12 @@ async loadalert_search() {
     console.log('Erreur de chargement', error);
     if (this.oldresto && this.oldresto.length > 0) {
       this.resto = this.oldresto;
+      try {
+        // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
+        await this.openUrl();
+      } catch (err) {
+        console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
+      }
     }
     else { this.resto = 'erreur_chargement'; }
     event.target.complete();

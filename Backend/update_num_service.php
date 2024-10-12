@@ -10,8 +10,10 @@ if (isset($_GET['id'], $data['nom'], $data['numero'], $data['description'])) {
     $nom = mysqli_real_escape_string($con, $data['nom']);
     $numero = mysqli_real_escape_string($con, $data['numero']);
     $description = mysqli_real_escape_string($con, $data['description']);
+    $rang = mysqli_real_escape_string($con, $data['rang']);
+    $vip = mysqli_real_escape_string($con, $data['vip']);
 
-    $q = mysqli_query($con, "UPDATE `numero_service` SET `nom_service`='$nom', `numero`='$numero', `description`='$description' WHERE `id`='$id' LIMIT 1");
+    $q = mysqli_query($con, "UPDATE `numero_service` SET `nom_service`='$nom', `numero`='$numero', `description`='$description', `rang`='$rang', `vip`='$vip' WHERE `id`='$id' LIMIT 1");
 
     if ($q) {
         $message['status'] = "Success";

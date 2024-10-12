@@ -47,6 +47,7 @@ this.getuser();
 this.getgrade();
 this.user_connecter();
 }
+
 getsession(){
 this.grade= (localStorage.getItem('grade'));
 console.log(this.grade);
@@ -254,7 +255,6 @@ get userCount(){
 transform(users: any, term: string, excludes: any = []): any {
   return CustomFilterPipe.filter(users, term, excludes);
 }
-
 
 private hideButtonTimeout: any;
 @ViewChild('scrollButton', { static: false }) scrollButton: ElementRef;

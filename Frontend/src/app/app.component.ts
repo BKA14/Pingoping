@@ -34,9 +34,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private LoginServiceReadyService: LoginServiceReadyService,
     private loadingCtrl: LoadingController,
     private FirebaseService: FirebaseService
-
-  )
-  {
+  ) {
     this.initializeApp();
 
     window.addEventListener('online', () => {
@@ -49,8 +47,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.lekeyboard();
   }
 
-  ngOnInit()  {
-     this.FirebaseService.initFirebaseMessaging();
+  ngOnInit() {
+    this.FirebaseService.initFirebaseMessaging();
   }
 
   async openAlert() {
@@ -70,72 +68,64 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     // Vous pouvez implémenter cette méthode si nécessaire
   }
 
-
   async initializeApp() {
-    this.platform.ready().then(async () => {
-      // Présenter le loading dès que la plateforme est prête
-      const loading = await this.loadingCtrl.create({
-        message: 'Rechargement',
-        spinner: 'lines',
-        cssClass: 'custom-loading',
-      });
+    await this.platform.ready();
 
-      await loading.present();
-
-
-      // Appliquer le style de la barre de statut noire translucide
-      this.statusBar.show();
-      this.backButtonService.init();
-
-      try {
-        // Vérification de la plateforme pour éviter les problèmes sur le web
-        if (Capacitor.getPlatform() !== 'web') {
-          this.LoginServiceReadyService.isLoginPageReady$.pipe(
-            take(1),  // Prendre la première valeur
-            timeout(10000),  // Timeout après 10 secondes
-            catchError((err) => {
-              console.error('Erreur ou timeout pendant la préparation de la page de login:', err);
-              return of(false);  // Retourne 'false' en cas de problème
-            }),
-            finalize(() => {
-              loading.dismiss();  // Masquer le loading dans tous les cas
-            })
-          ).subscribe({
-            next: (isReady) => {
-              // Délai de 2 secondes avant de masquer le splash screen
-              if (isReady) {
-                setTimeout(() => this.hideSplashScreen(), 3000); // Délai avant masquage
-              } else {
-                console.warn("La page de login n'a pas été prête dans le délai imparti.");
-                setTimeout(() => this.hideSplashScreen(), 4500);  // On masque le splash malgré tout
-              }
-            }
-          });
-        } else {
-          // Masquer le loading si l'on est sur le web
-          await loading.dismiss();
-          await this.hideSplashScreen(); // Masquer le splash screen pour le web
-        }
-      } catch (error) {
-        console.error('Erreur lors de l\'initialisation de l\'application :', error);
-        await loading.dismiss();  // Assurez-vous que le loading est masqué en cas d'erreur
-      }
+    const loading = await this.loadingCtrl.create({
+      message: 'Rechargement',
+      spinner: 'lines',
+      cssClass: 'custom-loading',
     });
-  }
 
+    await loading.present();
 
-  // Masquer le splash screen avec gestion des erreurs
-  async hideSplashScreen() {
+    this.statusBar.show();
+    this.statusBar.backgroundColorByHexString('#80000000');
+    this.backButtonService.init();
+
     try {
-      await SplashScreen.hide();
+      if (Capacitor.getPlatform() !== 'web') {
+        this.LoginServiceReadyService.isLoginPageReady$.pipe(
+          take(1),
+          timeout(10000),
+          catchError((err) => {
+            console.error('Erreur ou timeout pendant la préparation de la page de login:', err);
+            return of(false);
+          }),
+          finalize(() => {
+            loading.dismiss();
+          })
+        ).subscribe({
+          next: (isReady) => {
+            if (isReady) {
+              setTimeout(() => this.hideSplashScreen(), 3000);
+            } else {
+              console.warn("La page de login n'a pas été prête dans le délai imparti.");
+              setTimeout(() => this.hideSplashScreen(), 4500);
+            }
+          }
+        });
+      } else {
+        await loading.dismiss();
+        await this.hideSplashScreen();
+      }
     } catch (error) {
-      console.error('Erreur lors du masquage du splash screen :', error);
+      console.error('Erreur lors de l\'initialisation de l\'application :', error);
+      await loading.dismiss();
     }
   }
 
+  async hideSplashScreen() {
+    if (Capacitor.isPluginAvailable('SplashScreen')) {
+      try {
+        await SplashScreen.hide();
+      } catch (error) {
+        console.error('Erreur lors du masquage du splash screen :', error);
+      }
+    }
+  }
 
-
-  lekeyboard(){
+  lekeyboard() {
     if (Capacitor.isPluginAvailable('Keyboard')) {
       this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', (info: { keyboardHeight: number }) => {
         this.adjustContentForKeyboard(info.keyboardHeight);
@@ -147,9 +137,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  ngAfterViewInit() {
-
-  }
+  ngAfterViewInit() {}
 
   ngOnDestroy() {
     if (this.keyboardWillShowListener) {
@@ -159,7 +147,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.keyboardWillHideListener.remove();
     }
 
-    // Clean up the timeout when leaving the component
     if (this.tokenRefreshTimeout) {
       clearTimeout(this.tokenRefreshTimeout);
     }

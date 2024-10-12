@@ -33,7 +33,8 @@ export class MenuPage implements OnInit {
             });
 
             this.grade = this.userData.grade;
-  }
+
+             }
 
 
   userinfo() {
