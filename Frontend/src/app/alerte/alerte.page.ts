@@ -425,7 +425,6 @@ formatCommentTime(time: string): string {
   this.infiniteScrollDisabled = false; // Réactiver l'infinite scroll
 
     await this.loadalert();
-    this.getUserLocation();
 
     // Log pour indiquer le rafraîchissement
     console.log('Rafraîchissement de la page');

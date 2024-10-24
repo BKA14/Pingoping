@@ -1,8 +1,5 @@
 <ion-header>
   <ion-toolbar class="toolbar">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/" color="light"></ion-back-button>
-    </ion-buttons>
     <ion-title >RESTAURANT</ion-title>
   </ion-toolbar>
 
@@ -14,6 +11,11 @@
   </ion-toolbar>
 
   <ion-toolbar class="toolbar">
+
+    <ion-label (click)="restaurant_2()" style="text-align: center;" class="cart-label" slot="start" color="light" >
+      actualiser
+    </ion-label>
+
     <ion-buttons slot="end">
       <ion-button [routerLink]="['/panier']" class="cart-button" color="primary">
         <ion-icon name="cart-outline" class="cart-icon"></ion-icon>
@@ -21,12 +23,6 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
-    <ion-toolbar>
-      <ion-label (click)="restaurant_2()" class="cart-label" color="light" >
-        actualiser
-      </ion-label>
-    </ion-toolbar>
 
 </ion-header>
 

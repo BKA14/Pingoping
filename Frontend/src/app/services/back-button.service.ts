@@ -9,6 +9,9 @@ import { Location } from '@angular/common';
 export class BackButtonService {
   private lastTimeBackButtonWasPressed = 0;
   private timePeriodToAction = 2000;
+  private durerToast = 1000;
+  private isNavigating = false;
+
 
   constructor(
     private platform: Platform,
@@ -22,7 +25,9 @@ export class BackButtonService {
 
   init() {
     this.platform.backButton.subscribeWithPriority(100, async () => {
-        const currentUrl = this.router.url;
+
+       this.isNavigating = true;
+       const currentUrl = this.router.url;
 
         // URLs qui déclenchent la fermeture de l'application
         const exitAppUrls = ["/login2", "/welcome", "/acceuil", "/apropos", "/notifications"];
@@ -39,6 +44,8 @@ export class BackButtonService {
             console.log("Navigate back triggered");
             this.location.back();
         }
+
+         this.isNavigating = false;
     });
 }
 
@@ -51,7 +58,7 @@ export class BackButtonService {
     } else {
       const toast = await this.toastController.create({
         message: message,
-        duration: this.timePeriodToAction
+        duration: this.durerToast
       });
 
       await toast.present();

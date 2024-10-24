@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { AcceuilPageRoutingModule } from './acceuil-routing.module';
 
 import { AcceuilPage } from './acceuil.page';
-import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -16,7 +15,6 @@ import { SharedModule } from '../shared/shared.module';
     FormsModule,
     IonicModule,
     AcceuilPageRoutingModule,
-    HttpClientModule,
     SharedModule
 
   ],

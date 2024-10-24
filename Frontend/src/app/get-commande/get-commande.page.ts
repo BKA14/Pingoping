@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, IonContent, IonInfiniteScroll, LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
@@ -8,8 +6,6 @@ import { Geolocation } from '@capacitor/geolocation';
 import { CustomFilterPipe } from './custom-filter.pipe';
 import { interval, Subscription } from 'rxjs';
 import { authService } from '../services/auth.service';
-import { WebSocketService } from '../websocket.service';
-import { CartService } from '../services/cart.service'; // service panier
 import { DistanceCalculatorService } from './distance-calculator.service';
 import { timeService } from '../timeservice.service';
 
@@ -52,10 +48,7 @@ export class GetCommandePage implements OnInit {
 
 
   constructor(
-    private http: HttpClient,
     private _apiService: ApiService,
-    private loadingController: LoadingController,
-    private router: Router,
     private callNumber: CallNumber,
     private alertController: AlertController,
     private loadingCtrl: LoadingController,
@@ -63,9 +56,6 @@ export class GetCommandePage implements OnInit {
     private renderer: Renderer2,
     private toastCtrl: ToastController,  // Injecter le ToastController
     private authService: authService,
-    private wsService: WebSocketService,
-    private route: ActivatedRoute,
-    private cartService: CartService,
     private distanceCalculatorService: DistanceCalculatorService,
     private timeService: timeService
   ) {
@@ -77,7 +67,7 @@ export class GetCommandePage implements OnInit {
 
     ngOnInit() {
       this.updateSubscription = interval(18000).subscribe(async () => {
-        await this.openUrl(); // Si tu as besoin de faire quelque chose avant l'appel réseau
+        await this.openUrl();
         this.get_commande_2(); // Récupérer les nouvelles données depuis l'API
         this.cdr.detectChanges(); // Appliquer les changements
       });
@@ -300,7 +290,6 @@ export class GetCommandePage implements OnInit {
         ],
         });
       return alert.present();
-      this.cdr.detectChanges();
       }
 
 

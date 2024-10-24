@@ -1,7 +1,5 @@
-import { Alert } from 'selenium-webdriver';
 import { CommentaireService } from './CommentaireService';
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, NgZone, OnInit, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { App } from '@capacitor/app';
 import { AlertController, IonInfiniteScroll, IonList, LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -10,9 +8,7 @@ import { DistanceCalculatorService } from './distance-calculator.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { ApplicationRef } from '@angular/core';
 import { IonRouterOutlet } from '@ionic/angular';
-import { filter, throttleTime } from 'rxjs/operators';
 import { Observable, Subscription, fromEvent, interval } from 'rxjs';
-import { debounceTime, map, startWith, switchMap } from 'rxjs/operators';
 import { NavController } from '@ionic/angular';
 import { IonContent } from '@ionic/angular';
 import { OnDestroy } from '@angular/core';
@@ -130,15 +126,9 @@ private loadingCtrl: LoadingController,
 public  loadingController: LoadingController,
 private distanceCalculatorService: DistanceCalculatorService,
 private cdr: ChangeDetectorRef,
-private zone: NgZone,
-private appRef: ApplicationRef,
-private routerOutlet: IonRouterOutlet,
 public commentaireService: CommentaireService,
 private el: ElementRef,
-private ngZone: NgZone,
-private navCtrl: NavController,
 private countdownService: CountdownService,
-private elementRef: ElementRef,
 private renderer: Renderer2,
 private wsService: WebSocketService,
 private authService: authService,
@@ -154,7 +144,6 @@ this.loadcommentairepub(this.pubid);
 });
 
 this.getpub();
-this.getUserLocation();
 this.loadcommentairepub(this.pubid);
 }
 
@@ -211,7 +200,6 @@ restoreScrollPosition() {
 
 ionViewWillEnter() {
 this.getpub();
-this.getUserLocation();
 }
 
 
@@ -552,7 +540,6 @@ this.infiniteScrollDisabled = false; // Réactiver l'infinite scroll
 
 await this.getpub();
 this.cdr.detectChanges();
-this.getUserLocation();
 await this.loadcommentairepub(this.pubid);
 console.log('rafraichissement de la page');
 e.target.complete();

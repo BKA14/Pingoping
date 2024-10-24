@@ -1,8 +1,5 @@
 <ion-header>
   <ion-toolbar class="toolbar">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/" color="light"></ion-back-button>
-    </ion-buttons>
     <ion-title >SIGNALEMENT</ion-title>
   </ion-toolbar>
 
@@ -14,7 +11,7 @@
   </ion-toolbar>
 
 <ion-toolbar>
-  <ion-label (click)="refreshPage($event)" class="cart-label" color="light" style="text-align: left;">
+  <ion-label (click)="refreshPage($event)" class="cart-label" color="light" slot="end" style="text-align: left;">
     actualiser
   </ion-label>
 </ion-toolbar>

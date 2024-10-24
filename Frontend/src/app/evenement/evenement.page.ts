@@ -103,23 +103,17 @@ event.preventDefault();
       public loadingController: LoadingController,
       private distanceCalculatorService: DistanceCalculatorService,
       private cdr: ChangeDetectorRef,
-      private zone: NgZone,
-      private appRef: ApplicationRef,
-      private routerOutlet: IonRouterOutlet,
       public commentaireService: CommentaireService,
       private el: ElementRef,
-      private ngZone: NgZone,
       private navCtrl: NavController,
       private wsService: WebSocketService,
       private renderer: Renderer2,
-      private userService: UserService,
       private authService: authService,
       private notificationService: NotificationService,
       private toastCtrl: ToastController  // Injecter le ToastController
     )
     {
       this.manualPause = false;
-      this.getUserLocation();
       this.getpub();
     }
 
@@ -532,11 +526,6 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
       }
     }
 
-   ionViewWillEnter() {
-     // this.getpub();
-      this.getUserLocation();
-                   }
-
 
     reloadPage() {
       this.getpub();
@@ -679,8 +668,6 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     // Déclencher la détection des changements
     this.cdr.detectChanges();
 
-    // Appeler à nouveau la localisation de l'utilisateur (si nécessaire)
-    this.getUserLocation();
 
     // Log pour indiquer le rafraîchissement
     console.log('Rafraîchissement de la page');

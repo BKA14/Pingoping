@@ -1,23 +1,20 @@
 import { CommentaireService } from './CommentaireService';
-import { Component, ElementRef, EventEmitter, HostListener, NgZone, OnInit, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { App } from '@capacitor/app';
+import { Component, ElementRef, HostListener, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { AlertController, IonContent, IonInfiniteScroll, IonList, LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
 import { DistanceCalculatorService } from './distance-calculator.service';
 import { ChangeDetectorRef } from '@angular/core';
-import { ApplicationRef } from '@angular/core';
-import { IonRouterOutlet } from '@ionic/angular';
-import { Subscription, fromEvent, interval } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import { NavController } from '@ionic/angular';
 import { authService } from '../services/auth.service';
 import { NotificationService } from '../notification.service';
 import { WebSocketService } from '../websocket.service';
-import { UserService } from '../services/user.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
+
 
 @Component({
   selector: 'app-acceuil',
@@ -97,22 +94,16 @@ event.preventDefault();
     constructor(
       public _apiService: ApiService,
       private alertController: AlertController,
-      private route: ActivatedRoute,
       private router: Router,
       private loadingCtrl: LoadingController,
       public loadingController: LoadingController,
       private distanceCalculatorService: DistanceCalculatorService,
       private cdr: ChangeDetectorRef,
-      private zone: NgZone,
-      private appRef: ApplicationRef,
-      private routerOutlet: IonRouterOutlet,
       public commentaireService: CommentaireService,
       private el: ElementRef,
-      private ngZone: NgZone,
       private navCtrl: NavController,
       private wsService: WebSocketService,
       private renderer: Renderer2,
-      private userService: UserService,
       private authService: authService,
       private notificationService: NotificationService,
       private statusBar: StatusBar,
@@ -120,14 +111,11 @@ event.preventDefault();
     )
     {
       this.manualPause = false;
-      this.getUserLocation();
       this.getpub();
     }
 
 
     async ngOnInit() {
-
-      this.statusBar.show();  // Réafficher la barre de statut lorsque l'on quitte cette page
 
       this.updateSubscription = interval(12000).subscribe(async () => {
       await this.openUrl();
@@ -136,7 +124,6 @@ event.preventDefault();
 
       this.updateSubscription = interval(100).subscribe(async () => {
       this.setupIntersectionObserver();
-      this.cdr.detectChanges(); // Détecter et appliquer les changements
       });
 
           // S'abonner aux changements de données utilisateur
@@ -147,10 +134,7 @@ event.preventDefault();
       this.loadInitialPub();
       this.loadLike() ;
       this.setupIntersectionObserver(); // pour lecture automatic de la video
-      this.cdr.detectChanges(); // Détecter et appliquer les changements
 
-      // pour initialiser les notiications push
-      this.notificationService.initializePushNotifications();
       }
 
 
@@ -531,11 +515,6 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
       }
     }
 
-   ionViewWillEnter() {
-     // this.getpub();
-      this.getUserLocation();
-                   }
-
 
     reloadPage() {
       this.getpub();
@@ -678,9 +657,6 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     // Déclencher la détection des changements
     this.cdr.detectChanges();
 
-    // Appeler à nouveau la localisation de l'utilisateur (si nécessaire)
-    this.getUserLocation();
-
     // Log pour indiquer le rafraîchissement
     console.log('Rafraîchissement de la page');
 
@@ -799,30 +775,6 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     });
   return alert.present();
   this.cdr.detectChanges();
-  }
-
-
-  async quitter(id) {
-    const alert = await this.alertController.create({
-      header: 'Etes-vous sur de vouloir quitter Lokalist ?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            //this.handlerMessage = 'Alert canceled';
-          },
-        },
-        {
-          text: 'OK',
-          role: 'confirm',
-          handler: () => {
-          App.exitApp();
-        },
-        },
-    ],
-    });
-     return alert.present();
   }
 
 

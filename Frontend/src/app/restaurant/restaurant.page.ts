@@ -46,10 +46,7 @@ export class RestaurantPage implements OnInit {
 
 
   constructor(
-    private http: HttpClient,
     private _apiService: ApiService,
-    private loadingController: LoadingController,
-    private router: Router,
     private callNumber: CallNumber,
     private alertController: AlertController,
     private loadingCtrl: LoadingController,
