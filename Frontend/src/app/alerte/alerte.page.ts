@@ -222,7 +222,7 @@ export class AlertePage implements OnInit {
 
         if (res && res.length > 0) {
           this.alert = res;
-          this.openUrl();
+          await this.openUrl();
         }
         else {
           this.alert = 'aucune_alerte';
@@ -308,7 +308,7 @@ export class AlertePage implements OnInit {
         }
         else {
            this.alert = res;
-           this.openUrl();
+          await  this.openUrl();
         }
 
         } catch (error) {
@@ -693,7 +693,6 @@ date_normal() {
       return null;
     }
   }
-
 
   async openUrl() {
     const userLocationData = await this.getUserLocation();

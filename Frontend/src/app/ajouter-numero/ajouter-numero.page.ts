@@ -20,7 +20,8 @@ export class AjouterNumeroPage implements OnInit {
  numero: any;
  grade:any;
  entreprises: any = [];
-
+  vip: any;
+  rang : any;
 
  constructor(
   private route: ActivatedRoute,
@@ -52,6 +53,8 @@ export class AjouterNumeroPage implements OnInit {
      nom: this.nom_entreprise,
      numero: this.numero,
      description: this.description,
+     vip: this.vip,
+     rang: this.rang,
     }
 
     const loading = await this.loadingCtrl.create({
@@ -67,7 +70,7 @@ export class AjouterNumeroPage implements OnInit {
       this.nom_entreprise ='';
       //window.location.reload();
       loading.dismiss();
-      this.router.navigateByUrl('/numero-service');
+     // this.router.navigateByUrl('/numero-service');
       this.presentToast('Entreprise et numero ajoute avec success', 'success');
     },(error: any) => {
       loading.dismiss();

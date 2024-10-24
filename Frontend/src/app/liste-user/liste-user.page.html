@@ -5,10 +5,16 @@
     </ion-buttons>
     <ion-title >UTILISATEURS</ion-title>
   </ion-toolbar>
-  
+
  <ion-toolbar>
     <ion-searchbar class="searchbar" type="text" placeholder="Rechercher un utilisateur" [(ngModel)]="term"></ion-searchbar>
     </ion-toolbar>
+
+    <ion-toolbar>
+    <ion-label (click)="refreshPage($event)"  class="cart-label" slot="start" color="light">
+      Actualiser
+    </ion-label>
+  </ion-toolbar>
 
     <ion-toolbar>
       <ion-label class="username light">{{prenom1 | uppercase}}</ion-label>

@@ -71,6 +71,10 @@ export class ListPlatPage implements OnInit {
 
   ngOnInit() {
 
+  this.updateSubscription = interval(15000).subscribe(async () => {
+    this.cdr.detectChanges(); // Détecter et appliquer les changements
+    });
+
 
       // Charger le panier initial à partir du serveur
       this.cartService.loadCart(this.cartService.userData.iduser);
@@ -184,19 +188,17 @@ export class ListPlatPage implements OnInit {
 
   async restaurant(id) {
 
-    this.page = 1;
-    this.oldresto = this.resto;
-
     const loading = await this.loadingCtrl.create({
       message: 'Rechargement...',
       spinner: 'lines',
       cssClass: 'custom-loading',
-      duration: 7500,
+      duration: 8500,
     });
 
     loading.present();
 
-
+    this.page = 1;
+    this.oldresto = this.resto;
 
     try {
     const res : any = await this._apiService.plat_resto(id, this.page, this.limit).toPromise();

@@ -11,7 +11,7 @@ ion-card{
 
   ion-header {
     ion-toolbar {
-      height: 47px;  /* Hauteur recommandée pour les en-têtes sur mobile */
+      height: 48px;  /* Hauteur recommandée pour les en-têtes sur mobile */
       display: flex;
       align-items: center;  /* Centrer verticalement les éléments */
       --background: linear-gradient(to right, #0eeb49, #05a83d) !important;
@@ -32,6 +32,7 @@ ion-card{
   .message-item {
     margin-bottom: 15px;
     border-radius: 8px;
+    margin: 6px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     background-color: #ffffff;
   }
@@ -53,6 +54,24 @@ ion-card{
       padding: 0 15px;
     }
 
+    .cart-label {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      background-color: #f9f9f9; /* Light background */
+      border-radius: 20px; /* Rounded label */
+      font-size: 16px;
+      font-weight: bold;
+      color: #333; /* Dark text */
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        background-color: #e0e0e0; /* Slightly darker on hover */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+      }
+    }
 
   .custom-card {
     margin-bottom: 20px; /* Espace entre les cartes, ajustez selon vos besoins */
@@ -709,14 +728,6 @@ text-align: center;
         border-bottom-color: #ff6347;
       }
 
-      .truncate {
-        display: inline-block;         /* Pour permettre à overflow de fonctionner */
-        max-width: 115px;            /* Définissez la largeur maximale souhaitée */
-        overflow: hidden;             /* Masque le texte qui déborde */
-        white-space: nowrap;          /* Évite le retour à la ligne */
-        text-overflow: ellipsis;      /* Ajoute les points de suspension */
-      }
-
       .admin-indicator {
         background-color: rgb(231, 219, 51);
         color: white;
@@ -724,23 +735,4 @@ text-align: center;
         padding: 2px;
         border-radius: 3px;
         margin-bottom: 10px;
-      }
-
-      .cart-label {
-        display: flex;
-        align-items: center;
-        padding: 5px 10px;
-        background-color: #f9f9f9; /* Light background */
-        border-radius: 20px; /* Rounded label */
-        font-size: 16px;
-        font-weight: bold;
-        color: #333; /* Dark text */
-        cursor: pointer;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-
-        &:hover {
-          background-color: #e0e0e0; /* Slightly darker on hover */
-          box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
-        }
       }

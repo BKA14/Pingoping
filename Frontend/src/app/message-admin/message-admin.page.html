@@ -13,6 +13,12 @@
     </div>
   </ion-toolbar>
 
+  <ion-toolbar>
+    <ion-label (click)="refreshPage($event)"  class="cart-label" slot="start" color="light">
+      Actualiser
+    </ion-label>
+  </ion-toolbar>
+
   <ion-toolbar class="toolbar" >
   <ion-buttons style="justify-content: center;">
     <ion-button (click)="filterByStatus('toutes')">Toutes</ion-button> &nbsp; &nbsp;

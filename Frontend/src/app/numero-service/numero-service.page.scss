@@ -15,10 +15,6 @@ ion-header {
 
   }
 
-  .service-card {
-    position: relative; /* Nécessaire pour le positionnement absolu de l'étoile */
-  }
-
   ion-back-button {
     --color: light;  /* Couleur spécifique du bouton retour */
   }
@@ -144,4 +140,19 @@ padding: 8px;
   border: 1px solid #7d2424; /* Ajoutez une bordure si nécessaire */
   color: #0e0e0e;
   background-color: #ffffff;
+}
+
+
+.header-content {
+  display: flex;
+  align-items: center; /* Aligne verticalement l'étoile et le texte */
+}
+
+.vip-star {
+  margin-right: 8px; /* Ajustez l'espacement selon vos besoins */
+}
+
+.erreur_chargement {
+  text-align: center;
+  bottom: 35%;
 }

@@ -36,15 +36,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private FirebaseService: FirebaseService
   ) {
     this.initializeApp();
-
-    window.addEventListener('online', () => {
-      this.openAlert1();
-    });
-    window.addEventListener('offline', () => {
-      this.openAlert();
-    });
-
-    this.lekeyboard();
+    this.setupNetworkListeners();
+    this.setupKeyboardListeners();
   }
 
   ngOnInit() {
@@ -65,25 +58,27 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   async openAlert1() {
-    // Vous pouvez implémenter cette méthode si nécessaire
+    // Implémentation si nécessaire
   }
 
   async initializeApp() {
-    await this.platform.ready();
+    this.platform.ready().then(async () => {
+      const loading = await this.loadingCtrl.create({
+        message: 'Rechargement',
+        spinner: 'lines',
+        cssClass: 'custom-loading',
+      });
 
-    const loading = await this.loadingCtrl.create({
-      message: 'Rechargement',
-      spinner: 'lines',
-      cssClass: 'custom-loading',
-    });
+      await loading.present();
 
-    await loading.present();
+      // Configurer la barre de statut
+      if (Capacitor.getPlatform() === 'android') {
+        this.statusBar.overlaysWebView(false);  // Superpose la barre de statut sur le contenu
+        this.statusBar.backgroundColorByHexString('#80000000');  // Barre de statut transparente
+      }
 
-    this.statusBar.show();
-    this.statusBar.backgroundColorByHexString('#80000000');
-    this.backButtonService.init();
+      await this.backButtonService.init();
 
-    try {
       if (Capacitor.getPlatform() !== 'web') {
         this.LoginServiceReadyService.isLoginPageReady$.pipe(
           take(1),
@@ -92,40 +87,35 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             console.error('Erreur ou timeout pendant la préparation de la page de login:', err);
             return of(false);
           }),
-          finalize(() => {
-            loading.dismiss();
-          })
-        ).subscribe({
-          next: (isReady) => {
-            if (isReady) {
-              setTimeout(() => this.hideSplashScreen(), 3000);
-            } else {
-              console.warn("La page de login n'a pas été prête dans le délai imparti.");
-              setTimeout(() => this.hideSplashScreen(), 4500);
-            }
-          }
+          finalize(() => loading.dismiss())
+        ).subscribe((isReady) => {
+          setTimeout(() => this.hideSplashScreen(), 2000);
         });
       } else {
         await loading.dismiss();
-        await this.hideSplashScreen();
       }
-    } catch (error) {
-      console.error('Erreur lors de l\'initialisation de l\'application :', error);
-      await loading.dismiss();
-    }
+    });
   }
+
 
   async hideSplashScreen() {
-    if (Capacitor.isPluginAvailable('SplashScreen')) {
-      try {
-        await SplashScreen.hide();
-      } catch (error) {
-        console.error('Erreur lors du masquage du splash screen :', error);
-      }
+    try {
+      await SplashScreen.hide();
+    } catch (error) {
+      console.error('Erreur lors du masquage du splash screen :', error);
     }
   }
 
-  lekeyboard() {
+  setupNetworkListeners() {
+    window.addEventListener('online', () => {
+      this.openAlert1();
+    });
+    window.addEventListener('offline', () => {
+      this.openAlert();
+    });
+  }
+
+  setupKeyboardListeners() {
     if (Capacitor.isPluginAvailable('Keyboard')) {
       this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', (info: { keyboardHeight: number }) => {
         this.adjustContentForKeyboard(info.keyboardHeight);
@@ -147,6 +137,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.keyboardWillHideListener.remove();
     }
 
+    // Clean up the timeout when leaving the component
     if (this.tokenRefreshTimeout) {
       clearTimeout(this.tokenRefreshTimeout);
     }

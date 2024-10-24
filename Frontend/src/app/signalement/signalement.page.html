@@ -12,6 +12,13 @@
       <ion-input class="recherche" type="text" placeholder="Rechercher id, nom, prenom,..." [(ngModel)]="term" (ionInput)="search_active($event)"></ion-input>
     </div>
   </ion-toolbar>
+
+<ion-toolbar>
+  <ion-label (click)="refreshPage($event)" class="cart-label" color="light" style="text-align: left;">
+    actualiser
+  </ion-label>
+</ion-toolbar>
+
 </ion-header>
 
 

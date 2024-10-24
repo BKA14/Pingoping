@@ -67,7 +67,7 @@
           </ng-container>
 
           <br>
-          <ion-label  class="localisation" *ngIf="pub.distanceToUser !== undefined && pub.distanceToUser !== null  && pub.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non' && pub.distanceToUser !== NaN " >
+          <ion-label  class="localisation" *ngIf="pub.distanceToUser !== undefined && pub.distanceToUser !== null  && pub.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non'" >
             Vous êtes présentement à : {{ convertMetersToKilometers(pub.distanceToUser) }} du lieu.
           </ion-label>
           <br>
@@ -129,7 +129,7 @@
     </div>
 
 
-      <div  #commentContainer >
+      <ion-list >
         <ion-item *ngFor="let commentaire of comment"  >
           <ion-label [class]="commentaire.iduser === userData.iduser ? 'my-comment' : 'other-comment'">
             <div class="container_a">
@@ -156,17 +156,16 @@
               <br>
 
               <div class="commentaire-actions">
-                <a class="cart-label" *ngIf="commentaire.iduser == userData.iduser" (click)="modifcommentaire(commentaire)">Modifier</a>&nbsp;&nbsp;
-                <a class="cart-label" *ngIf="commentaire.iduser == userData.iduser" (click)="presentAlert(commentaire.id)">Supprimer</a>&nbsp;&nbsp;
-                <a class="cart-label" (click)="copiercommentaire(commentaire.commentaire)">Copier</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a class="cart-label" *ngIf="commentaire.iduser !== userData.iduser" (click)="signalement(commentaire)">Signaler</a>&nbsp;&nbsp;
+                <ion-label class="cart-label" *ngIf="commentaire.iduser == userData.iduser" (click)="modifcommentaire(commentaire)">Modifier</ion-label>&nbsp;&nbsp;
+                <ion-label class="cart-label" *ngIf="commentaire.iduser == userData.iduser" (click)="presentAlert(commentaire.id)">Supprimer</ion-label>&nbsp;&nbsp;
+                <ion-label class="cart-label" (click)="copiercommentaire(commentaire.commentaire)">Copier</ion-label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <ion-label class="cart-label" *ngIf="commentaire.iduser !== userData.iduser" (click)="signalement(commentaire)">Signaler</ion-label>&nbsp;&nbsp;
             </div>
 
 
-           <!--   </ul>  -->
           </ion-label>
         </ion-item>
-      </div>
+      </ion-list>
 
       <!-- Infinite Scroll -->
       <ion-infinite-scroll [disabled]="infiniteScrollDisabled" threshold="100px" (ionInfinite)="loadMore($event)">
@@ -202,7 +201,7 @@
              </ng-container>
             </ion-button>
 
-            <ion-button (click)="repondrecommentaire(newComment)" class="likes1" fill="outline" color="success"  *ngIf="reponse==true" [disabled]="!newComment">
+            <ion-button (click)="repondrecommentaire()" class="likes1" fill="outline" color="success"  *ngIf="reponse==true" [disabled]="!newComment">
               <ion-icon name="chatbox"></ion-icon>
                <ng-container *ngIf="!countdownValue">
                 Repondre

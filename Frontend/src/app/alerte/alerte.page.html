@@ -10,6 +10,12 @@
     <ion-input class="recherche" type="text" placeholder=" Rechercher id, nom, prenom,..." [(ngModel)]="term" (ionInput)="search_active($event)"></ion-input>
 </ion-toolbar>
 
+<ion-toolbar>
+<ion-label (click)="refreshPage($event)" class="cart-label" color="light" slot="end">
+  Actualiser
+</ion-label>
+</ion-toolbar>
+
 </ion-header>
 
 <div class="arrow-container" #scrollButton  (click)="scrollToTop()" >
@@ -143,7 +149,6 @@
           <br>
           <ion-label class="label-title" *ngIf="alert.distanceToUser !== undefined
           && alert.distanceToUser !== null
-          && alert.distanceToUser !== NaN
           && alert.latitude !== undefined
           && alert.longitude !== undefined
           && alert.latitude !== null
@@ -151,8 +156,7 @@
           Vous êtes présentement à :
           </ion-label> <h2 class="message-content"
           *ngIf="alert.distanceToUser !== undefined
-          && alert.distanceToUser !== null
-          && alert.distanceToUser !== NaN">
+          && alert.distanceToUser !== null">
           {{ convertMetersToKilometers(alert.distanceToUser) }} du lieu.</h2>
 
           <br>
@@ -160,9 +164,7 @@
           *ngIf="alert?.latitude !== undefined
               && alert?.longitude !== undefined
               && alert?.latitude !== null
-              && alert?.longitude !== null
-              && alert?.latitude !== NaN
-              && alert?.longitude !== NaN"
+              && alert?.longitude !== null"
               (click)="openInMaps(alert.latitude, alert.longitude)">
               Démarrer la navigation
           </ion-button>

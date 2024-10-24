@@ -5,13 +5,13 @@
     </ion-buttons>
     <ion-title >SIGNALISATION</ion-title>
   </ion-toolbar>
-
 </ion-header>
 
 
 <ion-content padding>
   <br>
   <form [formGroup]="signalementForm" (ngSubmit)="onSubmit()">
+
     <ion-item>
       <ion-label class="coord-label">Vos coordonnées géographiques</ion-label>
       <br>
@@ -20,10 +20,11 @@
       <ion-button color="success" class="form-control" (click)="localiser()">Actualiser vos coordonnées</ion-button>
     </ion-item>
 
-    <div id="map" style="height: 400px; display: none; width: 60%; margin: 0 auto"></div>
-    <ion-item>
-      <ion-button color="success" class="form-control" *ngIf="mapVisible" (click)="valider()">Valider la position</ion-button>
-      <br *ngIf="mapVisible">
+       <!-- Conteneur pour la carte Leaflet, initialement caché -->
+       <div id="map" style="height: 400px; display: none; width: 60%; margin: 0 auto"></div>
+       <ion-item>
+       <ion-button color="success" class="form-control" *ngIf="mapVisible" (click)="valider()">Valider la position</ion-button>
+       <br *ngIf="mapVisible" >
       <ion-button color="success" class="form-control" *ngIf="!mapVisible" (click)="enableManualLocationSelection()">Choisir ma position manuellement</ion-button>
     </ion-item>
     <br>
@@ -46,7 +47,7 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
-    <br>
+     <br>
 
     <ion-item class="form-control">
       <ion-label position="stacked">Description</ion-label>
@@ -54,51 +55,16 @@
     </ion-item>
 
     <br>
-    <p *ngIf="!photo" class="alert">Prenez ou choisissez une image/vidéo</p>
-    <p class="alert ion-text-warning">Taille max : 100 Mo</p>
-    <ion-item *ngIf="photo !== 'none'" >
-      <ion-label position="floating" class="h2">Lien illustratif (photo ou vidéo)</ion-label><br/>
-      <input type="file" accept="image/*,video/*"  name="photo" (change)="onFileSelected($event)" />
+    <p *ngIf="!selectedMedia" class="alert">Prenez ou choisissez une image/vidéo</p>
+    <p color="warning" class="alert">taille max : 100 Mo</p>
+    <ion-item class="form-control">
+    <ion-label>Photo/vidéo</ion-label>
+    <ion-button expand="block" color="success" (click)="selectMedia()">Choisir une photo/vidéo</ion-button>
     </ion-item>
     <br>
-    <ion-label *ngIf="photo" class="ion-text-wrap">
-      Si l'image choisie ne correspond pas, ou est trop floue, choisissez ou prenez une autre image/vidéo !
-    </ion-label>
+    <ion-label *ngIf="selectedMedia">Si l'image choisie ne correspond pas, ou est trop floue, choisissez ou prenez une autre image/vidéo!</ion-label>
     <br>
-    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-    <br>
-    <ion-label *ngIf="recuperer_location == 'non'" class="ion-text-wrap">
-      Impossible de récupérer vos coordonnées,
-      verifier votre connexion et assurez-vous
-      d\'activer les services
-      de localisation sur votre mobile.
-      Si le problème persiste contacté
-      Pingoping depuis les paramètres.
-       </ion-label>
-    <br>
-    <ng-container *ngIf="isImage(photo)">
-      <div class="image-container">
-        <ion-img class="custom-image" [src]="imagePreview"></ion-img>
-      </div>
-    </ng-container>
 
-
-  <!--
-<ng-container *ngIf="isVideo(photo)">
-    <video #videoElement class="custom-image video-style" controls preload="metadata" (click)="toggleManualPause(videoElement)" muted>
-        <source [src]="imagePreview" type="video/mp4">
-    </video>
-    <br>
-    <div class="controls">
-        <ion-icon name="play" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="videoElement.paused"></ion-icon>
-        <ion-icon name="pause" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="!videoElement.paused"></ion-icon>
-        <input type="range" min="0" [max]="videoElement.duration" [value]="videoElement.currentTime" (input)="seekVideo($event, videoElement)">
-    </div>
-</ng-container>
--->
-
-    <ion-button type="submit" [disabled]="signalementForm.invalid" expand="block" color="success">
-      Envoyer Signalisation
-    </ion-button>
+    <ion-button [disabled]="!signalementForm.get('ville').value  || !signalementForm.get('service').value || !signalementForm.get('image').value  || !signalementForm.get('location').value.longitude  || !signalementForm.get('location').value.latitude" expand="block" color="success" (click)="onSubmit()">Envoyer Signalisation</ion-button>
   </form>
 </ion-content>

@@ -1,57 +1,66 @@
-<ion-header >
-
-  <ion-toolbar class="tool1" color="success">
-    <br/>
+<ion-header>
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button text="" icon="arrow-back-outline"></ion-back-button>
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
     </ion-buttons>
-    <br/> <br> <br>
-      <ion-title >FORMATION INFORMATIQUE</ion-title>
-      <br/>
-    </ion-toolbar>
+    <ion-title>LIVRAISON</ion-title>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="custom-background"  [fullscreen]="true">
+<div style="text-align: center;" *ngIf="grade === 'admin' || grade === 'superadmin'">
+  <ion-item class="span" lines="none">
+    <span color="success">Ajouter un numéro</span>
+    <ion-icon type="button" class="icon" [routerLink]="['/ajouter-numero-livraison/']" style="zoom: 1.1;" name="add-circle-outline"></ion-icon>
+  </ion-item>
+</div>
+
+<ion-content>
+  <br>
+  <h3 class="centered-heading" *ngIf="number !== 'erreur_chargement' && number !== 'aucune_alerte'">
+    Besoin d'une livraison partout à Bobo-Dioulasso ?   <br>
+    Contactez-nous à travers l'un des numéros disponibles.
+  </h3>
+  <br>
+
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-<br/>
-<ion-list >
-
- <ion-item  class="custom-background" lines="inset" *ngFor="let livraison of livraison">
-  <ion-label color="dark">
-
-      <h2 class="custom-text">{{livraison.commentaire2}}</h2>  <br/><br/>
-      <div class="menu">
-
-          <ion-img class="item-image" [src]="livraison.lienphoto"></ion-img>
-          <div class="item-content">
-            <h2 class="prix"></h2> <br/>
-            <p class="prix" >{{livraison.prix}}</p>
-
-        </div>
+  <ion-list>
+    <ion-card *ngFor="let number of number" class="service-card">
+      <br>
+      <p> Opérateur : {{number.nom_operateur}}</p>
+      <ion-card-content>
+        <ion-button color="success" (click)="appeler(number.numero)">
+          <ion-icon slot="start" name="call-outline"></ion-icon>
+          Appeler
+        </ion-button>
+        <br>
+      </ion-card-content>
+      <div class="icon-right" *ngIf="grade === 'admin' || grade === 'superadmin'">
+        <ion-icon name="create" style="zoom: 2.5;" color="success" [routerLink]="['/update-numero-livraison/', number.id]"></ion-icon> &nbsp;
+        <ion-icon name="trash" style="zoom: 2.5;" class="iconsupp" (click)="presentAlert(number)"></ion-icon>
       </div>
+    </ion-card>
+  </ion-list>
 
-  </ion-label>
+  <br *ngIf="number == 'erreur_chargement'">
+  <br *ngIf="number == 'erreur_chargement'">
+  <div *ngIf="number == 'erreur_chargement'" class="erreur_chargement">
+    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+    <p>Erreur de chargement</p>
+    <br>
+    <ion-button color="success" (click)="refreshPage($event)">réessayer</ion-button>
+  </div>
 
-</ion-item>
-</ion-list>
-
-<ion-item  class="custom-background" lines="inset" *ngFor="let livraison of livraison">
-<h2 class="ion-text-small">{{livraison.commentaire3}}</h2 >  <br/> <br/>
-</ion-item>
-<br>
-  <ion-col style="display: flex; justify-content: center;">
-    <a href="https://api.whatsapp.com/send?phone=+22662023367&text=Bonjour%2C%20j'aimerais%20faire%20une%20commande" target="_blank">
-      <ion-button color="success" shape="round">
-        <p class="prix">Contactez nous </p>
-        <ion-icon name="logo-whatsapp" style="zoom: 1.5;"></ion-icon>
-      </ion-button>
-    </a>
-  </ion-col>
-
-
-
+  <br *ngIf="number == 'aucune_alerte'">
+  <br *ngIf="number == 'aucune_alerte'">
+  <div>
+    <div  *ngIf="number == 'aucune_alerte'" class="erreur_chargement">
+      <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+      <p>Aucun numero</p>
+      <br>
+    </div>
+  </div>
 
 </ion-content>

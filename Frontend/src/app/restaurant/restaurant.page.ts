@@ -12,7 +12,8 @@ import { DistanceCalculatorService } from './distance-calculator.service';
 import { authService } from '../services/auth.service';
 import { WebSocketService } from '../websocket.service';
 import { CartService } from '../services/cart.service';
-
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-restaurant',
@@ -21,6 +22,7 @@ import { CartService } from '../services/cart.service';
 })
 export class RestaurantPage implements OnInit {
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   infiniteScrollDisabled: boolean = false;
   resto: any = [];
@@ -32,11 +34,10 @@ export class RestaurantPage implements OnInit {
   userlongitude: any;
   userlatitude: any;
   duration = 2000;
-  limit_comment: number = 180;
+  limit_comment: number = 180; // Limite des caractères avant le tronquage
   search: boolean = false;
 
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
-
+  private unsubscribe$ = new Subject<void>();
   private updateSubscription: Subscription;
   showFullCommentaire: boolean = false;
   userData: any;
@@ -54,7 +55,7 @@ export class RestaurantPage implements OnInit {
     private loadingCtrl: LoadingController,
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
-    private toastCtrl: ToastController,
+    private toastCtrl: ToastController,  // Injecter le ToastController
     public commentaireService: CommentaireService,
     private distanceCalculatorService: DistanceCalculatorService,
     private authService: authService,
@@ -63,38 +64,32 @@ export class RestaurantPage implements OnInit {
 
   ) {
 
+    this.restaurant()  ;
 
     }
 
   ngOnInit() {
 
-    this.fonction_abonnement();
+  this.updateSubscription = interval(15000).subscribe(async () => {
+    await this.openUrl_resto();
+    this.cdr.detectChanges(); // Détecter et appliquer les changements
+    });
+
+  // S'abonner aux changements de données utilisateur
+  this.authService.userData$.subscribe(data => {
+    this.userData = data;
+  });
+
+  // S'abonner aux changements du panier
+  this.cartService.cart$.subscribe(cart => {
+    this.cart = cart;
+  });
+
+    this.loadLike() ;
+    this.getsessionuser();
 
   }
 
-
-  async fonction_abonnement() {
-
-    this.updateSubscription = interval(30000).subscribe(async () => {
-       this.openUrl();
-      this.cdr.detectChanges(); // Détecter et appliquer les changements
-      });
-
-    // S'abonner aux changements de données utilisateur
-    this.authService.userData$.subscribe(data => {
-      this.userData = data;
-    });
-
-    // S'abonner aux changements du panier
-    this.cartService.cart$.subscribe(cart => {
-      this.cart = cart;
-    });
-
-      await this.restaurant();
-      this.loadLike() ;
-      this.getsessionuser();
-
-    }
 
     // Méthode pour afficher un toast
     async presentToast(message: string, color: string = 'danger') {
@@ -117,51 +112,77 @@ export class RestaurantPage implements OnInit {
 
 
       ngOnDestroy() {
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
+
         if (this.websocketSubscription) {
           this.websocketSubscription.unsubscribe();
         }
         if (this.updateSubscription) {
           this.updateSubscription.unsubscribe();
         }
+        if (this.websocketSubscription) {
+          this.websocketSubscription.unsubscribe();
+        }
       }
 
-  async restaurant() {
+      async restaurant() {
+        this.page = 1;
+        let loading: HTMLIonLoadingElement;
 
-    const loading = await this.loadingCtrl.create({
-      message: 'Rechargement...',
-      spinner: 'lines',
-      cssClass: 'custom-loading',
-      duration: 8500,
-    });
+        try {
+          loading = await this.loadingCtrl.create({
+            message: 'Actualisation...',
+            spinner: 'lines',
+            cssClass: 'custom-loading',
+            duration: 8000,
+          });
 
-    loading.present();
+          await loading.present();
 
-    this.page = 1;
-    this.oldresto = this.resto;
+          this.oldresto = this.resto;
 
-    try {
-    const res : any = await this._apiService.restaurant(this.page, this.limit).toPromise();
+          // Appel API pour récupérer les pubs
+          this._apiService.restaurant(this.page, this.limit)
+            .pipe(takeUntil(this.unsubscribe$)) // Ajout de takeUntil pour arrêter l'abonnement lorsque la page est détruite
+            .subscribe(
+              async (res: any) => {
+                if (res && Array.isArray(res) && res.length > 0) {
+                  this.resto = res;
+                  try {
+                    await this.openUrl_resto();
+                  } catch (error) {
+                    console.error("Erreur critique lors de l'appel à openUrl:", error);
+                  }
+                } else {
+                  this.resto = 'aucune_alerte';
+                }
 
-    if (res && res.length > 0) {
-      this.resto = res;
-      this.openUrl();
-    }
-    else {
-      this.resto = 'aucune_alerte';
-    }
+                await loading.dismiss();
+              },
+              async (error: any) => {
+                console.error("ERROR == pub", error);
+                if (this.oldresto && this.oldresto.length > 0) {
+                  this.resto = this.oldresto;
+                } else {
+                  this.resto = 'erreur_chargement';
+                }
 
-    loading.dismiss();
-
-    } catch (error) {
-    console.log('erreur de chargement', error);
-    if (this.oldresto && this.oldresto.length > 0) {
-      this.resto = this.oldresto;
-    }
-    else { this.resto = 'erreur_chargement'; }
-    console.log('Erreur de chargement', error);
-    loading.dismiss();
-  }
-    }
+                await this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
+                await loading.dismiss();
+              }
+            );
+        } catch (e) {
+          console.error("Erreur inattendue dans getpub:", e);
+          await this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
+          if (loading) {
+            await loading.dismiss();
+          }
+          await this.presentToast("Une erreur inattendue s'est produite, veuillez réessayer.");
+        } finally {
+          this.cdr.detectChanges();
+        }
+      }
 
 
     async restaurant_2() {
@@ -177,13 +198,8 @@ export class RestaurantPage implements OnInit {
       } else {
         this.resto =  res;
         this.syncCommandes(res);
-        try {
-          // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
-          await this.openUrl();
-        } catch (err) {
-          console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
-        }
-            }
+       await  this.openUrl_resto();
+      }
 
       } catch (error) {
       console.log('erreur de chargement', error);
@@ -237,13 +253,8 @@ export class RestaurantPage implements OnInit {
           // Désactiver l'infinite scroll si moins de données retournées que la limite
       if (res.length < this.limit) {
         this.resto = this.resto.concat(res);
-        try {
-          // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
-          await this.openUrl();
-        } catch (err) {
-          console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
-        }
-                event.target.complete();
+        this.openUrl_resto();
+        event.target.complete();
       }else {
         this.infiniteScrollDisabled = true;
       }
@@ -357,59 +368,68 @@ export class RestaurantPage implements OnInit {
   }
 
 
-  async getUserLocation(): Promise<{ userLatitude: number, userLongitude: number } | null> {
-
+  async getUserLocation(): Promise<{ userLatitude: number; userLongitude: number } | null> {
     try {
-      const coordinates = await Geolocation.getCurrentPosition();
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Timeout: Unable to get location')), 6000)
+      );
+
+      const geolocationPromise = Geolocation.getCurrentPosition();
+
+      const coordinates = await Promise.race([geolocationPromise, timeoutPromise]) as GeolocationPosition; // Assertion de type ici
+
       const userLatitude = coordinates.coords.latitude;
       const userLongitude = coordinates.coords.longitude;
+
+      console.log('Latitude:', userLatitude);
+      console.log('Longitude:', userLongitude);
 
       this.userlongitude = userLongitude;
       this.userlatitude = userLatitude;
 
-      return { userLatitude, userLongitude };
+      return {  userLatitude, userLongitude };
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
       return null;
     }
   }
 
+async openUrl_resto() {
+  console.log('Début de openUrl');
+  const userLocationData = await this.getUserLocation();
 
+  if (userLocationData) {
+    const { userLatitude, userLongitude } = userLocationData;
+    console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
 
-  async openUrl() {
-    const userLocationData = await this.getUserLocation();
+    if (Array.isArray(this.resto)) {
+      for (const publi of this.resto) {
+        const distance = this.distanceCalculatorService.haversineDistance(
+          userLatitude,
+          userLongitude,
+          publi.latitude,
+          publi.longitude
+        );
 
-    if (userLocationData) {
-      const { userLatitude, userLongitude } = userLocationData;
+        console.log(`Distance : ${distance} mètres`);
 
-      this.resto.forEach((publi) => {
-        // Vérifiez si les coordonnées ne sont pas 'non'
-        if (publi.latitude !== 'non' && publi.longitude !== 'non') {
-          const distance = this.distanceCalculatorService.haversineDistance(
-            userLatitude,
-            userLongitude,
-            parseFloat(publi.latitude), // Assurez-vous de convertir en nombre si nécessaire
-            parseFloat(publi.longitude)
-          );
-
-          console.log(`Distance entre l'utilisateur et l'alerte : ${distance} mètres`);
-
-          if (!isNaN(distance)) {
-            publi.distanceToUser = distance;
-            console.log(`Distance entre l'utilisateur et l'alerte : ${publi.distanceToUser} mètres`);
-          } else {
-            publi.distanceToUser = 'Coordonnées invalides';
-            console.error('Coordonnées invalides pour l\'alerte:', publi);
-          }
+        if (!isNaN(distance)) {
+          publi.distanceToUser = distance;
+          console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
         } else {
-          publi.distanceToUser = 'Coordonnées non disponibles';
-          console.log('Coordonnées non disponibles pour cet resto');
+          console.error('La distance est NaN.');
         }
-      });
+      }
     } else {
-      console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
+      console.error('this.pub n\'est pas un tableau :', this.resto);
     }
+  } else {
+    this.userlongitude = null;
+    this.userlatitude = null;
+    console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
+    throw new Error('Erreur: Impossible de récupérer les coordonnées de l\'utilisateur.');
   }
+}
 
 
   convertMetersToKilometers(meters: number | string): string {
@@ -539,14 +559,8 @@ async loadalert_search() {
      }
      else {
         this.resto = res;
-
-        try {
-          // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
-          await this.openUrl();
-        } catch (err) {
-          console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
-        }
-            }
+        this.openUrl_resto();
+     }
 
      } catch (error) {
      if (this.oldresto && this.oldresto.length > 0) {
@@ -579,12 +593,6 @@ async loadalert_search() {
     console.log('Erreur de chargement', error);
     if (this.oldresto && this.oldresto.length > 0) {
       this.resto = this.oldresto;
-      try {
-        // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
-        await this.openUrl();
-      } catch (err) {
-        console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
-      }
     }
     else { this.resto = 'erreur_chargement'; }
     event.target.complete();

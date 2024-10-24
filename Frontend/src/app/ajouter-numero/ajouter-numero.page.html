@@ -34,7 +34,19 @@
     <ion-label color="danger" *ngIf="verifieForm.get('numero').touched && verifieForm.get('numero').errors?.required">Veuillez entrer le numero</ion-label>
     <ion-label color="danger" *ngIf="verifieForm.get('numero').touched && verifieForm.get('numero').hasError('minlength')">Verifier votre numero</ion-label>
     <br/>
+  </form>
 
+    <ion-item>
+      <ion-label position="floating" class="h2"> Vip ?</ion-label><br/>
+        <ion-input [(ngModel)]="vip"   type="text" ></ion-input>
+      </ion-item>
+      <br/>
+
+      <ion-item>
+        <ion-label position="floating" class="h2"> rang</ion-label><br/>
+          <ion-input [(ngModel)]="rang"  type="number" ></ion-input>
+        </ion-item>
+        <br/>
 <ion-col>
   <br/> <br/>
   <ion-button type="button" (click)="addNumero()"  [disabled]="!verifieForm.valid" color="success" shape="round" expand="full">
@@ -42,7 +54,6 @@
 </ion-button>
 </ion-col>
 
-</form>
 </ion-content>
 
 

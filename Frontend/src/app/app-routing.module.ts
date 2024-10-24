@@ -101,8 +101,10 @@ const routes: Routes = [
   {
     path: 'acceuil',
     loadChildren: () => import('./acceuil/acceuil.module').then( m => m.AcceuilPageModule),
-    canActivate: [AuthGuard]
+    //data: { preload: true }
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
+
   {
     path: 'ajouterpub',
     loadChildren: () => import('./ajouterpub/ajouterpub.module').then( m => m.AjouterpubPageModule),
@@ -482,6 +484,19 @@ const routes: Routes = [
     path: 'market',
     loadChildren: () => import('./market/market.module').then( m => m.MarketPageModule)
   },
+  {
+    path: 'ajouter-numero-livraison',
+    loadChildren: () => import('./ajouter-numero-livraison/ajouter-numero-livraison.module').then( m => m.AjouterNumeroLivraisonPageModule)
+  },
+  {
+    path: 'update-numero-livraison/:id',
+    loadChildren: () => import('./update-numero-livraison/update-numero-livraison.module').then( m => m.UpdateNumeroLivraisonPageModule)
+  },  {
+    path: 'piece-moto',
+    loadChildren: () => import('./piece-moto/piece-moto.module').then( m => m.PieceMotoPageModule)
+  },
+
+
 
 
 

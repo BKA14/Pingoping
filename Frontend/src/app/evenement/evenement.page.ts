@@ -17,7 +17,8 @@ import { authService } from '../services/auth.service';
 import { NotificationService } from '../notification.service';
 import { WebSocketService } from '../websocket.service';
 import { UserService } from '../services/user.service';
-
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -57,7 +58,7 @@ event.preventDefault();
   longitude:any;
   rangpub: any;
   categorie: any = [];
-   pub: any = [];
+   event: any = [];
    pubs: any = [];
    etats: any = [];
    etat : any = [];
@@ -87,6 +88,7 @@ event.preventDefault();
 
     private updateSubscription: Subscription;
     private websocketSubscription: Subscription;
+    private unsubscribe$ = new Subject<void>();
 
 
     public progress = 0;
@@ -116,30 +118,20 @@ event.preventDefault();
       private toastCtrl: ToastController  // Injecter le ToastController
     )
     {
-
+      this.manualPause = false;
+      this.getUserLocation();
+      this.getpub();
     }
 
 
     async ngOnInit() {
 
-      this.getpub();
-      this.fonction_abonnement();
-
-      }
-
-
-
-    async fonction_abonnement() {
-
-      this.manualPause = false;
-
-      this.updateSubscription = interval(30000).subscribe(async () => {
-        this.getpub_2();
-       this.openUrl();
+      this.updateSubscription = interval(12000).subscribe(async () => {
+      await this.openUrl_evenement();
       this.cdr.detectChanges(); // Détecter et appliquer les changements
       });
 
-      this.updateSubscription = interval(600).subscribe(async () => {
+      this.updateSubscription = interval(100).subscribe(async () => {
       this.setupIntersectionObserver();
       this.cdr.detectChanges(); // Détecter et appliquer les changements
       });
@@ -151,107 +143,109 @@ event.preventDefault();
 
       this.loadInitialPub();
       this.loadLike() ;
-      this.cdr.detectChanges();
+      this.setupIntersectionObserver(); // pour lecture automatic de la video
+      this.cdr.detectChanges(); // Détecter et appliquer les changements
+
       // pour initialiser les notiications push
       this.notificationService.initializePushNotifications();
       }
+
 
           // Méthode pour afficher un toast
       async presentToast(message: string, color: string = 'danger') {
       const toast = await this.toastCtrl.create({
         message: message,
         duration: 2000, // Durée d'affichage du toast
-        position: 'middle',
+        position: 'top',
         color: color,
       });
       toast.present();
       }
 
 
-
       ngOnDestroy() {
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
+
         if (this.websocketSubscription) {
           this.websocketSubscription.unsubscribe();
         }
         if (this.updateSubscription) {
           this.updateSubscription.unsubscribe();
         }
+        if (this.websocketSubscription) {
+          this.websocketSubscription.unsubscribe();
+        }
       }
-
 
       async getpub() {
         this.page = 1;
-        this.oldpub = this.pub;
-
         let loading: HTMLIonLoadingElement;
 
         try {
-          // Créer et afficher le loader
           loading = await this.loadingCtrl.create({
             message: 'Actualisation...',
             spinner: 'lines',
             cssClass: 'custom-loading',
-            duration: 7000, // Timeout de 8,5 secondes
+            duration: 8000,
           });
 
           await loading.present();
 
+          this.oldpub = this.event;
 
           // Appel API pour récupérer les pubs
-          await  this._apiService.getpub_evenement(this.page, this.limit).subscribe(
-            async (res: any) => {
+          this._apiService.getpub_evenement(this.page, this.limit)
+            .pipe(takeUntil(this.unsubscribe$)) // Ajout de takeUntil pour arrêter l'abonnement lorsque la page est détruite
+            .subscribe(
+              async (res: any) => {
+                if (res && Array.isArray(res) && res.length > 0) {
+                  this.event = res;
+                  try {
+                    await this.openUrl_evenement();
+                  } catch (error) {
+                    console.error("Erreur critique lors de l'appel à openUrl:", error);
+                  }
+                } else {
+                  this.event = 'aucune_alerte';
+                }
 
-              if (res && res.length > 0) {
-                this.pub = res;
-                this.openUrl();
+                await loading.dismiss();
+              },
+              async (error: any) => {
+                console.error("ERROR == pub", error);
+                if (this.oldpub && this.oldpub.length > 0) {
+                  this.event = this.oldpub;
+                } else {
+                  this.event = 'erreur_chargement';
+                }
+
+                await this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
+                await loading.dismiss();
               }
-              else {
-                this.pub = 'aucune_alerte';
-              }
-
-              await loading.dismiss(); // Fermer le chargement après succès
-            },
-            async (error: any) => {
-              console.error("ERROR == pub", error);
-
-              // Restaurer les anciennes données si échec de chargement
-              if (this.oldpub && this.oldpub.length > 0) {
-                this.pub = this.oldpub;
-              } else {
-                this.pub = 'erreur_chargement';
-              }
-
-              await this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
-              await loading.dismiss(); // Fermer le chargement en cas d'erreur
-            }
-          );
+            );
         } catch (e) {
-          console.error("Erreur lors de la récupération des pubs", e);
-
+          console.error("Erreur inattendue dans getpub:", e);
+          await this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
           if (loading) {
-            await loading.dismiss(); // S'assurer que le loader est fermé en cas d'erreur
+            await loading.dismiss();
           }
-
           await this.presentToast("Une erreur inattendue s'est produite, veuillez réessayer.");
         } finally {
-          this.cdr.detectChanges(); // Actualiser l'affichage après la mise à jour des données
+          this.cdr.detectChanges();
         }
       }
 
 
 async loadMore(event) {
   this.page++;
- this.oldpub = this.pub;
+ this.oldpub = this.event;
   try {
     const res: any = await this._apiService.getpub_evenement(this.page, this.limit).toPromise();
+    console.log('SUCCESS ===', res);
 
-    this.pub = this.pub.concat(res);
-
-    try {
-       this.openUrl();
-    } catch (err) {
-      console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
-    }
+    this.event = this.event.concat(res);
+    await this.openUrl_evenement();
 
     // Désactiver l'infinite scroll si moins de données retournées que la limite
     if (res.length < this.limit) {
@@ -261,80 +255,11 @@ async loadMore(event) {
   } catch (error) {
     console.log('Erreur de chargement', error);
     if (this.oldpub && this.oldpub.length > 0) {
-      this.pub = this.oldpub;
+      this.event = this.oldpub;
     }
-    else { this.pub = 'erreur_chargement'; }
+    else { this.event = 'erreur_chargement'; }
     this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
     event.target.complete();
-  }
-}
-
-
-async getpub_2() {
-
-  try {
-
-    this.oldpub = this.pub;
-
-    await this._apiService.getpub(this.page, this.limit).subscribe(
-      async (res: any) => {
-        if (res && res.length < 1) {
-          this.pub = 'aucune_alerte';
-        } else {
-          this.syncCommandes(res);
-          try {
-             this.openUrl();
-          } catch (err) {
-            console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
-          }
-        }
-
-      },
-      async (error: any) => {
-        console.error("ERROR == pub", error);
-
-        if (this.oldpub && this.oldpub.length > 0) {
-          this.pub = this.oldpub;
-        } else {
-          this.pub = 'erreur_chargement';
-        }
-
-        await this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer.");
-      }
-    );
-  } catch (e) {
-    await this.presentToast("Une erreur inattendue s'est produite, veuillez réessayer.");
-  } finally {
-    this.cdr.detectChanges(); // Actualiser l'affichage après la mise à jour des données
-  }
-}
-
-
-syncCommandes(nouvellesPub: any) {
-  // Gérer l'ajout, la mise à jour et la suppression des commandes
-  const updatedPub = [...this.pub]; // Copie de l'ancienne liste pour comparaison
-
-  // 1. Gérer les ajouts et les mises à jour
-  nouvellesPub.forEach(nouvellesPub => {
-    const index = updatedPub.findIndex(c => c.id === nouvellesPub.id);
-
-    if (index === -1) {
-      // Ajout en tête si c'est une nouvelle commande
-      updatedPub.unshift(nouvellesPub);
-    } else {
-      // Mise à jour de la commande existante
-      updatedPub[index] = nouvellesPub;
-    }
-  });
-
-  // 2. Gérer les suppressions
-  this.pub = updatedPub.filter(pub =>
-    nouvellesPub.some(nouvellesPub => nouvellesPub.id === pub.id)
-  );
-
-  // 3. Mettre à jour la liste des commandes
-  if (this.pub.length === 0) {
-    this.pub = 'aucune_alerte'; // Aucun élément dans la liste
   }
 }
 
@@ -378,10 +303,10 @@ loadLike() {
             // Vous pouvez ajouter un traitement spécifique si nécessaire
             break;
           case 'update':
-            const updatedIndex = this.pub.findIndex(pub => pub.id === message.idpub);
+            const updatedIndex = this.event.findIndex(pub => pub.id === message.idpub);
             if (updatedIndex !== -1) {
-              this.pub[updatedIndex].likes_count = message.likes_count;
-              this.pub[updatedIndex].user_ids = message.user_ids;
+              this.event[updatedIndex].likes_count = message.likes_count;
+              this.event[updatedIndex].user_ids = message.user_ids;
               console.log('Likes_count du pub mis à jour:', message.likes_count);
               console.log('User_ids du pub mis à jour:', message.user_ids);
             }
@@ -407,8 +332,8 @@ loadLike() {
         if (Array.isArray(message)) {
           message.forEach(item => {
             if (item.admin === 'evenement') {
-              this.pub = item;
-              console.log('Initial alerts loaded:', this.pub);
+              this.event = item;
+              console.log('Initial alerts loaded:', this.event);
             }
           });
         }
@@ -418,9 +343,9 @@ loadLike() {
             case 'date':
               const updatedPubs = Array.isArray(message) ? message: [message];
               updatedPubs.forEach(updatedPub => {
-                const index = this.pub.findIndex(pub => pub.id === updatedPub.id);
+                const index = this.event.findIndex(pub => pub.id === updatedPub.id);
                 if (index !== -1) {
-                  this.pub[index].countdown = updatedPub.countdown;
+                  this.event[index].countdown = updatedPub.countdown;
                   console.log(`Nouveau countdown pour pub ${updatedPub.id}:`, updatedPub.countdown);
                 }
               });
@@ -430,31 +355,31 @@ loadLike() {
               if(message.admin =='evenement'){
                 message.likes_count = 0;
                 message.user_ids = [];
-                this.pub.unshift(message);
+                this.event.unshift(message);
                 console.log('New pub inserted:', message);
               }
               break;
 
             case 'update':
-              const updatedIndex = this.pub.findIndex(pub => pub.id === message.old_pub_id);
+              const updatedIndex = this.event.findIndex(pub => pub.id === message.old_pub_id);
               if (updatedIndex !== -1) {
                 // Copier les valeurs actuelles avant la mise à jour
-                const currentLikesCount = this.pub[updatedIndex].likes_count;
-                const currentUserIds = [...this.pub[updatedIndex].user_ids];
+                const currentLikesCount = this.event[updatedIndex].likes_count;
+                const currentUserIds = [...this.event[updatedIndex].user_ids];
 
                 // Mettre à jour le message avec les nouvelles valeurs
                 message.likes_count = currentLikesCount;
                 message.user_ids = currentUserIds;
 
                 // Remplacer l'élément dans le tableau this.pub
-                this.pub[updatedIndex] = message;
+                this.event[updatedIndex] = message;
 
                 console.log('pub updated:', message);
                 console.log('pub updated:', message.old_pub_id);
               }
               break;
             case 'delete':
-              this.pub = this.pub.filter(pub => pub.id !== message.pub_id);
+              this.event = this.event.filter(pub => pub.id !== message.pub_id);
               console.log('pub deleted:', message);
               break;
             default:
@@ -524,10 +449,14 @@ loadLike() {
 
     // Méthode pour gérer la pause manuelle
     toggleManualPause(videoElement: HTMLVideoElement) {
+      console.log('Entre dans toggle:');
       this.manualPause = !this.manualPause;
       if (this.manualPause) {
+        console.log('Entre dans toggle 1:', this.manualPause);
         this.pauseVideo(videoElement);
+        console.log('Entre dans toggle 2:', this.manualPause);
       } else {
+        console.log('Entre dans toggle 3:', this.manualPause);
         this.playVideo(videoElement);
       }
     }
@@ -625,6 +554,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
       };
 
       this._apiService.getetat2(data).subscribe(async (res:any) => {
+        console.log("SUCCESS ===",res);
 
         if(res.result === 'oui') {
           if(res.data.etat === 'oui') {
@@ -713,6 +643,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
            }
 
            this._apiService.disLike(pub.id,data).subscribe((res:any) => {
+            console.log("SUCCESS ===",res);
 
              //window.location.reload();
              //alert('Nouveau etat ajoute avec success');
@@ -747,6 +678,9 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
     // Déclencher la détection des changements
     this.cdr.detectChanges();
+
+    // Appeler à nouveau la localisation de l'utilisateur (si nécessaire)
+    this.getUserLocation();
 
     // Log pour indiquer le rafraîchissement
     console.log('Rafraîchissement de la page');
@@ -802,6 +736,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     getcategorie(){
 
       this._apiService.getcategorie().subscribe((res:any) => {
+        console.log("SUCCESS ===",res);
         this.categorie = res;
        },(error: any) => {
 
@@ -896,7 +831,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
   get entrepriseCount(){
 
-    return  this.pub.length;
+    return  this.event.length;
 
   }
 
@@ -922,41 +857,67 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     this.router.navigateByUrl('/ping');
   }
 
+  async getUserLocation(): Promise<{ userLatitude: number; userLongitude: number } | null> {
+    try {
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Timeout: Unable to get location')), 6000)
+      );
 
-async getUserLocation() {
-  try {
-    const coordinates = await Geolocation.getCurrentPosition();
-    const userLatitude = coordinates.coords.latitude;
-    const userLongitude = coordinates.coords.longitude;
-    // Utilisez les coordonnées de l'utilisateur comme nécessaire
+      const geolocationPromise = Geolocation.getCurrentPosition();
 
+      const coordinates = await Promise.race([geolocationPromise, timeoutPromise]) as GeolocationPosition; // Assertion de type ici
 
-    this.userlongitude = userLongitude ;
-    this.userlatitude = userLatitude;
+      const userLatitude = coordinates.coords.latitude;
+      const userLongitude = coordinates.coords.longitude;
 
-   // console.error('Coordonnées entreprise:', this.latitude, this.longitude);
-    return { userLatitude, userLongitude };
-  } catch (error) {
-    console.error('Erreur lors de la récupération des coordonnées:', error);
-    return null;
+      console.log('Latitude:', userLatitude);
+      console.log('Longitude:', userLongitude);
+
+      this.userlongitude = userLongitude;
+      this.userlatitude = userLatitude;
+
+      return {  userLatitude, userLongitude };
+    } catch (error) {
+      console.error('Erreur lors de la récupération des coordonnées:', error);
+      return null;
+    }
   }
 
-}
+async openUrl_evenement() {
+  console.log('Début de openUrl');
+  const userLocationData = await this.getUserLocation();
 
+  if (userLocationData) {
+    const { userLatitude, userLongitude } = userLocationData;
+    console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
 
-async getUserLocationAndCompanyId(id) {
-try {
-  const coordinates = await Geolocation.getCurrentPosition();
-  const userLatitude = coordinates.coords.latitude;
-  const userLongitude = coordinates.coords.longitude;
+    if (Array.isArray(this.event)) {
+      for (const publi of this.event) {
+        const distance = this.distanceCalculatorService.haversineDistance(
+          userLatitude,
+          userLongitude,
+          publi.latitude,
+          publi.longitude
+        );
 
-  return { userLatitude, userLongitude, companyId: id };
-} catch (error) {
-  console.error('Erreur lors de la récupération des coordonnées:', error);
-  return null;
+        console.log(`Distance : ${distance} mètres`);
 
-}
-
+        if (!isNaN(distance)) {
+          publi.distanceToUser = distance;
+          console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
+        } else {
+          console.error('La distance est NaN.');
+        }
+      }
+    } else {
+      console.error('this.pub n\'est pas un tableau :', this.event);
+    }
+  } else {
+    this.userlongitude = null;
+    this.userlatitude = null;
+    console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
+    throw new Error('Erreur: Impossible de récupérer les coordonnées de l\'utilisateur.');
+  }
 }
 
 
@@ -969,44 +930,7 @@ CommentPub(pubs) {
   }
 }
 
-
-async openUrl() {
-  const userLocationData = await this.getUserLocation();
-
-  if (userLocationData) {
-    const { userLatitude, userLongitude } = userLocationData;
-
-    this.pub.forEach((publi) => {
-      // Vérifiez si les coordonnées ne sont pas 'non'
-      if (publi.latitude !== 'non' && publi.longitude !== 'non') {
-        const distance = this.distanceCalculatorService.haversineDistance(
-          userLatitude,
-          userLongitude,
-          parseFloat(publi.latitude), // Assurez-vous de convertir en nombre si nécessaire
-          parseFloat(publi.longitude)
-        );
-
-        console.log(`Distance entre l'utilisateur et l'alerte : ${distance} mètres`);
-
-        if (!isNaN(distance)) {
-          publi.distanceToUser = distance;
-          console.log(`Distance entre l'utilisateur et l'alerte : ${publi.distanceToUser} mètres`);
-        } else {
-          publi.distanceToUser = 'Coordonnées invalides';
-          console.error('Coordonnées invalides pour l\'alerte:', publi);
-        }
-      } else {
-        publi.distanceToUser = 'Coordonnées non disponibles';
-        console.log('Coordonnées non disponibles pour cet evenement');
-      }
-    });
-  } else {
-    console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
-  }
-}
-
-
-  convertMetersToKilometers(meters: number): string {
+convertMetersToKilometers(meters: number): string {
     // Si la distance en mètres est inférieure à 4000 (4 km), renvoyer en mètres
     if (meters < 4000) {
       const formattedmettre = Math.floor(meters).toString();

@@ -16,11 +16,12 @@ export class UpdateNumeroPage implements OnInit {
   nom_entreprise:any;
   entreprises: any = [];
   navCtrl: any;
-  rang:any;
+  vip: any;
+  rang: any;
   description: any;
   number: Object;
   numero: any;
-  vip: any;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -35,6 +36,7 @@ export class UpdateNumeroPage implements OnInit {
       console.log(this.id);
       this.numero_id(this.id);
     })
+
   }
 
 
@@ -47,7 +49,6 @@ export class UpdateNumeroPage implements OnInit {
       this.description = resultat.description;
       this.rang = resultat.rang;
       this.vip = resultat.vip;
-
      },(error: any) => {
       console.log("Erreur de connection",error);
   })
@@ -57,12 +58,11 @@ export class UpdateNumeroPage implements OnInit {
 
   async update_num_service(){
 
-  let id = this.id;
+    let id = this.id;
   let data = {
     nom: this.nom_entreprise,
     numero : this.numero,
-    description : this.description,
-    rang: this.rang
+    description : this.description
 }
 
 const loading = await this.loadingCtrl.create({

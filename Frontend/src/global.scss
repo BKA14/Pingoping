@@ -27,6 +27,15 @@
 @import '~leaflet/dist/leaflet.css';
 
 
+ion-header {
+  padding-top: var(--ion-safe-area-top);
+  z-index: 10;
+}
+
+ion-toolbar {
+  margin-top: 0;
+}
+
 body {
   transition: padding-bottom 0.3s ease-in-out;
 

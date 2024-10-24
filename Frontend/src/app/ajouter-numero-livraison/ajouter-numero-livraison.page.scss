@@ -1,0 +1,32 @@
+ion-header {
+  ion-toolbar {
+    height: 56px;  /* Hauteur recommandée pour les en-têtes sur mobile */
+    display: flex;
+    align-items: center;  /* Centrer verticalement les éléments */
+    --background: linear-gradient(to right, #0eeb49, #05a83d) !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  ion-title {
+    font-size: 1.2rem;  /* Taille du texte adaptable */
+    text-align: center;
+    color: white;
+
+  }
+
+  ion-back-button {
+    --color: light;  /* Couleur spécifique du bouton retour */
+  }
+}
+
+
+      ion-loading.custom-loading {
+        --background: #e3edff;
+        --spinner-color: #1c6dff;
+
+        color: #1c6dff;
+      }
+      input,
+      label {
+          margin: .4rem 0;
+      }

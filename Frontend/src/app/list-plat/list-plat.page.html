@@ -15,11 +15,9 @@
 
   <ion-toolbar class="toolbar">
     <!-- Boutons sur une nouvelle ligne -->
-    <ion-buttons slot="start">
-      <ion-button (click)="reloadPage()" class="light" color="light">
+      <ion-label (click)="reloadPage()" class="cart-label" slot="start" color="light">
         Actualiser
-      </ion-button>
-    </ion-buttons>
+      </ion-label>
 
     <ion-buttons slot="end">
       <ion-button [routerLink]="['/panier']" class="cart-button" color="primary">

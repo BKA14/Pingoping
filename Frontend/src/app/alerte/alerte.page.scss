@@ -11,7 +11,7 @@ ion-header {
     --background: linear-gradient(to right, #0eeb49, #05a83d) !important;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
   ion-title {
     font-size: 1.2rem;  /* Taille du texte adaptable */
     text-align: center;
@@ -21,6 +21,26 @@ ion-header {
 
   ion-back-button {
     --color: light;  /* Couleur spécifique du bouton retour */
+  }
+}
+
+
+.cart-label {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #f9f9f9; /* Light background */
+  border-radius: 20px; /* Rounded label */
+  font-size: 16px;
+  font-weight: bold;
+  color: #333; /* Dark text */
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    background-color: #e0e0e0; /* Slightly darker on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
   }
 }
 
@@ -109,6 +129,7 @@ ion-button {
   .message-item {
     margin-bottom: 15px;
     border-radius: 8px;
+    margin: 6px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     background-color: #ffffff;
     padding: 15px;

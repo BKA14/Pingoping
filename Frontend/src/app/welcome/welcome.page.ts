@@ -25,7 +25,9 @@ export class WelcomePage implements OnInit {
     { title: 'Restaurant', icon: 'restaurant-outline', description: 'Dégusté les fabuleux mets de vos restaurants préférés.', link: '/restaurant'  },
     { title: 'Market', icon: 'bag-outline', description: 'Découvrez nos différents produits.', link: '/market' },
     { title: 'Professionnels à proximité', icon: 'call-outline', description: 'Besoin d\'un service ?.', link: '/numero-service'  },
-    { title: 'PMU', icon: 'analytics-outline', description: 'Pronostic PMU.', link: '/pmu'  }
+    { title: 'PMU', icon: 'analytics-outline', description: 'Pronostic PMU.', link: '/pmu'  },
+    { title: 'Service de livraison Bobo-Dioulasso', icon: 'bicycle-outline', description: 'Contactez-nous pour organiser une livraison rapide et efficace.', link: '/livraison'  },
+    { title: 'Pièces de moto', icon: 'cog-outline', description: 'Achetez ou commandez des pièces de moto de qualité.', link: '/piece-moto'  }
   ];
 
 
@@ -61,7 +63,8 @@ prenom1:any;
 
   ngOnInit()
 {
-
+// pour initialiser les notiications push
+this.notificationService.initializePushNotifications();
 }
 
 
@@ -73,12 +76,10 @@ prenom1:any;
    this.grade= (localStorage.getItem('grade'));
    console.log(this.grade);
     }
-
-
-  getsession1(){
-    this.prenom1= (localStorage.getItem('prenom1'));
-    console.log(this.prenom1);
-      }
+    getsession1(){
+      this.prenom1= (localStorage.getItem('prenom1'));
+      console.log(this.prenom1);
+       }
 
 
   async getentreprises(){
@@ -112,7 +113,6 @@ this.getsession1();
 
 refreshPage(e){
 setTimeout(() => {
-  this.getentreprises();
   console.log('rafraichissement de la page');
   e.target.complete();
 },500);
@@ -159,7 +159,7 @@ async presentAlert(id) {
         role: 'confirm',
         handler: () => {
 
-        this.supprimer(id);
+          this.supprimer(id);
 
       },
       },
@@ -217,6 +217,7 @@ ping() {
   this.router.navigateByUrl('/ping');
 
 }
+
 
 
 transform(entreprises: any, term: string, excludes: any = []): any {

@@ -5,15 +5,6 @@
     </ion-buttons>
     <ion-title >ANNUAIRE</ion-title>
   </ion-toolbar>
-  <ion-toolbar>
-
-    <ion-buttons slot="start">
-      <ion-button (click)="refreshPage($event)" class="light" color="light">
-        evenement
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-
 <ion-toolbar>
  <ion-input class="recherche" type="text" placeholder="Rechercher un service..." [(ngModel)]="term" (ionInput)="search_active($event)"></ion-input>
   </ion-toolbar>
@@ -33,70 +24,60 @@
   </div>
 
 
-<ion-content>
-
-  <h4 class="centered-heading" *ngIf="number !== 'erreur_chargement' || number !== 'aucune_alerte'">
-    Besoin d'un service ?
-    Notre annuaire vous met en relation avec des
-    professionnels de confiance pour tous vos besoins.
-  </h4>
-  <br>
-
-  <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-  <ion-list>
-    <ion-card *ngFor="let number of number | customFilter: term" class="service-card">
-      <div *ngIf="number.vip === 'oui'" style="position: absolute; top: 10px; right: 10px;">
-        <ion-icon name="star" color="success" style="font-size: 45px;"></ion-icon>
-      </div>
-      <br>
-      <ion-card-header>
-        <ion-label class="nom" color="success">{{ number.nom_service }}</ion-label>
-      </ion-card-header>
-      <ion-card-content>
-        <p>{{ number.description }}</p>
-        <br>
-        <p *ngIf="grade === 'admin' || grade === 'superadmin'">
-          {{ number.rang }}
-        </p>
-        <ion-button color="success" (click)="appeler(number.numero)">
-          <ion-icon slot="start" name="call-outline"></ion-icon>
-          Appeler
-        </ion-button>
-      </ion-card-content>
-      <div class="icon-right" *ngIf="grade === 'admin' || grade === 'superadmin'">
-        <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/update-numero/',number.id]"></ion-icon>
-        <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(number)"></ion-icon>
-      </div>
-    </ion-card>
-
-  </ion-list>
-
-
-  <br *ngIf="number == 'erreur_chargement'">
-  <br *ngIf="number == 'erreur_chargement'">
-  <div *ngIf="number == 'erreur_chargement'" class="erreur_chargement">
-    <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
-    <p>Erreur de chargement</p>
+  <ion-content>
+    <h3 class="centered-heading" *ngIf="number !== 'erreur_chargement' || number !== 'aucune_alerte'">
+      Besoin d'un service ?
+      Notre annuaire vous met en relation avec des
+      professionnels de confiance pour tous vos besoins.
+    </h3>
     <br>
-    <ion-button color="success" (click)="refreshPage($event)" >réessayer</ion-button>
-  </div>
 
-  <br *ngIf="number == 'aucune_alerte'">
-  <br *ngIf="number == 'aucune_alerte'">
-  <div>
-    <div  *ngIf="number == 'aucune_alerte'" class="erreur_chargement">
-      <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
-      <p>Aucun ruméro trouvé, réessayer </p>
-      <br>
+    <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-list>
+      <ion-card *ngFor="let number of number | customFilter: term" class="service-card">
+        <br>
+        <ion-card-header>
+          <div class="header-content">
+            <div class="vip-star" *ngIf="number.vip === 'oui'">
+              <ion-icon name="star" color="warning" style="font-size: 30px;"></ion-icon>
+            </div>
+            <ion-label class="nom" color="success">{{ number.nom_service }}</ion-label>
+          </div>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{ number.description }}</p>
+          <p *ngIf="grade === 'admin' || grade === 'superadmin'"> rang : {{ number.rang }}</p>
+          <p *ngIf="grade === 'admin' || grade === 'superadmin'"> Vip ? : {{ number.vip }}</p>
+
+          <ion-button color="success" (click)="appeler(number.numero)">
+            <ion-icon slot="start" name="call-outline"></ion-icon>
+            Appeler
+          </ion-button>
+          <br>
+        </ion-card-content>
+        <div class="icon-right" *ngIf="grade === 'admin' || grade === 'superadmin'">
+          <ion-icon name="create" style="zoom: 3.0;" color="success" [routerLink]="['/update-numero/', number.id]"></ion-icon>
+          <ion-icon name="trash" style="zoom: 3.0;" class="iconsupp" (click)="presentAlert(number)"></ion-icon>
+        </div>
+      </ion-card>
+    </ion-list>
+
+    <br *ngIf="number == 'aucune_alerte'">
+    <br *ngIf="number == 'aucune_alerte'">
+    <div>
+      <div  *ngIf="number == 'aucune_alerte'" class="erreur_chargement">
+        <ion-icon name="alert-circle" style="zoom: 12;" color="success"></ion-icon>
+        <p>Aucun numero</p>
+        <br>
+      </div>
     </div>
-  </div>
 
+    <ion-infinite-scroll threshold="100px" [disabled]="infiniteScrollDisabled" (ionInfinite)="getLoadFunction($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Chargement...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 
-  <ion-infinite-scroll threshold="100px" [disabled]="infiniteScrollDisabled" (ionInfinite)="getLoadFunction($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Chargement...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-
-</ion-content>
+  </ion-content>

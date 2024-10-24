@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar >
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title >ajouter numéro livraison</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<br/>
+<ion-content [fullscreen]="true">
+  <form [formGroup]="verifieForm">
+
+    <ion-item>
+      <ion-label position="floating" class="h2"> Nom opérateur</ion-label><br/>
+      <ion-input [(ngModel)]="nom_operateur"  formControlName="name"  type="text" ></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('name').touched && verifieForm.get('name').errors?.required">Veuillez entrer le nom de l'operateur</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('name').touched && verifieForm.get('name').hasError('minlength')">Verifier votre nom</ion-label>
+    <br/>
+
+    <ion-item>
+    <ion-label position="floating" class="h2"> Numero du service</ion-label><br/>
+      <ion-input [(ngModel)]="numero"  formControlName="numero"  type="number" ></ion-input>
+    </ion-item>
+    <ion-label color="danger" *ngIf="verifieForm.get('numero').touched && verifieForm.get('numero').errors?.required">Veuillez entrer le numero</ion-label>
+    <ion-label color="danger" *ngIf="verifieForm.get('numero').touched && verifieForm.get('numero').hasError('minlength')">Verifier votre numero</ion-label>
+    <br/>
+
+<ion-col>
+  <br/> <br/>
+  <ion-button type="button" (click)="addNumero()"  [disabled]="!verifieForm.valid" color="success" shape="round" expand="full">
+  Ajouter
+</ion-button>
+</ion-col>
+
+</form>
+</ion-content>
+
+

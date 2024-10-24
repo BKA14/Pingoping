@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -8,42 +9,43 @@ import { AlertController, Platform, ToastController } from '@ionic/angular';
 export class BackButtonService {
   private lastTimeBackButtonWasPressed = 0;
   private timePeriodToAction = 2000;
-  private exitUrls = ["/login2", "/welcome", "/acceuil", "/apropos", "/menu", "/notifications"];
 
   constructor(
     private platform: Platform,
     private router: Router,
+    private location: Location,
     private alertController: AlertController,
     private toastController: ToastController
   ) {
-    this.init();
   }
 
-  async init() {
-    await this.platform.backButton.subscribeWithPriority(10, async () => {
-      const currentUrl = this.router.url;
 
-      if (this.exitUrls.includes(currentUrl)) {
-        this.withDoublePress("Appuyez à nouveau pour quitter", () => {
-          navigator['app'].exitApp();
-        });
-      } else {
-        // Vérifier si l'historique de navigation contient une entrée
-        const navigation = this.router.getCurrentNavigation();
-        if (navigation && navigation.extras.state && navigation.extras.state.previousUrl) {
-          this.router.navigateByUrl(navigation.extras.state.previousUrl);
+  init() {
+    this.platform.backButton.subscribeWithPriority(100, async () => {
+        const currentUrl = this.router.url;
+
+        // URLs qui déclenchent la fermeture de l'application
+        const exitAppUrls = ["/login2", "/welcome", "/acceuil", "/apropos", "/notifications"];
+
+        console.log("Current URL:", currentUrl);
+
+        // Utilisation de `startsWith` pour gérer les URLs dynamiques
+        if (exitAppUrls.some(url => currentUrl.startsWith(url))) {
+            console.log("Exit app logic triggered");
+            this.withDoublePress("Appuyez à nouveau pour quitter", () => {
+                navigator['app'].exitApp();
+            });
         } else {
-          // Aucun historique, donc demander à quitter l'application
-          this.withDoublePress("Appuyez à nouveau pour quitter l'application", () => {
-            navigator['app'].exitApp();
-          });
+            console.log("Navigate back triggered");
+            this.location.back();
         }
-      }
     });
-  }
+}
+
 
   async withDoublePress(message: string, action: () => void) {
     const currentTime = new Date().getTime();
+
     if (currentTime - this.lastTimeBackButtonWasPressed < this.timePeriodToAction) {
       action();
     } else {
@@ -53,24 +55,8 @@ export class BackButtonService {
       });
 
       await toast.present();
+
       this.lastTimeBackButtonWasPressed = currentTime;
     }
-  }
-
-  async withAlert(message: string, action: () => void) {
-    const alert = await this.alertController.create({
-      message: message,
-      buttons: [
-        {
-          text: "Cancel",
-          role: "cancel"
-        },
-        {
-          text: "OK",
-          handler: action
-        }
-      ]
-    });
-    await alert.present();
   }
 }

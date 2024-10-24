@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { retry ,catchError, timeout, delay, retryWhen, scan} from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { retry ,catchError, timeout} from 'rxjs/operators';
 
 @Injectable({
 providedIn: 'root'
@@ -10,7 +10,7 @@ export class ApiService {
 
 headers : HttpHeaders;
   adr_web: string='http://localhost:80/Projet_ Lokaliser/Backend';
-  adr_mobile: string='http://192.168.1.79:80/Projet_ Lokaliser/Backend';
+  adr_mobile: string='http://192.168.1.67:80/Projet_ Lokaliser/Backend';
   time: any = 6000
   base_url = this.adr_mobile;
 
@@ -230,6 +230,11 @@ signalisation(formData) {
       .pipe(timeout(this.time))
     }
 
+    add_numero_livraison(data) {
+      return this.http.post(this.base_url+'//add_numero_livraison.php',data)
+      .pipe(timeout(this.time))
+    }
+
     add_cart(data) {
       return this.http.post(this.base_url+'//add_panier.php',data)
       .pipe(timeout(this.time))
@@ -251,25 +256,25 @@ signalisation(formData) {
     loadalert(page: number, limit: number) {
       return this.http.get(`${this.base_url}/loadalert.php?page=${page}&limit=${limit}`)
         .pipe(timeout(this.time))
-        .pipe(retry(1), catchError(this.handleError));
+        .pipe(retry(0), catchError(this.handleError));
     }
 
     restaurant(page: number, limit: number) {
       return this.http.get(`${this.base_url}/get_restaurant.php?page=${page}&limit=${limit}`)
         .pipe(timeout(this.time))
-        .pipe(retry(1), catchError(this.handleError));
+        .pipe(retry(0), catchError(this.handleError));
     }
 
     getCart(id) {
       return this.http.get(`${this.base_url}/get_panier.php?id=${id}`)
         .pipe(timeout(this.time))
-        .pipe(retry(1), catchError(this.handleError));
+        .pipe(retry(0), catchError(this.handleError));
     }
 
     plat_resto(id, page: number, limit: number) {
       return this.http.get(`${this.base_url}/get_plat.php?id=${id}&page=${page}&limit=${limit}`)
         .pipe(timeout(this.time))
-        .pipe(retry(1), catchError(this.handleError));
+        .pipe(retry(0), catchError(this.handleError));
     }
 
     get_commande(page: number, limit: number) {
@@ -291,11 +296,11 @@ signalisation(formData) {
     }
 
 
-    loadalert_id(id, page: number, limit: number) {
+    loadalert_id(id, page: number, limit: number): Observable<any> {
       return this.http.get(`${this.base_url}/loadalert_id.php?page=${page}&limit=${limit}&id=${id}`)
       .pipe(
         timeout(this.time), // Timeout de 15 secondes
-        retry(1), // Nombre de tentatives de retry en cas d'échec
+        retry(0), // Nombre de tentatives de retry en cas d'échec
         catchError(this.handleError) // Gestion des erreurs
       );
       }
@@ -303,27 +308,27 @@ signalisation(formData) {
 
 
 
-      loadalert_search(term, page: number, limit: number) {
+      loadalert_search(term, page: number, limit: number): Observable<any> {
         return this.http.get(`${this.base_url}/search_alert.php?page=${page}&limit=${limit}&term=${term}`)
         .pipe(
           timeout(this.time), // Timeout de 15 secondes
-          retry(1), // Nombre de tentatives de retry en cas d'échec
+          retry(0), // Nombre de tentatives de retry en cas d'échec
           catchError(this.handleError) // Gestion des erreurs
         );
         }
 
 
-        load_search_resto(term, page: number, limit: number) {
+        load_search_resto(term, page: number, limit: number): Observable<any> {
           return this.http.get(`${this.base_url}/load_search_resto.php?page=${page}&limit=${limit}&term=${term}`)
           .pipe(
             timeout(this.time), // Timeout de 15 secondes
-            retry(1), // Nombre de tentatives de retry en cas d'échec
+            retry(0), // Nombre de tentatives de retry en cas d'échec
             catchError(this.handleError) // Gestion des erreurs
           );
           }
 
 
-          load_message_search(term, page: number, limit: number) {
+          load_message_search(term, page: number, limit: number): Observable<any> {
             return this.http.get(`${this.base_url}/load_message_search.php?page=${page}&limit=${limit}&term=${term}`)
             .pipe(
               timeout(this.time), // Timeout de 15 secondes
@@ -333,17 +338,17 @@ signalisation(formData) {
             }
 
 
-        load_search_commande(term, page: number, limit: number){
+        load_search_commande(term, page: number, limit: number): Observable<any> {
           return this.http.get(`${this.base_url}/load_search_commande.php?page=${page}&limit=${limit}&term=${term}`)
           .pipe(
             timeout(this.time), // Timeout de 15 secondes
-            retry(1), // Nombre de tentatives de retry en cas d'échec
+            retry(0), // Nombre de tentatives de retry en cas d'échec
             catchError(this.handleError) // Gestion des erreurs
           );
           }
 
 
-        load_signalement_search(term, page: number, limit: number) {
+        load_signalement_search(term, page: number, limit: number): Observable<any> {
         return this.http.get(`${this.base_url}/load_signalement_search.php?page=${page}&limit=${limit}&term=${term}`)
         .pipe(
           timeout(this.time), // Timeout de 15 secondes
@@ -352,7 +357,7 @@ signalisation(formData) {
         );
         }
 
-        load_numero_search(term, page: number, limit: number) {
+        load_numero_search(term, page: number, limit: number): Observable<any> {
           return this.http.get(`${this.base_url}/load_numero_search.php?page=${page}&limit=${limit}&term=${term}`)
           .pipe(
             timeout(this.time),
@@ -362,7 +367,7 @@ signalisation(formData) {
           }
 
 
-        loadalert_search_all(startDate: string, endDate: string, selectedStatus: string, service: string, ville: string, page: number, limit: number) {
+        loadalert_search_all(startDate: string, endDate: string, selectedStatus: string, service: string, ville: string, page: number, limit: number): Observable<any> {
           let params = new HttpParams()
             .set('page', page.toString())
             .set('limit', limit.toString());
@@ -382,7 +387,7 @@ signalisation(formData) {
         }
 
 
-        loadalert_search_all_user(startDate: string, endDate: string, selectedStatus: string, service: string, page: number, limit: number, id) {
+        loadalert_search_all_user(startDate: string, endDate: string, selectedStatus: string, service: string, page: number, limit: number, id): Observable<any> {
           let params = new HttpParams()
             .set('page', page.toString())
             .set('limit', limit.toString())
@@ -403,7 +408,7 @@ signalisation(formData) {
         }
 
 
-        loadsignalement_search_all(startDate: string, endDate: string, traitement: string, page: number, limit: number) {
+        loadsignalement_search_all(startDate: string, endDate: string, traitement: string, page: number, limit: number): Observable<any> {
           let params = new HttpParams()
             .set('page', page.toString())
             .set('limit', limit.toString())
@@ -430,30 +435,26 @@ signalisation(formData) {
       .pipe(retry(0), catchError(this.handleError));
       }
 
-getpub(page: number, limit: number) {
-  return this.http.get(`${this.base_url}/getpub.php?page=${page}&limit=${limit}`)
-    .pipe(
-      timeout(this.time), // Timeout de 15 secondes
-      retryWhen(errors =>
-        errors.pipe(
-          scan((retryCount, error) => {
-            if (retryCount >= 2) {
-              throw error; // Abandon après 2 tentatives
-            }
-            return retryCount + 1;
-          }, 0),
-          delay(2000) // Délai de 2 secondes avant chaque nouvelle tentative
-        )
-      ),
-      catchError(this.handleError) // Gestion des erreurs
-    );
-}
+      numero_id_livraison(id){
+        return this.http.get(this.base_url+'/numero_id_livraison.php?id='+id)
+        .pipe(timeout(this.time))
+        .pipe(retry(0), catchError(this.handleError));
+        }
 
-      getpub_evenement(page: number, limit: number) {
+    getpub(page: number, limit: number): Observable<any> {
+      return this.http.get(`${this.base_url}/getpub.php?page=${page}&limit=${limit}`)
+        .pipe(
+          timeout(this.time), // Timeout de 15 secondes
+          retry(0), // Nombre de tentatives de retry en cas d'échec
+          catchError(this.handleError) // Gestion des erreurs
+        );
+      }
+
+      getpub_evenement(page: number, limit: number): Observable<any> {
         return this.http.get(`${this.base_url}/get_pub_evenement.php?page=${page}&limit=${limit}`)
           .pipe(
             timeout(this.time), // Timeout de 15 secondes
-            retry(1), // Nombre de tentatives de retry en cas d'échec
+            retry(0), // Nombre de tentatives de retry en cas d'échec
             catchError(this.handleError) // Gestion des erreurs
           );
         }
@@ -471,11 +472,11 @@ getpubid(id){
 }
 
 
-loadcommentairepub(id, page: number, limit: number) {
+loadcommentairepub(id, page: number, limit: number): Observable<any> {
   return this.http.get(`${this.base_url}/getcomment.php?page=${page}&limit=${limit}&id=${id}`)
   .pipe(
     timeout(this.time), // Timeout de 15 secondes
-    retry(1), // Nombre de tentatives de retry en cas d'échec
+    retry(0), // Nombre de tentatives de retry en cas d'échec
     catchError(this.handleError) // Gestion des erreurs
   );
   }
@@ -493,7 +494,7 @@ getpmu(){
   .pipe(retry(0), catchError(this.handleError));
   }
 
-    getmessage(page: number, limit: number)  {
+    getmessage(page: number, limit: number): Observable<any> {
       return this.http.get(`${this.base_url}/getmessage.php?page=${page}&limit=${limit}`)
       .pipe(
       timeout(this.time), // Timeout de 15 secondes
@@ -502,7 +503,7 @@ getpmu(){
       );
       }
 
-loadsignalement(page: number, limit: number) {
+loadsignalement(page: number, limit: number): Observable<any> {
 return this.http.get(`${this.base_url}/loadsignalement.php?page=${page}&limit=${limit}`)
 .pipe(
 timeout(this.time), // Timeout de 15 secondes
@@ -543,7 +544,7 @@ getgrade(){
   }
 
 
-    getuser(page: number, limit: number){
+    getuser(page: number, limit: number): Observable<any> {
       return this.http.get(`${this.base_url}/getuser.php?page=${page}&limit=${limit}`)
       .pipe(
         timeout(this.time), // Timeout de 15 secondes
@@ -582,6 +583,12 @@ supprimer_numero(id){
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
   }
+
+  supprimer_num_livraison(id){
+    return this.http.delete(this.base_url+'/supprimer_num_livraison.php?id='+id)
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError))
+    }
 
   supprimer_resto(id){
     return this.http.delete(this.base_url+'/supprimer_restaurant.php?id='+id)
@@ -803,6 +810,14 @@ getgateau(){
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
   }
+
+
+  numero_livraison(){
+    return this.http.get(this.base_url+'/numero_livraison.php?id=')
+    .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError))
+  }
+
 
   getalimentation(){
     return this.http.get(this.base_url+'/getalimentation.php?id=')
@@ -1032,6 +1047,13 @@ updatenumero(id,data){
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
+
+update_num_livraison(id,data){
+  return this.http.put(this.base_url+'/update_numero_livraison.php?id='+id,data)
+  .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError))
+}
+
 
 updatecoupon(id,data){
   return this.http.put(this.base_url+'/updatecoupon.php?id='+id,data)

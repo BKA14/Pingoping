@@ -1,154 +1,178 @@
+ion-header {
+  ion-toolbar {
+    height: 56px; /* Hauteur recommandée pour les en-têtes sur mobile */
+    display: flex;
+    align-items: center; /* Centrer verticalement les éléments */
+    --background: linear-gradient(to right, #0eeb49, #05a83d) !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
 
-body {
-  font-family: "Roboto", sans-serif;
+  ion-title {
+    font-size: 1.2rem;
+    text-align: center;
+    color: white;
+  }
+
+  ion-back-button {
+    --color: light; /* Couleur spécifique du bouton retour */
+  }
 }
 
 
-
-.h3{
-  font-size: 21px;
-  font-style: normal;
-
-  font-family: "Roboto", sans-serif;
-    color: black;
-  }
-  .tool1{
-    font-size: 20px;
-    font-style: normal;
-    font-family: "Roboto", sans-serif;
-      padding: 8;
-  border-radius: 10px;
-    }
-
-  .h2{
-  font-size: 18px;
-  font-style: normal;
-
-  font-family: "Roboto", sans-serif;
+ion-header {
+  ion-toolbar {
+    height: 56px;  /* Hauteur recommandée pour les en-têtes sur mobile */
+    display: flex;
+    align-items: center;  /* Centrer verticalement les éléments */
+    --background: linear-gradient(to right, #0eeb49, #05a83d) !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-    .tool2{
+  ion-title {
+    font-size: 1.2rem;  /* Taille du texte adaptable */
+    text-align: center;
+    color: white;
 
-      font-size: 18px;
-      font-style: normal;
-      text-align: center;
-      font-family: "Roboto", sans-serif;
-    padding: 5;
-      }
+  }
 
-      .header-row {
-        background: #7163AA;
-        color: #fff;
-        font-size: 18px;
-      }
+  ion-back-button {
+    --color: light;  /* Couleur spécifique du bouton retour */
+  }
+}
 
-      ion-col {
-        border: 1px solid #ECEEEF;
-      }
+  .search-container {
+    padding: 10px 16px;  /* Ajoutez un padding pour que l'input ne soit pas collé aux bords */
+  }
 
-      .commentaire1 {
-        text-align: center;
-        font-size: 25px;
-      }
+  ion-input.recherche {
+    width: 100%;  /* Prendre toute la largeur disponible */
+    font-size: 1rem;
+    border-radius: 8px;  /* Un léger arrondi des coins pour un style plus moderne */
+    background-color: #fff;  /* Fond blanc pour rendre l'input distinct du toolbar */
+    padding: 8px 12px;
+  }
 
-      /* Dans votre fichier CSS personnalisé */
-      .custom-background {
-       --background: #f2f2f2; /* Remplacez cette couleur par la nuance de gris légère que vous souhaitez */
-
-       }
-       .list {
-        --background: #a29797; /* Remplacez cette couleur par la nuance de gris légère que vous souhaitez */
-
-        }
-
-
-      .custom-title {
-font-size: 24px;
-font-weight: bold;
-color: white;
+.title {
 text-align: center;
+width: 100%;
 }
 
-.custom-content {
-  background-color: #f5f5f5; /* Couleur de fond pour votre contenu */
+.header-row {
+display: flex;
+justify-content: center;
+align-items: center;
 }
 
-.custom-list {
-  padding: 16px;
+h2.centered-heading {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #315c28;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.custom-comment {
-  font-size: 20px;
-  color: #333; /* Couleur de texte personnalisée */
-  font-weight: bold;
+.span{
+  display: inline-block;
+  vertical-align: middle;
+  font-style: normal;
+  text-align: center;
+  --ion-background-color:#fdfdfd;
+  font-family: "Roboto", sans-serif;
+  --background: linear-gradient(#e0ede4, #afcab0) !important;
+  padding: 3px;
 }
 
-.custom-label {
-  font-size: 14px;
-  color: #555; /* Couleur de texte personnalisée */
+.icon{
+  //display: inline-block;
+  font-size: 42px;
+  color: #2dd36f;
+  vertical-align: middle;
+  float: right;
+  }
+
+.service-card {
+margin: 10px;
+margin-top: 9px;
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+background-color: #e4e8e5;
+}
+
+.nom {
+font-size: 18px;
+
+}
+
+ion-card-content p {
+color: #666;
+}
+
+ion-button {
+--background: #3880ff;
+--color: #fff;
+margin-top: 10px;
+}
+
+.icon-right {
+float: right; /* Aligne l'icône à droite */
+}
+
+.iconsupp{
+//display: inline-block;
+color: #f70707a9;
+}
+
+.span{
+display: inline-block;
+vertical-align: middle;
+font-style: normal;
+text-align: center;
+--ion-background-color:#fdfdfd;
+font-family: "Roboto", sans-serif;
+--background: linear-gradient(#e0ede4, #afcab0) !important;
+padding: 8px;
 }
 
 
-/* pour le menu fastfood */
 
-.menu {
+.arrow-container {
+  position: fixed;
+  bottom: 70%;/* Ajustez cette valeur selon vos préférences */
+  right: 12px;  /* Ajustez cette valeur selon vos préférences */
+  color: #7cc571; /* Couleur de l'icône */
+  border-radius: 70%;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1000; /* Assurez-vous que l'icône est au-dessus des autres éléments */
+}
+
+
+.recherche {
+  flex: 1;
+  margin-right: 10px;
+  flex: 1;
+  border-radius: 14px; /* Ajustez le border-radius si nécessaire */
+  margin-right: 6px; /* Ajoutez une marge à droite pour l'espacement avec l'icône */
+  padding: 1px; /* Ajoutez du padding à l'intérieur de l'input */
+  box-shadow: 0px 2px 5px rgba(86, 195, 115, 0.2); /* Optionnel: ajoutez une ombre pour l'effet visuel */
+  border: 1px solid #7d2424; /* Ajoutez une bordure si nécessaire */
+  color: #0e0e0e;
+  background-color: #ffffff;
+}
+
+
+.header-content {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding: 20px;
-
-
+  align-items: center; /* Aligne verticalement l'étoile et le texte */
 }
 
-.menu-item {
-  width: 100%;
-  background-color: #eee3e3;
-  border-radius: 5px;
-  margin: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
+.vip-star {
+  margin-right: 8px; /* Ajustez l'espacement selon vos besoins */
 }
 
-.menu-item:hover {
-  transform: scale(1.05);
-}
-
-.item-image {
-  width: 100%;
-  height: 100%;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-.item-content {
-  padding: 10px;
-}
-
-h2 {
-  font-size: 24px;
-  margin: 0;
-}
-
-p {
-  font-size: 16px;
-}
-
-.item-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-
-.boutonwhatsapp{
- text-align: center;
-}
-
-.custom-text {
-  white-space: normal; /* Permet le retour à la ligne automatique */
-  word-wrap: break-word; /* Assure le passage à la ligne en cas de besoin */
-  text-align: justify;
-  font-size: medium;
+.erreur_chargement {
+  text-align: center;
+  bottom: 35%;
 }

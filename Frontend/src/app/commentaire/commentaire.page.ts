@@ -2,7 +2,7 @@ import { Alert } from 'selenium-webdriver';
 import { CommentaireService } from './CommentaireService';
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, NgZone, OnInit, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { App } from '@capacitor/app';
-import { AlertController, IonInfiniteScroll, IonList, LoadingController, ToastController } from '@ionic/angular';
+import { AlertController, IonInfiniteScroll, IonList, LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
@@ -30,9 +30,9 @@ styleUrls: ['./commentaire.page.scss'],
 })
 export class CommentairePage implements OnInit, OnDestroy {
 
+
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
   @ViewChild('commentsList') commentsList: ElementRef;
-  @ViewChild('commentContainer', { static: false }) commentContainer: ElementRef;
 
   updateSubscription: Subscription;
   oldpub: any;
@@ -133,7 +133,7 @@ private cdr: ChangeDetectorRef,
 private zone: NgZone,
 private appRef: ApplicationRef,
 private routerOutlet: IonRouterOutlet,
-private commentaireService: CommentaireService,
+public commentaireService: CommentaireService,
 private el: ElementRef,
 private ngZone: NgZone,
 private navCtrl: NavController,
@@ -142,35 +142,31 @@ private elementRef: ElementRef,
 private renderer: Renderer2,
 private wsService: WebSocketService,
 private authService: authService,
-private timeService: timeService,
-private toastCtrl: ToastController
+private timeService: timeService
+
 )
 {
 this.route.queryParams.subscribe(params => {
 if (params && params.pubId) {
 this.pubid = params.pubId;
 this.loadcommentairepub(this.pubid);
-this.getpub();
-
 }
 });
 
+this.getpub();
+this.getUserLocation();
+this.loadcommentairepub(this.pubid);
 }
 
 
 private clickListener: () => void;
 
 
-
 async ngOnInit() {
 
   this.updateSubscription = interval(10000).subscribe(async () => {
-    try {
-      // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
-       this.openUrl();
-    } catch (err) {
-      console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
-    }
+  await this.openUrl();
+  console.log('actualise openUrl 3');
   this.cdr.detectChanges(); // Détecter et appliquer les changements
   });
 
@@ -208,23 +204,15 @@ async ngOnInit() {
   }
 
 
-  // Méthode pour afficher un toast
-  async presentToast(message: string, color: string = 'danger') {
-  const toast = await this.toastCtrl.create({
-    message: message,
-    duration: 1000, // Durée d'affichage du toast
-    position: 'middle',
-    color: color,
-  });
-  toast.present();
-  }
-
 restoreScrollPosition() {
   window.scrollTo(0, this.scrollPosition);
   console.log(this.scrollPosition);
 }
 
-
+ionViewWillEnter() {
+this.getpub();
+this.getUserLocation();
+}
 
 
     likepub(pub: any) {
@@ -239,6 +227,7 @@ restoreScrollPosition() {
         pubid: pub.id,
        }
        this._apiService.getetat2(data).subscribe(async (res:any) => {
+        console.log("SUCCESS ===",res);
 
         if(res.result === 'oui'){
 
@@ -246,14 +235,16 @@ restoreScrollPosition() {
         await this.disLike(pub);
         pub.likes_count = pub.likes_count - 1;
         pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
-
+        console.log("dislike",pub.likes_count);
+        console.log("dislike",pub.user_ids);
         }
         else if (res.data.etat === 'non')
         {
           await  this.Likes(pub);
           pub.likes_count = pub.likes_count + 1;
           pub.user_ids.push(this.userData.iduser);
-
+          console.log("like",pub.likes_count);
+          console.log("like",pub.user_ids);
         }
         else {
         console.log('Erreur de connection')
@@ -266,7 +257,8 @@ restoreScrollPosition() {
            await this.Likepremier(pub);
            pub.likes_count = pub.likes_count + 1;
            pub.user_ids.push(this.userData.iduser);
-
+           console.log("like",pub.likes_count);
+           console.log("like",pub.user_ids);
            }
 
            pub.isLoading = false;
@@ -317,6 +309,7 @@ restoreScrollPosition() {
            }
 
            this._apiService.disLike(pubs.id,data).subscribe((res:any) => {
+            console.log("SUCCESS ===",res);
 
              //alert('Nouveau etat ajoute avec success');
            },(error: any) => {
@@ -341,6 +334,7 @@ restoreScrollPosition() {
            }
 
            this._apiService.disLike(pub.id,data).subscribe((res:any) => {
+            console.log("SUCCESS ===",res);
 
            },(error: any) => {
 
@@ -378,7 +372,8 @@ async getpub(){
   });
 
    loading.present();
-   await  this._apiService.getpubid(this.pubid).subscribe(async (res:any) => {
+   this._apiService.getpubid(this.pubid).subscribe(async (res:any) => {
+   console.log("SUCCESS == pub",res);
 
    if (res && res.length < 1) {
     this.pub = 'aucune_alerte';
@@ -386,13 +381,8 @@ async getpub(){
   else {
     this.pub = res;
     console.log('latitude', res[0].latitude)
-    try {
-      // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
-      await this.openUrl();
-    } catch (err) {
-      console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
-    }
-    }
+    await this.openUrl();
+  }
 
     loading.dismiss();
 
@@ -448,7 +438,8 @@ loadInitialPub() {
                 // Remplacer l'élément dans le tableau this.pub
                 this.pub[updatedIndex] = message;
 
-
+                console.log('pub updated:', message);
+                console.log('pub updated:', message.old_pub_id);
               }
               break;
           case 'delete':
@@ -513,19 +504,8 @@ loadCommentaires() {
         // Traitement des actions individuelles
         switch (message.action) {
           case 'insert':
-            console.log('Un nouveau commentaire inséré:');
-
-            // Vérifier si le commentaire existe déjà dans le tableau
-            const existingIndex = this.comment.findIndex(comment => comment.id === message.commentaires_id);
-
-            if (existingIndex === -1) {
-              // Si le commentaire n'existe pas, on l'ajoute
-              this.comment.push(message);
-              console.log('Commentaire ajouté:', message.commentaires_id);
-            } else {
-              // Si le commentaire existe déjà, on peut ignorer ou mettre à jour selon le besoin
-              console.log('Le commentaire existe déjà et ne sera pas ajouté:', message.commentaires_id);
-            }
+            console.log('Un nouveau commentaires inseré:');
+            this.comment.push(message);
             break;
           case 'update':
             console.log('Il y a une mise à jour de commentraires:');
@@ -551,7 +531,6 @@ loadCommentaires() {
     (err) => console.error('Erreur WebSocket:', err)
   );
 }
-
 
 
  // Vérification d'appartenance avec Set
@@ -653,82 +632,68 @@ this.router.navigateByUrl('/ping');
 
 }
 
+async getUserLocation(): Promise<{ userLatitude: number; userLongitude: number } | null> {
+  try {
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Timeout: Unable to get location')), 6000)
+    );
 
-async getUserLocation() {
+    const geolocationPromise = Geolocation.getCurrentPosition();
 
-try {
-const coordinates = await Geolocation.getCurrentPosition();
-const userLatitude = coordinates.coords.latitude;
-const userLongitude = coordinates.coords.longitude;
-// Utilisez les coordonnées de l'utilisateur comme nécessaire
-console.log('Latitude:', userLatitude);
-console.log('Longitude:', userLongitude);
+    const coordinates = await Promise.race([geolocationPromise, timeoutPromise]) as GeolocationPosition; // Assertion de type ici
 
-this.userlongitude = userLongitude ;
-this.userlatitude = userLatitude;
+    const userLatitude = coordinates.coords.latitude;
+    const userLongitude = coordinates.coords.longitude;
 
-return { userLatitude, userLongitude };
-} catch (error) {
-console.error('Erreur lors de la récupération des coordonnées:', error);
-return null;
-}
+    console.log('Latitude:', userLatitude);
+    console.log('Longitude:', userLongitude);
 
-}
+    this.userlongitude = userLongitude;
+    this.userlatitude = userLatitude;
 
-async getUserLocationAndCompanyId(id) {
-
-try {
-const coordinates = await Geolocation.getCurrentPosition();
-const userLatitude = coordinates.coords.latitude;
-const userLongitude = coordinates.coords.longitude;
-
-return { userLatitude, userLongitude, companyId: id };
-} catch (error) {
-console.error('Erreur lors de la récupération des coordonnées:', error);
-return null;
-
-}
-
-}
-
-
-
-async openUrl() {
-  const userLocationData = await this.getUserLocation();
-
-  if (userLocationData) {
-    const { userLatitude, userLongitude } = userLocationData;
-
-    this.pub.forEach((publi) => {
-      // Vérifiez si les coordonnées ne sont pas 'non'
-      if (publi.latitude !== 'non' && publi.longitude !== 'non') {
-        const distance = this.distanceCalculatorService.haversineDistance(
-          userLatitude,
-          userLongitude,
-          parseFloat(publi.latitude), // Assurez-vous de convertir en nombre si nécessaire
-          parseFloat(publi.longitude)
-        );
-
-        console.log(`Distance entre l'utilisateur et l'alerte : ${distance} mètres`);
-
-        if (!isNaN(distance)) {
-          publi.distanceToUser = distance;
-          console.log(`Distance entre l'utilisateur et l'alerte : ${publi.distanceToUser} mètres`);
-        } else {
-          publi.distanceToUser = 'Coordonnées invalides';
-          console.error('Coordonnées invalides pour l\'alerte:', publi);
-        }
-      } else {
-        publi.distanceToUser = 'Coordonnées non disponibles';
-        console.log('Coordonnées non disponibles pour cet commentaire');
-      }
-    });
-  } else {
-    console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
+    return {  userLatitude, userLongitude };
+  } catch (error) {
+    console.error('Erreur lors de la récupération des coordonnées:', error);
+    return null;
   }
 }
 
+async openUrl() {
+console.log('Début de openUrl');
+const userLocationData = await this.getUserLocation();
 
+if (userLocationData) {
+  const { userLatitude, userLongitude } = userLocationData;
+  console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
+
+  if (Array.isArray(this.pub)) {
+    for (const publi of this.pub) {
+      const distance = this.distanceCalculatorService.haversineDistance(
+        userLatitude,
+        userLongitude,
+        publi.latitude,
+        publi.longitude
+      );
+
+      console.log(`Distance : ${distance} mètres`);
+
+      if (!isNaN(distance)) {
+        publi.distanceToUser = distance;
+        console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
+      } else {
+        console.error('La distance est NaN.');
+      }
+    }
+  } else {
+    console.error('this.pub n\'est pas un tableau :', this.pub);
+  }
+} else {
+  this.userlongitude = null;
+  this.userlatitude = null;
+  console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
+  throw new Error('Erreur: Impossible de récupérer les coordonnées de l\'utilisateur.');
+}
+}
 
 convertMetersToKilometers(meters: number): string {
 // Si la distance en mètres est inférieure à 4000 (4 km), renvoyer en mètres
@@ -759,7 +724,8 @@ async loadcommentairepub(pubId: string) {
 
     loading.present();
 
-    await this._apiService.loadcommentairepub(pubId, this.page, this.limit).subscribe((res: any) => {
+    this._apiService.loadcommentairepub(pubId, this.page, this.limit).subscribe((res: any) => {
+    console.log('SUCCESS ===', res);
     // Mettez à jour les commentaires avec la réponse de l'API
 
       this.comment = res;
@@ -777,6 +743,7 @@ async loadMore(event) {
   this.page++;
   this.oldcomment = this.comment;
     this._apiService.loadcommentairepub(this.pubid, this.page, this.limit).subscribe((res: any) => {
+      console.log('SUCCESS ===', res);
 
     this.comment = this.comment.concat(res);
 
@@ -849,24 +816,28 @@ this.countdownValue = null;
       iduser: this.userData.iduser,
       prenom: this.userData.prenom1,
       commentaire: this.newComment,
-      heure: new Date
     };
 
     try {
       const res : any = await this._apiService.sendcomment(newComment).toPromise();
+      console.log("SUCCESS ===", res);
 
            const idsubmit = res.id;
-
+           console.log('id res', res.id);
+           console.log('idsubmit', idsubmit); // Affiche l'identifiant retourné
 
            newComment.id = idsubmit;
 
            this.newComment = '';
 
       // Ajoutez le nouveau commentaire en bas de la liste sans recharger la page
-       await this.comment.push(newComment);
+       //await this.comment.push(newComment);
 
-       // scroll bottom
-       this.content.scrollToBottom(500);
+       // Ajoutez une petite pause pour permettre au DOM de se mettre à jour
+       setTimeout(() => {
+       // Défilez jusqu'à la fin de la liste des commentaires
+       this.scrollTo();
+       }, 850); // ajustez la durée selon les besoins
 
 
       loading.dismiss();
@@ -885,9 +856,11 @@ this.countdownValue = null;
   scrollTo() {
     // Obtenez une référence à la liste des commentaires par son identifiant unique
     const commentsList = document.getElementById('commentsList');
-
+    console.log('ok 1', commentsList)
+    console.log('ok 2', commentsList.lastElementChild)
     if (commentsList && commentsList.lastElementChild) {
       // Faites défiler jusqu'au dernier élément de la liste
+      console.log('ok 3', commentsList)
 
       commentsList.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
@@ -1018,7 +991,8 @@ this.cdr.detectChanges();
 
 modifcommentaire(commentaire : any): void {
 this.id_comment = commentaire.id;
-
+console.log( 'idvue', this.id_comment  );
+console.log( 'idvue2', commentaire.id  );
 this.newComment = commentaire.commentaire;
 this.modif=true;
 this.reponse=false;
@@ -1026,7 +1000,8 @@ this.reponse=false;
 
 repondre(commentaire) {
   this.id_reponse = commentaire.id;
-
+  console.log( 'idvue', this.id_reponse  );
+  console.log( 'idvue2', commentaire.id  );
   this.reponse=true;
   this.modif=false;
   }
@@ -1090,6 +1065,7 @@ const data = {
     };
 
   const result = await this._apiService.verifie(data).toPromise();
+  console.log("SUCCESS ===", result);
 
   if (result === true) {
     loading.dismiss();
@@ -1102,6 +1078,7 @@ const data = {
   try {
 
   const res = await this._apiService.signalercommentaire(newComment).toPromise();
+  console.log("SUCCESS ===", res);
   loading.dismiss();
   alert('Signalement envoyé, notre équipe va s\'en charger');
 
@@ -1175,12 +1152,12 @@ async signalement(commentaire) {
       prenom: this.userData.prenom1,
       commentaire: this.newComment,
       idcommentrepondu : this.id_reponse,
-      heure : new Date
       };
       console.log('id', this.id_reponse);
 
       try {
       const res : any = await this._apiService.repondrecommentaire(newComment).toPromise();
+      console.log("SUCCESS ===", res);
 
       // Ajouter l'identifiant retourné dans l'objet de commentaire
          const idnouv = res.id;
@@ -1189,10 +1166,13 @@ async signalement(commentaire) {
 
          newComment.id = idnouv;
 
-        await  this.comment.push(newComment);
+         this.comment.push(newComment);
 
-        this.content.scrollToBottom(500); // Utiliser la méthode scrollToTop d'Ionic
-
+      // Ajoutez une petite pause pour permettre au DOM de se mettre à jour
+      setTimeout(() => {
+      // Défilez jusqu'à la fin de la liste des commentaires
+      this.scrollTo();
+      }, 850); // ajustez la durée selon les besoins
 
       this.newComment ='';
       this.id_reponse ='';
@@ -1219,21 +1199,22 @@ async signalement(commentaire) {
         document.execCommand('copy');
         document.body.removeChild(textArea);
 
-        this.presentToast('texte copier','success');
-
+        // Affichez le message de copie pendant 2 secondes
+        const copyMessage = document.getElementById('copy-message');
+        if (copyMessage) {
+          copyMessage.classList.add('show');
+          setTimeout(() => {
+            copyMessage.classList.remove('show');
+          }, 2000); // 2 secondes
+        }
       }
+
 
 
 ngOnDestroy() {
   document.removeEventListener('click', this.clickListener);
-
-  if (this.websocketSubscription) {
-    this.websocketSubscription.unsubscribe();
-  }
-  if (this.updateSubscription) {
-    this.updateSubscription.unsubscribe();
-  }
 }
+
 
 toggleOptions(event: MouseEvent,commentaire: any): void {
   // Fermer tous les menus de commentaire
@@ -1258,9 +1239,7 @@ private hideButtonTimeout: any;
 ngAfterViewInit() {
   this.addScrollListener();
   this.resetHideButtonTimer() ;
-
 }
-
 
 
 scrollToTop() {
@@ -1283,6 +1262,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
+  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 700 && scrollTop + clientHeight < scrollHeight - 800) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
@@ -1333,6 +1313,7 @@ setupIntersectionObserver() {
 }
 
 handleVideoClick(videoElement: HTMLVideoElement) {
+  console.log('Video clicked', videoElement);
   if (this.currentPlayingVideo && this.currentPlayingVideo !== videoElement) {
     // Pause la vidéo actuellement en cours si elle existe et n'est pas la même que celle cliquée
     this.pauseVideo(this.currentPlayingVideo);
@@ -1350,10 +1331,14 @@ handleVideoClick(videoElement: HTMLVideoElement) {
 
 // Méthode pour gérer la pause manuelle
 toggleManualPause(videoElement: HTMLVideoElement) {
+  console.log('Entre dans toggle:');
   this.manualPause = !this.manualPause;
   if (this.manualPause) {
+    console.log('Entre dans toggle 1:', this.manualPause);
     this.pauseVideo(videoElement);
+    console.log('Entre dans toggle 2:', this.manualPause);
   } else {
+    console.log('Entre dans toggle 3:', this.manualPause);
     this.playVideo(videoElement);
   }
 }

@@ -20,14 +20,14 @@
         <ion-badge class="cart-badge" *ngIf="cart?.length > 0">{{ cart.length }}</ion-badge>
       </ion-button>
     </ion-buttons>
-
-    <span style="margin-left: auto;">
-      <ion-button (click)="restaurant_2()" class="light" color="light" style="text-align: left;">
-        actualiser
-      </ion-button>
-    </span>
-
   </ion-toolbar>
+
+    <ion-toolbar>
+      <ion-label (click)="restaurant_2()" class="cart-label" color="light" >
+        actualiser
+      </ion-label>
+    </ion-toolbar>
+
 </ion-header>
 
 
@@ -48,9 +48,9 @@
    </div>
 
 
-  <h4 class="centered-heading">
+  <h3 class="centered-heading">
     Craquez pour un plat délicieux ! Commandez en ligne et savourez-le chez vous en quelques minutes.
-  </h4>
+  </h3>
 
 
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
@@ -154,8 +154,8 @@
 
         <br>
         <!-- Localisation -->
-        <ion-label  class="localisation">
-          Vous êtes présentement à : {{ convertMetersToKilometers(resto.distanceToUser) }} du lieu.
+        <ion-label  class="localisation" *ngIf="resto.distanceToUser !== undefined && resto.distanceToUser !== null && resto.longitude.toLowerCase().trim() !== 'non' && resto.latitude.toLowerCase().trim() !== 'non'">
+          Vous êtes présentement à : {{ convertMetersToKilometers(resto?.distanceToUser) }} du lieu.
         </ion-label>
          <br>
 
@@ -289,7 +289,7 @@
         <br>
         <!-- Localisation -->
         <ion-label  class="localisation">
-          Vous êtes présentement à : {{ convertMetersToKilometers(resto.distanceToUser) }} du lieu.
+          Vous êtes présentement à : {{ convertMetersToKilometers(resto?.distanceToUser) }} du lieu.
         </ion-label>
           <br>
 

@@ -31,6 +31,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
     SplashScreen,CallNumber,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, WebSocketService,
     CallNumber
+
   ],
   bootstrap: [AppComponent]
 })

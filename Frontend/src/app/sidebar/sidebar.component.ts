@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationBadgeService } from '../notification-badge.service';
 
-
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -21,7 +20,6 @@ export class SidebarComponent implements OnInit {
     private authService : authService
   )
   {
-
   }
 
   ngOnInit() {
@@ -74,5 +72,6 @@ export class SidebarComponent implements OnInit {
     this.router.navigateByUrl('/notifications');
 
   }
+
 
 }

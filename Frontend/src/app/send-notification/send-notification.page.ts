@@ -47,6 +47,7 @@ export class SendNotificationPage implements OnInit {
 
     try {
       const response = await this.apiService.sendNotification(notificationData).toPromise(); // Utiliser toPromise pour gérer le retour avec async/await
+      console.log('Notification envoyée avec succès', response);
       alert('Notification envoyée avec succès');
 
       // Réinitialiser le formulaire ou afficher un message de succès si nécessaire

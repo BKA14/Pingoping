@@ -80,7 +80,7 @@ export class NotificationService {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     PushNotifications.addListener('pushNotificationActionPerformed', (notification: ActionPerformed) => {
-     // alert('Action de notification effectuée: ' + JSON.stringify(notification));
+      alert('Action de notification effectuée: ' + JSON.stringify(notification));
       // Logique pour gérer les actions effectuées sur la notification
     });
   }

@@ -66,10 +66,17 @@ export class GetCommandeUserPage implements OnInit {
     private timeService: timeService
   ) {
 
+    this.get_commande()  ;
+
     }
 
 
   ngOnInit() {
+
+  this.updateSubscription = interval(15000).subscribe(async () => {
+    await this.openUrl();
+    this.cdr.detectChanges(); // Détecter et appliquer les changements
+    });
 
     // S'abonner aux changements de données utilisateur
     this.authService.userData$.subscribe(data => {
@@ -80,9 +87,6 @@ export class GetCommandeUserPage implements OnInit {
       this.serverTime = response.serverTime;
       console.log('serveur time', this.serverTime );
     });
-
-    this.get_commande();
-
   }
 
 
@@ -101,7 +105,7 @@ export class GetCommandeUserPage implements OnInit {
       const toast = await this.toastCtrl.create({
         message: message,
         duration: this.duration, // Durée d'affichage du toast
-        position: 'middle',
+        position: 'bottom',
         color: color,
       });
       toast.present();
@@ -132,11 +136,13 @@ export class GetCommandeUserPage implements OnInit {
 
     try {
     const res : any = await this._apiService.get_commande_user(this.userData.iduser, this.page, this.limit).toPromise();
+    console.log('SUCCESS ===', res);
 
     if (res && res.length < 1) {
       this.commande = 'aucune_alerte';
     } else {
       this.commande =  res;
+      await this.openUrl();
     }
 
     loading.dismiss();
@@ -166,12 +172,7 @@ export class GetCommandeUserPage implements OnInit {
         const res : any  = await this._apiService.get_commande_user(this.userData.iduser, this.page, this.limit).toPromise();
 
         this.commande = this.commande.concat(res);
-        try {
-          // Tenter d'ouvrir l'URL, ignorer en cas d'erreur
-        } catch (err) {
-          console.warn('Erreur lors de l\'ouverture de l\'URL:', err);
-        }
-
+        this.openUrl();
         event.target.complete();
 
           // Désactiver l'infinite scroll si moins de données retournées que la limite
@@ -312,6 +313,7 @@ async load_search() {
      }
      else {
         this.commande = res;
+        await this.openUrl();
 
      }
 
@@ -335,6 +337,7 @@ async load_search() {
     console.log('SUCCESS ===', res);
 
     this.commande = this.commande.concat(res);
+    await this.openUrl();
 
     event.target.complete();
 
@@ -423,6 +426,73 @@ filterCommandes() {
   }
 }
 
+////////////// pour les geolocalisation///////////
+
+
+async getUserLocation(): Promise<{ userLatitude: number, userLongitude: number } | null> {
+
+  try {
+    const coordinates = await Geolocation.getCurrentPosition();
+    const userLatitude = coordinates.coords.latitude;
+    const userLongitude = coordinates.coords.longitude;
+
+    this.userlongitude = userLongitude;
+    this.userlatitude = userLatitude;
+
+    return { userLatitude, userLongitude };
+  } catch (error) {
+    console.error('Erreur lors de la récupération des coordonnées:', error);
+    return null;
+  }
+}
+
+
+async openUrl() {
+
+  //const userLocationData = await this.getUserLocationAndCompanyId(id);
+
+  const userLocationData = await this.getUserLocation();
+
+  if (userLocationData) {
+
+    const { userLatitude, userLongitude } = userLocationData;
+
+    this.commande.forEach(async (publi) => {
+      console.log('coordonné', publi.latitude, publi.longitude);
+      const distance = this.distanceCalculatorService.haversineDistance(
+        userLatitude,
+        userLongitude,
+        publi.latitude,
+        publi.longitude,
+      );
+
+      if (!isNaN(distance)) {
+        publi.distanceToUser = distance;
+        console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
+      } else {
+        console.error('La distance calculée est NaN. Veuillez vérifier les coordonnées.');
+      }
+
+    });
+
+  } else {
+    console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
+  }
+
+  }
+
+
+  convertMetersToKilometers(meters: number | string): string {
+    if (typeof meters === 'string') {
+      return meters;
+    }
+
+    if (meters < 4000) {
+      return `${Math.floor(meters)} m`;
+    } else {
+      return `${Math.floor(meters / 1000)} km`;
+    }
+  }
 
   //////////// recuperer la date /////////////////////
 
