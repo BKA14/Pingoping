@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { Chart, registerables } from 'chart.js';
@@ -8,11 +8,14 @@ import { Chart, registerables } from 'chart.js';
   templateUrl: './statistique.page.html',
   styleUrls: ['./statistique.page.scss'],
 })
-export class StatistiquePage implements OnInit {
+export class StatistiquePage implements OnInit, OnDestroy {
   alert: any;
   oldalert: any;
   villeStats: {};
   serviceStats: {};
+
+  private entrepriseChart: Chart | null = null;
+  private statChart: Chart | null = null;
 
   constructor(
     private _apiService: ApiService,
@@ -24,6 +27,18 @@ export class StatistiquePage implements OnInit {
 
   ngOnInit() {
     this.loadalert();
+  }
+
+  ngOnDestroy() {
+    // Détruire les instances de graphique existantes pour libérer la mémoire
+    if (this.entrepriseChart) {
+      this.entrepriseChart.destroy();
+      this.entrepriseChart = null;
+    }
+    if (this.statChart) {
+      this.statChart.destroy();
+      this.statChart = null;
+    }
   }
 
   async loadalert() {
@@ -52,20 +67,11 @@ export class StatistiquePage implements OnInit {
           const service = alert.service.trim().toLowerCase().replace(/\s+/g, ' ');
 
           // Statistiques par ville
-          if (this.villeStats[ville]) {
-            this.villeStats[ville]++;
-          } else {
-            this.villeStats[ville] = 1;
-          }
+          this.villeStats[ville] = (this.villeStats[ville] || 0) + 1;
 
           // Statistiques par service
-          if (this.serviceStats[service]) {
-            this.serviceStats[service]++;
-          } else {
-            this.serviceStats[service] = 1;
-          }
+          this.serviceStats[service] = (this.serviceStats[service] || 0) + 1;
         });
-
 
       } else {
         this.alert = 'aucune_alerte';
@@ -86,37 +92,47 @@ export class StatistiquePage implements OnInit {
     console.log('fonction char appelé');
   }
 
-
   createBarChart() {
-    const ctx = document.getElementById('entrepriseChart') as HTMLCanvasElement;
-    const entrepriseChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: Object.keys(this.villeStats),
-        datasets: [{
-          label: '',
-          data: Object.values(this.villeStats),
-          backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
-          borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-          borderWidth: 1
-        }]
+    // Vérifier et détruire l'instance précédente si elle existe
+    if (this.entrepriseChart) {
+      this.entrepriseChart.destroy();
+    }
 
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
+    const ctx = document.getElementById('entrepriseChart') as HTMLCanvasElement;
+    if (ctx) {
+      this.entrepriseChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: Object.keys(this.villeStats),
+          datasets: [{
+            label: '',
+            data: Object.values(this.villeStats),
+            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
           }
         }
-      }
-    });
+      });
+    }
   }
 
+  createChart() {
+    // Vérifier et détruire l'instance précédente si elle existe
+    if (this.statChart) {
+      this.statChart.destroy();
+    }
 
-    createChart() {
-      const ctx = document.getElementById('statChart') as HTMLCanvasElement;
-      new Chart(ctx, {
-        type: 'bar', // ou 'line', 'pie', etc.
+    const ctx = document.getElementById('statChart') as HTMLCanvasElement;
+    if (ctx) {
+      this.statChart = new Chart(ctx, {
+        type: 'bar',
         data: {
           labels: Object.keys(this.serviceStats),
           datasets: [{
@@ -136,17 +152,11 @@ export class StatistiquePage implements OnInit {
         }
       });
     }
-
+  }
 
   async refreshPage(e: any) {
-
-     await this.loadalert();
-
-     // Log pour indiquer le rafraîchissement
-     console.log('Rafraîchissement de la page');
-
-     // Terminer l'animation de rafraîchissement
-     e.target.complete();
-   }
-
+    await this.loadalert();
+    console.log('Rafraîchissement de la page');
+    e.target.complete();
+  }
 }

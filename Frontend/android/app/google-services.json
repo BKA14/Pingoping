@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "991351287389",
     "project_id": "pingoping",
-    "storage_bucket": "pingoping.appspot.com"
+    "storage_bucket": "pingoping.firebasestorage.app"
   },
   "client": [
     {

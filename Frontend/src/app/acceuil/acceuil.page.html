@@ -113,7 +113,7 @@
 
         <br>
         <ion-label class="localisation"
-                  *ngIf="pub.distanceToUser !== undefined && pub.distanceToUser !== null">
+                  *ngIf="pub?.distanceToUser !== undefined && pub?.distanceToUser !== null">
           Vous êtes présentement à : {{ convertMetersToKilometers(pub?.distanceToUser) }} du lieu.
         </ion-label>
         <br>
@@ -121,9 +121,9 @@
         <br>
         &nbsp;
 
-        <ion-button *ngIf="pub.longitude && pub.latitude && pub.longitude !== undefined && pub.latitude !== undefined && pub.longitude !== null && pub.latitude !== null && pub.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non'"
+        <ion-button *ngIf="pub?.longitude && pub?.latitude && pub?.longitude !== undefined && pub?.latitude !== undefined && pub?.longitude !== null && pub?.latitude !== null && pub?.longitude.toLowerCase().trim() !== 'non' && pub.latitude.toLowerCase().trim() !== 'non'"
                     class="btnpub location" fill="outline"
-                    [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pub.latitude + ',' + pub.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pub.latitude + ',' + pub.longitude">
+                    [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + pub?.latitude + ',' + pub?.longitude + '&travelmode=driving&dir_action=navigate&waypoints=' + pub?.latitude + ',' + pub?.longitude">
           Localiser le lieu
           &nbsp;
           <ion-icon name="location-outline"></ion-icon>

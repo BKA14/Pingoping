@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-header('Content-Type: application/json'); // Modifiez en fonction de vos besoins
+header('Content-Type: application/json'); 
 
 $baseUrl = "192.168.1.67";
 

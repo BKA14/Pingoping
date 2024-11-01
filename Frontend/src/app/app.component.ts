@@ -1,17 +1,18 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import { Platform, AlertController, LoadingController } from '@ionic/angular';
+import { App } from '@capacitor/app';
+import { Component, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
+import { Platform, AlertController, LoadingController, IonRouterOutlet } from '@ionic/angular';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
-import { BackButtonService } from './services/back-button.service';
+import { StatusBar } from '@capacitor/status-bar';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { AcceuilPage } from './acceuil/acceuil.page';
 import { Keyboard } from '@capacitor/keyboard';
 import { Capacitor } from '@capacitor/core';
-import { Router } from '@angular/router';
 import { LoginServiceReadyService } from './login-service-ready.service';
 import { FirebaseService } from './firebase-init.service';
+import { Router } from '@angular/router';
 import { catchError, finalize, take, timeout } from 'rxjs/operators';
 import { of } from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,9 @@ import { of } from 'rxjs';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
+
+  @ViewChild(IonRouterOutlet) outlet;
+
   rootPage: any = AcceuilPage;
   private keyboardWillShowListener: any;
   private keyboardWillHideListener: any;
@@ -26,43 +30,111 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private platform: Platform,
-    private statusBar: StatusBar,
-    private backButtonService: BackButtonService,
-    private network: Network,
     public alertController: AlertController,
-    private router: Router,
+    private network: Network,
     private LoginServiceReadyService: LoginServiceReadyService,
+    private FirebaseService: FirebaseService,
     private loadingCtrl: LoadingController,
-    private FirebaseService: FirebaseService
+    private router: Router,
   ) {
     this.initializeApp();
-    this.setupNetworkListeners();
+    StatusBar.setOverlaysWebView({ overlay: false });
+    StatusBar.setBackgroundColor({ color: '#1C1C1C' });
     this.setupKeyboardListeners();
   }
 
+
   ngOnInit() {
     this.FirebaseService.initFirebaseMessaging();
+    this.setupNetworkListeners();
+    this.backbutton();
   }
 
+
+  private isBackAlertPresented = false;
+
+  backbutton() {
+    this.platform.backButton.subscribeWithPriority(9999, async () => {
+      if (this.isBackAlertPresented) return;
+
+      const currentUrl = this.router.url;
+      const needsConfirmation = ['/acceuil', '/welcome', '/notifications', '/login2'].some(page => currentUrl.includes(page));
+
+      // Si la page nécessite une confirmation
+      if (needsConfirmation) {
+        this.isBackAlertPresented = true;
+
+        const alert = await this.alertController.create({
+          header: 'Confirmer',
+          message: 'Voulez-vous vraiment quitter l\'application ?',
+          buttons: [
+            {
+              text: 'Non',
+              role: 'cancel',
+              handler: () => {
+                this.isBackAlertPresented = false; // Permet de réafficher l'alerte plus tard
+              }
+            },
+            {
+              text: 'Oui',
+              handler: () => {
+                this.isBackAlertPresented = false;
+                App.exitApp();
+              }
+            }
+          ]
+        });
+
+        await alert.present();
+        return; // Arrête ici pour éviter le retour arrière
+      }
+
+      // Si la page ne nécessite pas de confirmation, faire un retour en arrière normal
+      if (this.outlet?.canGoBack()) {
+        this.outlet.pop();
+      }
+    });
+  }
+
+
+  async ngAfterViewInit() {
+    // Code supplémentaire après le chargement de la vue
+  }
+
+
+  private isNetworkAlertPresented = false;
+
   async openAlert() {
+    if (this.isNetworkAlertPresented) return;
+
+    this.isNetworkAlertPresented = true;
+
     const alert = await this.alertController.create({
       header: 'Erreur réseau',
       message: 'Il semble que vous ne soyez pas connecté à internet, vérifiez votre connexion !',
       buttons: [{
         text: "OK",
         role: 'confirm',
+        handler: () => {
+          this.isNetworkAlertPresented = false; // Réinitialiser après fermeture
+        }
       }]
     });
 
     await alert.present();
   }
 
+
   async openAlert1() {
     // Implémentation si nécessaire
   }
 
+
+
+
   async initializeApp() {
     this.platform.ready().then(async () => {
+      // Présenter le loading dès que la plateforme est prête
       const loading = await this.loadingCtrl.create({
         message: 'Rechargement',
         spinner: 'lines',
@@ -71,32 +143,43 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
       await loading.present();
 
-      // Configurer la barre de statut
-      if (Capacitor.getPlatform() === 'android') {
-        this.statusBar.overlaysWebView(false);  // Superpose la barre de statut sur le contenu
-        this.statusBar.backgroundColorByHexString('#80000000');  // Barre de statut transparente
-      }
+      try {
+        // Vérification de la plateforme pour éviter les problèmes sur le web
+        if (Capacitor.getPlatform() !== 'web') {
 
-      await this.backButtonService.init();
-
-      if (Capacitor.getPlatform() !== 'web') {
-        this.LoginServiceReadyService.isLoginPageReady$.pipe(
-          take(1),
-          timeout(10000),
-          catchError((err) => {
-            console.error('Erreur ou timeout pendant la préparation de la page de login:', err);
-            return of(false);
-          }),
-          finalize(() => loading.dismiss())
-        ).subscribe((isReady) => {
-          setTimeout(() => this.hideSplashScreen(), 2000);
-        });
-      } else {
-        await loading.dismiss();
+          this.LoginServiceReadyService.isLoginPageReady$.pipe(
+            take(1),  // Prendre la première valeur
+            timeout(10000),  // Timeout après 10 secondes
+            catchError((err) => {
+              console.error('Erreur ou timeout pendant la préparation de la page de login:', err);
+              return of(false);  // Retourne 'false' en cas de problème
+            }),
+            finalize(() => {
+              loading.dismiss();  // Masquer le loading dans tous les cas
+            })
+          ).subscribe({
+            next: (isReady) => {
+              setTimeout(() => {
+                // Délai de 2 secondes avant de masquer le splash screen
+                if (isReady) {
+                  this.hideSplashScreen();
+                } else {
+                  console.warn("La page de login n'a pas été prête dans le délai imparti.");
+                  this.hideSplashScreen();  // On masque le splash malgré tout
+                }
+              }, 2000); // Délai de 2 secondes
+            }
+          });
+        } else {
+          // Masquer le loading si l'on est sur le web
+          await loading.dismiss();
+        }
+      } catch (error) {
+        console.error('Erreur lors de l\'initialisation de l\'application :', error);
+        await loading.dismiss();  // Assurez-vous que le loading est masqué en cas d'erreur
       }
     });
   }
-
 
   async hideSplashScreen() {
     try {
@@ -106,12 +189,18 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+
+
+
+
+
   setupNetworkListeners() {
-    window.addEventListener('online', () => {
-      this.openAlert1();
-    });
-    window.addEventListener('offline', () => {
+    this.network.onDisconnect().subscribe(() => {
       this.openAlert();
+    });
+
+    this.network.onConnect().subscribe(() => {
+      this.openAlert1();
     });
   }
 
@@ -126,8 +215,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       });
     }
   }
-
-  ngAfterViewInit() {}
 
   ngOnDestroy() {
     if (this.keyboardWillShowListener) {

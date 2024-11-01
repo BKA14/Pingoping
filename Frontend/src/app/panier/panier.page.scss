@@ -16,7 +16,7 @@ ion-header {
     --background: linear-gradient(to right, #0eeb49, #05a83d) !important;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
   ion-title {
     font-size: 1.2rem;  /* Taille du texte adaptable */
     text-align: center;
@@ -36,18 +36,14 @@ ion-title.tool2 {
   color: white;
 }
 
-.cart-list {
-  padding: 30px 10px;
-  margin: 30px ;
 
-}
 
 .cart-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  padding: 15px 0;
+  padding: 1px;
   border-bottom: 1px solid #ddd;
 }
 
@@ -55,12 +51,12 @@ ion-title.tool2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 76%;
 }
 
 .plat-info {
   flex: 1;
-  margin-right: 15px;
+  margin-right: 6px;
   text-align: left;
 }
 
@@ -86,14 +82,13 @@ ion-title.tool2 {
 }
 
 .qty-input {
-  width: 40px;
+  width: 24px;
   text-align: center;
   font-size: 1.1rem;
-  margin: 0 10px;
 }
 
 .total-item {
-  margin-top: 15px;
+  margin-top: 10px;
   justify-content: center;
 }
 
@@ -104,7 +99,7 @@ ion-title.tool2 {
 }
 
 .order-button {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .empty-cart-container {

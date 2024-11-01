@@ -106,7 +106,6 @@ event.preventDefault();
       private renderer: Renderer2,
       private authService: authService,
       private notificationService: NotificationService,
-      private statusBar: StatusBar,
       private toastCtrl: ToastController  // Injecter le ToastController
     )
     {
@@ -131,6 +130,7 @@ event.preventDefault();
         this.userData = data;
       });
 
+      this.notificationService.initializePushNotifications();
       this.loadInitialPub();
       this.loadLike() ;
       this.setupIntersectionObserver(); // pour lecture automatic de la video
@@ -177,7 +177,7 @@ event.preventDefault();
             message: 'Actualisation...',
             spinner: 'lines',
             cssClass: 'custom-loading',
-            duration: 8000,
+            duration: 10000,
           });
 
           await loading.present();
@@ -449,6 +449,7 @@ toggleMute(videoElement: HTMLVideoElement) {
   videoElement.muted = !videoElement.muted;
 }
 
+
 // Méthode pour ajuster le volume
 setVolume(event: Event, videoElement: HTMLVideoElement) {
   const volume = (event.target as HTMLInputElement).value;
@@ -465,6 +466,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
         console.log('Exited fullscreen mode');
       }
     }
+
 
     playVideo(video: HTMLVideoElement) {
       // Pause toutes les autres vidéos avant de jouer la nouvelle
@@ -483,6 +485,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
       }
     }
 
+
     pauseVideo(video: HTMLVideoElement) {
       if (video) {
         video.pause();
@@ -491,6 +494,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
         }
       }
     }
+
 
     togglePlayPause(video: HTMLVideoElement) {
       if (video.paused) {
@@ -536,18 +540,18 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
         if(res.result === 'oui') {
           if(res.data.etat === 'oui') {
-           await  this.disLike(pub);
             pub.likes_count--;
             pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
+            await  this.disLike(pub);
           } else if (res.data.etat === 'non') {
-            await  this.Likes(pub);
             pub.likes_count++;
             pub.user_ids.push(this.userData.iduser);
+            await  this.Likes(pub);
           }
         } else if (res.result === 'non') {
-          await this.Likepremier(pub);
           pub.likes_count++;
           pub.user_ids.push(this.userData.iduser);
+          await this.Likepremier(pub);
         }
 
         pub.isLoading = false;

@@ -96,7 +96,7 @@ export class PmuPage implements OnInit {
   const loading = await this.loadingCtrl.create({
    message:'Chargement...',
    spinner:'lines',
-   duration:8500,
+   duration:10000,
    cssClass:'custom-loading',
   });
 

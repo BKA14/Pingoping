@@ -31,9 +31,11 @@ export class authService {
       });
   }
 
+
   ngOnInit() {
 
   }
+
 
   private userDataSubject = new BehaviorSubject<any>(this.getUserData());
   userData$ = this.userDataSubject.asObservable();
@@ -101,6 +103,7 @@ export class authService {
       );
     });
   }
+
 
   // Modifier isTokenExpired pour utiliser l'heure du serveur
   async isTokenExpired(): Promise<boolean> {

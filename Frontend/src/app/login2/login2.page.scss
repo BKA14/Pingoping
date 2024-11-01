@@ -62,3 +62,18 @@ ion-content{
           border-radius: 14px; /* Ajustez la valeur selon vos préférences */
         }
 
+
+        .custom-toast {
+          animation: slide-up 0.5s forwards; // Animation pour faire monter le toast
+        }
+
+        @keyframes slide-up {
+          from {
+            transform: translateY(100%); // Commence en bas de l'écran
+            opacity: 0; // Initialement transparent
+          }
+          to {
+            transform: translateY(0); // Position finale
+            opacity: 1; // Devenir visible
+          }
+        }

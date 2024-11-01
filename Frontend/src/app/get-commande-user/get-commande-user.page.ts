@@ -126,7 +126,7 @@ export class GetCommandeUserPage implements OnInit {
       message: 'Rechargement...',
       spinner: 'lines',
       cssClass: 'custom-loading',
-      duration: 8500,
+      duration: 10000,
     });
 
     loading.present();

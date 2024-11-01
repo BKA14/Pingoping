@@ -18,8 +18,8 @@
         "alert"
       ],
       "SplashScreen": {
-        "launchShowDuration": 7000,
-        "launchAutoHide": false,
+        "launchShowDuration": 2000,
+        "launchAutoHide": true,
         "launchFadeOutDuration": 1000,
         "androidSplashResourceName": "splash",
         "androidScaleType": "CENTER_CROP",

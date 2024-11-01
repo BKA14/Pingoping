@@ -132,7 +132,7 @@ export class RestaurantPage implements OnInit {
             message: 'Actualisation...',
             spinner: 'lines',
             cssClass: 'custom-loading',
-            duration: 8000,
+            duration: 10000,
           });
 
           await loading.present();

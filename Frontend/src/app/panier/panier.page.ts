@@ -34,7 +34,7 @@ export class PanierPage implements OnInit {
     const loading = await this.loadingCtrl.create({
       message: 'Chargement du panier...',
       spinner: 'lines',
-      duration: 7000,
+      duration: 10000,
     });
 
     await loading.present();

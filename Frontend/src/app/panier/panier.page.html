@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar class="tool1">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" color="light"></ion-back-button>
+    </ion-buttons>
     <ion-title class="tool2">PANIER</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -10,6 +13,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <br>
   <ng-container *ngIf="cart?.length > 0; else emptyCart">
     <ion-list class="cart-list">
       <ion-item *ngFor="let plat of cart; let i = index" class="cart-item">
@@ -21,13 +25,13 @@
           </ion-label>
 
           <ion-button (click)="removeFromCart(plat.id)" color="danger" fill="clear">
-            <ion-icon name="trash-outline" style="zoom: 2;"></ion-icon>
+            <ion-icon name="trash-outline" style="zoom: 1.5;"></ion-icon>
           </ion-button>
 
           <div class="quantity-controls">
-            <ion-button (click)="decreaseQuantity(i)" color="danger" style="zoom: 1.7;" fill="outline">-</ion-button>
+            <ion-button (click)="decreaseQuantity(i)" color="danger" style="zoom: 1.2;" fill="outline">-</ion-button>
             <ion-input [(ngModel)]="plat.quantity" type="number" class="qty-input" readonly></ion-input>
-            <ion-button (click)="increaseQuantity(i)" color="success"  style="zoom: 1.7;" fill="outline">+</ion-button>
+            <ion-button (click)="increaseQuantity(i)" color="success"  style="zoom: 1.2;" fill="outline">+</ion-button>
           </div>
         </div>
       </ion-item>

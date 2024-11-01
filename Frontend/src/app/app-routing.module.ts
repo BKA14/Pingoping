@@ -48,11 +48,6 @@ const routes: Routes = [
    // canActivate: [AuthenticationService]
   },
   {
-    path: 'welcome3',
-    loadChildren: () => import('./welcome3/welcome3.module').then( m => m.Welcome3PageModule),
-   // canActivate: [AuthenticationService]
-  },
-  {
     path: 'login2',
     loadChildren: () => import('./login2/login2.module').then( m => m.Login2PageModule),
 
@@ -146,18 +141,8 @@ const routes: Routes = [
     canActivate: [AuthAdminGuardService]
   },
   {
-    path: 'depot-retrait',
-    loadChildren: () => import('./depot-retrait/depot-retrait.module').then( m => m.DepotRetraitPageModule),
-  //  canActivate: [AuthenticationService]
-  },
-  {
     path: 'modif-depot-retrait',
     loadChildren: () => import('./modif-depot-retrait/modif-depot-retrait.module').then( m => m.ModifDepotRetraitPageModule),
-  //  canActivate: [AuthenticationService]
-  },
-  {
-    path: 'achatalimentation',
-    loadChildren: () => import('./achatalimentation/achatalimentation.module').then( m => m.AchatalimentationPageModule),
   //  canActivate: [AuthenticationService]
   },
   {
@@ -165,11 +150,7 @@ const routes: Routes = [
     loadChildren: () => import('./modifalimentation/modifalimentation.module').then( m => m.ModifalimentationPageModule),
    //  canActivate: [AuthenticationService]
   },
-  {
-    path: 'achatpoule',
-    loadChildren: () => import('./achatpoule/achatpoule.module').then( m => m.AchatpoulePageModule),
-   //  canActivate: [AuthenticationService]
-  },
+
   {
     path: 'updateachatpoule',
     loadChildren: () => import('./updateachatpoule/updateachatpoule.module').then( m => m.UpdateachatpoulePageModule),
@@ -491,7 +472,8 @@ const routes: Routes = [
   {
     path: 'update-numero-livraison/:id',
     loadChildren: () => import('./update-numero-livraison/update-numero-livraison.module').then( m => m.UpdateNumeroLivraisonPageModule)
-  },  {
+  },
+  {
     path: 'piece-moto',
     loadChildren: () => import('./piece-moto/piece-moto.module').then( m => m.PieceMotoPageModule)
   },

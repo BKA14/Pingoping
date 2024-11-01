@@ -32,7 +32,7 @@ export class Login2Page implements OnInit {
     private authService: authService,
     private loginServiceReadyService: LoginServiceReadyService,
     private toastCtrl: ToastController,
-    private timeService: timeService
+    private timeService: timeService,
   )
   {
     this.verifieForm = this.formBuilder.group({
@@ -49,16 +49,19 @@ export class Login2Page implements OnInit {
     // Informer que la page de login est prête
     this.loginServiceReadyService.setLoginPageReady(true);
   }
+
   // Méthode pour afficher un toast
   async presentToast(message: string, color: string = 'danger') {
     const toast = await this.toastCtrl.create({
       message: message,
-      duration: 2000, // Durée d'affichage du toast
-      position: 'middle',
+      duration: 2000,
+      position: 'bottom', // Positionner le toast en bas
       color: color,
+      cssClass: 'custom-toast', // Classe CSS personnalisée
     });
     toast.present();
-    }
+  }
+
 
 
 
@@ -70,12 +73,23 @@ export class Login2Page implements OnInit {
     return now > expiry;
   }
 
+
+
   async login() {
+    const isExpired = await this.authService.isTokenExpired();
     const token = localStorage.getItem('access_token');
-    if (token) {
+
+    // Vérifie si le token existe et n'est pas expiré
+    if (token && !isExpired) {  // Vérifier si le token n'est pas expiré
       this.router.navigateByUrl('/acceuil');
+    } else {
+      // Si le token est absent ou expiré, redirige vers la page de connexion
+      localStorage.removeItem('access_token'); // Retirer le token expiré, si présent
+      localStorage.removeItem('token_expiry'); // Supprimer aussi le temps d'expiration pour éviter confusion future
+      this.router.navigateByUrl('/login2'); // Redirection vers la page de connexion
     }
   }
+
 
 
   async login4() {
@@ -127,9 +141,11 @@ export class Login2Page implements OnInit {
     }
   }
 
+
   ionViewWillEnter() {
     this.login();
   }
+
 
   async ngOnInit() {
     this.timeService.getServerTime().subscribe((response) => {
@@ -137,6 +153,7 @@ export class Login2Page implements OnInit {
       console.log('serveur time', this.serverTime );
     });
   }
+
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;

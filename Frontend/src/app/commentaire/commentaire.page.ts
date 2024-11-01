@@ -220,17 +220,17 @@ this.getpub();
         if(res.result === 'oui'){
 
         if(res.data.etat === 'oui') {
-        await this.disLike(pub);
         pub.likes_count = pub.likes_count - 1;
         pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
+        await this.disLike(pub);
         console.log("dislike",pub.likes_count);
         console.log("dislike",pub.user_ids);
         }
         else if (res.data.etat === 'non')
         {
-          await  this.Likes(pub);
           pub.likes_count = pub.likes_count + 1;
           pub.user_ids.push(this.userData.iduser);
+          await  this.Likes(pub);
           console.log("like",pub.likes_count);
           console.log("like",pub.user_ids);
         }
@@ -242,9 +242,9 @@ this.getpub();
         }
         else if (res.result === 'non')
            {
-           await this.Likepremier(pub);
            pub.likes_count = pub.likes_count + 1;
            pub.user_ids.push(this.userData.iduser);
+           await this.Likepremier(pub);
            console.log("like",pub.likes_count);
            console.log("like",pub.user_ids);
            }
@@ -347,7 +347,6 @@ this.getpub();
 }
 
 
-
 async getpub(){
 
   this.oldpub = this.pub;
@@ -356,7 +355,7 @@ async getpub(){
    spinner:'lines',
   // showBackdrop:false,
     cssClass: 'custom-loading',
-    duration: 8500,
+    duration: 10000,
   });
 
    loading.present();

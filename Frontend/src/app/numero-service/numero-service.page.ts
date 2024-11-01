@@ -68,7 +68,7 @@ export class NumeroServicePage implements OnInit {
         message: 'Rechargement...',
         spinner: 'lines',
         cssClass: 'custom-loading',
-        duration: 8500,
+        duration: 10000,
       });
 
       this.page = 1;
