@@ -3,6 +3,11 @@ import { CartService } from '../services/cart.service';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { authService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { timeService } from '../timeservice.service';
+import { ApiService } from '../api.service';
+import { DeliveryResponse } from '../api.service';
+
+
 
 @Component({
   selector: 'app-panier',
@@ -10,26 +15,41 @@ import { Router } from '@angular/router';
   styleUrls: ['./panier.page.scss'],
 })
 export class PanierPage implements OnInit {
-  cart: any[] = []; // Initialisation à un tableau vide
+  cart: any[] = [];
   total = 0;
+  deliveryFee = 0; // Variable pour les frais de livraison
   duration = 3000;
   userData: any;
+  serverTime: string | number | Date;
+  isOrderValidated: boolean = false; // Nouveau champ pour contrôler l'état de validation
+
+
 
   constructor(
     private cartService: CartService,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private authService: authService,
-    private router: Router
+    private router: Router,
+    private timeService: timeService,
+    private _apiService: ApiService,
+    public loadingController: LoadingController,
+
   ) {}
 
   ngOnInit() {
-    // S'abonner aux changements de données utilisateur
     this.authService.userData$.subscribe(data => {
       this.userData = data;
-      this.loadCart(); // Charger le panier chaque fois que userData change
+      this.loadCart();
     });
+
+    this.timeService.getServerTime().subscribe((response) => {
+      this.serverTime = response.serverTime;
+      console.log('serveur time', this.serverTime );
+    });
+
   }
+
   async loadCart() {
     const loading = await this.loadingCtrl.create({
       message: 'Chargement du panier...',
@@ -41,9 +61,11 @@ export class PanierPage implements OnInit {
 
     this.cartService.loadCart(this.userData.iduser).subscribe({
       next: (cart: any[]) => {
-        this.cart = Array.isArray(cart) ? cart : []; // Assurez-vous que cart est toujours un tableau
-        console.log('Contenu du panier:', this.cart); // Logguez le contenu du panier
-        this.calculateTotal(); // Recalculer le total du panier
+        // Filtrer les plats invalides dès le chargement
+        this.cart = Array.isArray(cart) ? cart.filter(plat => this.isValidItem(plat)) : [];
+        console.log('Contenu du panier:', this.cart);
+        this.calculateTotal();
+        this.calculateDeliveryFee(); // Appeler ici après le chargement du panier
       },
       error: (error) => {
         console.error('Erreur lors du chargement du panier:', error);
@@ -56,11 +78,10 @@ export class PanierPage implements OnInit {
   }
 
 
-  // Méthode pour afficher un toast
   async presentToast(message: string, color: string = 'danger') {
     const toast = await this.toastCtrl.create({
       message: message,
-      duration: this.duration, // Durée d'affichage du toast
+      duration: this.duration,
       position: 'middle',
       color: color,
     });
@@ -74,9 +95,7 @@ export class PanierPage implements OnInit {
   }
 
   validateOrder() {
-    // Vérifiez que vous avez bien des articles dans le panier
     if (this.cart.length > 0 && this.total > 0) {
-      // Naviguez vers la page 'valider-panier' en passant l'état (cart et total)
       this.router.navigate(['/valider-panier'], {
         state: { cart: this.cart, total: this.total }
       });
@@ -85,41 +104,110 @@ export class PanierPage implements OnInit {
     }
   }
 
-  // Ajouter un plat au panier
-  ajouterAuPanier(plat) {
-    const index = this.cart.findIndex(item => item.plat_id === plat.id);
 
-    if (index > -1) {
-      // Si le plat est déjà dans le panier, le supprimer
-      this.cartService.removeFromCart(this.cart[index].id).subscribe({
-        next: () => {
-          this.presentToast(`${plat.nom_plat} supprimé du panier.`, 'warning');
-          this.loadCart(); // Recharger le panier après suppression
-        },
-        error: (error) => {
-          console.error('Erreur lors de la suppression du panier:', error);
-          this.presentToast('Erreur lors de la suppression du plat. Veuillez réessayer.', 'danger');
-        }
-      });
+  isNightTime: boolean = false;
+
+calculateTotal() {
+  if (!Array.isArray(this.cart)) {
+    console.error('this.cart n\'est pas un tableau:', this.cart);
+    return;
+  }
+
+  const subtotal = this.cart
+    .filter(plat => this.isValidItem(plat)) // Filtrer les éléments valides
+    .reduce((acc, plat) => {
+      // Vérifier que le prix est un nombre avant de le multiplier
+      const prix = parseFloat(plat.prix); // Convertir en nombre
+      return acc + (isNaN(prix) ? 0 : prix * plat.quantity);
+    }, 0);
+
+  this.total = subtotal + this.deliveryFee; // Calculer le total
+}
+
+
+calculateDeliveryFee(): Promise<void> {
+  const totalPlats = this.cart.reduce((acc, plat) => acc + plat.quantity, 0);
+  const data = { totalPlats, serverTime: this.serverTime };
+
+  return new Promise((resolve, reject) => {
+    this._apiService.calcul_total(data).subscribe({
+      next: (response: DeliveryResponse) => {
+        this.deliveryFee = response.deliveryFee;
+        this.isNightTime = response.isNightTime;
+        console.log('deliveryFee', response.deliveryFee, response.isNightTime);
+        this.calculateTotal(); // Mise à jour avec les nouveaux frais
+        resolve(); // Résoudre la promesse
+      },
+      error: (error) => {
+        console.error('Erreur lors du calcul des frais de livraison:', error);
+        this.presentToast('Erreur de calcul des frais de livraison', 'danger');
+        reject(error); // Rejeter la promesse en cas d'erreur
+      },
+    });
+  });
+}
+
+async validatepanier() {
+  try {
+    await this.calculateDeliveryFee(); // Attendre que le calcul soit terminé
+    // Ici, vous pouvez gérer la logique après que les frais de livraison ont été calculés
+    if (this.deliveryFee >= 0) { // ou toute autre condition de succès
+      this.isOrderValidated = true; // Supposons que la validation soit réussie
+      this.presentToast('Panier validé avec succès', 'success');
+      // Afficher le bouton commander
     } else {
-      // Ajouter le plat au panier
-      this.cartService.addToCart(plat).subscribe({
+      this.presentToast('Erreur de validation du panier. Veuillez réessayer.', 'danger');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la validation du panier:', error);
+    this.presentToast('Erreur de validation du panier. Veuillez réessayer.', 'danger');
+  }
+}
+
+
+
+increaseQuantity(index: number) {
+  if (this.cart[index].quantity < 10) {
+    this.cart[index].quantity++;
+    this.cartService.updateCart(this.cart).subscribe(); // Mettez à jour le panier
+    this.calculateTotal();
+    this.calculateDeliveryFee();
+  } else {
+    this.presentToast('Quantité maximale atteinte', 'warning');
+  }
+}
+
+
+decreaseQuantity(index: number) {
+  if (this.cart[index].quantity > 1) {
+    this.cart[index].quantity--;
+    this.cartService.updateCart(this.cart).subscribe(); // Mettez à jour le panier
+    this.calculateTotal();
+    this.calculateDeliveryFee();
+  } else {
+    this.presentToast('Quantité minimale atteinte', 'warning');
+  }
+}
+
+    // Vider le panier
+    vider_panier() {
+      this.cartService.emptyCart(this.userData.iduser).subscribe({
         next: () => {
-          this.presentToast(`${plat.nom_plat} ajouté au panier.`, 'success');
-          this.loadCart(); // Recharger le panier après ajout
+          this.presentToast('Panier vidé', 'success');
+          this.cart = [];
+          this.total = 0;
+          this.deliveryFee = 0; // Mettre les frais de livraison à 0
         },
         error: (error) => {
-          console.error('Erreur lors de l\'ajout au panier:', error);
-          this.presentToast('Erreur lors de l\'ajout au panier. Veuillez réessayer.', 'danger');
+          console.error('Erreur lors du vidage du panier:', error);
+          this.presentToast('Erreur lors du vidage du panier. Veuillez réessayer.', 'danger');
         }
       });
     }
-  }
 
-
-  // Supprimer un plat du panier
-  removeFromCart(cartItemId: number) {
-    this.cartService.removeFromCart(cartItemId).subscribe({
+      // Supprimer un plat du panier
+  removeFromCart(cartItemId: any) {
+    this.cartService.removeFromCart(cartItemId, this.userData.iduser).subscribe({
       next: () => {
         this.presentToast('Plat supprimé du panier', 'warning');
         this.loadCart(); // Recharger le panier
@@ -131,55 +219,15 @@ export class PanierPage implements OnInit {
     });
   }
 
-  // Vider le panier
-  vider_panier(){
-    this.cartService.emptyCart(this.userData.iduser).subscribe({
-      next: () => {
-        this.presentToast('Panier vidé', 'success');
-        this.cart = [];
-        this.total = 0;
-      },
-      error: (error) => {
-        console.error('Erreur lors du vidage du panier:', error);
-        this.presentToast('Erreur lors du vidage du panier. Veuillez réessayer.', 'danger');
-      }
-    });
+
+  isValidItem(plat: any): boolean {
+    return plat.nom_restaurant &&
+           plat.nom_plat &&
+           plat.prix != null &&
+           !isNaN(plat.prix) &&
+           plat.prix > 0 &&
+           plat.quantity > 0;
   }
 
-  // Méthode pour vérifier si un plat est valide (toutes les informations sont présentes)
-isValidItem(plat: any): boolean {
-  return plat.nom_restaurant && plat.nom_plat && plat.prix && plat.quantity;
-}
 
-// Calculer le prix total en excluant les plats incomplets
-calculateTotal() {
-
-  if (!Array.isArray(this.cart)) {
-    console.error('this.cart n\'est pas un tableau:', this.cart);
-    return; // Sortir de la fonction si ce n'est pas un tableau
-  }
-
-  this.total = this.cart
-    .filter(plat => this.isValidItem(plat))  // Filtrer les plats valides
-    .reduce((acc, plat) => acc + plat.prix * plat.quantity, 0);
-}
-
-
-  increaseQuantity(index: number) {
-    if (this.cart[index].quantity < 10) { // Limiter la quantité à 10 par exemple
-      this.cart[index].quantity++;
-      this.calculateTotal();
-    } else {
-      this.presentToast('Quantité maximale atteinte', 'warning');
-    }
-  }
-
-  decreaseQuantity(index: number) {
-    if (this.cart[index].quantity > 1) {
-      this.cart[index].quantity--;
-      this.calculateTotal();
-    } else {
-      this.presentToast('Quantité minimale atteinte', 'warning');
-    }
-  }
 }

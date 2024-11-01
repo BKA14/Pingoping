@@ -161,7 +161,7 @@
          <p class="ligne"></p>
          <br>
         <!-- Boutons -->
-        <ion-button *ngIf="resto.longitude && resto.latitude" class="btnpub location" fill="outline"
+        <ion-button *ngIf="resto.longitude && resto.latitude && resto.longitude !== undefined && resto.latitude !== undefined && resto.longitude !== null && resto.latitude !== null && resto.longitude.toLowerCase().trim() !== 'non' && resto.latitude.toLowerCase().trim() !== 'non'" class="btnpub location" fill="outline"
           [href]="'https://www.google.com/maps/dir/?api=1&origin=' + userlatitude + ',' + userlongitude + '&destination=' + resto.latitude + ',' + resto.longitude + '&travelmode=driving'">
           Localiser le lieu
           <ion-icon name="location-outline"></ion-icon>

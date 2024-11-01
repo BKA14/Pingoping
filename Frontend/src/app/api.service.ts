@@ -3,6 +3,13 @@ import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/c
 import { Observable, throwError } from 'rxjs';
 import { retry ,catchError, timeout} from 'rxjs/operators';
 
+// Interface définie à l'extérieur de la classe
+export interface DeliveryResponse {
+  deliveryFee: number;
+  isNightTime: boolean;
+}
+
+
 @Injectable({
 providedIn: 'root'
 })
@@ -13,6 +20,7 @@ headers : HttpHeaders;
   adr_mobile: string='http://192.168.1.67:80/Projet_ Lokaliser/Backend';
   time: any = 10000
   base_url = this.adr_mobile;
+
 
   constructor(public http: HttpClient) {
     this.headers = new HttpHeaders()
@@ -122,6 +130,7 @@ headers : HttpHeaders;
 
 
 
+
   sendNotification(data) {
     return this.http.post(this.base_url+'/sendnotification.php',data)
     .pipe(timeout(this.time))
@@ -133,6 +142,18 @@ headers : HttpHeaders;
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
+
+
+      calcul_total(data: any): Observable<DeliveryResponse> {
+        return this.http.post<DeliveryResponse>(`${this.base_url}/calculate_delivery_fee.php`, data)
+          .pipe(
+            timeout(this.time),
+            retry(0),
+            catchError(this.handleError)
+          );
+      }
+
+
 
     get_time() {
       return this.http.get(this.base_url+'/serveur_time.php')
@@ -315,6 +336,16 @@ signalisation(formData) {
           retry(0), // Nombre de tentatives de retry en cas d'échec
           catchError(this.handleError) // Gestion des erreurs
         );
+        }
+
+
+        update_cart(body: any): Observable<any> {
+          return this.http.put(this.base_url + '/update_cart.php', body) // Correction ici
+            .pipe(
+              timeout(this.time), // Timeout de 15 secondes
+              retry(0), // Nombre de tentatives de retry en cas d'échec
+              catchError(this.handleError) // Gestion des erreurs
+            );
         }
 
 
@@ -602,10 +633,10 @@ supprimer_numero(id){
       .pipe(retry(0), catchError(this.handleError))
       }
 
-    delete_cart(id){
-      return this.http.delete(this.base_url+'/supprimer_du_panier.php?id='+id)
-      .pipe(timeout(this.time))
-      .pipe(retry(0), catchError(this.handleError))
+      delete_cart(id, id_user) {
+        return this.http.delete(this.base_url + '/supprimer_du_panier.php?id=' + id + '&id_user=' + id_user)
+          .pipe(timeout(this.time))
+          .pipe(retry(0), catchError(this.handleError));
       }
 
     supprimer_plat(id){

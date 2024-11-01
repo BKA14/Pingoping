@@ -247,12 +247,11 @@ export class RestaurantPage implements OnInit {
       try {
         const res : any  = await this._apiService.restaurant(this.page, this.limit).toPromise();
 
-          // Désactiver l'infinite scroll si moins de données retournées que la limite
-      if (res.length < this.limit) {
         this.resto = this.resto.concat(res);
         this.openUrl_resto();
         event.target.complete();
-      }else {
+          // Désactiver l'infinite scroll si moins de données retournées que la limite
+      if (res.length < this.limit) {
         this.infiniteScrollDisabled = true;
       }
 

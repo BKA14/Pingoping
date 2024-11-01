@@ -147,6 +147,19 @@ update_prix(event: any) {
     return " choisissez la photo";
   }
 
+
+  if (this.prix === null || this.prix === '' || isNaN(this.prix)) {
+    alert("Entrer le prix du plat");
+    return;
+}
+
+
+if (this.nom_plat === null || this.nom_plat === '') {
+  alert("Entrer le prix du plat");
+  return;
+}
+
+
    const loading = await this.loadingCtrl.create({
      message: 'Rechargement...',
      spinner: 'lines',

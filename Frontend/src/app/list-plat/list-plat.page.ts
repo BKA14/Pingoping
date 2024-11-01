@@ -97,7 +97,7 @@ export class ListPlatPage implements OnInit {
 
   ajouterAuPanier(plat) {
     // Vérifier que le nom du restaurant, le nom du plat et le prix sont présents
-    if (!plat.nom_restaurant || !plat.nom_plat || !plat.prix) {
+    if (!plat.nom_restaurant || !plat.nom_plat || !plat.prix || plat.prix <= 0) {
       // Si un champ est manquant, afficher un toast d'erreur
       this.presentToast('Erreur : veuillez contacter le pingoping. Informations manquantes.', 'danger');
       console.error('Erreur : informations manquantes pour ajouter le plat au panier.');
@@ -112,7 +112,7 @@ export class ListPlatPage implements OnInit {
 
       if (index > -1) {
         // Si le plat est déjà dans le panier, le supprimer
-        this.cartService.removeFromCart(this.cart[index].id) // Utiliser l'ID du plat
+        this.cartService.removeFromCart(this.cart[index].id, this.userData.iduser) // Utiliser l'ID du plat
           .subscribe({
             next: (res: any) => {
               console.log(`${plat.nom_plat} supprimé du panier.`);

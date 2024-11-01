@@ -17,6 +17,7 @@ export class CartService {
     private _apiService: ApiService,
     private authService: authService,
   ) {
+
     // S'abonner aux changements de données utilisateur
     this.authService.userData$.subscribe(data => {
       this.userData = data;
@@ -45,6 +46,7 @@ export class CartService {
     );
   }
 
+
  // Ajouter un plat au panier
 addToCart(plat): Observable<any> {
   const body = {
@@ -55,6 +57,7 @@ addToCart(plat): Observable<any> {
     prix: plat.prix,
     quantity: plat.quantity || 1,
   };
+
 
   return this._apiService.add_cart(body).pipe(
     tap((res: any) => {
@@ -77,8 +80,8 @@ addToCart(plat): Observable<any> {
 
 
   // Supprimer un plat du panier
-  removeFromCart(cartItemId): Observable<any> {
-    return this._apiService.delete_cart(cartItemId).pipe(
+  removeFromCart(cartItemId, id_user): Observable<any> {
+    return this._apiService.delete_cart(cartItemId, id_user).pipe(
       tap(() => {
         const currentCart = this.cartSubject.value.filter(item => item.id !== cartItemId);
         this.cartSubject.next(currentCart); // Met à jour le panier sans l'élément supprimé
@@ -94,4 +97,24 @@ addToCart(plat): Observable<any> {
       })
     );
   }
+
+
+
+// Update cart quantities
+updateCart(cart: any[]): Observable<any> {
+  const body = {
+    user_id: this.userData.iduser,
+    items: cart.map(item => ({
+      plat_id: item.plat_id,
+      quantity: item.quantity
+    }))
+  };
+
+  return this._apiService.update_cart(body).pipe(
+    tap(() => {
+      this.cartSubject.next(cart); // Met à jour le panier localement
+    })
+  );
+}
+
 }

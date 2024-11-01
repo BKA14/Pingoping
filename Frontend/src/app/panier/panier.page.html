@@ -5,6 +5,14 @@
     </ion-buttons>
     <ion-title class="tool2">PANIER</ion-title>
   </ion-toolbar>
+
+  <ion-toolbar>
+  <ion-label (click)="refreshPage($event)" style="text-align: center;" class="cart-label" slot="start" color="light" >
+    actualiser
+  </ion-label>
+</ion-toolbar>
+
+
 </ion-header>
 
 
@@ -37,12 +45,27 @@
       </ion-item>
     </ion-list>
 
+        <!-- Message d'avertissement de nuit -->
+    <ion-item *ngIf="isNightTime" class="night-time-alert">
+      <ion-label color="warning">
+        <strong>Note :</strong> Des frais supplémentaires de 500 fr s'appliquent pendant les heures de nuit (22h - 5h).
+      </ion-label>
+    </ion-item>
+
+
+    <ion-item class="delivery-item">
+      <ion-label class="delivery-label"><strong>Frais de livraison :</strong> {{ deliveryFee }} fr</ion-label>
+    </ion-item>
     <ion-item class="total-item">
       <ion-label class="total-label"><strong>Total :</strong> {{ total }} fr</ion-label>
     </ion-item>
 
+
     <ion-button expand="full" color="medium" (click)="vider_panier()">Vider le panier</ion-button>
-    <ion-button expand="full" color="success" (click)="validateOrder()">Passer la commande</ion-button>
+
+    <ion-button expand="full" color="success" *ngIf="!isOrderValidated" (click)="validatepanier()">Valider</ion-button>
+    <ion-button expand="full" color="success" *ngIf="isOrderValidated" (click)="validateOrder()">Passer la commande</ion-button>
+
 
   </ng-container>
 

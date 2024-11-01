@@ -125,9 +125,17 @@ update_prix(event: any) {
  async add_resto() {
 
 
-  if (!this.prix){
-    return "entrer le prix du plat";
-  }
+  if (this.prix === null || this.prix === '' || isNaN(this.prix)) {
+    alert("Entrer le prix du plat");
+    return;
+}
+
+
+if (this.nom_plat === null || this.nom_plat === '') {
+  alert("Entrer le prix du plat");
+  return;
+}
+
 
    const file: File = this.selectedFile;
 
