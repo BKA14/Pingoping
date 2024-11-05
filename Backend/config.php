@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header('Content-Type: application/json'); 
 
+mysql://root:woHXCLZJcnIzAgjVnocnAbGxwevRcqMo@autorack.proxy.rlwy.net:53042/railway
 $baseUrl = "192.168.1.67";
 
 $host = $baseUrl;

@@ -198,7 +198,9 @@ export class ListPlatPage implements OnInit {
     loading.present();
 
     this.page = 1;
-    this.oldresto = this.resto;
+
+    localStorage.setItem('oldresto', JSON.stringify(this.resto));
+    this.oldresto = JSON.parse(localStorage.getItem('oldresto'));
 
     try {
     const res : any = await this._apiService.plat_resto(id, this.page, this.limit).toPromise();
@@ -231,7 +233,9 @@ export class ListPlatPage implements OnInit {
     async loadMore(event) {
 
       this.page++;
-      this.oldresto = this.resto;
+
+      localStorage.setItem('oldresto', JSON.stringify(this.resto));
+      this.oldresto = JSON.parse(localStorage.getItem('oldresto'));
 
       try {
         const res : any  = await this._apiService.restaurant(this.page, this.limit).toPromise();
@@ -313,7 +317,6 @@ export class ListPlatPage implements OnInit {
         ],
         });
       return alert.present();
-      this.cdr.detectChanges();
       }
 
 
@@ -443,7 +446,9 @@ onSearch(event: any) {
 async loadalert_search() {
 
   this.page = 1;
-   this.oldresto = this.resto;
+
+  localStorage.setItem('oldresto', JSON.stringify(this.resto));
+  this.oldresto = JSON.parse(localStorage.getItem('oldresto'));
 
    try {
      const res : any = await this._apiService.load_search_resto(this.term, this.page, this.limit).toPromise();
@@ -470,7 +475,10 @@ async loadalert_search() {
  async load_more_search(event) {
 
   this.page++;
-  this.oldresto = this.resto;
+
+  localStorage.setItem('oldresto', JSON.stringify(this.resto));
+  this.oldresto = JSON.parse(localStorage.getItem('oldresto'));
+
   try {
     const res : any  = await this._apiService.load_search_resto(this.term, this.page, this.limit).toPromise();
     console.log('SUCCESS ===', res);

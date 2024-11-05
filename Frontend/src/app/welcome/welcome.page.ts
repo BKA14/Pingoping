@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Alert } from 'selenium-webdriver';
 import { ApiService } from '../api.service';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { AlertController, IonList, LoadingController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -76,10 +75,12 @@ this.notificationService.initializePushNotifications();
    this.grade= (localStorage.getItem('grade'));
    console.log(this.grade);
     }
-    getsession1(){
-      this.prenom1= (localStorage.getItem('prenom1'));
-      console.log(this.prenom1);
-       }
+
+  getsession1(){
+    this.prenom1= (localStorage.getItem('prenom1'));
+    console.log(this.prenom1);
+    }
+
 
 
   async getentreprises(){
@@ -103,7 +104,6 @@ this.notificationService.initializePushNotifications();
    //this.navCtrl.setRoot('/welcome2');
    //this.router.navigateByUrl('/welcome2');
    loading.dismiss();
-   // console.log("ERREUR ===",error);
 })
 this.getsession();
 this.getsession1();

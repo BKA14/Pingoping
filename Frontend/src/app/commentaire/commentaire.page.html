@@ -58,10 +58,6 @@
               <ion-icon name="play" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="videoElement.paused"></ion-icon>
               <ion-icon name="pause" style="zoom: 2.5;" (click)="toggleManualPause(videoElement)" *ngIf="!videoElement.paused"></ion-icon>
               <input type="range" min="0" [max]="videoElement.duration" [value]="videoElement.currentTime" (input)="seekVideo($event, videoElement)">
-              <!--
-              <ion-icon name="expand" style="zoom: 2.5;" (click)="toggleFullScreen(videoElement)" *ngIf="!isFullScreen"></ion-icon>
-              <ion-icon name="contract" style="zoom: 2.5;" (click)="toggleFullScreen(videoElement)" *ngIf="isFullScreen"></ion-icon>
-              -->
 
             </div>
           </ng-container>
@@ -99,7 +95,6 @@
               <!-- Bouton "J'aime" aligné à gauche -->
               <ion-button (click)="likepub(pub)" class="likes" fill="outline" [ngClass]="{'vert': hasLiked(pub)}">
                 <ion-icon class="black" name="thumbs-up"></ion-icon>
-                J'aime
             </ion-button>
 
             </div>

@@ -51,6 +51,11 @@
         <ion-label color="success">ADMIN</ion-label>
       </div>
 
+      <!-- Indication visuelle pour les pubs administratives -->
+      <div *ngIf="pub.admin.trim() === 'evenement'" class="admin-indicator">
+        <ion-label color="success">evenement</ion-label>
+      </div>
+
       <!-- Le reste de votre code d'affichage des pubs -->
       <div *ngIf="pub.countdown !== undefined && pub.countdown !== null && pub.countdown.trim() !== 'non'">
         <ion-label class="deconte" [ngClass]="{'blinking-text': shouldBlink(pub.countdown)}">  {{ pub.countdown }}</ion-label>
@@ -149,13 +154,11 @@
             <!-- Bouton "J'aime" aligné à gauche -->
             <ion-button (click)="likepub(pub)" class="likes" fill="outline"   [disabled]="pub.isLoading" [ngClass]="{'vert': hasLiked(pub)}">
               <ion-icon class="black" name="thumbs-up"></ion-icon>
-              J'aime
             </ion-button>
 
             <!-- Bouton "Commentaire" aligné à droite -->
             <ion-button (click)="CommentPub(pub)" class="likes" fill="outline">
               <ion-icon class="black" name="chatbox"></ion-icon>
-              Commentaire
             </ion-button>
           </div>
         </div>
@@ -166,7 +169,7 @@
       </div>
     </div>
     <!-- Si l'utilisateur est un utilisateur normal, afficher uniquement les pubs non-admin -->
-    <div *ngIf="pub.admin.trim() !== 'admin' && userData.grade !== 'admin' && userData.grade !== 'superadmin'" class="custom-card">
+    <div *ngIf="pub.admin.trim() !== 'admin' && pub.admin.trim() !== 'evenement' && userData.grade !== 'admin' && userData.grade !== 'superadmin'" class="custom-card">
 
       <br>
       <!-- Le reste de votre code d'affichage des pubs -->

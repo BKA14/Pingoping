@@ -70,14 +70,8 @@ $stmt_pub = mysqli_prepare($con, $sql_pub);
 mysqli_stmt_bind_param($stmt_pub, "sssssssssss", $id, $titre, $commentaire, $rangpub, $contact, $longitude, $latitude, $datePublication, $datefin, $file_name, $admin );
 $success_pub = mysqli_stmt_execute($stmt_pub);
 
-// Construisez la requête SQL en utilisant une requête préparée pour la table pubstockage
-$sql_pubstockage = "INSERT INTO `pubstockage` (`id`, `titre`, `commentaire`, `rangpub`, `contact`, `longitude`, `latitude`, `date`, `datefin`, `photo`, `admin`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-$stmt_pubstockage = mysqli_prepare($con, $sql_pubstockage);
-mysqli_stmt_bind_param($stmt_pubstockage, "sssssssssss", $id, $titre, $commentaire, $rangpub, $contact, $longitude, $latitude, $datePublication, $datefin, $file_name, $admin );
-$success_pubstockage = mysqli_stmt_execute($stmt_pubstockage);
-
 // Vérifiez le succès de l'insertion dans les deux tables
-if($success_pub && $success_pubstockage) {
+if($success_pub) {
     http_response_code(201);
     $message['status'] = "Success";
 } else {

@@ -186,7 +186,8 @@ event.preventDefault();
 
           await loading.present();
 
-          this.oldpub = this.event;
+          localStorage.setItem('oldpub', JSON.stringify(this.event));
+          this.oldpub = JSON.parse(localStorage.getItem('oldpub'));
 
           // Appel API pour récupérer les pubs
           this._apiService.getpub_evenement(this.page, this.limit)
@@ -233,7 +234,10 @@ event.preventDefault();
 
 async loadMore(event) {
   this.page++;
- this.oldpub = this.event;
+
+  localStorage.setItem('oldpub', JSON.stringify(this.event));
+  this.oldpub = JSON.parse(localStorage.getItem('oldpub'));
+
   try {
     const res: any = await this._apiService.getpub_evenement(this.page, this.limit).toPromise();
     console.log('SUCCESS ===', res);

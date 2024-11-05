@@ -13,7 +13,6 @@ import { NotificationService } from '../notification.service';
 import { WebSocketService } from '../websocket.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 
 
 @Component({
@@ -25,7 +24,7 @@ import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 export class AcceuilPage implements OnInit {
 
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
-  oldpub: any;
+  oldpub: string;
 
 
 @HostListener('click', ['$event'])
@@ -182,7 +181,8 @@ event.preventDefault();
 
           await loading.present();
 
-          this.oldpub = this.pub;
+          localStorage.setItem('oldpub', JSON.stringify(this.pub));
+          this.oldpub = JSON.parse(localStorage.getItem('oldpub'));
 
           // Appel API pour récupérer les pubs
           this._apiService.getpub(this.page, this.limit)
@@ -230,7 +230,10 @@ event.preventDefault();
 
 async loadMore(event) {
   this.page++;
- this.oldpub = this.pub;
+
+  localStorage.setItem('oldpub', JSON.stringify(this.pub));
+  this.oldpub = JSON.parse(localStorage.getItem('oldpub'));
+
   try {
     const res: any = await this._apiService.getpub(this.page, this.limit).toPromise();
     console.log('SUCCESS ===', res);
@@ -748,11 +751,10 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
       this.presentToast('Erreur de connection avec le serveur veillez reessayer');
 
-      //this.navCtrl.setRoot('/welcome2');
-      // console.log("ERREUR ===",error);
    })
    this.cdr.detectChanges();
-      }
+
+  }
 
 
   async presentAlert(id) {
@@ -807,7 +809,6 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
   }
 
   CommentPub(pubs) {
-
     try {
       this.navCtrl.navigateForward('/commentaire', { queryParams: { pubId: pubs.id } });
     } catch {
@@ -840,6 +841,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
       return null;
     }
   }
+
 
 async openUrl() {
   console.log('Début de openUrl');

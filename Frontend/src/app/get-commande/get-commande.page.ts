@@ -126,7 +126,9 @@ export class GetCommandePage implements OnInit {
     loading.present();
 
     this.page = 1;
-    this.oldcommande = this.commande;
+
+    localStorage.setItem('oldcommande', JSON.stringify(this.commande));
+    this.oldcommande = JSON.parse(localStorage.getItem('oldcommande'));
 
     try {
     const res : any = await this._apiService.get_commande(this.page, this.limit).toPromise();
@@ -164,7 +166,9 @@ export class GetCommandePage implements OnInit {
     async get_commande_2() {
 
       this.page = 1; // Assure-toi que la pagination est correcte
-      this.oldcommande = this.commande; // Sauvegarde de l'ancienne liste de commandes
+
+      localStorage.setItem('oldcommande', JSON.stringify(this.commande));
+      this.oldcommande = JSON.parse(localStorage.getItem('oldcommande'));
 
       try {
         const res: any = await this._apiService.get_commande(this.page, this.limit).toPromise();
@@ -220,7 +224,9 @@ export class GetCommandePage implements OnInit {
     async loadMore(event) {
 
       this.page++;
-      this.oldcommande = this.commande;
+
+      localStorage.setItem('oldcommande', JSON.stringify(this.commande));
+      this.oldcommande = JSON.parse(localStorage.getItem('oldcommande'));
 
       try {
         const res : any  = await this._apiService.get_commande(this.page, this.limit).toPromise();
@@ -417,7 +423,9 @@ onSearch(event: any) {
 async load_search() {
 
   this.page = 1;
-   this.oldcommande = this.commande;
+
+  localStorage.setItem('oldcommande', JSON.stringify(this.commande));
+  this.oldcommande = JSON.parse(localStorage.getItem('oldcommande'));
 
    try {
      const res : any = await this._apiService.load_search_commande(this.term, this.page, this.limit).toPromise();
@@ -446,7 +454,10 @@ async load_search() {
  async load_more_search(event) {
 
   this.page++;
-  this.oldcommande = this.commande;
+
+  localStorage.setItem('oldcommande', JSON.stringify(this.commande));
+  this.oldcommande = JSON.parse(localStorage.getItem('oldcommande'));
+
   try {
     const res : any  = await this._apiService.load_search_commande(this.term, this.page, this.limit).toPromise();
     console.log('SUCCESS ===', res);

@@ -189,7 +189,7 @@ if (this.nom_plat === null || this.nom_plat === '') {
      (res: any) => {
        console.log('SUCCESS ===', res);
        loading.dismiss();
-       this.router.navigateByUrl('/restaurant');
+       this.router.navigateByUrl('/list-plat');
        alert('resto ajoutée avec succès');
        this.presentToast(' Restaurant ajoute avec success', 'success');
      },

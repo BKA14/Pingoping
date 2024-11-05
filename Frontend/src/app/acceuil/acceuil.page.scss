@@ -32,12 +32,12 @@ ion-card{
   .message-item {
     margin-bottom: 15px;
     border-radius: 8px;
-    margin: 6px;
+    margin: 2px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     background-color: #ffffff;
   }
 
-  /* Styles spécifiques pour les plateformes natives (ajustez le breakpoint si nécessaire) */
+
   @media (min-width: 1024px) {
     .message-item {
       padding-bottom: 0 !important;

@@ -132,7 +132,9 @@ export class GetCommandeUserPage implements OnInit {
     loading.present();
 
     this.page = 1;
-    this.oldcommande = this.commande;
+
+    localStorage.setItem('oldcommande', JSON.stringify(this.commande));
+    this.oldcommande = JSON.parse(localStorage.getItem('oldcommande'));
 
     try {
     const res : any = await this._apiService.get_commande_user(this.userData.iduser, this.page, this.limit).toPromise();
@@ -166,7 +168,9 @@ export class GetCommandeUserPage implements OnInit {
     async loadMore(event) {
 
       this.page++;
-      this.oldcommande = this.commande;
+
+      localStorage.setItem('oldcommande', JSON.stringify(this.commande));
+      this.oldcommande = JSON.parse(localStorage.getItem('oldcommande'));
 
       try {
         const res : any  = await this._apiService.get_commande_user(this.userData.iduser, this.page, this.limit).toPromise();
@@ -269,14 +273,11 @@ resetHideButtonTimer() {
 }
 
 
-
 getPlainText(commentaire: string): string {
   const div = document.createElement('div');
   div.innerHTML = commentaire;
   return div.textContent || div.innerText || '';
 }
-
-
 
 
 onSearch(event: any) {
@@ -298,11 +299,12 @@ onSearch(event: any) {
 }
 
 
-
 async load_search() {
 
   this.page = 1;
-   this.oldcommande = this.commande;
+
+  localStorage.setItem('oldcommande', JSON.stringify(this.commande));
+  this.oldcommande = JSON.parse(localStorage.getItem('oldcommande'));
 
    try {
      const res : any = await this._apiService.load_search_commande(this.term, this.page, this.limit).toPromise();
@@ -331,7 +333,10 @@ async load_search() {
  async load_more_search(event) {
 
   this.page++;
-  this.oldcommande = this.commande;
+
+  localStorage.setItem('oldcommande', JSON.stringify(this.commande));
+  this.oldcommande = JSON.parse(localStorage.getItem('oldcommande'));
+
   try {
     const res : any  = await this._apiService.load_search_commande(this.term, this.page, this.limit).toPromise();
     console.log('SUCCESS ===', res);
@@ -355,6 +360,8 @@ async load_search() {
     event.target.complete();
   }
 }
+
+
 async update(commandeId: number, nouveauStatut: string) {
   const alert = await this.alertController.create({
     header: 'Etes-vous sûr de vouloir mettre en ' + nouveauStatut + ' cette commande ?',

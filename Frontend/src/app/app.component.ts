@@ -10,6 +10,7 @@ import { Capacitor } from '@capacitor/core';
 import { LoginServiceReadyService } from './login-service-ready.service';
 import { FirebaseService } from './firebase-init.service';
 import { Router } from '@angular/router';
+import { NotificationService } from './notification.service';
 import { catchError, finalize, take, timeout } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -36,6 +37,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private FirebaseService: FirebaseService,
     private loadingCtrl: LoadingController,
     private router: Router,
+    private notificationService: NotificationService,
   ) {
     this.initializeApp();
     StatusBar.setOverlaysWebView({ overlay: false });
@@ -46,6 +48,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.FirebaseService.initFirebaseMessaging();
+    this.notificationService.initializePushNotifications();
     this.setupNetworkListeners();
     this.backbutton();
   }
@@ -66,7 +69,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
         const alert = await this.alertController.create({
           header: 'Confirmer',
-          message: 'Voulez-vous vraiment quitter l\'application ?',
+          message: '😢 Voulez-vous vraiment quitter l\'application ?',  // Ajout de l'emoji triste
           buttons: [
             {
               text: 'Non',
@@ -84,6 +87,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
             }
           ]
         });
+
 
         await alert.present();
         return; // Arrête ici pour éviter le retour arrière

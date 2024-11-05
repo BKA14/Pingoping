@@ -19,7 +19,6 @@ const routes: Routes = [
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule),
     data: { preload: true },
-    canActivate: [AuthGuard] //  AuthGuard pour les liens ne necessitant pas le grade admin
   },
   {
     path: 'update-entreprise/:id',
@@ -85,7 +84,6 @@ const routes: Routes = [
     path: 'apropos',
     loadChildren: () => import('./apropos/apropos.module').then( m => m.AproposPageModule),
    // data: { preload: true },
-   canActivate: [AuthGuard] // Utilisez AuthGuard ici
 
   },
   {
@@ -328,7 +326,6 @@ const routes: Routes = [
   {
     path: 'commentaire',
     loadChildren: () => import('./commentaire/commentaire.module').then( m => m.CommentairePageModule),
-    canActivate: [AuthGuard]
 
   },
   {
@@ -399,7 +396,6 @@ const routes: Routes = [
   {
     path: 'statistique',
     loadChildren: () => import('./statistique/statistique.module').then( m => m.StatistiquePageModule),
-    canActivate: [AuthGuard]
   },
   {
     path: 'notifications',

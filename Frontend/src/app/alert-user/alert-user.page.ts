@@ -17,7 +17,7 @@ export class AlertUserPage implements OnInit {
 
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-  alert: any;
+  alert: any = [];
   recherche_date: any;
   page: number = 1;
   limit: number = 10;
@@ -81,7 +81,10 @@ async loadalert_id() {
   });
 
   loading.present();
-  this.oldalert = alert;
+
+  localStorage.setItem('oldalert', JSON.stringify(this.alert));
+  this.oldalert = JSON.parse(localStorage.getItem('oldalert'));
+
 
   let id =  await this.userData.iduser;
   try {
@@ -113,7 +116,11 @@ async loadalert_id() {
   async loadMore(event) {
 
     this.page++;
-    this.oldalert = this.alert;
+
+    localStorage.setItem('oldalert', JSON.stringify(this.alert));
+    this.oldalert = JSON.parse(localStorage.getItem('oldalert'));
+
+
     this._apiService.loadalert_id(this.userData.iduser, this.page, this.limit).subscribe((res: any) => {
         console.log('SUCCESS ===', res);
 
@@ -222,7 +229,11 @@ async loadalert_id() {
   async filterAlerts2() {
 
     this.page= 1;
-    this.oldalert = this.alert;
+
+    localStorage.setItem('oldalert', this.alert);
+
+    this.oldalert =  localStorage.getItem('oldalert');
+
     const loading = await this.loadingCtrl.create({
       message: 'Rechargement...',
       spinner: 'lines',
@@ -267,7 +278,11 @@ async loadalert_id() {
   async More_filterAlerts(event) {
 
     this.page++;
-    this.oldalert = this.alert;
+
+    localStorage.setItem('oldalert', JSON.stringify(this.alert));
+    this.oldalert = JSON.parse(localStorage.getItem('oldalert'));
+
+
     try {
       const res: any = await this._apiService.loadalert_search_all_user(
         this.startDate || '',

@@ -43,7 +43,7 @@ export class AlertePage implements OnInit {
   }
 
 
-  alert: any;
+  alert: any = [];
   page: number = 1;
   limit: number = 10;
   rapport: any;
@@ -205,7 +205,10 @@ export class AlertePage implements OnInit {
     async loadalert() {
 
       this.page = 1;
-      this.oldalert = this.alert;
+
+      localStorage.setItem('oldalert', JSON.stringify(this.alert));
+      this.oldalert = JSON.parse(localStorage.getItem('oldalert'));
+
 
       const loading = await this.loadingCtrl.create({
         message: 'Rechargement...',
@@ -242,7 +245,9 @@ export class AlertePage implements OnInit {
     async loadMore(event) {
 
       this.page++;
-      this.oldalert = this.alert;
+
+      localStorage.setItem('oldalert', JSON.stringify(this.alert));
+      this.oldalert = JSON.parse(localStorage.getItem('oldalert'));
 
       try {
         const res : any  = await this._apiService.loadalert(this.page, this.limit).toPromise();
@@ -297,7 +302,9 @@ export class AlertePage implements OnInit {
 
     async loadalert_search() {
      this.page = 1;
-      this.oldalert = this.alert;
+
+     localStorage.setItem('oldalert', JSON.stringify(this.alert));
+     this.oldalert = JSON.parse(localStorage.getItem('oldalert'));
 
       try {
         const res : any = await this._apiService.loadalert_search(this.term, this.page, this.limit).toPromise();
@@ -323,7 +330,10 @@ export class AlertePage implements OnInit {
 
     async load_more_search(event) {
       this.page++;
-      this.oldalert = this.alert;
+
+      localStorage.setItem('oldalert', JSON.stringify(this.alert));
+      this.oldalert = JSON.parse(localStorage.getItem('oldalert'));
+
       try {
         const res : any  = await this._apiService.loadalert_search(this.term, this.page, this.limit).toPromise();
         console.log('SUCCESS ===', res);
@@ -625,7 +635,11 @@ async filterAlerts2() {
 async More_filterAlerts(event) {
 
   this.page++;
-  this.oldalert = this.alert;
+
+  localStorage.setItem('oldalert', JSON.stringify(this.alert));
+  this.oldalert = JSON.parse(localStorage.getItem('oldalert'));
+
+
   try {
     const res: any = await this._apiService.loadalert_search_all(
       this.startDate || '',

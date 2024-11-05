@@ -114,7 +114,6 @@
 
         <ion-button *ngIf="pub.contact && pub.contact !== '0' && pub.contact !== undefined && pub.contact !== null" class="btnpub contact" fill="outline" [href]="getWhatsAppLink(pub.contact)">
           <ion-icon class="black" name="logo-whatsapp"></ion-icon>
-          Contact-Info
         </ion-button>
         <br>
         <br>
@@ -128,13 +127,11 @@
             <!-- Bouton "J'aime" aligné à gauche -->
             <ion-button (click)="likepub(pub)" class="likes" fill="outline" [ngClass]="{'vert': hasLiked(pub)}">
               <ion-icon class="black" name="flame"></ion-icon>
-              Super
             </ion-button>
 
             <!-- Bouton "Commentaire" aligné à droite -->
             <ion-button (click)="CommentPub(pub)" class="likes" fill="outline">
               <ion-icon class="black" name="chatbox"></ion-icon>
-              Commentaire
             </ion-button>
           </div>
           <div class="icon-right" *ngIf="userData.grade === 'admin' || userData.grade === 'superadmin'">

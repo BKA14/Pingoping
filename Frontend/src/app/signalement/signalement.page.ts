@@ -18,7 +18,7 @@ export class SignalementPage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
 
-signalement : any;
+signalement : any = [];
 term2 : string ;
 term : string ;
 oui_terminer =  'oui';
@@ -126,7 +126,10 @@ async loadsignalement() {
   });
 
   loading.present();
-this.oldsignalement = this.signalement;
+
+  localStorage.setItem('oldsignalement', JSON.stringify(this.signalement));
+  this.oldsignalement = JSON.parse(localStorage.getItem('oldsignalement'));
+
 try {
 const res : any = await this._apiService.loadsignalement(this.page, this.limit).toPromise();
 console.log('SUCCESS ===', res);
@@ -160,8 +163,11 @@ async loadsignalement_2() {
    });
 
    loading.present();
- this.oldsignalement = this.signalement;
- try {
+
+   localStorage.setItem('oldsignalement', JSON.stringify(this.signalement));
+   this.oldsignalement = JSON.parse(localStorage.getItem('oldsignalement'));
+
+   try {
  const res : any = await this._apiService.loadsignalement(this.page, this.limit).toPromise();
  console.log('SUCCESS ===', res);
 
@@ -217,7 +223,9 @@ async loadsignalement_2() {
 async loadMore(event) {
 
   this.page++;
-  this.oldsignalement = this.signalement;
+
+  localStorage.setItem('oldsignalement', JSON.stringify(this.signalement));
+  this.oldsignalement = JSON.parse(localStorage.getItem('oldsignalement'));
 
   try {
     const res : any  = await this._apiService.loadsignalement(this.page, this.limit).toPromise();
@@ -517,7 +525,9 @@ getLoadFunction(event) {
 
 async load_signalement_search(event) {
  this.page = 1;
-  this.oldsignalement = this.signalement;
+
+ localStorage.setItem('oldsignalement', JSON.stringify(this.signalement));
+ this.oldsignalement = JSON.parse(localStorage.getItem('oldsignalement'));
 
   try {
     const res : any = await this._apiService.load_signalement_search(this.term, this.page, this.limit).toPromise();
@@ -542,7 +552,10 @@ async load_signalement_search(event) {
 
 async load_more_search(event) {
   this.page++;
-  this.oldsignalement = this.signalement;
+
+  localStorage.setItem('oldsignalement', JSON.stringify(this.signalement));
+  this.oldsignalement = JSON.parse(localStorage.getItem('oldsignalement'));
+
   try {
     const res : any  = await this._apiService.load_signalement_search(this.term, this.page, this.limit).toPromise();
     console.log('SUCCESS ===', res);
@@ -642,7 +655,10 @@ async filterAlerts2() {
 async More_filterAlerts(event) {
 
   this.page++;
-  this.oldsignalement = this.signalement;
+
+  localStorage.setItem('oldsignalement', JSON.stringify(this.signalement));
+  this.oldsignalement = JSON.parse(localStorage.getItem('oldsignalement'));
+
   try {
     const res: any = await this._apiService.loadsignalement_search_all(
       this.startDate || '',
