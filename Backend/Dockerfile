@@ -4,7 +4,8 @@ FROM php:8.1-apache
 # Installer les dépendances nécessaires
 RUN apt-get update && apt-get install -y \
     libzip-dev \
-    && docker-php-ext-install zip
+    libmysqlclient-dev && \
+    docker-php-ext-install zip mysqli
 
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
