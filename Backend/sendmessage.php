@@ -1,5 +1,15 @@
 <?php
+
 include "config.php";
+require 'vendor/autoload.php';
+
+$redis = new Predis\Client();
+$con = new mysqli($host, $user, $password, $dbname, $port);
+
+use Google\Auth\Credentials\ServiceAccountCredentials;
+use GuzzleHttp\Client;
+
+$input = json_decode(file_get_contents('php://input'), true);
 
 // Récupérer les données JSON de la requête POST
 $input = file_get_contents('php://input');
@@ -66,5 +76,62 @@ if ($iduser && $nom && $prenom && $contact && $message) {
 // Retourner la réponse au format JSON
 echo json_encode($response);
 
+
+
+
+// Notification
+$title = "Nouveau message";
+$body = "Un nouveau message a été envoyé";
+$page = "message-admin";
+
+// Essayer d'envoyer la notification, sans affecter la réponse précédente
+try {
+    sendFCMNotification($con, $title, $body, $page);
+} catch (Exception $e) {
+    // Log or handle the error without affecting the user response
+}
+
 // Fermer la connexion à la base de données
 mysqli_close($con);
+
+
+function insertNotification($con, $title, $body, $page) {
+    $sql = "INSERT INTO notifications (title, message, page) VALUES ('$title', '$body', '$page')";
+    return mysqli_query($con, $sql) ? mysqli_insert_id($con) : null;
+}
+
+function sendFCMNotification($con, $title, $body, $page) {
+    $keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
+    $scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
+    $credentials = new ServiceAccountCredentials($scopes, $keyFilePath);
+    $accessToken = $credentials->fetchAuthToken()['access_token'];
+    $client = new Client();
+
+    $topic = 'admin';
+
+    $response = $client->post('https://fcm.googleapis.com/v1/projects/pingoping/messages:send', [
+        'headers' => [
+            'Authorization' => 'Bearer ' . $accessToken,
+            'Content-Type' => 'application/json',
+        ],
+        'json' => [
+            'message' => [
+                'topic' => $topic,
+                'notification' => [
+                    'title' => $title,
+                    'body' => $body,
+                ],
+                'android' => ['ttl' => '7200s'],
+                'apns' => ['headers' => ['apns-expiration' => (string)(time() + 7200)]],
+                'webpush' => ['headers' => ['TTL' => '7200']],
+            ],
+        ],
+    ]);
+
+    $notificationId = insertNotification($con, $title, $body, $page);
+    if ($notificationId) {
+        $usersSql = "INSERT INTO user_notifications (user_id, notification_id) 
+                     SELECT id, '$notificationId' FROM user WHERE grade IN ('admin', 'superadmin')";
+        mysqli_query($con, $usersSql);
+    }
+}

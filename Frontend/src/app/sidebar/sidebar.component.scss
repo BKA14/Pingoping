@@ -2,9 +2,10 @@
   color: #ffffff; /* blanc */
 }
 
+
 /* Ajustement de la barre de tabulation */
 .menu {
-  height: 45px;
+  height: 55px;
   width: auto;
   background-color: #2dd36f; /* Vert de la couleur de succès d'Ionic */
   border-bottom-left-radius: 20px; /* Rayon pour le coin inférieur gauche */
@@ -14,10 +15,14 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+
 /* Style pour l'élément actif */
 .menu .active {
-  color: #ffffff; /* blanc */
+  color: #ffffff;
   background-color: #00ff00;
+  /* Ajoutez ici d'autres styles pour personnaliser l'effet */
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.9);
+  transform: scale(1.10);
 }
 
 //// pour mon badge

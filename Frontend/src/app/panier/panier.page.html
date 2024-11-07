@@ -61,9 +61,10 @@
     </ion-item>
 
 
-    <ion-button expand="full" color="medium" (click)="vider_panier()">Vider le panier</ion-button>
-
-    <ion-button expand="full" color="success" *ngIf="!isOrderValidated" (click)="validatepanier()">Valider</ion-button>
+    <ion-button expand="full" color="medium" (click)="presentAlert()">Vider le panier</ion-button>
+    <br>
+    <ion-button expand="full" color="warning" *ngIf="!isOrderValidated" (click)="validatepanier()">Valider</ion-button>
+    <br>
     <ion-button expand="full" color="success" *ngIf="isOrderValidated" (click)="validateOrder()">Passer la commande</ion-button>
 
 

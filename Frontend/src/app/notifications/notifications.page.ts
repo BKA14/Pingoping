@@ -32,6 +32,7 @@ export class NotificationsPage implements OnInit {
 
   ) {}
 
+
   ngOnInit() {
 
     this.authService.userData$.subscribe(data => {
@@ -45,7 +46,7 @@ export class NotificationsPage implements OnInit {
 
     this.loadUnreadNotifications();
 
-    this.updateSubscription = interval(30000).subscribe(async () => {
+    this.updateSubscription = interval(10000).subscribe(async () => {
       this.loadUnreadNotifications_reload();
       this.cdr.detectChanges(); // Détecter et appliquer les changements
       });
@@ -55,6 +56,7 @@ export class NotificationsPage implements OnInit {
     console.log('serveur time', this.serverTime );
   });
 }
+
 
   async loadUnreadNotifications() {
    // const userId = this.userData.iduser; // Récupérer l'ID de l'utilisateur connecté
@@ -80,6 +82,7 @@ export class NotificationsPage implements OnInit {
   }
 }
 
+
 async loadUnreadNotifications_reload() {
   // const userId = this.userData.iduser; // Récupérer l'ID de l'utilisateur connecté
 
@@ -104,11 +107,11 @@ async loadUnreadNotifications_reload() {
  }
 }
 
+
   openNotifications() {
     let data ={
       id : this.userData.iduser
     }
-
     this.notificationBadgeService.openNotifications(data);
   }
 

@@ -60,11 +60,11 @@ prenom1:any;
   }
 
 
-  ngOnInit()
-{
-// pour initialiser les notiications push
-this.notificationService.initializePushNotifications();
-}
+    ngOnInit()
+  {
+  // pour initialiser les notiications push
+  this.notificationService.initializePushNotifications();
+  }
 
 
   reloadPage() {
@@ -80,7 +80,6 @@ this.notificationService.initializePushNotifications();
     this.prenom1= (localStorage.getItem('prenom1'));
     console.log(this.prenom1);
     }
-
 
 
   async getentreprises(){

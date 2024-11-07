@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
 import { ApiService } from './api.service';
@@ -31,8 +31,8 @@ export class NotificationBadgeService {
     private loadingCtrl: LoadingController, // Injection de LoadingController si nécessaire
     private authService: authService,
     private wsService: WebSocketService,
-
   ) {
+
       // S'abonner aux changements de données utilisateur
       this.authService.userData$.subscribe(data => {
         this.userData = data;
@@ -40,12 +40,12 @@ export class NotificationBadgeService {
 
       this.loadUnreadNotifications();
 
-      this.notifications_websocket();
+       this.notifications_websocket();
   }
 
     // Méthode pour obtenir la valeur ancienne des notif non lu sans souscription
   async getUnreadCount(): Promise<number> {
-    return await this.unreadCountSubject.getValue(); // Utiliser getValue() sur BehaviorSubject
+    return await this.unreadCountSubject.getValue();
   }
 
   async loadUnreadNotifications(): Promise<void> {

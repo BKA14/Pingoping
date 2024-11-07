@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CartService } from '../services/cart.service';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { authService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { timeService } from '../timeservice.service';
@@ -34,7 +34,8 @@ export class PanierPage implements OnInit {
     private timeService: timeService,
     private _apiService: ApiService,
     public loadingController: LoadingController,
-
+    private cdr: ChangeDetectorRef,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -189,6 +190,34 @@ decreaseQuantity(index: number) {
   }
 }
 
+
+async presentAlert() {
+  const alert = await this.alertController.create({
+    header: 'Etes-vous sur de vouloir vider votre panier ?',
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        handler: () => {
+          //this.handlerMessage = 'Alert canceled';
+        },
+      },
+      {
+        text: 'OK',
+        role: 'confirm',
+        handler: () => {
+
+        this.vider_panier();
+
+      },
+      },
+  ],
+  });
+return alert.present();
+this.cdr.detectChanges();
+}
+
+
     // Vider le panier
     vider_panier() {
       this.cartService.emptyCart(this.userData.iduser).subscribe({
@@ -204,6 +233,9 @@ decreaseQuantity(index: number) {
         }
       });
     }
+
+
+
 
       // Supprimer un plat du panier
   removeFromCart(cartItemId: any) {

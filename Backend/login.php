@@ -39,7 +39,7 @@ if ($row = $result->fetch_object()) {
             "contact" => $row->contact,
             "datefinblocage" => $row->datefinblocage,
             "date_inscription" => $row->date_inscription,
-            "exp" => time() + (24 * 60 * 60) // 24 heures
+            "exp" => time() + (48 * 60 * 60) // 24 heures
         );
         $accessToken = JWT::encode($accessTokenPayload, 'your_secret_key', 'HS256');
 
