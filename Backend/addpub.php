@@ -48,7 +48,8 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     $file_name = generateRandomString(20) . "." . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
 
     // Spécifiez le chemin cible où vous souhaitez enregistrer le fichier sur votre serveur
-    $target_path = "C:/xampp/htdocs/videopub/" . $file_name;
+    $target_path2 = "C:/xampp/htdocs/videopub/" . $file_name;
+    $target_path = "image_app/videopub/" . $file_name;
 
     // Déplacez le fichier téléchargé vers le chemin spécifié
     if (!move_uploaded_file($file_tmp, $target_path)) {

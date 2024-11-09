@@ -66,7 +66,7 @@ if ($stmt) {
         // Parcourez les résultats
         while ($row = mysqli_fetch_assoc($result)) {
             // Ajoutez le lien au chemin de la photo pour chaque ligne de résultat
-            $row['photo'] = "http://$baseUrl/videopub/" . $row['photo'];
+            $row['photo'] = "http://$baseUrl/image_app/videopub/" . $row['photo'];
 
             // Convertir likes_count en entier
             $row['likes_count'] = (int) $row['likes_count'];
