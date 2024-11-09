@@ -15,6 +15,9 @@ header('Content-Type: application/json');
 mysql://root:woHXCLZJcnIzAgjVnocnAbGxwevRcqMo@autorack.proxy.rlwy.net:53042/railway
 $baseUrl = "autorack.proxy.rlwy.net";
 
+$Url_render = "https://pingoping.onrender.com/image_app/";
+
+
 $host = $baseUrl;
 $user = "root";
 $password = "woHXCLZJcnIzAgjVnocnAbGxwevRcqMo";

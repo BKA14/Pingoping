@@ -49,7 +49,7 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
 
     // Spécifiez le chemin cible où vous souhaitez enregistrer le fichier sur votre serveur
     $target_path2 = "C:/xampp/htdocs/videopub/" . $file_name;
-    $target_path = "image_app/videopub/" . $file_name;
+    $target_path = "$Url_render/image_pub/" . $file_name;
 
     // Déplacez le fichier téléchargé vers le chemin spécifié
     if (!move_uploaded_file($file_tmp, $target_path)) {
