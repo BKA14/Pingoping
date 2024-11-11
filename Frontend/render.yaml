@@ -1,0 +1,5 @@
+services:
+  - type: static
+    name: frontend
+    env: static
+    static_publish_path: ./www
