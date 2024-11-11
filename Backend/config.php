@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 header('Content-Type: application/json'); 
 
 mysql://root:woHXCLZJcnIzAgjVnocnAbGxwevRcqMo@autorack.proxy.rlwy.net:53042/railway
+$url_render = "https://pingoping.onrender.com/";
 $baseUrl = "autorack.proxy.rlwy.net";
 $url_alert = $url_render . "image_app/image_alert/";
 $url_pub = $url_render ."image_app/image_pub/";
@@ -20,7 +21,6 @@ $url_resto = $url_render ."image_app/image_resto/";
 $url_plat =$url_render . "image_app/image_plat/";
 $url_apropos = $url_render ."image_app/image_apropos/";
 $url_firebase = "https://pingoping.onrender.com/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json";
-$url_render = "https://pingoping.onrender.com/";
 
 
 $host = $baseUrl;
