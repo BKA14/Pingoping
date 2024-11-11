@@ -20,7 +20,7 @@ headers : HttpHeaders;
   adr_mobile: string='http://192.168.1.67:80/Projet_ Lokaliser/Backend';
   adr_deploy: string='https://pingoping.onrender.com';
   time: any = 10000;
-  base_url = this.adr_mobile;
+  base_url = this.adr_deploy;
 
 
   constructor(public http: HttpClient) {
