@@ -13,7 +13,7 @@ if ($_FILES['photo']) {
     $file_tmp = $_FILES['photo']['tmp_name'];
 
     // Spécifiez le chemin où vous souhaitez enregistrer le fichier sur votre serveur
-    $target_path =$url_pub . $file_name;
+    $target_path =$url_move_pub . $file_name;
 
     // Déplacez le fichier vers le chemin spécifié
     if (move_uploaded_file($file_tmp, $target_path)) {

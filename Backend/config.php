@@ -22,6 +22,11 @@ $url_plat =$url_render . "image_app/image_plat/";
 $url_apropos = $url_render ."image_app/image_apropos/";
 $url_firebase = "https://pingoping.onrender.com/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json";
 
+$url_move_pub = "/var/www/html/image_app/image_pub/";
+$url_move_alert = "/var/www/html/image_app/image_alert/";
+$url_move_resto = "/var/www/html/image_app/image_pub/";
+$url_move_plat = "/var/www/html/image_app/image_plat/";
+
 
 $host = $baseUrl;
 $user = "root";

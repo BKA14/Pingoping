@@ -77,7 +77,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     $file_name = generateRandomString(22) . "." . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
 
     // Spécifiez le chemin cible où vous souhaitez enregistrer le fichier sur votre serveur
-    $target_path =  $url_alert . $file_name;
+    $target_path =  $url_move_alert . $file_name;
 
     // Déplacez le fichier téléchargé vers le chemin spécifié
     if (!move_uploaded_file($file_tmp, $target_path)) {

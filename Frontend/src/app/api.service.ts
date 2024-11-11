@@ -26,7 +26,6 @@ headers : HttpHeaders;
   constructor(public http: HttpClient) {
     this.headers = new HttpHeaders()
       .set('Accept', 'application/json')
-      .set('Content-Type', 'application/json');
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
