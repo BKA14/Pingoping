@@ -73,12 +73,12 @@ prenom1:any;
 
   getsession(){
    this.grade= (localStorage.getItem('grade'));
-   console.log(this.grade);
+   // console.log(this.grade);
     }
 
   getsession1(){
     this.prenom1= (localStorage.getItem('prenom1'));
-    console.log(this.prenom1);
+    // console.log(this.prenom1);
     }
 
 
@@ -95,7 +95,7 @@ prenom1:any;
   this._apiService.getentreprisess().subscribe((res:any) => {
 
     this.entreprises = res; // Pour afficher les services sur l'app
-    console.log("SUCCESS ===",res);
+   //  console.log("SUCCESS ===",res);
     this.pageUrl= '/'+ this.lien ; // Initialisez cette variable avec l'URL souhaité depuis la base de données
     loading.dismiss();
    },(error: any) => {
@@ -112,7 +112,7 @@ this.getsession1();
 
 refreshPage(e){
 setTimeout(() => {
-  console.log('rafraichissement de la page');
+  // console.log('rafraichissement de la page');
   e.target.complete();
 },500);
 }

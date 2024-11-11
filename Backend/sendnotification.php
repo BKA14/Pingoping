@@ -1,12 +1,17 @@
 <?php
 include "config.php";
+include 'auth_admin.php'; // Inclure le fichier d'authentification admin
+
+// Appel de la fonction pour vérifier le token et le grade
+$userData = verifyAdminToken();
+
 require 'vendor/autoload.php';
 
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use GuzzleHttp\Client;
 
 // Chemin vers le fichier JSON du compte de service
-$keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-00ca2d68c2.json';
+$keyFilePath = 'cle_firebase/pingoping-firebase-adminsdk-gjefv-00ca2d68c2.json';
 
 // Scopes requis pour FCM
 $scopes = ['https://www.googleapis.com/auth/firebase.messaging'];

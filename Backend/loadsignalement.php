@@ -1,6 +1,10 @@
 <?php
 include"config.php";
 $data = array();
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
 
 // Obtenir les paramètres de pagination
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;

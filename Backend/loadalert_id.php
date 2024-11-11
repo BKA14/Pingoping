@@ -1,5 +1,9 @@
 <?php
 include "config.php";
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
 
 $id = $_GET['id'];
 // Obtenir les paramètres de pagination
@@ -20,7 +24,7 @@ if ($result) {
     // Parcourez les résultats
     while ($row = mysqli_fetch_assoc($result)) {
         // Ajoutez le lien au chemin de l'image pour chaque ligne de résultat
-        $row['image'] = "http://$baseUrl/alert/" . $row['image'];
+        $row['image'] = $url_alert . $row['image'];
         // Ajoutez la ligne modifiée au tableau de résultats
         $modified_rows[] = $row;
     }

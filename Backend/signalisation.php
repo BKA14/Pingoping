@@ -1,6 +1,11 @@
 <?php
 
 include "config.php";
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
+
 require 'vendor/autoload.php';
 
 $redis = new Predis\Client();
@@ -72,7 +77,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     $file_name = generateRandomString(22) . "." . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
 
     // Spécifiez le chemin cible où vous souhaitez enregistrer le fichier sur votre serveur
-    $target_path = "C:/xampp/htdocs/alert/" . $file_name;
+    $target_path =  $url_alert . $file_name;
 
     // Déplacez le fichier téléchargé vers le chemin spécifié
     if (!move_uploaded_file($file_tmp, $target_path)) {
@@ -125,7 +130,7 @@ function insertNotification($con, $title, $body, $page) {
 }
 
 function sendFCMNotification($con, $title, $body, $page) {
-    $keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
+    $keyFilePath = 'cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
     $scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
     $credentials = new ServiceAccountCredentials($scopes, $keyFilePath);
     $accessToken = $credentials->fetchAuthToken()['access_token'];

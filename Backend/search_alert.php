@@ -1,5 +1,10 @@
 <?php
 include "config.php";
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
+
 
 $mot = $_GET['term'];
 
@@ -43,7 +48,7 @@ if ($stmt) {
     // Parcourez les résultats
     while ($row = $result->fetch_assoc()) {
         // Ajoutez le lien au chemin de l'image pour chaque ligne de résultat
-        $row['image'] = "http://$baseUrl/alert/" . $row['image'];
+        $row['image'] =  $url_alert . $row['image'];
         // Ajoutez la ligne modifiée au tableau de résultats
         $modified_rows[] = $row;
     }

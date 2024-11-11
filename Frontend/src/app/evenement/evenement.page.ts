@@ -551,18 +551,22 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
         if(res.result === 'oui') {
           if(res.data.etat === 'oui') {
-           await  this.disLike(pub);
             pub.likes_count--;
             pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
+            this.cdr.detectChanges();
+            await  this.disLike(pub);
+
           } else if (res.data.etat === 'non') {
-            await  this.Likes(pub);
             pub.likes_count++;
             pub.user_ids.push(this.userData.iduser);
+            this.cdr.detectChanges();
+            await  this.Likes(pub);
           }
         } else if (res.result === 'non') {
-          await this.Likepremier(pub);
           pub.likes_count++;
           pub.user_ids.push(this.userData.iduser);
+          this.cdr.detectChanges();
+          await this.Likepremier(pub);
         }
 
         pub.isLoading = false;
@@ -610,7 +614,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
            }
 
            this._apiService.disLike(pubs.id,data).subscribe((res:any) => {
-            console.log("SUCCESS ===",res);
+           //  console.log("SUCCESS ===",res);
              //window.location.reload();
 
              //alert('Nouveau etat ajoute avec success');
@@ -636,7 +640,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
            }
 
            this._apiService.disLike(pub.id,data).subscribe((res:any) => {
-            console.log("SUCCESS ===",res);
+           //  console.log("SUCCESS ===",res);
 
              //window.location.reload();
              //alert('Nouveau etat ajoute avec success');
@@ -674,7 +678,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
 
     // Log pour indiquer le rafraîchissement
-    console.log('Rafraîchissement de la page');
+    // console.log('Rafraîchissement de la page');
 
     // Terminer l'animation de rafraîchissement
     e.target.complete();
@@ -727,11 +731,11 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     getcategorie(){
 
       this._apiService.getcategorie().subscribe((res:any) => {
-        console.log("SUCCESS ===",res);
+      //   console.log("SUCCESS ===",res);
         this.categorie = res;
        },(error: any) => {
 
-        console.log("Erreur de connection ",error);
+       //  console.log("Erreur de connection ",error);
         this.cdr.detectChanges();
     })
 
@@ -861,8 +865,8 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
       const userLatitude = coordinates.coords.latitude;
       const userLongitude = coordinates.coords.longitude;
 
-      console.log('Latitude:', userLatitude);
-      console.log('Longitude:', userLongitude);
+      // console.log('Latitude:', userLatitude);
+      // console.log('Longitude:', userLongitude);
 
       this.userlongitude = userLongitude;
       this.userlatitude = userLatitude;
@@ -875,12 +879,12 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
   }
 
 async openUrl_evenement() {
-  console.log('Début de openUrl');
+  // console.log('Début de openUrl');
   const userLocationData = await this.getUserLocation();
 
   if (userLocationData) {
     const { userLatitude, userLongitude } = userLocationData;
-    console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
+   //  console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
 
     if (Array.isArray(this.event)) {
       for (const publi of this.event) {
@@ -891,13 +895,13 @@ async openUrl_evenement() {
           publi.longitude
         );
 
-        console.log(`Distance : ${distance} mètres`);
+       //  console.log(`Distance : ${distance} mètres`);
 
         if (!isNaN(distance)) {
           publi.distanceToUser = distance;
-          console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
+         //  console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
         } else {
-          console.error('La distance est NaN.');
+         //  console.error('La distance est NaN.');
         }
       }
     } else {
@@ -965,7 +969,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+  // console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
@@ -1004,7 +1008,7 @@ resetHideButtonTimer() {
 
   // Méthode pour gérer les erreurs vidéo
 handleVideoError(videoElement: HTMLVideoElement) {
-  console.log('Video error', videoElement);
+ //  console.log('Video error', videoElement);
   this.videoError = true; // Mettre à jour l'état d'erreur vidéo
 }
 

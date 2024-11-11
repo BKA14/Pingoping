@@ -222,6 +222,7 @@ this.getpub();
         if(res.data.etat === 'oui') {
         pub.likes_count = pub.likes_count - 1;
         pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
+        this.cdr.detectChanges();
         await this.disLike(pub);
         console.log("dislike",pub.likes_count);
         console.log("dislike",pub.user_ids);
@@ -230,6 +231,7 @@ this.getpub();
         {
           pub.likes_count = pub.likes_count + 1;
           pub.user_ids.push(this.userData.iduser);
+          this.cdr.detectChanges();
           await  this.Likes(pub);
           console.log("like",pub.likes_count);
           console.log("like",pub.user_ids);
@@ -244,9 +246,10 @@ this.getpub();
            {
            pub.likes_count = pub.likes_count + 1;
            pub.user_ids.push(this.userData.iduser);
+           this.cdr.detectChanges();
            await this.Likepremier(pub);
-           console.log("like",pub.likes_count);
-           console.log("like",pub.user_ids);
+           // console.log("like",pub.likes_count);
+           // console.log("like",pub.user_ids);
            }
 
            pub.isLoading = false;
@@ -254,8 +257,8 @@ this.getpub();
          this.cdr.detectChanges();
         },(error: any) => {
           pub.isLoading = false;
-          console.log('Erreur de connection  nouveau etat non enregistre');
-        console.log("ERROR ===",error);
+         //  console.log('Erreur de connection  nouveau etat non enregistre');
+         //console.log("ERROR ===",error);
        })
 
          }
@@ -277,7 +280,7 @@ this.getpub();
          //alert('Nouveau etat ajoute avec success');
        },(error: any) => {
 
-        console.log('Erreur de connection  nouveau etat non enregistre');
+         //console.log('Erreur de connection  nouveau etat non enregistre');
         console.log("ERROR ===",error);
        })
 
@@ -297,12 +300,12 @@ this.getpub();
            }
 
            this._apiService.disLike(pubs.id,data).subscribe((res:any) => {
-            console.log("SUCCESS ===",res);
+            // console.log("SUCCESS ===",res);
 
              //alert('Nouveau etat ajoute avec success');
            },(error: any) => {
 
-            console.log('Erreur de connection  nouveau etat non enregistre');
+           //  console.log('Erreur de connection  nouveau etat non enregistre');
             console.log("ERROR ===",error);
            })
 
@@ -322,11 +325,11 @@ this.getpub();
            }
 
            this._apiService.disLike(pub.id,data).subscribe((res:any) => {
-            console.log("SUCCESS ===",res);
+           //  console.log("SUCCESS ===",res);
 
            },(error: any) => {
 
-            console.log('Erreur de connection  nouveau etat non enregistre');
+            // console.log('Erreur de connection  nouveau etat non enregistre');
             console.log("ERROR ===",error);
            })
 
@@ -360,14 +363,14 @@ async getpub(){
 
    loading.present();
    this._apiService.getpubid(this.pubid).subscribe(async (res:any) => {
-   console.log("SUCCESS == pub",res);
+    //console.log("SUCCESS == pub",res);
 
    if (res && res.length < 1) {
     this.pub = 'aucune_alerte';
   }
   else {
     this.pub = res;
-    console.log('latitude', res[0].latitude)
+    // console.log('latitude', res[0].latitude)
     await this.openUrl();
   }
 
@@ -378,7 +381,7 @@ async getpub(){
       this.pub = this.oldpub;
     }
     else { this.pub = 'erreur_chargement'; }
-   console.log('Erreur de connection avec le serveur veillez reessayer');
+    //console.log('Erreur de connection avec le serveur veillez reessayer');
    this.pub = this.oldpub;
    loading.dismiss();
 
@@ -395,7 +398,7 @@ loadInitialPub() {
     (message) => {
       if (Array.isArray(message)) {
         // Chargement initial des alertes
-        console.log('Initial alerts loaded:');
+        // console.log('Initial alerts loaded:');
       } else {
         // Traitement des actions individuelles
         switch (message.action) {
@@ -405,11 +408,11 @@ loadInitialPub() {
               const index = this.pub.findIndex(pub => pub.id === updatedPub.id);
               if (index !== -1) {
                 this.pub[index].countdown = updatedPub.countdown;
-                console.log(`Nouveau countdown pour pub ${updatedPub.id}:`, updatedPub.countdown);
+                // console.log(`Nouveau countdown pour pub ${updatedPub.id}:`, updatedPub.countdown);
               }
             });
           case 'insert':
-              console.log('New alert inserted:', message);
+               //console.log('New alert inserted:', message);
               break;
             case 'update':
               const updatedIndex = this.pub.findIndex(pub => pub.id === message.old_pub_id);
@@ -425,15 +428,15 @@ loadInitialPub() {
                 // Remplacer l'élément dans le tableau this.pub
                 this.pub[updatedIndex] = message;
 
-                console.log('pub updated:', message);
-                console.log('pub updated:', message.old_pub_id);
+               //  console.log('pub updated:', message);
+                // console.log('pub updated:', message.old_pub_id);
               }
               break;
           case 'delete':
-            console.log('pub deleted:', message);
+            // console.log('pub deleted:', message);
             break;
           default:
-            console.log('Unknown action:', message);
+            // console.log('Unknown action:', message);
         }
       }
     },
@@ -448,31 +451,31 @@ loadLike() {
     (message) => {
       if (Array.isArray(message)) {
         // Chargement initial des alertes
-        console.log('Ne fais rien car géré au niveau des Pub:');
+        // console.log('Ne fais rien car géré au niveau des Pub:');
         // Vous pouvez éventuellement traiter les données initiales ici si nécessaire
       } else {
         // Traitement des actions individuelles
         switch (message.action) {
           case 'insert':
-            console.log('Ne fais rien pour insert car géré au niveau des Pub:');
+            // console.log('Ne fais rien pour insert car géré au niveau des Pub:');
             // Vous pouvez ajouter un traitement spécifique si nécessaire
             break;
           case 'update':
-            console.log('Il y a une mise à jour like sur la pub ok:');
+           //  console.log('Il y a une mise à jour like sur la pub ok:');
             const updatedIndex = this.pub.findIndex(pub => pub.id === message.idpub);
             if (updatedIndex !== -1) {
               this.pub[updatedIndex].likes_count = message.likes_count;
               this.pub[updatedIndex].user_ids = message.user_ids;
-              console.log('Likes_count de la pub mis à jour:', message.likes_count);
-              console.log('User_ids de la pub mis à jour:', message.user_ids);
+              // console.log('Likes_count de la pub mis à jour:', message.likes_count);
+              // console.log('User_ids de la pub mis à jour:', message.user_ids);
             }
             break;
           case 'delete':
-            console.log('Ne fais rien pour delete car géré au niveau des Pub:');
+           //  console.log('Ne fais rien pour delete car géré au niveau des Pub:');
             // Vous pouvez ajouter un traitement spécifique si nécessaire
             break;
           default:
-            console.log('Action inconnue:', message);
+            // console.log('Action inconnue:', message);
         }
       }
     },
@@ -486,32 +489,32 @@ loadCommentaires() {
     (message) => {
       if (Array.isArray(message)) {
         // Chargement initial des alertes
-        console.log('Ne fais rien car pas besoin pour le moment:');
+        // console.log('Ne fais rien car pas besoin pour le moment:');
       } else {
         // Traitement des actions individuelles
         switch (message.action) {
           case 'insert':
-            console.log('Un nouveau commentaires inseré:');
+           //  console.log('Un nouveau commentaires inseré:');
             this.comment.push(message);
             break;
           case 'update':
-            console.log('Il y a une mise à jour de commentraires:');
+            // console.log('Il y a une mise à jour de commentraires:');
             const updatedIndex = this.comment.findIndex(comment => comment.id === message.old_commentaires_id);
             if (updatedIndex !== -1) {
               const ancienne_date = this.comment[updatedIndex].heure;
               message.heure =  ancienne_date;
               this.comment[updatedIndex] = message;
-              console.log('commentaires mis a jour:', message.old_commentaires_id);
-              console.log('commentaires mis a jour :', message.commentaires_id);
+              // console.log('commentaires mis a jour:', message.old_commentaires_id);
+              // console.log('commentaires mis a jour :', message.commentaires_id);
             }
             break;
           case 'delete':
-            console.log('Il y a une suppression de commentraires:');
+            // console.log('Il y a une suppression de commentraires:');
             this.comment = this.comment.filter(comment => comment.id !== message.old_commentaires_id);
-            console.log('commentaire deleted:', message);
+           //  console.log('commentaire deleted:', message);
             break;
           default:
-            console.log('Action inconnue:', message);
+            // console.log('Action inconnue:', message);
         }
       }
     },
@@ -540,7 +543,7 @@ this.infiniteScrollDisabled = false; // Réactiver l'infinite scroll
 await this.getpub();
 this.cdr.detectChanges();
 await this.loadcommentairepub(this.pubid);
-console.log('rafraichissement de la page');
+ //console.log('rafraichissement de la page');
 e.target.complete();
 
 }
@@ -631,8 +634,8 @@ async getUserLocation(): Promise<{ userLatitude: number; userLongitude: number }
     const userLatitude = coordinates.coords.latitude;
     const userLongitude = coordinates.coords.longitude;
 
-    console.log('Latitude:', userLatitude);
-    console.log('Longitude:', userLongitude);
+    // console.log('Latitude:', userLatitude);
+    // console.log('Longitude:', userLongitude);
 
     this.userlongitude = userLongitude;
     this.userlatitude = userLatitude;
@@ -645,12 +648,12 @@ async getUserLocation(): Promise<{ userLatitude: number; userLongitude: number }
 }
 
 async openUrl() {
-console.log('Début de openUrl');
+ //console.log('Début de openUrl');
 const userLocationData = await this.getUserLocation();
 
 if (userLocationData) {
   const { userLatitude, userLongitude } = userLocationData;
-  console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
+  // console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
 
   if (Array.isArray(this.pub)) {
     for (const publi of this.pub) {
@@ -661,11 +664,11 @@ if (userLocationData) {
         publi.longitude
       );
 
-      console.log(`Distance : ${distance} mètres`);
+     //  console.log(`Distance : ${distance} mètres`);
 
       if (!isNaN(distance)) {
         publi.distanceToUser = distance;
-        console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
+       //  console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
       } else {
         console.error('La distance est NaN.');
       }
@@ -711,14 +714,14 @@ async loadcommentairepub(pubId: string) {
     loading.present();
 
     this._apiService.loadcommentairepub(pubId, this.page, this.limit).subscribe((res: any) => {
-    console.log('SUCCESS ===', res);
+    // console.log('SUCCESS ===', res);
     // Mettez à jour les commentaires avec la réponse de l'API
 
       this.comment = res;
       loading.dismiss();
       this.iduserenligne = pubId;
     } , (error: any) => {
-      console.log('Erreur de connexion avec le serveur, veuillez réessayer.');
+      // console.log('Erreur de connexion avec le serveur, veuillez réessayer.');
       this.comment = this.oldcomment;
     });
 
@@ -729,7 +732,7 @@ async loadMore(event) {
   this.page++;
   this.oldcomment = this.comment;
     this._apiService.loadcommentairepub(this.pubid, this.page, this.limit).subscribe((res: any) => {
-      console.log('SUCCESS ===', res);
+      // console.log('SUCCESS ===', res);
 
     this.comment = this.comment.concat(res);
 
@@ -739,7 +742,7 @@ async loadMore(event) {
     }
     event.target.complete();
   } , (error: any) => {
-    console.log('Erreur de connexion avec le serveur, veuillez réessayer.');
+    // console.log('Erreur de connexion avec le serveur, veuillez réessayer.');
     this.comment = this.oldcomment;
   });
 }
@@ -786,7 +789,7 @@ this.countdownValue = null;
         return;
       }
     } catch (error) {
-      console.log('erreur de chargement', error);
+     //  console.log('erreur de chargement', error);
       loading.dismiss();
       return;
     }
@@ -806,11 +809,11 @@ this.countdownValue = null;
 
     try {
       const res : any = await this._apiService.sendcomment(newComment).toPromise();
-      console.log("SUCCESS ===", res);
+      // console.log("SUCCESS ===", res);
 
            const idsubmit = res.id;
-           console.log('id res', res.id);
-           console.log('idsubmit', idsubmit); // Affiche l'identifiant retourné
+         //   console.log('id res', res.id);
+          //  console.log('idsubmit', idsubmit); // Affiche l'identifiant retourné
 
            newComment.id = idsubmit;
 
@@ -842,11 +845,11 @@ this.countdownValue = null;
   scrollTo() {
     // Obtenez une référence à la liste des commentaires par son identifiant unique
     const commentsList = document.getElementById('commentsList');
-    console.log('ok 1', commentsList)
-    console.log('ok 2', commentsList.lastElementChild)
+    // console.log('ok 1', commentsList)
+    // console.log('ok 2', commentsList.lastElementChild)
     if (commentsList && commentsList.lastElementChild) {
       // Faites défiler jusqu'au dernier élément de la liste
-      console.log('ok 3', commentsList)
+    //   console.log('ok 3', commentsList)
 
       commentsList.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
@@ -977,8 +980,8 @@ this.cdr.detectChanges();
 
 modifcommentaire(commentaire : any): void {
 this.id_comment = commentaire.id;
-console.log( 'idvue', this.id_comment  );
-console.log( 'idvue2', commentaire.id  );
+ //console.log( 'idvue', this.id_comment  );
+ //console.log( 'idvue2', commentaire.id  );
 this.newComment = commentaire.commentaire;
 this.modif=true;
 this.reponse=false;
@@ -986,8 +989,8 @@ this.reponse=false;
 
 repondre(commentaire) {
   this.id_reponse = commentaire.id;
-  console.log( 'idvue', this.id_reponse  );
-  console.log( 'idvue2', commentaire.id  );
+   //console.log( 'idvue', this.id_reponse  );
+   //console.log( 'idvue2', commentaire.id  );
   this.reponse=true;
   this.modif=false;
   }
@@ -1051,7 +1054,7 @@ const data = {
     };
 
   const result = await this._apiService.verifie(data).toPromise();
-  console.log("SUCCESS ===", result);
+  // console.log("SUCCESS ===", result);
 
   if (result === true) {
     loading.dismiss();
@@ -1064,7 +1067,7 @@ const data = {
   try {
 
   const res = await this._apiService.signalercommentaire(newComment).toPromise();
-  console.log("SUCCESS ===", res);
+  // console.log("SUCCESS ===", res);
   loading.dismiss();
   alert('Signalement envoyé, notre équipe va s\'en charger');
 
@@ -1139,16 +1142,16 @@ async signalement(commentaire) {
       commentaire: this.newComment,
       idcommentrepondu : this.id_reponse,
       };
-      console.log('id', this.id_reponse);
+     //  console.log('id', this.id_reponse);
 
       try {
       const res : any = await this._apiService.repondrecommentaire(newComment).toPromise();
-      console.log("SUCCESS ===", res);
+      // console.log("SUCCESS ===", res);
 
       // Ajouter l'identifiant retourné dans l'objet de commentaire
          const idnouv = res.id;
-         console.log('id res', res.id);
-         console.log('idniouv', idnouv); // Affiche l'identifiant retourné
+        //  console.log('id res', res.id);
+         // console.log('idniouv', idnouv); // Affiche l'identifiant retourné
 
          newComment.id = idnouv;
 
@@ -1213,7 +1216,7 @@ toggleOptions(event: MouseEvent,commentaire: any): void {
  // commentaire.showOptions = !commentaire.showOptions;
 
   event.stopPropagation();
-  console.log('1',event)
+ //  console.log('1',event)
 
 }
 
@@ -1248,7 +1251,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+  // console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 700 && scrollTop + clientHeight < scrollHeight - 800) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
@@ -1299,7 +1302,7 @@ setupIntersectionObserver() {
 }
 
 handleVideoClick(videoElement: HTMLVideoElement) {
-  console.log('Video clicked', videoElement);
+  // console.log('Video clicked', videoElement);
   if (this.currentPlayingVideo && this.currentPlayingVideo !== videoElement) {
     // Pause la vidéo actuellement en cours si elle existe et n'est pas la même que celle cliquée
     this.pauseVideo(this.currentPlayingVideo);
@@ -1317,14 +1320,14 @@ handleVideoClick(videoElement: HTMLVideoElement) {
 
 // Méthode pour gérer la pause manuelle
 toggleManualPause(videoElement: HTMLVideoElement) {
-  console.log('Entre dans toggle:');
+   //console.log('Entre dans toggle:');
   this.manualPause = !this.manualPause;
   if (this.manualPause) {
-    console.log('Entre dans toggle 1:', this.manualPause);
+   //  console.log('Entre dans toggle 1:', this.manualPause);
     this.pauseVideo(videoElement);
-    console.log('Entre dans toggle 2:', this.manualPause);
+    // console.log('Entre dans toggle 2:', this.manualPause);
   } else {
-    console.log('Entre dans toggle 3:', this.manualPause);
+     //console.log('Entre dans toggle 3:', this.manualPause);
     this.playVideo(videoElement);
   }
 }
@@ -1332,10 +1335,10 @@ toggleManualPause(videoElement: HTMLVideoElement) {
 @HostListener('document:fullscreenchange', ['$event'])
 onFullScreenChange(event: Event) {
   const videoElement = event.target as HTMLVideoElement;
-  console.log('Fullscreen change event', videoElement);
+  // console.log('Fullscreen change event', videoElement);
   if (!document.fullscreenElement) {
     // Le document n'est pas en mode plein écran
-    console.log('Exited fullscreen mode');
+  //   console.log('Exited fullscreen mode');
   }
 }
 

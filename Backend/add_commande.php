@@ -1,6 +1,11 @@
 <?php
 
 include "config.php";
+include 'auth_admin.php'; // Inclure le fichier d'authentification admin
+
+// Appel de la fonction pour vérifier le token et le grade
+$userData = verifyAdminToken();
+
 require 'vendor/autoload.php';
 
 $redis = new Predis\Client();
@@ -98,7 +103,7 @@ function insertNotification($con, $title, $body, $page) {
 }
 
 function sendFCMNotification($con, $title, $body, $page) {
-    $keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
+    $keyFilePath = 'cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
     $scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
     $credentials = new ServiceAccountCredentials($scopes, $keyFilePath);
     $accessToken = $credentials->fetchAuthToken()['access_token'];

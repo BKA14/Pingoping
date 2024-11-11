@@ -134,7 +134,7 @@ export class NotificationBadgeService {
       const notifications = await this.getUnreadNotifications(this.userData.iduser).toPromise();
 
       if (notifications) {
-        console.log('Notifications récupérées:', notifications);
+        // console.log('Notifications récupérées:', notifications);
         this.notifications = notifications;
         this.valeur_count = this.notifications.length;
 
@@ -197,7 +197,7 @@ export class NotificationBadgeService {
       });
 
       this.updateUnreadCount(0); // Réinitialiser le compteur partagé
-      console.log(' isread mis a jour');
+      // console.log(' isread mis a jour');
 
     }, (error) => {
       console.error('Erreur lors de la mise à jour des notifications comme lues:', error);

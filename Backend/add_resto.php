@@ -1,5 +1,9 @@
 <?php
 include "config.php";
+include 'auth_admin.php'; // Inclure le fichier d'authentification admin
+
+// Appel de la fonction pour vérifier le token et le grade
+$userData = verifyAdminToken();
 
 
 // Fonction pour générer un ID unique
@@ -52,7 +56,7 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     $file_name = $nom . generateRandomString(20) . "." . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
 
     // Spécifiez le chemin cible où vous souhaitez enregistrer le fichier sur votre serveur
-    $target_path = "C:/xampp/htdocs/restaurant/" . $file_name;
+    $target_path = $url_resto . $file_name;
 
     // Déplacez le fichier téléchargé vers le chemin spécifié
     if (!move_uploaded_file($file_tmp, $target_path)) {

@@ -1,5 +1,9 @@
 <?php
 include "config.php";
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
 
 // Définir le fuseau horaire à UTC+0
 date_default_timezone_set('UTC');
@@ -66,7 +70,7 @@ if ($stmt) {
         // Parcourez les résultats
         while ($row = mysqli_fetch_assoc($result)) {
             // Ajoutez le lien au chemin de la photo pour chaque ligne de résultat
-            $row['photo'] = "$Url_render/image_pub/" . $row['photo'];
+            $row['photo'] = $url_pub. $row['photo'];
 
             // Convertir likes_count en entier
             $row['likes_count'] = (int) $row['likes_count'];

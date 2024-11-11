@@ -69,7 +69,7 @@ ngOnInit() {
 
   this.timeService.getServerTime().subscribe((response) => {
     this.serverTime = response.serverTime;
-    console.log('serveur time', this.serverTime );
+    // console.log('serveur time', this.serverTime );
   });
 
   this.signalement_websocket();
@@ -132,7 +132,7 @@ async loadsignalement() {
 
 try {
 const res : any = await this._apiService.loadsignalement(this.page, this.limit).toPromise();
-console.log('SUCCESS ===', res);
+ //console.log('SUCCESS ===', res);
 
 if (res && res.length < 1) {
   this.signalement = 'aucune_alerte';
@@ -144,7 +144,7 @@ if (res && res.length < 1) {
   }
   loading.dismiss();
 } catch (error) {
-console.log('erreur de chargement', error);
+ //console.log('erreur de chargement', error);
 if (this.oldsignalement && this.oldsignalement.length > 0) {
   this.signalement =  this.oldsignalement;
 }
@@ -169,7 +169,7 @@ async loadsignalement_2() {
 
    try {
  const res : any = await this._apiService.loadsignalement(this.page, this.limit).toPromise();
- console.log('SUCCESS ===', res);
+  //console.log('SUCCESS ===', res);
 
  if (res && res.length < 1) {
    this.signalement = 'aucune_alerte';
@@ -181,7 +181,7 @@ async loadsignalement_2() {
    }
    loading.dismiss();
  } catch (error) {
- console.log('erreur de chargement', error);
+  //console.log('erreur de chargement', error);
  if (this.oldsignalement && this.oldsignalement.length > 0) {
    this.signalement =  this.oldsignalement;
  }
@@ -229,7 +229,7 @@ async loadMore(event) {
 
   try {
     const res : any  = await this._apiService.loadsignalement(this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+   //  console.log('SUCCESS ===', res);
 
     this.signalement = this.signalement.concat(res);
     event.target.complete();
@@ -239,7 +239,7 @@ async loadMore(event) {
     this.infiniteScrollDisabled = true;
   }
   } catch (error) {
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
     if (this.oldsignalement && this.oldsignalement.length > 0) {
       this.signalement = this.oldsignalement;
     }
@@ -255,28 +255,28 @@ signalement_websocket() {
       if (Array.isArray(message)) {
         // Chargement initial des alertes
        // this.signalement = message;
-        console.log('Initial alerts loaded:', this.signalement);
+        // console.log('Initial alerts loaded:', this.signalement);
       } else {
         // Traitement des actions individuelles
         switch (message.action) {
           case 'insert':
             this.signalement.unshift(message);
             console.log('New signalement inserted:', message);
-            break;
+            // break;
           case 'update':
             const updatedIndex = this.signalement.findIndex(signalement => signalement.id === message.old_signalement_id);
             if (updatedIndex !== -1) {
               this.signalement[updatedIndex] = message;
-              console.log('signalement updated:', message);
-              console.log('signalement updated:', message.old_signalement_id);
+             //  console.log('signalement updated:', message);
+             //  console.log('signalement updated:', message.old_signalement_id);
             }
             break;
           case 'delete':
             this.signalement = this.signalement.filter(signalement => signalement.id !== message.signalement_id);
-            console.log('signalement deleted:', message);
+           //  console.log('signalement deleted:', message);
             break;
           default:
-            console.log('Unknown action:', message);
+           //  console.log('Unknown action:', message);
         }
       }
     },
@@ -293,14 +293,14 @@ signalement_websocket() {
     }
 
     this._apiService.traitement(signalement.id ,data).subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+     //  console.log("SUCCESS ===",res);
       signalement.admin_nom = this.userData.nom;
       signalement.admin_prenom = this.userData.prenom1;
       signalement.traitement = 'oui';
       this.loadsignalement_2();
       alert(' Signalement traité !');
      },(error: any) => {
-      console.log("Erreur de connection");
+    //   console.log("Erreur de connection");
       alert(' Erreur de connection ');
     })
     }
@@ -369,12 +369,12 @@ formatCommentTime(time: string): string {
     }
 
     this._apiService.confirmer(signalement.idusersignaler ,data).subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+    //   console.log("SUCCESS ===",res);
       this.signalement.selectedDateOption  = !this.signalement.selectedDateOption;
       this.loadsignalement_2();
       alert(' blocage effectué  !');
      },(error: any) => {
-      console.log("Erreur de connection");
+     //  console.log("Erreur de connection");
       alert(' Erreur de connection ');
     })
    }
@@ -390,12 +390,12 @@ async user() {
   this.olduser = this.userbloquer;
   try {
   const res = await this._apiService.usersignaler().toPromise();
-  console.log('SUCCESS ok ===', res);
+  // console.log('SUCCESS ok ===', res);
 
   this.userbloquer = res;
 
   } catch (error) {
-  console.log('erreur de chargement', error);
+  // console.log('erreur de chargement', error);
   this.userbloquer = this.olduser;
   }
   }
@@ -434,11 +434,11 @@ debloquer(signalement){
   }
 
   this._apiService.debloquer(signalement.idusersignaler ,data).subscribe((res:any) => {
-    console.log("SUCCESS ===",res);
+    // console.log("SUCCESS ===",res);
     this.loadsignalement_2();
    alert(' deblocage effectué  !');
    },(error: any) => {
-    console.log("Erreur de connection");
+    // console.log("Erreur de connection");
     alert(' Erreur de connection ');
   })
 
@@ -475,7 +475,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+   //console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
@@ -531,7 +531,7 @@ async load_signalement_search(event) {
 
   try {
     const res : any = await this._apiService.load_signalement_search(this.term, this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+   //  console.log('SUCCESS ===', res);
 
     if (res && res.length < 1) {
       this.signalement = 'aucune_alerte';
@@ -545,7 +545,7 @@ async load_signalement_search(event) {
       this.signalement = this.oldsignalement;
     }
     else { this.signalement = 'erreur_chargement'; }
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
   }
 }
 
@@ -558,7 +558,7 @@ async load_more_search(event) {
 
   try {
     const res : any  = await this._apiService.load_signalement_search(this.term, this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+    // console.log('SUCCESS ===', res);
 
     this.signalement = this.signalement.concat(res);
     event.target.complete();
@@ -569,7 +569,7 @@ async load_more_search(event) {
     this.search = false ;
   }
   } catch (error) {
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
     if (this.oldsignalement && this.oldsignalement.length > 0) {
       this.signalement = this.oldsignalement;
     }
@@ -668,7 +668,7 @@ async More_filterAlerts(event) {
       this.limit
     ).toPromise();
 
-    console.log('SUCCESS ===', res);
+   //  console.log('SUCCESS ===', res);
 
     this.signalement = this.signalement.concat(res);
     event.target.complete();
@@ -679,7 +679,7 @@ async More_filterAlerts(event) {
     this.search2 = false;
   }
   } catch (error) {
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
     if (this.oldsignalement && this.oldsignalement.length > 0) {
       this.signalement = this.oldsignalement;
     }

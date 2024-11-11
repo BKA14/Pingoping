@@ -80,10 +80,10 @@ export class SignalisationPage implements OnInit {
 
   this.timeService.getServerTime().subscribe((response) => {
     this.serverTime = response.serverTime;
-    console.log('serveur time', this.serverTime );
+    // console.log('serveur time', this.serverTime );
   });
 
-  console.log(console.log(this.userData.numuser));
+   //console.log(console.log(this.userData.numuser));
 
   }
 
@@ -98,11 +98,11 @@ export class SignalisationPage implements OnInit {
     loading.present();
 
     this._apiService.getservice().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+      // console.log("SUCCESS ===",res);
       this.service = res;
       loading.dismiss();
      },(error: any) => {
-      console.log("Erreur de connection ",error);
+      // console.log("Erreur de connection ",error);
       loading.dismiss();
   })
   }
@@ -117,11 +117,11 @@ export class SignalisationPage implements OnInit {
     loading.present();
 
     this._apiService.getville().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+      // console.log("SUCCESS ===",res);
       this.ville = res;
       loading.dismiss();
      },(error: any) => {
-      console.log("Erreur de connection ",error);
+      // console.log("Erreur de connection ",error);
       loading.dismiss();
   })
   }
@@ -262,7 +262,7 @@ async onSubmit() {
   });
 
   await loading.present();
-  console.log('Loading presented');
+  // console.log('Loading presented');
 
   let userData = {
       nom:  this.userData.nom,
@@ -279,7 +279,7 @@ async onSubmit() {
           ...this.signalementForm.value
       };
 
-      console.log('Combined data:', combinedData);
+    //   console.log('Combined data:', combinedData);
 
       try {
 
@@ -304,11 +304,11 @@ async onSubmit() {
           formData.append('iduser', combinedData.iduser);
           formData.append('heuredusignalement', new Date( this.serverTime).toISOString());
 
-          console.log('Form data prepared:', formData);
+         //  console.log('Form data prepared:', formData);
 
           this._apiService.signalisation(formData).subscribe(
               async (res: any) => {
-                  console.log('Signalement envoyé avec succès', res);
+               //    console.log('Signalement envoyé avec succès', res);
                   alert("alerte bien envoyé, on s'en charge");
                   this.router.navigateByUrl('/alert-user');
                   await loading.dismiss();

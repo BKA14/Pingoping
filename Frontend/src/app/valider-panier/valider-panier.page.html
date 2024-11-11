@@ -43,9 +43,8 @@
     </div>
 
     <!-- Bouton de validation -->
-    <ion-button [disabled]="!signalementForm.get('location').value.longitude || !signalementForm.get('location').value.latitude" (click)="confirmOrder()"  expand="block" color="success">
+    <ion-button [disabled]="!isValidLocation() && (!signalementForm.get('location').value.longitude || !signalementForm.get('location').value.latitude)" (click)="presentAlert()"  expand="block" color="success">
       Confirmer la commande
     </ion-button>
-
   </form>
 </ion-content>

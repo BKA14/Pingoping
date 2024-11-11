@@ -19,8 +19,8 @@ headers : HttpHeaders;
   adr_web: string='http://localhost:80/Projet_ Lokaliser/Backend';
   adr_mobile: string='http://192.168.1.67:80/Projet_ Lokaliser/Backend';
   adr_deploy: string='https://pingoping.onrender.com';
-  time: any = 10000
-  base_url = this.adr_deploy;
+  time: any = 10000;
+  base_url = this.adr_mobile;
 
 
   constructor(public http: HttpClient) {
@@ -42,6 +42,13 @@ headers : HttpHeaders;
     return throwError(errorMessage);
   }
 
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('access_token');
+    return this.headers.set('Authorization', `Bearer ${token}`);
+  }
+
+
   sendtoken(data) {
     return this.http.post(this.base_url+'/sendtoken.php',data)
     .pipe(timeout(this.time))
@@ -49,7 +56,7 @@ headers : HttpHeaders;
     }
 
     isread(id: string): Observable<any[]> {
-      return this.http.get<any[]>(`${this.base_url}/isread.php?id=${id}`)
+      return this.http.get<any[]>(`${this.base_url}/isread.php?id=${id}`, { headers: this.getHeaders() })
         .pipe(
           timeout(this.time),
           retry(0), // Essaye 1 fois en cas d'échec, ajustez selon vos besoins
@@ -59,7 +66,7 @@ headers : HttpHeaders;
 
 
     user_connecter(): Observable<any> {
-      return this.http.get(`${this.base_url}/user_connecter.php`)
+      return this.http.get(`${this.base_url}/user_connecter.php`, { headers: this.getHeaders() })
         .pipe(
           timeout(this.time),
           retry(0),
@@ -67,8 +74,9 @@ headers : HttpHeaders;
         );
     }
 
+
     update_activity(id): Observable<any> {
-      return this.http.get(`${this.base_url}/update_activity.php?id=${id}`)
+      return this.http.get(`${this.base_url}/update_activity.php?id=${id}`, { headers: this.getHeaders() })
         .pipe(
           timeout(this.time),
           retry(0),
@@ -77,7 +85,7 @@ headers : HttpHeaders;
     }
 
     deconnexion(id): Observable<any> {
-      return this.http.get(`${this.base_url}/deconnexion.php?id=${id}`)
+      return this.http.get(`${this.base_url}/deconnexion.php?id=${id}`, { headers: this.getHeaders() })
         .pipe(
           timeout(this.time),
           retry(0),
@@ -87,15 +95,15 @@ headers : HttpHeaders;
 
 
     notification_lu(data) {
-    return this.http.post(this.base_url+'/notification_lu.php',data)
+    return this.http.post(this.base_url+'/notification_lu.php',data, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
       reinitialise(data) {
         return this.http.post(this.base_url + '/reinitialise.php', data, {
-          withCredentials: true, // Ajoutez cette ligne
-          headers: this.headers // Si vous utilisez des en-têtes personnalisés
+          withCredentials: true,
+          headers: this.getHeaders()
         })
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
@@ -104,8 +112,8 @@ headers : HttpHeaders;
 
     verifie_code(data) {
       return this.http.post(this.base_url + '/verify-code.php', data, {
-        withCredentials: true, // Ajoutez cette ligne
-        headers: this.headers // Si vous utilisez des en-têtes personnalisés
+        withCredentials: true,
+        headers: this.getHeaders()
       })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
@@ -114,7 +122,7 @@ headers : HttpHeaders;
     verifie_code_two(data) {
       return this.http.post(this.base_url + '/verifie_code_two.php', data, {
         withCredentials: true, // Ajoutez cette ligne
-        headers: this.headers // Si vous utilisez des en-têtes personnalisés
+        headers: this.getHeaders()
       })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
@@ -123,7 +131,7 @@ headers : HttpHeaders;
     verifie_code_password(data) {
       return this.http.post(this.base_url + '/verifie_code_password.php', data, {
         withCredentials: true, // Ajoutez cette ligne
-        headers: this.headers // Si vous utilisez des en-têtes personnalisés
+        headers: this.getHeaders()
       })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
@@ -133,20 +141,20 @@ headers : HttpHeaders;
 
 
   sendNotification(data) {
-    return this.http.post(this.base_url+'/sendnotification.php',data)
+    return this.http.post(this.base_url+'/sendnotification.php',data, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
   rafraichissement_token(data) {
-      return this.http.post(this.base_url+'/rafraichissement_token.php',data)
+      return this.http.post(this.base_url+'/rafraichissement_token.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
 
       calcul_total(data: any): Observable<DeliveryResponse> {
-        return this.http.post<DeliveryResponse>(`${this.base_url}/calculate_delivery_fee.php`, data)
+        return this.http.post<DeliveryResponse>(`${this.base_url}/calculate_delivery_fee.php`, data, { headers: this.getHeaders() })
           .pipe(
             timeout(this.time),
             retry(0),
@@ -157,37 +165,37 @@ headers : HttpHeaders;
 
 
     get_time() {
-      return this.http.get(this.base_url+'/serveur_time.php')
+      return this.http.get(this.base_url+'/serveur_time.php', { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
 addentreprise(data) {
-return this.http.post(this.base_url+'/create.php',data)
+return this.http.post(this.base_url+'/create.php',data, { headers: this.getHeaders() })
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError));
 }
 
 addpub(formData: FormData) {
-return this.http.post(this.base_url + '/addpub.php', formData)
+return this.http.post(this.base_url + '/addpub.php', formData, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
 }
 
 add_resto(formData: FormData) {
-  return this.http.post(this.base_url + '/add_resto.php', formData)
+  return this.http.post(this.base_url + '/add_resto.php', formData, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
   }
 
   add_plat(formData: FormData) {
-    return this.http.post(this.base_url + '/add_plat.php', formData)
+    return this.http.post(this.base_url + '/add_plat.php', formData, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
     }
 
     add_commande(formData: FormData) {
-      return this.http.post(this.base_url + '/add_commande.php', formData)
+      return this.http.post(this.base_url + '/add_commande.php', formData, { headers: this.getHeaders() })
         .pipe(
           timeout(this.time),
           retry(0), // Réessaie 0 fois en cas d'échec
@@ -196,130 +204,130 @@ add_resto(formData: FormData) {
     }
 
 addentreprises(data) {
-return this.http.post(this.base_url+'//create.php',data)
+return this.http.post(this.base_url+'//create.php',data, { headers: this.getHeaders() })
 .pipe(timeout(this.time))
 }
 
 signalisation(formData) {
-  return this.http.post(this.base_url+'//signalisation.php',formData)
+  return this.http.post(this.base_url+'//signalisation.php',formData, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   }
 
   sendcomment(data) {
-    return this.http.post(this.base_url+'//sendcomment.php',data)
+    return this.http.post(this.base_url+'//sendcomment.php',data, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     }
 
   sendmessage(data) {
-    return this.http.post(this.base_url+'//sendmessage.php',data)
+    return this.http.post(this.base_url+'//sendmessage.php',data, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     }
 
     repondrecommentaire(data) {
-      return this.http.post(this.base_url+'//repondrecommentaire.php',data)
+      return this.http.post(this.base_url+'//repondrecommentaire.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       }
 
     signalercommentaire(data) {
-      return this.http.post(this.base_url+'//signalercommentaire.php',data)
+      return this.http.post(this.base_url+'//signalercommentaire.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       }
 
     verifie(data) {
-      return this.http.post(this.base_url+'//verifie.php',data)
+      return this.http.post(this.base_url+'//verifie.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       }
 
 
 
     addetatlikes(data) {
-      return this.http.post(this.base_url+'//addetatlikes.php',data)
+      return this.http.post(this.base_url+'//addetatlikes.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       }
 
       addetatlikes_resto(data) {
-        return this.http.post(this.base_url+'//addetatlikes_resto.php',data)
+        return this.http.post(this.base_url+'//addetatlikes_resto.php',data, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
         }
 
     addcategorie(data) {
-      return this.http.post(this.base_url+'//createcategorie.php',data)
+      return this.http.post(this.base_url+'//createcategorie.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
     }
 
     add_numero(data) {
-      return this.http.post(this.base_url+'//add_numero.php',data)
+      return this.http.post(this.base_url+'//add_numero.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
     }
 
     add_numero_livraison(data) {
-      return this.http.post(this.base_url+'//add_numero_livraison.php',data)
+      return this.http.post(this.base_url+'//add_numero_livraison.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
     }
 
     add_cart(data) {
-      return this.http.post(this.base_url+'//add_panier.php',data)
+      return this.http.post(this.base_url+'//add_panier.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
     }
 
     getentreprises(){
-    return this.http.get(this.base_url+'/getentreprises.php')
+    return this.http.get(this.base_url+'/getentreprises.php', { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
 
     getapropos(){
-    return this.http.get(this.base_url+'/getapropos.php')
+    return this.http.get(this.base_url+'/getapropos.php', { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
     loadalert(page: number, limit: number) {
-      return this.http.get(`${this.base_url}/loadalert.php?page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/loadalert.php?page=${page}&limit=${limit}`, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
     }
 
     restaurant(page: number, limit: number) {
-      return this.http.get(`${this.base_url}/get_restaurant.php?page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/get_restaurant.php?page=${page}&limit=${limit}`, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
     }
 
     getCart(id) {
-      return this.http.get(`${this.base_url}/get_panier.php?id=${id}`)
+      return this.http.get(`${this.base_url}/get_panier.php?id=${id}`, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
     }
 
     plat_resto(id, page: number, limit: number) {
-      return this.http.get(`${this.base_url}/get_plat.php?id=${id}&page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/get_plat.php?id=${id}&page=${page}&limit=${limit}`, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
     }
 
     get_commande(page: number, limit: number) {
-      return this.http.get(`${this.base_url}/load_commande.php?page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/load_commande.php?page=${page}&limit=${limit}`, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
     }
 
     get_commande_user(id, page: number, limit: number) {
-      return this.http.get(`${this.base_url}/load_commande_user.php?id=${id}&page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/load_commande_user.php?id=${id}&page=${page}&limit=${limit}`, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
     }
 
     loadalert_statistique() {
-      return this.http.get(`${this.base_url}/loadalert_statistique.php`)
+      return this.http.get(`${this.base_url}/loadalert_statistique.php`, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
     }
 
 
     loadalert_id(id, page: number, limit: number): Observable<any> {
-      return this.http.get(`${this.base_url}/loadalert_id.php?page=${page}&limit=${limit}&id=${id}`)
+      return this.http.get(`${this.base_url}/loadalert_id.php?page=${page}&limit=${limit}&id=${id}`, { headers: this.getHeaders() })
       .pipe(
         timeout(this.time), // Timeout de 15 secondes
         retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -331,7 +339,7 @@ signalisation(formData) {
 
 
       loadalert_search(term, page: number, limit: number): Observable<any> {
-        return this.http.get(`${this.base_url}/search_alert.php?page=${page}&limit=${limit}&term=${term}`)
+        return this.http.get(`${this.base_url}/search_alert.php?page=${page}&limit=${limit}&term=${term}`, { headers: this.getHeaders() })
         .pipe(
           timeout(this.time), // Timeout de 15 secondes
           retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -341,7 +349,7 @@ signalisation(formData) {
 
 
         update_cart(body: any): Observable<any> {
-          return this.http.put(this.base_url + '/update_cart.php', body) // Correction ici
+          return this.http.put(this.base_url + '/update_cart.php', body, { headers: this.getHeaders() }) // Correction ici
             .pipe(
               timeout(this.time), // Timeout de 15 secondes
               retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -351,7 +359,7 @@ signalisation(formData) {
 
 
         load_search_resto(term, page: number, limit: number): Observable<any> {
-          return this.http.get(`${this.base_url}/load_search_resto.php?page=${page}&limit=${limit}&term=${term}`)
+          return this.http.get(`${this.base_url}/load_search_resto.php?page=${page}&limit=${limit}&term=${term}`, { headers: this.getHeaders() })
           .pipe(
             timeout(this.time), // Timeout de 15 secondes
             retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -361,7 +369,7 @@ signalisation(formData) {
 
 
           load_message_search(term, page: number, limit: number): Observable<any> {
-            return this.http.get(`${this.base_url}/load_message_search.php?page=${page}&limit=${limit}&term=${term}`)
+            return this.http.get(`${this.base_url}/load_message_search.php?page=${page}&limit=${limit}&term=${term}`, { headers: this.getHeaders() })
             .pipe(
               timeout(this.time), // Timeout de 15 secondes
               retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -371,7 +379,7 @@ signalisation(formData) {
 
 
         load_search_commande(term, page: number, limit: number): Observable<any> {
-          return this.http.get(`${this.base_url}/load_search_commande.php?page=${page}&limit=${limit}&term=${term}`)
+          return this.http.get(`${this.base_url}/load_search_commande.php?page=${page}&limit=${limit}&term=${term}`, { headers: this.getHeaders() })
           .pipe(
             timeout(this.time), // Timeout de 15 secondes
             retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -381,7 +389,7 @@ signalisation(formData) {
 
 
         load_signalement_search(term, page: number, limit: number): Observable<any> {
-        return this.http.get(`${this.base_url}/load_signalement_search.php?page=${page}&limit=${limit}&term=${term}`)
+        return this.http.get(`${this.base_url}/load_signalement_search.php?page=${page}&limit=${limit}&term=${term}`, { headers: this.getHeaders() })
         .pipe(
           timeout(this.time), // Timeout de 15 secondes
           retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -390,7 +398,7 @@ signalisation(formData) {
         }
 
         load_numero_search(term, page: number, limit: number): Observable<any> {
-          return this.http.get(`${this.base_url}/load_numero_search.php?page=${page}&limit=${limit}&term=${term}`)
+          return this.http.get(`${this.base_url}/load_numero_search.php?page=${page}&limit=${limit}&term=${term}`, { headers: this.getHeaders() })
           .pipe(
             timeout(this.time),
             retry(0),
@@ -410,7 +418,7 @@ signalisation(formData) {
           if (ville) params = params.set('ville', ville);
           if (service) params = params.set('service', service);
 
-          return this.http.get(`${this.base_url}/search_all_alert.php`, { params })
+          return this.http.get(`${this.base_url}/search_all_alert.php`, { params, headers: this.getHeaders() })
             .pipe(
               timeout(this.time),
               retry(0),
@@ -430,8 +438,7 @@ signalisation(formData) {
           if (selectedStatus) params = params.set('categorie', selectedStatus);
           if (service) params = params.set('service', service);
 
-
-          return this.http.get(`${this.base_url}/search_all_alert_user.php`, { params })
+          return this.http.get(`${this.base_url}/search_all_alert_user.php`, { params, headers: this.getHeaders() }, )
             .pipe(
               timeout(this.time),
               retry(0),
@@ -449,9 +456,7 @@ signalisation(formData) {
           if (endDate) params = params.set('datefin', endDate);
           if (traitement) params = params.set('traitement', traitement);
 
-
-
-          return this.http.get(`${this.base_url}/loadsignalement_search_all.php`, { params })
+          return this.http.get(`${this.base_url}/loadsignalement_search_all.php`, { params, headers: this.getHeaders() })
             .pipe(
               timeout(this.time),
               retry(0),
@@ -462,19 +467,19 @@ signalisation(formData) {
 
 
     numero_id(id){
-      return this.http.get(this.base_url+'/numero_id.php?id='+id)
+      return this.http.get(this.base_url+'/numero_id.php?id='+id, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
       numero_id_livraison(id){
-        return this.http.get(this.base_url+'/numero_id_livraison.php?id='+id)
+        return this.http.get(this.base_url+'/numero_id_livraison.php?id='+id, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
         .pipe(retry(0), catchError(this.handleError));
         }
 
     getpub(page: number, limit: number): Observable<any> {
-      return this.http.get(`${this.base_url}/getpub.php?page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/getpub.php?page=${page}&limit=${limit}`, { headers: this.getHeaders() })
         .pipe(
           timeout(this.time), // Timeout de 15 secondes
           retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -483,7 +488,7 @@ signalisation(formData) {
       }
 
       getpub_evenement(page: number, limit: number): Observable<any> {
-        return this.http.get(`${this.base_url}/get_pub_evenement.php?page=${page}&limit=${limit}`)
+        return this.http.get(`${this.base_url}/get_pub_evenement.php?page=${page}&limit=${limit}`, { headers: this.getHeaders() })
           .pipe(
             timeout(this.time), // Timeout de 15 secondes
             retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -492,20 +497,20 @@ signalisation(formData) {
         }
 
 getinfo(id){
-  return this.http.get(this.base_url+'/getinfo.php?id='+id)
+  return this.http.get(this.base_url+'/getinfo.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
 getpubid(id){
-  return this.http.get(this.base_url+'/getpubid.php?id='+id)
+  return this.http.get(this.base_url+'/getpubid.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(1), catchError(this.handleError))
 }
 
 
 loadcommentairepub(id, page: number, limit: number): Observable<any> {
-  return this.http.get(`${this.base_url}/getcomment.php?page=${page}&limit=${limit}&id=${id}`)
+  return this.http.get(`${this.base_url}/getcomment.php?page=${page}&limit=${limit}&id=${id}`, { headers: this.getHeaders() })
   .pipe(
     timeout(this.time), // Timeout de 15 secondes
     retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -515,19 +520,19 @@ loadcommentairepub(id, page: number, limit: number): Observable<any> {
 
 
 getlivraison(){
-  return this.http.get(this.base_url+'/getlivraison.php')
+  return this.http.get(this.base_url+'/getlivraison.php', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
 getpmu(){
-  return this.http.get(this.base_url+'/getpmu.php')
+  return this.http.get(this.base_url+'/getpmu.php', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
     getmessage(page: number, limit: number): Observable<any> {
-      return this.http.get(`${this.base_url}/getmessage.php?page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/getmessage.php?page=${page}&limit=${limit}`, { headers: this.getHeaders() })
       .pipe(
       timeout(this.time), // Timeout de 15 secondes
       retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -536,7 +541,7 @@ getpmu(){
       }
 
 loadsignalement(page: number, limit: number): Observable<any> {
-return this.http.get(`${this.base_url}/loadsignalement.php?page=${page}&limit=${limit}`)
+return this.http.get(`${this.base_url}/loadsignalement.php?page=${page}&limit=${limit}`, { headers: this.getHeaders() })
 .pipe(
 timeout(this.time), // Timeout de 15 secondes
 retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -546,38 +551,38 @@ catchError(this.handleError) // Gestion des erreurs
 
 
 getpubvideo(){
-  return this.http.get(this.base_url+'/getpubvideo.php')
+  return this.http.get(this.base_url+'/getpubvideo.php', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
   getservice(){
-    return this.http.get(this.base_url+'/getservice.php')
+    return this.http.get(this.base_url+'/getservice.php', { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
     getville(){
-      return this.http.get(this.base_url+'/getville.php')
+      return this.http.get(this.base_url+'/getville.php', { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
       }
 
 getcategorie(){
-return this.http.get(this.base_url+'/getcategorie.php')
+return this.http.get(this.base_url+'/getcategorie.php', { headers: this.getHeaders() })
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError));
 }
 
 getgrade(){
-  return this.http.get(this.base_url+'/getgrade.php')
+  return this.http.get(this.base_url+'/getgrade.php', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
 
     getuser(page: number, limit: number): Observable<any> {
-      return this.http.get(`${this.base_url}/getuser.php?page=${page}&limit=${limit}`)
+      return this.http.get(`${this.base_url}/getuser.php?page=${page}&limit=${limit}`, { headers: this.getHeaders() })
       .pipe(
         timeout(this.time), // Timeout de 15 secondes
         retry(0), // Nombre de tentatives de retry en cas d'échec
@@ -586,157 +591,158 @@ getgrade(){
       }
 
 getentreprisess(){
-return this.http.get(this.base_url+'/getentreprisess.php')
+return this.http.get(this.base_url+'/getentreprisess.php', { headers: this.getHeaders() })
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError));
 }
 
 getfastfood(){
-  return this.http.get(this.base_url+'/getfastfood.php')
+  return this.http.get(this.base_url+'/getfastfood.php', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
 
   getformation(){
-    return this.http.get(this.base_url+'/getformation.php')
+    return this.http.get(this.base_url+'/getformation.php', { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
 
 presentAlert(id){
-return this.http.delete(this.base_url+'/deleteEntreprise.php?id='+id)
+return this.http.delete(this.base_url+'/deleteEntreprise.php?id='+id, { headers: this.getHeaders() })
 .pipe(timeout(this.time))
 .pipe(retry(0), catchError(this.handleError))
 }
 
 supprimer_numero(id){
-  return this.http.delete(this.base_url+'/supprimer_numero.php?id='+id)
+  return this.http.delete(this.base_url+'/supprimer_numero.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
   }
 
   supprimer_num_livraison(id){
-    return this.http.delete(this.base_url+'/supprimer_num_livraison.php?id='+id)
+    return this.http.delete(this.base_url+'/supprimer_num_livraison.php?id='+id, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError))
     }
 
   supprimer_resto(id){
-    return this.http.delete(this.base_url+'/supprimer_restaurant.php?id='+id)
+    return this.http.delete(this.base_url+'/supprimer_restaurant.php?id='+id, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError))
     }
 
     delete_all_cart(id){
-      return this.http.delete(this.base_url+'/supprimer_panier.php?id='+id)
+      return this.http.delete(this.base_url+'/supprimer_panier.php?id='+id, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError))
       }
 
       delete_cart(id, id_user) {
-        return this.http.delete(this.base_url + '/supprimer_du_panier.php?id=' + id + '&id_user=' + id_user)
+        return this.http.delete(this.base_url + '/supprimer_du_panier.php?id=' + id + '&id_user=' + id_user, { headers: this.getHeaders() })
           .pipe(timeout(this.time))
           .pipe(retry(0), catchError(this.handleError));
       }
 
     supprimer_plat(id){
-      return this.http.delete(this.base_url+'/supprimer_plat.php?id='+id)
+      return this.http.delete(this.base_url+'/supprimer_plat.php?id='+id, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError))
       }
 
 presentAlertpub(id){
-  return this.http.delete(this.base_url+'/deletePub.php?id='+id)
+  return this.http.delete(this.base_url+'/deletePub.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
   }
 
 presentAlertcommentaire(id){
-  return this.http.delete(this.base_url+'/deletecommentaire.php?id='+id)
+  return this.http.delete(this.base_url+'/deletecommentaire.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
   }
 
 presentAlertpubvideo(id){
-    return this.http.delete(this.base_url+'/deletePubvideo.php?id='+id)
+    return this.http.delete(this.base_url+'/deletePubvideo.php?id='+id, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError))
     }
 
 presentAlert2(id){
-  return this.http.delete(this.base_url+'/delete2Entreprise.php?id='+id)
+  return this.http.delete(this.base_url+'/delete2Entreprise.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
   }
 
 
   presentAlert3(id){
-    return this.http.delete(this.base_url+'/delete3categorie.php?id='+id)
+    return this.http.delete(this.base_url+'/delete3categorie.php?id='+id, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError))
     }
+
 getcoupon(){
-  return this.http.get(this.base_url+'/getsinglecoupon.php?id=')
+  return this.http.get(this.base_url+'/getsinglecoupon.php?id=', { headers: this.getHeaders() })
   .pipe(timeout(10000))
   .pipe(retry(1), catchError(this.handleError))
 }
 
 
 getentreprisee(id){
-  return this.http.get(this.base_url+'/getsingleEntreprise.php?id='+id)
+  return this.http.get(this.base_url+'/getsingleEntreprise.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 getpub2(id){
-  return this.http.get(this.base_url+'/getsinglepub.php?id='+id)
+  return this.http.get(this.base_url+'/getsinglepub.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 getresto(id){
-  return this.http.get(this.base_url+'/get_single_resto.php?id='+id)
+  return this.http.get(this.base_url+'/get_single_resto.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 getplat(id){
-  return this.http.get(this.base_url+'/get_single_plat.php?id='+id)
+  return this.http.get(this.base_url+'/get_single_plat.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 getcategorie3(id){
-  return this.http.get(this.base_url+'/getsinglecategorie.php?id='+id)
+  return this.http.get(this.base_url+'/getsinglecategorie.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 getmenuisier(){
-  return this.http.get(this.base_url+'/getmenuisier.php')
+  return this.http.get(this.base_url+'/getmenuisier.php', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 getvente(){
-  return this.http.get(this.base_url+'/getvente.php')
+  return this.http.get(this.base_url+'/getvente.php', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 getcoiffeur(){
-  return this.http.get(this.base_url+'/getcoiffeur.php')
+  return this.http.get(this.base_url+'/getcoiffeur.php', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 getmanagement(){
-  return this.http.get(this.base_url+'/getmanagement.php')
+  return this.http.get(this.base_url+'/getmanagement.php', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
   }
@@ -755,7 +761,7 @@ getmanagement(){
 
 
 getuser1(id){
-  return this.http.get(this.base_url+'/getusersingle.php?id='+id)
+  return this.http.get(this.base_url+'/getusersingle.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
@@ -779,19 +785,19 @@ getgateau(){
   }
 
   getetat(){
-    return this.http.get(this.base_url+'/getetat.php')
+    return this.http.get(this.base_url+'/getetat.php', { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
     }
 
     getetat2(data){
-      return this.http.post(this.base_url+'/getetat2.php',data)
+      return this.http.post(this.base_url+'/getetat2.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError))
     }
 
     get_etat_resto(data){
-      return this.http.post(this.base_url+'/get_etat_resto.php',data)
+      return this.http.post(this.base_url+'/get_etat_resto.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError))
     }
@@ -838,21 +844,21 @@ getgateau(){
 
 
   numero_service(page: number, limit: number) {
-    return this.http.get(`${this.base_url}/numero_service.php?page=${page}&limit=${limit}`)
+    return this.http.get(`${this.base_url}/numero_service.php?page=${page}&limit=${limit}`, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
       .pipe(retry(0), catchError(this.handleError));
   }
 
 
   numero_livraison(){
-    return this.http.get(this.base_url+'/numero_livraison.php?id=')
+    return this.http.get(this.base_url+'/numero_livraison.php?id=', { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError))
   }
 
 
   getalimentation(){
-    return this.http.get(this.base_url+'/getalimentation.php?id=')
+    return this.http.get(this.base_url+'/getalimentation.php?id=', { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError))
   }
@@ -871,112 +877,112 @@ achatpoule(){
 }
 
 terminer_alerte(id,data){
-  return this.http.put(this.base_url+'/terminer_alerte.php?id='+id,data)
+  return this.http.put(this.base_url+'/terminer_alerte.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 soumettre_rapport(id,data){
-  return this.http.put(this.base_url+'/soumettre_rapport.php?id='+id,data)
+  return this.http.put(this.base_url+'/soumettre_rapport.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 marquer_lu_message(id,data){
-  return this.http.put(this.base_url+'/update_message.php?id='+id,data)
+  return this.http.put(this.base_url+'/update_message.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updatefastfood(id,data){
-  return this.http.put(this.base_url+'/updatefastfood.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatefastfood.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 traitement(id,data){
-  return this.http.put(this.base_url+'/traitement.php?id='+id,data)
+  return this.http.put(this.base_url+'/traitement.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 confirmer(id,data){
-  return this.http.put(this.base_url+'/confirmer.php?id='+id,data)
+  return this.http.put(this.base_url+'/confirmer.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 debloquer(id,data){
-  return this.http.put(this.base_url+'/debloquer.php?id='+id,data)
+  return this.http.put(this.base_url+'/debloquer.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 usersignaler(){
-  return this.http.get(this.base_url+'/usersignaler.php?id=')
+  return this.http.get(this.base_url+'/usersignaler.php?id=', { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 usersignaler2(id){
-  return this.http.get(this.base_url+'/usersignaler2.php?id='+id)
+  return this.http.get(this.base_url+'/usersignaler2.php?id='+id, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateetatlikes(id,data){
-  return this.http.put(this.base_url+'/updateetatlikes.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateetatlikes.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateinfo(id,data){
-  return this.http.put(this.base_url+'/updateinfo.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateinfo.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatepmu(id,data){
-  return this.http.put(this.base_url+'/updatepmu.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatepmu.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 update_commande(id: number, data: any) {
-  return this.http.post(`${this.base_url}/update_commande.php`, data)
+  return this.http.post(`${this.base_url}/update_commande.php`, data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));
 }
 
 update_num_service(id,data){
-  return this.http.put(this.base_url+'/update_num_service.php?id='+id,data)
+  return this.http.put(this.base_url+'/update_num_service.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateetatlikes2(id,data){
-  return this.http.put(this.base_url+'/updateetatlikes2.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateetatlikes2.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 disLike(id,data){
-  return this.http.put(this.base_url+'/disLike.php?id='+id,data)
+  return this.http.put(this.base_url+'/disLike.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 disLike_resto(id,data){
-  return this.http.put(this.base_url+'/disLike_resto.php?id='+id,data)
+  return this.http.put(this.base_url+'/disLike_resto.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatecoiffeur(id,data){
-  return this.http.put(this.base_url+'/updatecoiffeur.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatecoiffeur.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
@@ -990,20 +996,20 @@ updatelivraison(id,data){
 
 
 updatelikes(id,data){
-  return this.http.put(this.base_url+'/updatelikes.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatelikes.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updateplomberie(id,data){
-  return this.http.put(this.base_url+'/updateplomberie.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateplomberie.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateresidence(id,data){
-  return this.http.put(this.base_url+'/updateresidence.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateresidence.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
@@ -1045,56 +1051,56 @@ updateentreprise(id,data){
 
 
 updatepub(id, formData) {
-  return this.http.post(`${this.base_url}/updatepub.php?id=${id}`, formData)
+  return this.http.post(`${this.base_url}/updatepub.php?id=${id}`, formData, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
 }
 
 update_resto(id, formData) {
-  return this.http.post(`${this.base_url}/update_resto.php?id=${id}`, formData)
+  return this.http.post(`${this.base_url}/update_resto.php?id=${id}`, formData, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
 }
 
 update_plat(id, formData) {
-  return this.http.post(`${this.base_url}/update_plat.php?id=${id}`, formData)
+  return this.http.post(`${this.base_url}/update_plat.php?id=${id}`, formData, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
 }
 
 update_apropos(id, formData) {
-  return this.http.post(`${this.base_url}/updateapropos.php?id=${id}`, formData)
+  return this.http.post(`${this.base_url}/updateapropos.php?id=${id}`, formData, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
     .pipe(retry(0), catchError(this.handleError));
 }
 
 updatecategorie(id,data){
-  return this.http.put(this.base_url+'/updatecategorie.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatecategorie.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updatenumero(id,data){
-  return this.http.put(this.base_url+'/updatenumero.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatenumero.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 update_num_livraison(id,data){
-  return this.http.put(this.base_url+'/update_numero_livraison.php?id='+id,data)
+  return this.http.put(this.base_url+'/update_numero_livraison.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 
 updatecoupon(id,data){
-  return this.http.put(this.base_url+'/updatecoupon.php?id='+id,data)
+  return this.http.put(this.base_url+'/updatecoupon.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 updateformation(id,data){
-  return this.http.put(this.base_url+'/updateformation.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateformation.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
@@ -1158,13 +1164,13 @@ updatetaxi(id,data){
 
 
 updateuser(id,data){
-  return this.http.put(this.base_url+'/updateuser.php?id='+id,data)
+  return this.http.put(this.base_url+'/updateuser.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
 
 modifierCommentaire(id,data){
-  return this.http.put(this.base_url+'/modifierCommentaire.php?id='+id,data)
+  return this.http.put(this.base_url+'/modifierCommentaire.php?id='+id,data, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError))
 }
@@ -1173,7 +1179,6 @@ modifierCommentaire(id,data){
 inscription(data) {
   return this.http.post(this.base_url + '/inscription2.php', data, {
     withCredentials: true, // Ajoutez cette ligne
-    headers: this.headers // Si vous utilisez des en-têtes personnalisés
   })
   .pipe(timeout(this.time))
   .pipe(retry(0), catchError(this.handleError));

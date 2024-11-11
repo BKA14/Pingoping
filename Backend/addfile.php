@@ -1,5 +1,10 @@
 <?php
 include "config.php";
+include 'auth_admin.php'; // Inclure le fichier d'authentification admin
+
+// Appel de la fonction pour vérifier le token et le grade
+$userData = verifyAdminToken();
+
 $message = array();
 
 // Vérifie si un fichier a été envoyé
@@ -8,7 +13,7 @@ if ($_FILES['photo']) {
     $file_tmp = $_FILES['photo']['tmp_name'];
 
     // Spécifiez le chemin où vous souhaitez enregistrer le fichier sur votre serveur
-    $target_path = "http://192.168.1.75/imagepub/" . $file_name;
+    $target_path =$url_pub . $file_name;
 
     // Déplacez le fichier vers le chemin spécifié
     if (move_uploaded_file($file_tmp, $target_path)) {

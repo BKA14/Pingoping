@@ -46,7 +46,7 @@ export class PanierPage implements OnInit {
 
     this.timeService.getServerTime().subscribe((response) => {
       this.serverTime = response.serverTime;
-      console.log('serveur time', this.serverTime );
+      // console.log('serveur time', this.serverTime );
     });
 
   }
@@ -64,7 +64,7 @@ export class PanierPage implements OnInit {
       next: (cart: any[]) => {
         // Filtrer les plats invalides dès le chargement
         this.cart = Array.isArray(cart) ? cart.filter(plat => this.isValidItem(plat)) : [];
-        console.log('Contenu du panier:', this.cart);
+       //  console.log('Contenu du panier:', this.cart);
         this.calculateTotal();
         this.calculateDeliveryFee(); // Appeler ici après le chargement du panier
       },
@@ -73,6 +73,7 @@ export class PanierPage implements OnInit {
         this.presentToast('Erreur lors du chargement du panier.', 'danger');
       },
       complete: async () => {
+        this.cdr.detectChanges();
         await loading.dismiss();
       }
     });
@@ -126,17 +127,23 @@ calculateTotal() {
 }
 
 
-calculateDeliveryFee(): Promise<void> {
+async calculateDeliveryFee(): Promise<void> {
   const totalPlats = this.cart.reduce((acc, plat) => acc + plat.quantity, 0);
   const data = { totalPlats, serverTime: this.serverTime };
 
   return new Promise((resolve, reject) => {
     this._apiService.calcul_total(data).subscribe({
       next: (response: DeliveryResponse) => {
+        // Mettez à jour les valeurs sans `await` ici
         this.deliveryFee = response.deliveryFee;
         this.isNightTime = response.isNightTime;
-        console.log('deliveryFee', response.deliveryFee, response.isNightTime);
-        this.calculateTotal(); // Mise à jour avec les nouveaux frais
+        this.cdr.detectChanges();
+
+        // console.log('deliveryFee', response.deliveryFee, response.isNightTime);
+
+        // Appelez la fonction de calcul total après la mise à jour des frais
+        this.calculateTotal();
+
         resolve(); // Résoudre la promesse
       },
       error: (error) => {
@@ -147,6 +154,7 @@ calculateDeliveryFee(): Promise<void> {
     });
   });
 }
+
 
 async validatepanier() {
   try {
@@ -163,6 +171,8 @@ async validatepanier() {
     console.error('Erreur lors de la validation du panier:', error);
     this.presentToast('Erreur de validation du panier. Veuillez réessayer.', 'danger');
   }
+  this.cdr.detectChanges();
+
 }
 
 
@@ -176,6 +186,8 @@ increaseQuantity(index: number) {
   } else {
     this.presentToast('Quantité maximale atteinte', 'warning');
   }
+  this.cdr.detectChanges();
+
 }
 
 
@@ -188,6 +200,8 @@ decreaseQuantity(index: number) {
   } else {
     this.presentToast('Quantité minimale atteinte', 'warning');
   }
+  this.cdr.detectChanges();
+
 }
 
 

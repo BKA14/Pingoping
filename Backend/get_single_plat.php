@@ -1,5 +1,9 @@
 <?php
 include "config.php"; // Inclusion du fichier de configuration pour la connexion à la base de données
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
 
 $data = array(); // Tableau pour stocker les données retournées
 

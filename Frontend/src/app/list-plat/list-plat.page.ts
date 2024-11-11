@@ -115,7 +115,7 @@ export class ListPlatPage implements OnInit {
         this.cartService.removeFromCart(this.cart[index].id, this.userData.iduser) // Utiliser l'ID du plat
           .subscribe({
             next: (res: any) => {
-              console.log(`${plat.nom_plat} supprimé du panier.`);
+             //  console.log(`${plat.nom_plat} supprimé du panier.`);
               this.presentToast(`${plat.nom_plat} supprimé du panier.`, 'warning');
             },
             error: (error) => {
@@ -129,7 +129,7 @@ export class ListPlatPage implements OnInit {
         this.cartService.addToCart(plat)
           .subscribe({
             next: (res: any) => {
-              console.log(`${plat.nom_plat} ajouté au panier.`);
+              // console.log(`${plat.nom_plat} ajouté au panier.`);
               this.presentToast(`${plat.nom_plat} ajouté au panier.`, 'success');
             },
             error: (error) => {
@@ -147,8 +147,8 @@ export class ListPlatPage implements OnInit {
     // Vérifier que this.cart est bien un tableau avant d'utiliser .some()
     if (Array.isArray(this.cart)) {
       const inCart = this.cart.some(item => item.plat_id === plat.id);
-      console.log(`Plat: ${plat.nom_plat}, In Cart: ${inCart}`);
-      console.log('cart', this.cart);
+       //console.log(`Plat: ${plat.nom_plat}, In Cart: ${inCart}`);
+      // console.log('cart', this.cart);
       return inCart;
     } else {
       // Si le panier est vide ou non défini, renvoyer false
@@ -181,7 +181,7 @@ export class ListPlatPage implements OnInit {
     getsessionuser(){
 
       this.grade= this.userData.grade;
-      console.log(this.grade);
+      // console.log(this.grade);
 
       }
 
@@ -204,7 +204,7 @@ export class ListPlatPage implements OnInit {
 
     try {
     const res : any = await this._apiService.plat_resto(id, this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+  //   console.log('SUCCESS ===', res);
 
     if (res && res.length < 1) {
       this.resto = 'aucune_alerte';
@@ -215,13 +215,13 @@ export class ListPlatPage implements OnInit {
     loading.dismiss();
 
     } catch (error) {
-    console.log('erreur de chargement', error);
+    // console.log('erreur de chargement', error);
     this.presentToast("Erreur de chargement");
     if (this.oldresto && this.oldresto.length > 0) {
       this.resto = this.oldresto;
     }
     else { this.resto = 'erreur_chargement'; }
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
     this.presentToast("Erreur de chargement");
 
     loading.dismiss();
@@ -384,7 +384,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+ //  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
@@ -452,7 +452,7 @@ async loadalert_search() {
 
    try {
      const res : any = await this._apiService.load_search_resto(this.term, this.page, this.limit).toPromise();
-     console.log('SUCCESS ===', res);
+    //  console.log('SUCCESS ===', res);
 
      if (res && res.length < 1) {
        this.resto = 'aucune_alerte';
@@ -466,7 +466,7 @@ async loadalert_search() {
        this.resto = this.oldresto;
      }
      else { this.resto = 'erreur_chargement'; }
-     console.log('Erreur de chargement', error);
+   //   console.log('Erreur de chargement', error);
    }
 
  }
@@ -481,7 +481,7 @@ async loadalert_search() {
 
   try {
     const res : any  = await this._apiService.load_search_resto(this.term, this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+    // console.log('SUCCESS ===', res);
 
     this.resto = this.resto.concat(res);
     event.target.complete();
@@ -492,7 +492,7 @@ async loadalert_search() {
     this.search = false ;
   }
   } catch (error) {
-    console.log('Erreur de chargement', error);
+   //  console.log('Erreur de chargement', error);
     if (this.oldresto && this.oldresto.length > 0) {
       this.resto = this.oldresto;
     }

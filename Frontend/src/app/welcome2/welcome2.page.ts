@@ -40,7 +40,7 @@ export class Welcome2Page implements OnInit {
 
    }
    this._apiService.addentreprise(data).subscribe((res:any) => {
-    console.log("SUCCESS ===",res);
+     //console.log("SUCCESS ===",res);
 
      this.annee ='';
      this.nom ='';
@@ -50,13 +50,13 @@ export class Welcome2Page implements OnInit {
      this.getentreprises();
    },(error: any) => {
     alert('ERROR');
-    console.log("ERROR ===",error);
+    // console.log("ERROR ===",error);
    })
    }
 
   getentreprises(){
     this._apiService.getentreprises().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+      // console.log("SUCCESS ===",res);
       this.entreprises = res;
      },(error: any) => {
       alert('Erreur de connection actualiser');
@@ -74,7 +74,7 @@ export class Welcome2Page implements OnInit {
   refreshPage(e){
   setTimeout(() => {
     this.getentreprises();
-    console.log('Async operation has ended');
+    // console.log('Async operation has ended');
     e.target.complete();
   }, 1500);
   }

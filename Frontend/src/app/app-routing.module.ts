@@ -19,6 +19,8 @@ const routes: Routes = [
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule),
     data: { preload: true },
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+
   },
   {
     path: 'update-entreprise/:id',
@@ -97,7 +99,6 @@ const routes: Routes = [
     //data: { preload: true }
     canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
-
   {
     path: 'ajouterpub',
     loadChildren: () => import('./ajouterpub/ajouterpub.module').then( m => m.AjouterpubPageModule),
@@ -345,12 +346,13 @@ const routes: Routes = [
   },
   {
     path: 'menu',
-    loadChildren: () => import('./menu/menu.module').then( m => m.MenuPageModule)
+    loadChildren: () => import('./menu/menu.module').then( m => m.MenuPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'signalisation',
     loadChildren: () => import('./signalisation/signalisation.module').then( m => m.SignalisationPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    canActivate: [AuthGuard]
   },
   {
     path: 'alerte',
@@ -399,7 +401,8 @@ const routes: Routes = [
   },
   {
     path: 'notifications',
-    loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule)
+    loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule),
+    canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'verifie-code',

@@ -15,7 +15,7 @@ $userRole = $data['role'] ?? 'user'; // Par défaut, rôle "user" si non spécif
 
 // Initialiser Firebase
 $factory = (new Factory)
-    ->withServiceAccount('C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-00ca2d68c2.json');
+    ->withServiceAccount('cle_firebase/pingoping-firebase-adminsdk-gjefv-00ca2d68c2.json');
 
 $messaging = $factory->createMessaging();
 

@@ -1,5 +1,9 @@
 <?php
 include "config.php";
+include 'auth_admin.php'; // Inclure le fichier d'authentification admin
+
+// Appel de la fonction pour vérifier le token et le grade
+$userData = verifyAdminToken();
 
 // Obtenez l'ID de la pub à modifier 
 $id_pub = $_POST['id_pub'];

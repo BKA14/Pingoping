@@ -38,7 +38,7 @@ export class AproposPage implements OnInit {
   ) {
     this.route.params.subscribe((param:any) => {
       this.id = param.id;
-      console.log(this.id);
+     //  console.log(this.id);
       this.getapropos();
     })
   }
@@ -51,12 +51,12 @@ export class AproposPage implements OnInit {
 
   getsession(){
     this.grade= (localStorage.getItem('grade'));
-    console.log(this.grade);
+    // console.log(this.grade);
      }
 
   getwhatsap(){
     this.grade= (localStorage.getItem('grade'));
-    console.log(this.grade);
+    // console.log(this.grade);
      }
 
   async getapropos(){
@@ -79,7 +79,7 @@ export class AproposPage implements OnInit {
       this.a_propos = 'aucune_alerte';
     }
     else {
-      console.log("SUCCESS ===",res);
+      // console.log("SUCCESS ===",res);
       this.a_propos = res[0];
      }
 
@@ -91,7 +91,7 @@ export class AproposPage implements OnInit {
     }
     else { this.a_propos = 'erreur_chargement'; }
     loading.dismiss();
-    console.log("Erreur de connection ===",error);
+    // console.log("Erreur de connection ===",error);
 
 })
     this.getsession();
@@ -192,7 +192,7 @@ openTelegram(link: string) {
 
      await this.getapropos();
      // Log pour indiquer le rafraîchissement
-     console.log('Rafraîchissement de la page');
+    //  console.log('Rafraîchissement de la page');
      // Terminer l'animation de rafraîchissement
      e.target.complete();
    }

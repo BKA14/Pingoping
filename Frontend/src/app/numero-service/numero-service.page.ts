@@ -57,7 +57,7 @@ export class NumeroServicePage implements OnInit {
   getsessionuser(){
 
     this.grade= (localStorage.getItem('grade'));
-    console.log(this.grade);
+    // console.log(this.grade);
 
      }
 
@@ -76,7 +76,7 @@ export class NumeroServicePage implements OnInit {
 
       try {
       const res : any = await this._apiService.numero_service(this.page, this.limit).toPromise();
-      console.log('SUCCESS ===', res);
+      // console.log('SUCCESS ===', res);
 
       if (res && res.length < 1) {
         this.number = 'aucune_alerte';
@@ -87,12 +87,12 @@ export class NumeroServicePage implements OnInit {
       loading.dismiss();
 
       } catch (error) {
-      console.log('erreur de chargement', error);
+     //  console.log('erreur de chargement', error);
       if (this.oldnumber && this.oldnumber.length > 0) {
         this.number = this.oldnumber;
       }
       else { this.number = 'erreur_chargement'; }
-      console.log('Erreur de chargement', error);
+      // console.log('Erreur de chargement', error);
       loading.dismiss();
     }
 
@@ -107,7 +107,7 @@ export class NumeroServicePage implements OnInit {
 
       try {
         const res : any  = await this._apiService.numero_service(this.page, this.limit).toPromise();
-        console.log('SUCCESS ===', res);
+        // console.log('SUCCESS ===', res);
 
         this.number = this.number.concat(res);
         event.target.complete();
@@ -117,7 +117,7 @@ export class NumeroServicePage implements OnInit {
         this.infiniteScrollDisabled = true;
       }
       } catch (error) {
-        console.log('Erreur de chargement', error);
+      //   console.log('Erreur de chargement', error);
         if (this.oldnumber && this.oldnumber.length > 0) {
           this.number = this.oldnumber;
         }
@@ -137,7 +137,7 @@ export class NumeroServicePage implements OnInit {
       refreshPage(e: any) {
         this.numero();
         // Log pour indiquer le rafraîchissement
-        console.log('Rafraîchissement de la page');
+        // console.log('Rafraîchissement de la page');
         // Terminer l'animation de rafraîchissement
         e.target.complete();
       }
@@ -236,7 +236,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+  // console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
@@ -291,7 +291,7 @@ async load_numero_search(event) {
 
   try {
     const res : any = await this._apiService.load_numero_search(this.term, this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+   //  console.log('SUCCESS ===', res);
 
     if (res && res.length < 1) {
       this.number = 'aucune_alerte';
@@ -305,7 +305,7 @@ async load_numero_search(event) {
       this.number = this.oldnumber;
     }
     else { this.number = 'erreur_chargement'; }
-    console.log('Erreur de chargement', error);
+   //  console.log('Erreur de chargement', error);
   }
 }
 
@@ -315,7 +315,7 @@ async load_more_search(event) {
   this.oldnumber = this.number;
   try {
     const res : any  = await this._apiService.load_numero_search(this.term, this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+   //  console.log('SUCCESS ===', res);
 
     this.number = this.number.concat(res);
     event.target.complete();
@@ -326,7 +326,7 @@ async load_more_search(event) {
     this.search = false ;
   }
   } catch (error) {
-    console.log('Erreur de chargement', error);
+   //  console.log('Erreur de chargement', error);
     if (this.oldnumber && this.oldnumber.length > 0) {
       this.number= this.oldnumber;
     }

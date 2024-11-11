@@ -53,7 +53,7 @@ export class NotificationsPage implements OnInit {
 
   this.timeService.getServerTime().subscribe((response) => {
     this.serverTime = response.serverTime;
-    console.log('serveur time', this.serverTime );
+   //  console.log('serveur time', this.serverTime );
   });
 }
 
@@ -69,14 +69,14 @@ export class NotificationsPage implements OnInit {
     this.notifications = this.notificationBadgeService.notifications;
 
     if (!this.notifications || this.notifications.length < 1 || this.notifications =='erreur') {
-        console.log('notif non recuperé');
+        // console.log('notif non recuperé');
           this.notifications = 'erreur';
         return; // Sortir de la fonction si les notifications ne sont pas disponibles
     }
 
     if (this.notifications && this.notifications.length !== 0 && this.notifications !=='erreur') {
           // Si des notifications ont été récupérées, les marquer comme lues
-          console.log('classé comme lu',this.notifications );
+         //  console.log('classé comme lu',this.notifications );
           this.openNotifications();
           localStorage.setItem('notif_lu', 'lu' );
   }
@@ -94,14 +94,14 @@ async loadUnreadNotifications_reload() {
    this.notifications = this.notificationBadgeService.notifications;
 
    if (!this.notifications || this.notifications.length < 1 || this.notifications =='erreur') {
-       console.log('notif non recuperé');
+      //  console.log('notif non recuperé');
          this.notifications = 'erreur';
        return; // Sortir de la fonction si les notifications ne sont pas disponibles
    }
 
    if (this.notifications && this.notifications.length !== 0 && this.notifications !=='erreur') {
          // Si des notifications ont été récupérées, les marquer comme lues
-         console.log('classé comme lu',this.notifications );
+        //  console.log('classé comme lu',this.notifications );
          this.openNotifications();
          localStorage.setItem('notif_lu', 'lu' );
  }
@@ -138,14 +138,14 @@ formatCommentTime(time: string): string {
 
 viewNotification(notification) {
   if (notification.page && typeof notification.page === 'string' && notification.id_element) {
-    console.log(`Navigating to /${notification.page}/${notification.id_element}`);
+    // console.log(`Navigating to /${notification.page}/${notification.id_element}`);
     //this.router.navigate(['/' + notification.page, notification.id_element]);
     this.navCtrl.navigateForward('/' + notification.page, { queryParams: { id: notification.id_element} });
   } else if (notification.page && typeof notification.page === 'string') {
-    console.log(`Navigating to /${notification.page}`);
+    // console.log(`Navigating to /${notification.page}`);
     this.router.navigate(['/' + notification.page]);
   } else {
-    console.log('Navigating to /acceuil');
+   //  console.log('Navigating to /acceuil');
     this.router.navigate(['/acceuil']);
   }
 }

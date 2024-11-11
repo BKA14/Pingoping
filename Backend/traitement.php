@@ -1,5 +1,10 @@
 <?php
 include"config.php";
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
+
 $input = file_get_contents('php://input');
 $data = json_decode($input,true);
 $message = array();

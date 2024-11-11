@@ -1,5 +1,10 @@
 <?php
 include"config.php";
+include 'auth_admin.php'; // Inclure le fichier d'authentification admin
+
+// Appel de la fonction pour vérifier le token et le grade
+$userData = verifyAdminToken();
+
 $input = file_get_contents('php://input');
 $data = json_decode($input,true);
 $message = array();

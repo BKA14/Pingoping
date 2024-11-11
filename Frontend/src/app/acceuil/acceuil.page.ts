@@ -236,7 +236,7 @@ async loadMore(event) {
 
   try {
     const res: any = await this._apiService.getpub(this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+    // console.log('SUCCESS ===', res);
 
     this.pub = this.pub.concat(res);
     this.openUrl();
@@ -247,7 +247,7 @@ async loadMore(event) {
     }
     event.target.complete();
   } catch (error) {
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
     if (this.oldpub && this.oldpub.length > 0) {
       this.pub = this.oldpub;
     }
@@ -287,13 +287,13 @@ loadLike() {
     (message) => {
       if (Array.isArray(message)) {
         // Chargement initial des alertes
-        console.log('Ne fais rien car géré au niveau des Pub:');
+        // console.log('Ne fais rien car géré au niveau des Pub:');
         // Vous pouvez éventuellement traiter les données initiales ici si nécessaire
       } else {
         // Traitement des actions individuelles
         switch (message.action) {
           case 'insert':
-            console.log('Ne fais rien pour insert car géré au niveau des Pub:');
+           //  console.log('Ne fais rien pour insert car géré au niveau des Pub:');
             // Vous pouvez ajouter un traitement spécifique si nécessaire
             break;
           case 'update':
@@ -301,16 +301,16 @@ loadLike() {
             if (updatedIndex !== -1) {
               this.pub[updatedIndex].likes_count = message.likes_count;
               this.pub[updatedIndex].user_ids = message.user_ids;
-              console.log('Likes_count du pub mis à jour:', message.likes_count);
-              console.log('User_ids du pub mis à jour:', message.user_ids);
+              //  console.log('Likes_count du pub mis à jour:', message.likes_count);
+              // console.log('User_ids du pub mis à jour:', message.user_ids);
             }
             break;
           case 'delete':
-            console.log('Ne fais rien pour delete car géré au niveau des Pub:');
+           //  console.log('Ne fais rien pour delete car géré au niveau des Pub:');
             // Vous pouvez ajouter un traitement spécifique si nécessaire
             break;
           default:
-            console.log('Action inconnue:', message);
+           //  console.log('Action inconnue:', message);
         }
       }
     },
@@ -320,13 +320,13 @@ loadLike() {
 
 
     loadInitialPub() {
-      console.log('Nouveau countdown:');
+      // console.log('Nouveau countdown:');
     this.websocketSubscription = this.wsService.listenForPubUpdates().subscribe(
       (message) => {
         if (Array.isArray(message)) {
           // Chargement initial des alertes
           this.pub = message;
-          console.log('Initial alerts loaded:', this.pub);
+         //  console.log('Initial alerts loaded:', this.pub);
           } else {
           // Traitement des actions individuelles
           switch (message.action) {
@@ -336,7 +336,7 @@ loadLike() {
                 const index = this.pub.findIndex(pub => pub.id === updatedPub.id);
                 if (index !== -1) {
                   this.pub[index].countdown = updatedPub.countdown;
-                  console.log(`Nouveau countdown pour pub ${updatedPub.id}:`, updatedPub.countdown);
+                 //  console.log(`Nouveau countdown pour pub ${updatedPub.id}:`, updatedPub.countdown);
                 }
               });
               break;
@@ -344,7 +344,7 @@ loadLike() {
               message.likes_count = 0;
               message.user_ids = [];
               this.pub.unshift(message);
-              console.log('New pub inserted:', message);
+              // console.log('New pub inserted:', message);
               break;
             case 'update':
               const updatedIndex = this.pub.findIndex(pub => pub.id === message.old_pub_id);
@@ -360,16 +360,16 @@ loadLike() {
                 // Remplacer l'élément dans le tableau this.pub
                 this.pub[updatedIndex] = message;
 
-                console.log('pub updated:', message);
-                console.log('pub updated:', message.old_pub_id);
+                // console.log('pub updated:', message);
+                // console.log('pub updated:', message.old_pub_id);
               }
               break;
             case 'delete':
               this.pub = this.pub.filter(pub => pub.id !== message.pub_id);
-              console.log('pub deleted:', message);
+             //  console.log('pub deleted:', message);
               break;
             default:
-              console.log('Unknown action:', message);
+              // console.log('Unknown action:', message);
           }
         }
       },
@@ -417,7 +417,7 @@ loadLike() {
     }
 
     handleVideoClick(videoElement: HTMLVideoElement) {
-      console.log('Video clicked', videoElement);
+      // console.log('Video clicked', videoElement);
       if (this.currentPlayingVideo && this.currentPlayingVideo !== videoElement) {
         // Pause la vidéo actuellement en cours si elle existe et n'est pas la même que celle cliquée
         this.pauseVideo(this.currentPlayingVideo);
@@ -435,15 +435,15 @@ loadLike() {
 
     // Méthode pour gérer la pause manuelle
     toggleManualPause(videoElement: HTMLVideoElement) {
-      console.log('Entre dans toggle:');
+      // console.log('Entre dans toggle:');
       this.manualPause = !this.manualPause;
       if (this.manualPause) {
-        console.log('Entre dans toggle 1:', this.manualPause);
+       //  console.log('Entre dans toggle 1:', this.manualPause);
         this.pauseVideo(videoElement);
-        console.log('Entre dans toggle 2:', this.manualPause);
+        // console.log('Entre dans toggle 2:', this.manualPause);
       } else {
-        console.log('Entre dans toggle 3:', this.manualPause);
-        this.playVideo(videoElement);
+        // console.log('Entre dans toggle 3:', this.manualPause);
+         this.playVideo(videoElement);
       }
     }
 
@@ -463,10 +463,10 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     @HostListener('document:fullscreenchange', ['$event'])
     onFullScreenChange(event: Event) {
       const videoElement = event.target as HTMLVideoElement;
-      console.log('Fullscreen change event', videoElement);
+      // console.log('Fullscreen change event', videoElement);
       if (!document.fullscreenElement) {
         // Le document n'est pas en mode plein écran
-        console.log('Exited fullscreen mode');
+       //  console.log('Exited fullscreen mode');
       }
     }
 
@@ -539,21 +539,27 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
       };
 
       this._apiService.getetat2(data).subscribe(async (res:any) => {
-        console.log("SUCCESS ===",res);
+        // console.log("SUCCESS ===",res);
 
         if(res.result === 'oui') {
           if(res.data.etat === 'oui') {
             pub.likes_count--;
             pub.user_ids = pub.user_ids.filter(userId => userId !== this.userData.iduser);
+            this.cdr.detectChanges();
+
             await  this.disLike(pub);
           } else if (res.data.etat === 'non') {
             pub.likes_count++;
             pub.user_ids.push(this.userData.iduser);
+            this.cdr.detectChanges();
+
             await  this.Likes(pub);
           }
         } else if (res.result === 'non') {
           pub.likes_count++;
           pub.user_ids.push(this.userData.iduser);
+          this.cdr.detectChanges();
+
           await this.Likepremier(pub);
         }
 
@@ -561,7 +567,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
         this.cdr.detectChanges();
       }, (error: any) => {
         pub.isLoading = false;
-        console.log('Erreur de connection  nouveau etat non enregistre');
+       //  console.log('Erreur de connection  nouveau etat non enregistre');
         console.log("ERROR ===",error);
       });
     }
@@ -582,7 +588,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
        },(error: any) => {
 
-        console.log('Erreur de connection  nouveau etat non enregistre');
+       //  console.log('Erreur de connection  nouveau etat non enregistre');
         console.log("ERROR ===",error);
        })
 
@@ -602,13 +608,13 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
            }
 
            this._apiService.disLike(pubs.id,data).subscribe((res:any) => {
-            console.log("SUCCESS ===",res);
+            // console.log("SUCCESS ===",res);
              //window.location.reload();
 
              //alert('Nouveau etat ajoute avec success');
            },(error: any) => {
 
-            console.log('Erreur de connection  nouveau etat non enregistre');
+           //  console.log('Erreur de connection  nouveau etat non enregistre');
             console.log("ERROR ===",error);
            })
 
@@ -628,13 +634,13 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
            }
 
            this._apiService.disLike(pub.id,data).subscribe((res:any) => {
-            console.log("SUCCESS ===",res);
+           //  console.log("SUCCESS ===",res);
 
              //window.location.reload();
              //alert('Nouveau etat ajoute avec success');
            },(error: any) => {
 
-            console.log('Erreur de connection  nouveau etat non enregistre');
+            // console.log('Erreur de connection  nouveau etat non enregistre');
             console.log("ERROR ===",error);
            })
 
@@ -665,7 +671,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     this.cdr.detectChanges();
 
     // Log pour indiquer le rafraîchissement
-    console.log('Rafraîchissement de la page');
+    // console.log('Rafraîchissement de la page');
 
     // Terminer l'animation de rafraîchissement
     e.target.complete();
@@ -718,11 +724,11 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
     getcategorie(){
 
       this._apiService.getcategorie().subscribe((res:any) => {
-        console.log("SUCCESS ===",res);
+        // console.log("SUCCESS ===",res);
         this.categorie = res;
        },(error: any) => {
 
-        console.log("Erreur de connection ",error);
+        // console.log("Erreur de connection ",error);
         this.cdr.detectChanges();
     })
 
@@ -829,8 +835,8 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
       const userLatitude = coordinates.coords.latitude;
       const userLongitude = coordinates.coords.longitude;
 
-      console.log('Latitude:', userLatitude);
-      console.log('Longitude:', userLongitude);
+      // console.log('Latitude:', userLatitude);
+      // console.log('Longitude:', userLongitude);
 
       this.userlongitude = userLongitude;
       this.userlatitude = userLatitude;
@@ -844,12 +850,12 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
 
 
 async openUrl() {
-  console.log('Début de openUrl');
+  // console.log('Début de openUrl');
   const userLocationData = await this.getUserLocation();
 
   if (userLocationData) {
     const { userLatitude, userLongitude } = userLocationData;
-    console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
+   //  console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
 
     if (Array.isArray(this.pub)) {
       for (const publi of this.pub) {
@@ -860,13 +866,13 @@ async openUrl() {
           publi.longitude
         );
 
-        console.log(`Distance : ${distance} mètres`);
+       //  console.log(`Distance : ${distance} mètres`);
 
         if (!isNaN(distance)) {
           publi.distanceToUser = distance;
-          console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
+          // console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
         } else {
-          console.error('La distance est NaN.');
+          // console.error('La distance est NaN.');
         }
       }
     } else {
@@ -925,7 +931,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+   //console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
@@ -964,7 +970,7 @@ resetHideButtonTimer() {
 
   // Méthode pour gérer les erreurs vidéo
 handleVideoError(videoElement: HTMLVideoElement) {
-  console.log('Video error', videoElement);
+  // console.log('Video error', videoElement);
   this.videoError = true; // Mettre à jour l'état d'erreur vidéo
 }
 

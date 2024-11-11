@@ -62,7 +62,7 @@ grade: any;
 
   getsession(){
     this.grade1= (localStorage.getItem('grade'));
-    console.log(this.grade1);
+    // console.log(this.grade1);
      }
 
 
@@ -87,7 +87,7 @@ grade: any;
       loading.present();
 
       this._apiService.inscription(data).subscribe((res: any) => {
-          console.log("SUCCESS ===", res);
+         //  console.log("SUCCESS ===", res);
 
           // Vérification des conditions et sortie de la fonction si une condition est remplie
           if (res === "email_exist") {
@@ -116,7 +116,7 @@ grade: any;
       (error: any) => {
           loading.dismiss();
           alert('Erreur de connexion, veuillez réessayer.');
-          console.log("ERROR ===", error);
+          // console.log("ERROR ===", error);
           this.router.navigateByUrl('/inscription');
       });
   }
@@ -180,12 +180,12 @@ grade: any;
   async grade_user() {
     try{
       const res: any = await this._apiService.getgrade().toPromise();
-      console.log('grade', res);
+      // console.log('grade', res);
       this.rang = res;
 
     } catch (error) {
       alert('Erreur de connexion avec le serveur, veuillez réessayer ou contactez-nous !');
-      console.log("ERROR ===", error);
+     //  console.log("ERROR ===", error);
     }
   }
 

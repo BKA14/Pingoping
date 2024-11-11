@@ -1,7 +1,11 @@
 <?php
-
 include "config.php";
 require 'vendor/autoload.php';
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
+
 
 $redis = new Predis\Client();
 $con = new mysqli($host, $user, $password, $dbname, $port);
@@ -101,7 +105,7 @@ function insertNotification($con, $title, $body, $page) {
 }
 
 function sendFCMNotification($con, $title, $body, $page) {
-    $keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
+    $keyFilePath = 'cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
     $scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
     $credentials = new ServiceAccountCredentials($scopes, $keyFilePath);
     $accessToken = $credentials->fetchAuthToken()['access_token'];

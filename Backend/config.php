@@ -14,8 +14,13 @@ header('Content-Type: application/json');
 
 mysql://root:woHXCLZJcnIzAgjVnocnAbGxwevRcqMo@autorack.proxy.rlwy.net:53042/railway
 $baseUrl = "autorack.proxy.rlwy.net";
-
-$Url_render = "https://pingoping.onrender.com/image_app/";
+$url_alert = "image_app/image_alert/";
+$url_pub ="image_app/image_pub/";
+$url_resto = "image_app/image_resto/";
+$url_plat = "image_app/image_plat/";
+$url_apropos = "image_app/image_apropos/";
+$url_firebase = "https://pingoping.onrender.com/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json";
+$url_render = "https://pingoping.onrender.com";
 
 
 $host = $baseUrl;

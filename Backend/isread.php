@@ -1,5 +1,9 @@
 <?php
 include "config.php";
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
 
 // Récupérer l'ID utilisateur depuis les paramètres GET, en vérifiant que c'est un entier
 if (isset($_GET['id'])) {

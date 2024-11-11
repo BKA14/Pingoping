@@ -66,7 +66,7 @@ export class AlertUserPage implements OnInit {
 
     this.timeService.getServerTime().subscribe((response) => {
       this.serverTime = response.serverTime;
-      console.log('serveur time', this.serverTime );
+      // console.log('serveur time', this.serverTime );
     });
   }
 
@@ -89,7 +89,7 @@ async loadalert_id() {
   let id =  await this.userData.iduser;
   try {
   const res = await this._apiService.loadalert_id(id,this.page, this.limit).toPromise();
-  console.log('SUCCESS ===', res);
+  // console.log('SUCCESS ===', res);
 
   if (res && res.length < 1) {
     this.alert = 'aucune_alerte';
@@ -104,7 +104,7 @@ async loadalert_id() {
       this.alert = this.oldalert;
     }
     else { this.alert = 'erreur_chargement'; }
-    console.log('erreur de chargement', error);
+   //  console.log('erreur de chargement', error);
   // Gérez les erreurs de chargement de manière appropriée
   loading.dismiss();
 
@@ -122,7 +122,7 @@ async loadalert_id() {
 
 
     this._apiService.loadalert_id(this.userData.iduser, this.page, this.limit).subscribe((res: any) => {
-        console.log('SUCCESS ===', res);
+         //console.log('SUCCESS ===', res);
 
       this.alert = this.alert.concat(res);
 
@@ -132,7 +132,7 @@ async loadalert_id() {
       }
       event.target.complete();
     } , (error: any) => {
-      console.log('Erreur de connexion avec le serveur, veuillez réessayer.');
+      // console.log('Erreur de connexion avec le serveur, veuillez réessayer.');
       if (this.oldalert && this.oldalert.length > 0) {
         this.alert = this.oldalert;
       }
@@ -146,32 +146,32 @@ async loadalert_id() {
         if (Array.isArray(message)) {
           // Chargement initial des alertes
           this.alert = message;
-          console.log('Initial alerts loaded:', this.alert);
+           //console.log('Initial alerts loaded:', this.alert);
         } else {
           // Traitement des actions individuelles
           switch (message.action) {
             case 'insert':
               if (message.iduser === this.userData.iduser) { // Vérifiez si l'iduser correspond
                 this.alert.unshift(message);
-                console.log('New alert inserted:', message);
+                // console.log('New alert inserted:', message);
               } else {
-                console.log('Insert ignored: iduser does not match.');
+                // console.log('Insert ignored: iduser does not match.');
               }
               break;
             case 'update':
               const updatedIndex = this.alert.findIndex(alert => alert.id === message.old_signalisation_id);
               if (updatedIndex !== -1) {
                 this.alert[updatedIndex] = message;
-                console.log('Alert updated:', message);
-                console.log('Alert updated:', message.old_signalisation_id);
+               //  console.log('Alert updated:', message);
+               //  console.log('Alert updated:', message.old_signalisation_id);
               }
               break;
             case 'delete':
               this.alert = this.alert.filter(alert => alert.id !== message.signalisation_id);
-              console.log('Alert deleted:', message);
+             //  console.log('Alert deleted:', message);
               break;
             default:
-              console.log('Unknown action:', message);
+              // console.log('Unknown action:', message);
           }
         }
       },
@@ -254,7 +254,7 @@ async loadalert_id() {
         this.userData.iduser
       ).toPromise();
 
-      console.log('SUCCESS ===',  this.selectedStatus );
+      // console.log('SUCCESS ===',  this.selectedStatus );
 
       if (res && res.length > 0) {
         this.alert = res;
@@ -294,7 +294,7 @@ async loadalert_id() {
         this.userData.iduser
       ).toPromise();
 
-      console.log('SUCCESS ===', res);
+     //  console.log('SUCCESS ===', res);
 
       this.alert = this.alert.concat(res);
       event.target.complete();
@@ -305,7 +305,7 @@ async loadalert_id() {
       this.search2 = false;
     }
     } catch (error) {
-      console.log('Erreur de chargement', error);
+    //   console.log('Erreur de chargement', error);
       if (this.oldalert && this.oldalert.length > 0) {
         this.alert = this.oldalert;
       }
@@ -334,11 +334,11 @@ async loadalert_id() {
     loading.present();
 
     this._apiService.getservice().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+      // console.log("SUCCESS ===",res);
       this.service = res;
       loading.dismiss();
      },(error: any) => {
-      console.log("Erreur de connection ",error);
+      // console.log("Erreur de connection ",error);
       loading.dismiss();
   })
   }
@@ -380,7 +380,7 @@ formatCommentTime(time: string): string {
     await this.loadalert_id();
 
     // Log pour indiquer le rafraîchissement
-    console.log('Rafraîchissement de la page');
+    // console.log('Rafraîchissement de la page');
 
     // Terminer l'animation de rafraîchissement
     e.target.complete();
@@ -419,7 +419,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+  // console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');

@@ -45,7 +45,7 @@ export class ChangePasswordPage implements OnInit {
         loading.present();
 
         this._apiService.reinitialise(data).subscribe((res: any) => {
-            console.log("SUCCESS ===", res);
+            // console.log("SUCCESS ===", res);
 
             alert('réinitialisation effectué avec succès.');
                 this.router.navigateByUrl('/login2');

@@ -85,7 +85,7 @@ export class GetCommandeUserPage implements OnInit {
 
     this.timeService.getServerTime().subscribe((response) => {
       this.serverTime = response.serverTime;
-      console.log('serveur time', this.serverTime );
+      // console.log('serveur time', this.serverTime );
     });
   }
 
@@ -115,7 +115,7 @@ export class GetCommandeUserPage implements OnInit {
     getsessionuser(){
 
       this.grade= (localStorage.getItem('grade'));
-      console.log(this.grade);
+      // console.log(this.grade);
 
       }
 
@@ -138,7 +138,7 @@ export class GetCommandeUserPage implements OnInit {
 
     try {
     const res : any = await this._apiService.get_commande_user(this.userData.iduser, this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+    // console.log('SUCCESS ===', res);
 
     if (res && res.length < 1) {
       this.commande = 'aucune_alerte';
@@ -150,13 +150,13 @@ export class GetCommandeUserPage implements OnInit {
     loading.dismiss();
 
     } catch (error) {
-    console.log('erreur de chargement', error);
+    // console.log('erreur de chargement', error);
     this.presentToast("Erreur de chargement");
     if (this.oldcommande && this.oldcommande.length > 0) {
       this.commande = this.oldcommande;
     }
     else { this.commande = 'erreur_chargement'; }
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
     this.presentToast("Erreur de chargement");
 
     loading.dismiss();
@@ -254,7 +254,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+  // console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
@@ -308,7 +308,7 @@ async load_search() {
 
    try {
      const res : any = await this._apiService.load_search_commande(this.term, this.page, this.limit).toPromise();
-     console.log('SUCCESS ===', res);
+    //  console.log('SUCCESS ===', res);
 
      if (res && res.length < 1) {
        this.commande = 'aucune_alerte';
@@ -324,7 +324,7 @@ async load_search() {
        this.commande = this.oldcommande;
      }
      else { this.commande = 'erreur_chargement'; }
-     console.log('Erreur de chargement', error);
+     // console.log('Erreur de chargement', error);
    }
 
  }
@@ -339,7 +339,7 @@ async load_search() {
 
   try {
     const res : any  = await this._apiService.load_search_commande(this.term, this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+     //console.log('SUCCESS ===', res);
 
     this.commande = this.commande.concat(res);
     await this.openUrl();
@@ -352,7 +352,7 @@ async load_search() {
     this.search = false ;
   }
   } catch (error) {
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
     if (this.oldcommande && this.oldcommande.length > 0) {
       this.commande = this.oldcommande;
     }
@@ -397,7 +397,7 @@ async updateStatus(commandeId: number, nouveauStatut: string) {
     const res: any = await this._apiService.update_commande(commandeId, formData).toPromise();
     this.reloadPage(); // Recharger les commandes après la mise à jour
   } catch (error) {
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
   }
 }
 
@@ -465,7 +465,7 @@ async openUrl() {
     const { userLatitude, userLongitude } = userLocationData;
 
     this.commande.forEach(async (publi) => {
-      console.log('coordonné', publi.latitude, publi.longitude);
+       //console.log('coordonné', publi.latitude, publi.longitude);
       const distance = this.distanceCalculatorService.haversineDistance(
         userLatitude,
         userLongitude,
@@ -475,7 +475,7 @@ async openUrl() {
 
       if (!isNaN(distance)) {
         publi.distanceToUser = distance;
-        console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
+        // console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
       } else {
         console.error('La distance calculée est NaN. Veuillez vérifier les coordonnées.');
       }

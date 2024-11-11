@@ -45,7 +45,7 @@ export class PmuPage implements OnInit {
    {
     this.route.params.subscribe((param:any) => {
       this.id = param.id;
-      console.log(this.id);
+      // console.log(this.id);
       this.getpmu();
     })
   }
@@ -84,7 +84,7 @@ export class PmuPage implements OnInit {
     setTimeout(() => {
       this.getpmu();
 
-      console.log('rafraichissement de la page');
+      // console.log('rafraichissement de la page');
       e.target.complete();
     },500);
 
@@ -104,7 +104,7 @@ export class PmuPage implements OnInit {
 
   this._apiService.getpmu().subscribe((res: any) => {
     loading.dismiss();
-    console.log("SUCCESS ===", res);
+    // console.log("SUCCESS ===", res);
     this.pmu = res[0];
 
     // Update form with API data
@@ -117,11 +117,11 @@ export class PmuPage implements OnInit {
       typecourse: this.pmu.typecourse
     });
 
-    console.log('comment', this.pmu.commentaire1);
+    // console.log('comment', this.pmu.commentaire1);
 
   }, (error: any) => {
     loading.dismiss();
-    console.log("Erreur de connection ===", error);
+    // console.log("Erreur de connection ===", error);
     // Add user-friendly error message here
   });
 
@@ -193,7 +193,7 @@ async modifier() {
     this._apiService.updatepmu(this.userData.iduser, data).subscribe(
       (res: any) => {
         loading.dismiss();
-        console.log("SUCCESS ===", res);
+       //  console.log("SUCCESS ===", res);
         this.getpmu();
       },
       (error: any) => {

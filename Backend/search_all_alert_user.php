@@ -90,7 +90,7 @@ if ($result) {
     // Parcourez les résultats
     while ($row = $result->fetch_assoc()) {
         // Ajoutez le lien au chemin de l'image pour chaque ligne de résultat
-        $row['image'] = "http://$baseUrl/alert/" . $row['image'];
+        $row['image'] =  $url_alert . $row['image'];
         // Ajoutez la ligne modifiée au tableau de résultats
         $modified_rows[] = $row;
     }

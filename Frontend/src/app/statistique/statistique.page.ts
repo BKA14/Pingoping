@@ -53,7 +53,7 @@ export class StatistiquePage implements OnInit, OnDestroy {
 
     try {
       const res: any = await this._apiService.loadalert_statistique().toPromise();
-      console.log('SUCCESS ===', res);
+    //   console.log('SUCCESS ===', res);
 
       if (res && res.length > 0) {
         this.alert = res;
@@ -84,12 +84,12 @@ export class StatistiquePage implements OnInit, OnDestroy {
       } else {
         this.alert = 'erreur_chargement';
       }
-      console.log('Erreur de chargement', error);
+      // console.log('Erreur de chargement', error);
       loading.dismiss();
     }
     this.createChart();
     this.createBarChart();
-    console.log('fonction char appelé');
+    // console.log('fonction char appelé');
   }
 
   createBarChart() {
@@ -156,7 +156,7 @@ export class StatistiquePage implements OnInit, OnDestroy {
 
   async refreshPage(e: any) {
     await this.loadalert();
-    console.log('Rafraîchissement de la page');
+    //  console.log('Rafraîchissement de la page');
     e.target.complete();
   }
 }

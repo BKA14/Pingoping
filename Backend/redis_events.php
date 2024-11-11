@@ -115,8 +115,8 @@ function insertNotification($con, $title, $body, $page) {
 
 function sendFCMNotification($con, $title, $body, $page) {
     // Remplacez par le chemin de votre fichier JSON du compte de service
-    $keyFilePath = 'C:/xampp/htdocs/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
-
+    $keyFilePath = 'C:/xampp/htdocs/Projet_ Lokaliser/Backend/cle_firebase/pingoping-firebase-adminsdk-gjefv-a0eaaa87d9.json';
+    
     // Scopes requis pour FCM
     $scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
 

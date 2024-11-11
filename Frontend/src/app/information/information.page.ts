@@ -104,12 +104,12 @@ export class InformationPage implements OnInit {
     loading.present();
     this._apiService.updateinfo(this.userData.iduser, data).subscribe((res: any) => {
       loading.dismiss();
-      console.log("SUCCESS ===", res);
+      // console.log("SUCCESS ===", res);
       alert('modification effectué');
       this.getinfo();
     }, (error: any) => {
       loading.dismiss();
-      console.log("Erreur de connection", error);
+      // console.log("Erreur de connection", error);
       alert('Erreur veuillez reesayer');
 
     });
@@ -130,7 +130,7 @@ export class InformationPage implements OnInit {
   refreshPage(e) {
     setTimeout(() => {
       this.getinfo();
-      console.log('Rafraichissement de la page');
+      // console.log('Rafraichissement de la page');
       e.target.complete();
     }, 500);
   }
@@ -145,7 +145,7 @@ export class InformationPage implements OnInit {
     loading.present();
 
     this._apiService.getinfo(this.userData.iduser).subscribe((res: any) => {
-      console.log("SUCCESS ==", res);
+      // console.log("SUCCESS ==", res);
       this.info = res[0];
       this.verifieForm.patchValue({
         nom: this.info?.nom,

@@ -65,7 +65,7 @@ export class MessageUserPage implements OnInit {
 
     try {
       const res : any = await this._apiService.sendmessage(newComment).toPromise();
-      console.log("SUCCESS ===", res);
+     //  console.log("SUCCESS ===", res);
 
            this.newComment = '';
            this.clearMessage();

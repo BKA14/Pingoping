@@ -13,7 +13,7 @@ if (mysqli_num_rows($result) > 0) {
     // Parcourir les résultats et les ajouter au tableau de données
     while ($row = mysqli_fetch_assoc($result)) {
         // Modifier le chemin de la photo pour inclure le préfixe de l'URL
-        $row['logo'] = "http://$baseUrl/img/" . $row['logo'];
+        $row['logo'] = $url_apropos  . $row['logo'];
         // Ajouter la ligne modifiée au tableau de données
         $data[] = $row;
     }

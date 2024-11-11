@@ -113,7 +113,7 @@ export class AlertePage implements OnInit {
       ////l'heure/////
       this.timeService.getServerTime().subscribe((response) => {
         this.serverTime = response.serverTime;
-        console.log('serveur time', this.serverTime );
+       //  console.log('serveur time', this.serverTime );
       });
   }
 
@@ -130,11 +130,11 @@ export class AlertePage implements OnInit {
     loading.present();
 
     this._apiService.getservice().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+      // console.log("SUCCESS ===",res);
       this.service = res;
       loading.dismiss();
      },(error: any) => {
-      console.log("Erreur de connection ",error);
+      // console.log("Erreur de connection ",error);
       loading.dismiss();
   })
   }
@@ -150,11 +150,11 @@ export class AlertePage implements OnInit {
     loading.present();
 
     this._apiService.getville().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+      // console.log("SUCCESS ===",res);
       this.ville = res;
       loading.dismiss();
      },(error: any) => {
-      console.log("Erreur de connection ",error);
+      // console.log("Erreur de connection ",error);
       loading.dismiss();
   })
   }
@@ -172,28 +172,28 @@ export class AlertePage implements OnInit {
         if (Array.isArray(message)) {
           // Chargement initial des alertes
           this.alert = message;
-          console.log('Initial alerts loaded:', this.alert);
+          // console.log('Initial alerts loaded:', this.alert);
         } else {
           // Traitement des actions individuelles
           switch (message.action) {
             case 'insert':
               this.alert.unshift(message);
-              console.log('New alert inserted:', message);
+              // console.log('New alert inserted:', message);
               break;
             case 'update':
               const updatedIndex = this.alert.findIndex(alert => alert.id === message.old_signalisation_id);
               if (updatedIndex !== -1) {
                 this.alert[updatedIndex] = message;
-                console.log('Alert updated:', message);
-                console.log('Alert updated:', message.old_signalisation_id);
+                 //console.log('Alert updated:', message);
+                 //console.log('Alert updated:', message.old_signalisation_id);
               }
               break;
             case 'delete':
               this.alert = this.alert.filter(alert => alert.id !== message.signalisation_id);
-              console.log('Alert deleted:', message);
+              // console.log('Alert deleted:', message);
               break;
             default:
-              console.log('Unknown action:', message);
+              // console.log('Unknown action:', message);
           }
         }
       },
@@ -221,7 +221,7 @@ export class AlertePage implements OnInit {
 
       try {
         const res : any = await this._apiService.loadalert(this.page, this.limit).toPromise();
-        console.log('SUCCESS ===', res);
+        // console.log('SUCCESS ===', res);
 
         if (res && res.length > 0) {
           this.alert = res;
@@ -237,7 +237,7 @@ export class AlertePage implements OnInit {
           this.alert = this.oldalert;
         }
         else { this.alert = 'erreur_chargement'; }
-        console.log('Erreur de chargement', error);
+         //console.log('Erreur de chargement', error);
         loading.dismiss();
       }
     }
@@ -251,7 +251,7 @@ export class AlertePage implements OnInit {
 
       try {
         const res : any  = await this._apiService.loadalert(this.page, this.limit).toPromise();
-        console.log('SUCCESS ===', res);
+        // console.log('SUCCESS ===', res);
 
         this.alert = this.alert.concat(res);
         event.target.complete();
@@ -261,7 +261,7 @@ export class AlertePage implements OnInit {
         this.infiniteScrollDisabled = true;
       }
       } catch (error) {
-        console.log('Erreur de chargement', error);
+        // console.log('Erreur de chargement', error);
         if (this.oldalert && this.oldalert.length > 0) {
           this.alert = this.oldalert;
         }
@@ -308,7 +308,7 @@ export class AlertePage implements OnInit {
 
       try {
         const res : any = await this._apiService.loadalert_search(this.term, this.page, this.limit).toPromise();
-        console.log('SUCCESS ===', res);
+       //  console.log('SUCCESS ===', res);
 
         if (res && res.length < 1) {
           this.alert = 'aucune_alerte';
@@ -323,7 +323,7 @@ export class AlertePage implements OnInit {
           this.alert = this.oldalert;
         }
         else { this.alert = 'erreur_chargement'; }
-        console.log('Erreur de chargement', error);
+        // console.log('Erreur de chargement', error);
       }
     }
 
@@ -336,7 +336,7 @@ export class AlertePage implements OnInit {
 
       try {
         const res : any  = await this._apiService.loadalert_search(this.term, this.page, this.limit).toPromise();
-        console.log('SUCCESS ===', res);
+        // console.log('SUCCESS ===', res);
 
         this.alert = this.alert.concat(res);
         event.target.complete();
@@ -437,7 +437,7 @@ formatCommentTime(time: string): string {
     await this.loadalert();
 
     // Log pour indiquer le rafraîchissement
-    console.log('Rafraîchissement de la page');
+   //  console.log('Rafraîchissement de la page');
 
     // Terminer l'animation de rafraîchissement
     e.target.complete();
@@ -465,7 +465,7 @@ formatCommentTime(time: string): string {
 
       this._apiService.terminer_alerte(alert.id, data).subscribe(
         (res: any) => {
-          console.log("SUCCESS ===", res);
+          // console.log("SUCCESS ===", res);
           loading.dismiss(); // Success case
         },
         (error: any) => {
@@ -500,7 +500,7 @@ formatCommentTime(time: string): string {
     };
 
   this._apiService.soumettre_rapport(alert.id,data).subscribe((res:any) => {
-    console.log("SUCCESS ===",res);
+    // console.log("SUCCESS ===",res);
 
     loading.dismiss();
    },(error: any) => {
@@ -551,7 +551,7 @@ formatCommentTime(time: string): string {
     };
 
   this._apiService.soumettre_rapport(alert.id,data).subscribe((res:any) => {
-    console.log("SUCCESS ===",res);
+    // console.log("SUCCESS ===",res);
 
     loading.dismiss();
    },(error: any) => {
@@ -610,7 +610,7 @@ async filterAlerts2() {
       this.limit
     ).toPromise();
 
-    console.log('SUCCESS ===',  this.selectedStatus );
+    // console.log('SUCCESS ===',  this.selectedStatus );
 
     if (res && res.length > 0) {
       this.alert = res;
@@ -651,7 +651,7 @@ async More_filterAlerts(event) {
       this.limit
     ).toPromise();
 
-    console.log('SUCCESS ===', res);
+    // console.log('SUCCESS ===', res);
 
     this.alert = this.alert.concat(res);
     event.target.complete();
@@ -662,7 +662,7 @@ async More_filterAlerts(event) {
     this.search2 = false ;
   }
   } catch (error) {
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
     if (this.oldalert && this.oldalert.length > 0) {
       this.alert = this.oldalert;
     }
@@ -694,15 +694,15 @@ date_normal() {
       const coordinates = await Geolocation.getCurrentPosition();
       const userLatitude = coordinates.coords.latitude;
       const userLongitude = coordinates.coords.longitude;
-      console.log('Latitude:', userLatitude);
-      console.log('Longitude:', userLongitude);
+      // console.log('Latitude:', userLatitude);
+      // console.log('Longitude:', userLongitude);
 
       this.userlongitude = userLongitude;
       this.userlatitude = userLatitude;
 
       return { userLatitude, userLongitude };
     } catch (error) {
-      console.error('Erreur lors de la récupération des coordonnées:', error);
+       //console.error('Erreur lors de la récupération des coordonnées:', error);
       return null;
     }
   }
@@ -721,18 +721,18 @@ date_normal() {
           publi?.longitude
         );
 
-        console.log(`Distance entre l'utilisateur et l'alerte : ${distance} mètres`);
+       //  console.log(`Distance entre l'utilisateur et l'alerte : ${distance} mètres`);
 
         if (!isNaN(distance)) {
           publi.distanceToUser = distance;
-          console.log(`Distance entre l'utilisateur et l'alerte : ${publi.distanceToUser} mètres`);
+          // console.log(`Distance entre l'utilisateur et l'alerte : ${publi.distanceToUser} mètres`);
         } else {
           publi.distanceToUser = 'Coordonnées invalides';
-          console.error('Coordonnées invalides pour l\'alerte:', publi);
+        //   console.error('Coordonnées invalides pour l\'alerte:', publi);
         }
       });
     } else {
-      console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
+      // console.error('Impossible de récupérer les coordonnées de l\'utilisateur.');
     }
   }
 
@@ -787,7 +787,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+  // console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');

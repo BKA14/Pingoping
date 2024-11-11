@@ -103,7 +103,7 @@ export class RestaurantPage implements OnInit {
     getsessionuser(){
 
       this.grade= this.userData.grade;
-      console.log(this.grade);
+      // console.log(this.grade);
 
       }
 
@@ -201,13 +201,13 @@ export class RestaurantPage implements OnInit {
       }
 
       } catch (error) {
-      console.log('erreur de chargement', error);
+    //   console.log('erreur de chargement', error);
       if (this.oldresto && this.oldresto.length > 0) {
         this.resto = this.oldresto;
 
       }
       else { this.resto = 'erreur_chargement'; }
-      console.log('Erreur de chargement', error);
+    //   console.log('Erreur de chargement', error);
     }
       }
 
@@ -261,7 +261,7 @@ export class RestaurantPage implements OnInit {
       }
 
       } catch (error) {
-        console.log('Erreur de chargement', error);
+        // console.log('Erreur de chargement', error);
         if (this.oldresto && this.oldresto.length > 0) {
           this.resto = this.oldresto;
         }
@@ -302,7 +302,7 @@ export class RestaurantPage implements OnInit {
         this.restaurant();
 
         // Log pour indiquer le rafraîchissement
-        console.log('Rafraîchissement de la page');
+        // console.log('Rafraîchissement de la page');
 
         // Terminer l'animation de rafraîchissement
         e.target.complete();
@@ -382,8 +382,8 @@ export class RestaurantPage implements OnInit {
       const userLatitude = coordinates.coords.latitude;
       const userLongitude = coordinates.coords.longitude;
 
-      console.log('Latitude:', userLatitude);
-      console.log('Longitude:', userLongitude);
+     //  console.log('Latitude:', userLatitude);
+      // console.log('Longitude:', userLongitude);
 
       this.userlongitude = userLongitude;
       this.userlatitude = userLatitude;
@@ -396,12 +396,12 @@ export class RestaurantPage implements OnInit {
   }
 
 async openUrl_resto() {
-  console.log('Début de openUrl');
+  // console.log('Début de openUrl');
   const userLocationData = await this.getUserLocation();
 
   if (userLocationData) {
     const { userLatitude, userLongitude } = userLocationData;
-    console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
+    // console.log(`Coordonnées utilisateur : ${userLatitude}, ${userLongitude}`);
 
     if (Array.isArray(this.resto)) {
       for (const publi of this.resto) {
@@ -412,11 +412,11 @@ async openUrl_resto() {
           publi.longitude
         );
 
-        console.log(`Distance : ${distance} mètres`);
+        // console.log(`Distance : ${distance} mètres`);
 
         if (!isNaN(distance)) {
           publi.distanceToUser = distance;
-          console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
+         //  console.log(`Distance entre l'utilisateur et l'entreprise : ${publi.distanceToUser} mètres`);
         } else {
           console.error('La distance est NaN.');
         }
@@ -477,7 +477,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+  // console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
@@ -571,7 +571,7 @@ async loadalert_search() {
        this.resto = this.oldresto;
      }
      else { this.resto = 'erreur_chargement'; }
-     console.log('Erreur de chargement', error);
+     // console.log('Erreur de chargement', error);
    }
 
  }
@@ -586,7 +586,7 @@ async loadalert_search() {
 
   try {
     const res : any  = await this._apiService.load_search_resto(this.term, this.page, this.limit).toPromise();
-    console.log('SUCCESS ===', res);
+    // console.log('SUCCESS ===', res);
 
     this.resto = this.resto.concat(res);
     event.target.complete();
@@ -597,7 +597,7 @@ async loadalert_search() {
     this.search = false ;
   }
   } catch (error) {
-    console.log('Erreur de chargement', error);
+    // console.log('Erreur de chargement', error);
     if (this.oldresto && this.oldresto.length > 0) {
       this.resto = this.oldresto;
     }
@@ -631,13 +631,13 @@ loadLike() {
     (message) => {
       if (Array.isArray(message)) {
         // Chargement initial des alertes
-        console.log('Ne fais rien car géré au niveau des Pub:');
+        // console.log('Ne fais rien car géré au niveau des Pub:');
         // Vous pouvez éventuellement traiter les données initiales ici si nécessaire
       } else {
         // Traitement des actions individuelles
         switch (message.action) {
           case 'insert':
-            console.log('Ne fais rien pour insert car géré au niveau des Pub:');
+            // console.log('Ne fais rien pour insert car géré au niveau des Pub:');
             // Vous pouvez ajouter un traitement spécifique si nécessaire
             break;
           case 'update':
@@ -645,16 +645,16 @@ loadLike() {
             if (updatedIndex !== -1) {
               this.resto[updatedIndex].likes_count = message.likes_count;
               this.resto[updatedIndex].user_ids = message.user_ids;
-              console.log('Likes_count du pub mis à jour:', message.likes_count);
-              console.log('User_ids du pub mis à jour:', message.user_ids);
+             //  console.log('Likes_count du pub mis à jour:', message.likes_count);
+              // console.log('User_ids du pub mis à jour:', message.user_ids);
             }
             break;
           case 'delete':
-            console.log('Ne fais rien pour delete car géré au niveau des Pub:');
+           //  console.log('Ne fais rien pour delete car géré au niveau des Pub:');
             // Vous pouvez ajouter un traitement spécifique si nécessaire
             break;
           default:
-            console.log('Action inconnue:', message);
+            // console.log('Action inconnue:', message);
         }
       }
     },
@@ -675,30 +675,33 @@ like_resto(resto: any) {
   };
 
   this._apiService.get_etat_resto(data).subscribe(async (res:any) => {
-    console.log("SUCCESS ===",res);
+    // console.log("SUCCESS ===",res);
 
     if(res.result === 'oui') {
       if(res.data.etat === 'oui') {
-       await  this.disLike(resto);
        resto.likes_count--;
        resto.user_ids = resto.user_ids.filter(userId => userId !== this.userData.iduser);
+       this.cdr.detectChanges();
+       await  this.disLike(resto);
       } else if (res.data.etat === 'non') {
-        await  this.Likes(resto);
         resto.likes_count++;
         resto.user_ids.push(this.userData.iduser);
+        this.cdr.detectChanges();
+        await  this.Likes(resto);
       }
     } else if (res.result === 'non') {
-      await this.Likepremier(resto);
       resto.likes_count++;
       resto.user_ids.push(this.userData.iduser);
+      this.cdr.detectChanges();
+      await this.Likepremier(resto);
     }
 
     resto.isLoading = false;
     this.cdr.detectChanges();
   }, (error: any) => {
     resto.isLoading = false;
-    console.log('Erreur de connection  nouveau etat non enregistre');
-    console.log("ERROR ===",error);
+   //  console.log('Erreur de connection  nouveau etat non enregistre');
+    // console.log("ERROR ===",error);
   });
 }
 
@@ -716,8 +719,8 @@ async Likepremier(resto): Promise<void> {
 
    },(error: any) => {
 
-    console.log('Erreur de connection nouveau etat non enregistre');
-    console.log("ERROR ===",error);
+    // console.log('Erreur de connection nouveau etat non enregistre');
+    // console.log("ERROR ===",error);
    })
 
    this.cdr.detectChanges();
@@ -737,14 +740,14 @@ async Likepremier(resto): Promise<void> {
        }
 
        this._apiService.disLike_resto(resto.id,data).subscribe((res:any) => {
-        console.log("SUCCESS ===",res);
+       //  console.log("SUCCESS ===",res);
          //window.location.reload();
 
          //alert('Nouveau etat ajoute avec success');
        },(error: any) => {
 
-        console.log('Erreur de connection  nouveau etat non enregistre');
-        console.log("ERROR ===",error);
+       //  console.log('Erreur de connection  nouveau etat non enregistre');
+         // console.log("ERROR ===",error);
        })
 
        this.cdr.detectChanges();
@@ -764,13 +767,13 @@ async Likepremier(resto): Promise<void> {
        }
 
        this._apiService.disLike_resto(resto.id,data).subscribe((res:any) => {
-        console.log("SUCCESS ===",res);
+        //  console.log("SUCCESS ===",res);
 
 
        },(error: any) => {
 
-        console.log('Erreur de connection  nouveau etat non enregistre');
-        console.log("ERROR ===",error);
+       //  console.log('Erreur de connection  nouveau etat non enregistre');
+         //  console.log("ERROR ===",error);
        })
 
        this.cdr.detectChanges();

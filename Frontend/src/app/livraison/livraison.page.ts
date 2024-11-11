@@ -52,7 +52,7 @@ export class LivraisonPage implements OnInit {
   getsessionuser(){
 
     this.grade= (localStorage.getItem('grade'));
-    console.log(this.grade);
+    // console.log(this.grade);
 
      }
 
@@ -70,7 +70,7 @@ export class LivraisonPage implements OnInit {
 
       try {
       const res : any = await this._apiService.numero_livraison().toPromise();
-      console.log('SUCCESS ===', res);
+      // console.log('SUCCESS ===', res);
 
       if (res && res.length < 1) {
         this.number = 'aucune_alerte';
@@ -81,12 +81,12 @@ export class LivraisonPage implements OnInit {
       loading.dismiss();
 
       } catch (error) {
-      console.log('erreur de chargement', error);
+      // console.log('erreur de chargement', error);
       if (this.oldnumber && this.oldnumber.length > 0) {
         this.number = this.oldnumber;
       }
       else { this.number = 'erreur_chargement'; }
-      console.log('Erreur de chargement', error);
+     //  console.log('Erreur de chargement', error);
       loading.dismiss();
     }
 
@@ -103,7 +103,7 @@ export class LivraisonPage implements OnInit {
       refreshPage(e: any) {
         this.numero();
         // Log pour indiquer le rafraîchissement
-        console.log('Rafraîchissement de la page');
+       //  console.log('Rafraîchissement de la page');
         // Terminer l'animation de rafraîchissement
         e.target.complete();
       }

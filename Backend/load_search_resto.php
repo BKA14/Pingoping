@@ -1,5 +1,9 @@
 <?php
 include "config.php";
+include "auth.php"; // Inclure le fichier d'authentification
+
+// Appel de la fonction pour vérifier le token
+$userData = verifyToken(); // Cette ligne bloque l'accès si le token est invalide
 
 // Activer l'affichage des erreurs
 ini_set('display_errors', 1);
@@ -60,7 +64,7 @@ if ($result) {
     // Parcourez les résultats
     while ($row = mysqli_fetch_assoc($result)) {
         // Ajoutez le lien au chemin de l'image pour chaque ligne de résultat
-        $row['image'] = "http://$baseUrl/restaurant/" . $row['image'];
+        $row['image'] =  $url_resto . $row['image'];
         // Ajoutez la ligne modifiée au tableau de résultats
         $modified_rows[] = $row;
     }

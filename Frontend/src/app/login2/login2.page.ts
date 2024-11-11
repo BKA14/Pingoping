@@ -91,7 +91,6 @@ export class Login2Page implements OnInit {
   }
 
 
-
   async login4() {
     let data = {
       email: this.verifieForm.value.email,
@@ -107,7 +106,7 @@ export class Login2Page implements OnInit {
 
     try {
       const res: any = await this._apiService.login(data).toPromise();
-      console.log('res', res.message);
+      // console.log('res', res.message);
 
       if (res.access_token) {
         const userData = {
@@ -135,7 +134,7 @@ export class Login2Page implements OnInit {
       }
     } catch (error) {
       this.presentToast("Erreur de connexion avec le serveur, veuillez réessayer ou contactez-nous !");
-      console.log("ERROR ===", error);
+     //  console.log("ERROR ===", error);
     } finally {
       loading.dismiss();
     }
@@ -150,7 +149,7 @@ export class Login2Page implements OnInit {
   async ngOnInit() {
     this.timeService.getServerTime().subscribe((response) => {
       this.serverTime = response.serverTime;
-      console.log('serveur time', this.serverTime );
+     //  console.log('serveur time', this.serverTime );
     });
   }
 

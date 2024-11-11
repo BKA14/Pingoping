@@ -5,12 +5,18 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Geolocation } from '@capacitor/geolocation';
 import { ApiService } from '../api.service';
-import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
 import { timeService } from '../timeservice.service';
 import * as L from 'leaflet';
 // Import the Leaflet CSS
 
+const BURKINA_FASO_BOUNDS = {
+  minLat: 9.4011,
+  maxLat: 15.084,
+  minLng: -5.522,
+  maxLng: 2.408
+};
 
 
 // Fix Leaflet's default icon paths
@@ -49,6 +55,7 @@ export class ValiderPanierPage implements OnInit {
     private http: HttpClient,
     private _apiService: ApiService,
     private router: Router,
+    private navCtrl: NavController,
     private alertController: AlertController,
     private loadingCtrl: LoadingController,
     public loadingController: LoadingController,
@@ -98,6 +105,33 @@ export class ValiderPanierPage implements OnInit {
     }
 
 
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Etes-vous sur de vouloir confirmer la commande ?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            //this.handlerMessage = 'Alert canceled';
+          },
+        },
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: () => {
+
+          this.confirmOrder();
+
+        },
+        },
+    ],
+    });
+  return alert.present();
+  }
+
+
     async confirmOrder() {
       const orderData = {
         cart: this.cart,
@@ -118,7 +152,7 @@ export class ValiderPanierPage implements OnInit {
           ...this.signalementForm.value
         };
 
-        console.log('Combined data:', combinedData);
+        //console.log('Combined data:', combinedData);
 
         // Envoie au serveur via une API
         this.sendOrderToServer(combinedData); // Envoyer combinedData, pas juste orderData
@@ -127,7 +161,6 @@ export class ValiderPanierPage implements OnInit {
 
 
     async sendOrderToServer(order: any) {
-
       if (this.cart.length === 0 || this.total <= 0) {
         alert('Votre panier est vide ou le montant total est incorrect.');
         return;
@@ -139,15 +172,14 @@ export class ValiderPanierPage implements OnInit {
         duration: 10000,
       });
 
-      loading.present();
+      await loading.present();
 
       this._apiService.add_commande(order).subscribe({
-        next: (response) => {
-          // Appeler emptyCart et s'abonner à l'observable pour exécuter l'opération
+        next: () => {
           this.cartService.emptyCart(this.userData.iduser).subscribe({
             next: () => {
-              console.log('Panier vidé avec succès');
-              this.router.navigate(['/get-commande-user']);
+            //   console.log('Panier vidé avec succès');
+              this.navCtrl.navigateRoot(['/get-commande-user']); // Utilisation de navigateRoot pour réinitialiser l'historique
             },
             error: (err) => {
               console.error('Erreur lors du vidage du panier:', err);
@@ -157,15 +189,14 @@ export class ValiderPanierPage implements OnInit {
           alert('Commande effectuée avec succès');
         },
         error: (error) => {
-          console.error('Erreur lors de l\'envoi de la commande', error);
-          this.presentToast('Erreur lors de l\'envoi de la commande...');
+          console.error("Erreur lors de l'envoi de la commande", error);
+          this.presentToast("Erreur lors de l'envoi de la commande...");
         },
         complete: () => {
           loading.dismiss();
         }
       });
     }
-
 
   localiser() {
     this.getLocation();
@@ -176,18 +207,38 @@ map: L.Map;
 marker: L.Marker;
 mapVisible = false;
 
+
+
+
+isValidLocation(): boolean {
+  const { latitude, longitude } = this.signalementForm.get('location')?.value || {};
+  // Vérifiez si les coordonnées sont dans les limites du Burkina Faso et différentes de (0,0)
+  return (
+    latitude !== 0 && longitude !== 0 &&
+    latitude >= BURKINA_FASO_BOUNDS.minLat && latitude <= BURKINA_FASO_BOUNDS.maxLat &&
+    longitude >= BURKINA_FASO_BOUNDS.minLng && longitude <= BURKINA_FASO_BOUNDS.maxLng
+  );
+}
+
+
+
 async getLocation() {
   try {
     const coordinates = await Geolocation.getCurrentPosition();
+    const { latitude, longitude } = coordinates.coords;
     this.signalementForm.patchValue({
-      location: {
-        latitude: coordinates.coords.latitude,
-        longitude: coordinates.coords.longitude
-      }
+      location: { latitude, longitude }
     });
-    this.updateMapLocation(coordinates.coords.latitude, coordinates.coords.longitude);
+
+    if (!this.isValidLocation()) {
+      this.presentToast('Coordonnées invalides. Veuillez sélectionner manuellement votre position sur la carte.');
+      this.enableManualLocationSelection();
+    } else {
+      this.updateMapLocation(latitude, longitude);
+    }
   } catch (error) {
-    alert('Impossible de récupérer vos coordonnées, verifier votre connexion et assurez-vous d\'activer les services de localisation sur votre mobile. Si le problème persiste contacté Pingoping depuis les paramètres. ');
+    this.presentToast("Impossible de récupérer vos coordonnées, veuillez les saisir manuellement.");
+    this.enableManualLocationSelection();
   }
 }
 
@@ -281,7 +332,7 @@ private updateMarker(lat: number, lng: number) {
       longitude: lng
     }
   });
-  console.log('Coordonnées sélectionnées:', lat, lng);
+ //  console.log('Coordonnées sélectionnées:', lat, lng);
 }
 
 }

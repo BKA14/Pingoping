@@ -35,21 +35,21 @@ export class ModifpmuPage implements OnInit {
   ) {
     this.route.params.subscribe((param:any) => {
       this.id = param.id;
-      console.log(this.id);
+      // console.log(this.id);
       this.getpmu();
     })
   }
 
   getsession(){
     this.grade= (localStorage.getItem('grade'));
-    console.log(this.grade);
+   //  console.log(this.grade);
      }
 
      refreshPage(e){
       setTimeout(() => {
         this.getpmu();
 
-        console.log('rafraichissement de la page');
+       //  console.log('rafraichissement de la page');
         e.target.complete();
       },500);
       }
@@ -67,7 +67,7 @@ export class ModifpmuPage implements OnInit {
 
   this._apiService.getpmu().subscribe((res:any) => {
     loading.dismiss();
-    console.log("SUCCESS ===",res);
+   //  console.log("SUCCESS ===",res);
     this.pmu = res[0];
 
 
@@ -80,7 +80,7 @@ export class ModifpmuPage implements OnInit {
 
    },(error: any) => {
     loading.dismiss();
-    console.log("Erreur de connection ===",error);
+   //  console.log("Erreur de connection ===",error);
 
 })
     this.getsession();
@@ -111,13 +111,13 @@ const loading = await this.loadingCtrl.create({
 
 loading.present();
 this._apiService.updatepmu(this.id,data).subscribe((res:any) => {
-  console.log("SUCCESS ===",res);
+  // console.log("SUCCESS ===",res);
   //this.getentreprisee(this.id);
 
   loading.dismiss();
   this.router.navigateByUrl('/welcome');
  },(error: any) => {
-  console.log("Erreur de connection",error);
+   //console.log("Erreur de connection",error);
   loading.dismiss();
 })
 }

@@ -21,9 +21,9 @@ export class PaiementPage implements OnInit {
   ngOnInit() {
     this.userService.getUserData().subscribe(data => {
       this.userData = data;
-      console.log('nom 2: ', this.userData );
+      // console.log('nom 2: ', this.userData );
     });
-    console.log('nom 1: ', this.userData);
+    // console.log('nom 1: ', this.userData);
 
     // pour initialiser les notiications push
     this.notificationService.initializePushNotifications();

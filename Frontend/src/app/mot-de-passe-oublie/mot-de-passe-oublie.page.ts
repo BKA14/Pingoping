@@ -45,7 +45,7 @@ export class MotDePasseOubliePage implements OnInit {
      if (response.status == 'Success')
       {
        this.successMessage = 'success';
-      console.log('succes numero present ', response);
+     //  console.log('succes numero present ', response);
       this.router.navigateByUrl('/verifie-password');
       // Réinitialiser le formulaire ou afficher un message de succès si nécessaire
       this.contact = ''; // Réinitialiser le titre

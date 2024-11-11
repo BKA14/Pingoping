@@ -49,11 +49,11 @@ this.user_connecter();
 }
 getsession(){
 this.grade= (localStorage.getItem('grade'));
-console.log(this.grade);
+ //console.log(this.grade);
 }
 getsession1(){
 this.prenom1= (localStorage.getItem('prenom1'));
-console.log(this.prenom1);
+ //console.log(this.prenom1);
         }
 
 
@@ -62,7 +62,7 @@ getuser(){
 this.list_user = this.users;
 this._apiService.getuser(this.page, this.limit).subscribe((res:any) => {
 
-console.log("SUCCESS ===",res);
+ //console.log("SUCCESS ===",res);
 if (res && res.length < 1) {
 this.users = 'aucune_alerte';
 }
@@ -89,7 +89,7 @@ this.getsession1();
     this.page++;
     try {
       const res : any  = await this._apiService.getuser(this.page, this.limit).toPromise();
-      console.log('SUCCESS ===', res);
+     //  console.log('SUCCESS ===', res);
 
       this.users = this.users.concat(res);
       event.target.complete();
@@ -99,7 +99,7 @@ this.getsession1();
       this.infiniteScrollDisabled = true;
     }
     } catch (error) {
-      console.log('Erreur de chargement', error);
+     //  console.log('Erreur de chargement', error);
       if (this.list_user && this.list_user.length > 0) {
         this.users = this.list_user;
       }
@@ -165,21 +165,21 @@ this.getsession1();
 
    getgrade(){
     this._apiService.getgrade().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+      // console.log("SUCCESS ===",res);
       this.rang = res;
 
      },(error: any) => {
-      console.log("Erreur de connection",error);
+      // console.log("Erreur de connection",error);
   })
   }
 
   user_connecter(){
     this._apiService.user_connecter().subscribe((res:any) => {
-      console.log("SUCCESS ===",res);
+      // console.log("SUCCESS ===",res);
       this.user_connect = res.connected_users;
 
      },(error: any) => {
-      console.log("Erreur de connection",error);
+      // console.log("Erreur de connection",error);
   })
   }
 
@@ -286,7 +286,7 @@ handleScroll(scrollElement) {
   if (!scrollElement || !scrollButton) return;
 
   const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-  console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+  // console.log(`scrollTop: ${scrollTop}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
 
   if (scrollTop >= 7000 ) {
     this.renderer.setStyle(scrollButton, 'display', 'block');
