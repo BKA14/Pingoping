@@ -63,6 +63,17 @@ $target_path = "";
 // Vérifier si un fichier a été téléchargé
 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     $file_tmp = $_FILES['image']['tmp_name'];
+    $file_size = $_FILES['image']['size'];
+    $file_type = mime_content_type($file_tmp);
+
+    // Vérifiez la taille du fichier (exemple : max 5 Mo)
+    if ($file_size > 100 * 1024 * 1024) {
+        http_response_code(422);
+        $message['status'] = "Error";
+        $message['message'] = "Le fichier est trop volumineux.";
+        echo json_encode($message);
+        exit;
+    }
 
     function generateRandomString($length) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -92,10 +103,15 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 $q = mysqli_query($con, "INSERT INTO `signalisation` (`id`, `iduser`, `image`, `numuser`, `nom`, `prenom`, `longitude`, `latitude`, `description`, `service`, `statut`, `rapport`, `statut_rapport`, `ville`) 
     VALUES ('$id', '$iduser', '$file_name', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$service', '$statut', '$rapport', '$statut_rapport' , '$ville')");
 
-$qq = mysqli_query($con, "INSERT INTO `signalisation_stockage` (`id`, `iduser`, `image`, `numuser`, `nom`, `prenom`, `longitude`, `latitude`, `description`, `service`, `statut`, `rapport`, `statut_rapport`, `ville`) 
-    VALUES ('$id', '$iduser', '$file_name', '$contactuser', '$nom', '$prenom', '$longitude', '$latitude', '$description', '$service', '$statut', '$rapport', '$statut_rapport', '$ville')");
+if (!$q) {
+    http_response_code(500);
+    $message['status'] = "Error";
+    $message['message'] = "Erreur SQL : " . mysqli_error($con);
+    echo json_encode($message);
+    exit;
+}
 
-if ($q && $qq) {
+if ($q) {
     http_response_code(201);
     $message['status'] = "Success";
 } else {

@@ -20,7 +20,7 @@ headers : HttpHeaders;
   adr_mobile: string='http://192.168.1.67:80/Projet_ Lokaliser/Backend';
   adr_deploy: string='https://pingoping.onrender.com';
   time: any = 10000;
-  base_url = this.adr_deploy;
+  base_url = this.adr_mobile;
 
 
   constructor(public http: HttpClient) {
@@ -205,36 +205,45 @@ add_resto(formData: FormData) {
 addentreprises(data) {
 return this.http.post(this.base_url+'//create.php',data, { headers: this.getHeaders() })
 .pipe(timeout(this.time))
+.pipe(retry(0), catchError(this.handleError));
 }
 
-signalisation(formData) {
+signalisation(formData: FormData) {
   return this.http.post(this.base_url+'//signalisation.php',formData, { headers: this.getHeaders() })
   .pipe(timeout(this.time))
+  .pipe(retry(0), catchError(this.handleError));
   }
+
+
 
   sendcomment(data) {
     return this.http.post(this.base_url+'//sendcomment.php',data, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
     }
 
   sendmessage(data) {
     return this.http.post(this.base_url+'//sendmessage.php',data, { headers: this.getHeaders() })
     .pipe(timeout(this.time))
+    .pipe(retry(0), catchError(this.handleError));
     }
 
     repondrecommentaire(data) {
       return this.http.post(this.base_url+'//repondrecommentaire.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
       }
 
     signalercommentaire(data) {
       return this.http.post(this.base_url+'//signalercommentaire.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
       }
 
     verifie(data) {
       return this.http.post(this.base_url+'//verifie.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
       }
 
 
@@ -242,31 +251,37 @@ signalisation(formData) {
     addetatlikes(data) {
       return this.http.post(this.base_url+'//addetatlikes.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
       }
 
       addetatlikes_resto(data) {
         return this.http.post(this.base_url+'//addetatlikes_resto.php',data, { headers: this.getHeaders() })
         .pipe(timeout(this.time))
+        .pipe(retry(0), catchError(this.handleError));
         }
 
     addcategorie(data) {
       return this.http.post(this.base_url+'//createcategorie.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
     }
 
     add_numero(data) {
       return this.http.post(this.base_url+'//add_numero.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
     }
 
     add_numero_livraison(data) {
       return this.http.post(this.base_url+'//add_numero_livraison.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
     }
 
     add_cart(data) {
       return this.http.post(this.base_url+'//add_panier.php',data, { headers: this.getHeaders() })
       .pipe(timeout(this.time))
+      .pipe(retry(0), catchError(this.handleError));
     }
 
     getentreprises(){

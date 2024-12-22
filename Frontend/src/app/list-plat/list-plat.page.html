@@ -73,7 +73,9 @@
       <ion-card-content>
         <!-- image Display -->
         <ng-container *ngIf="isImage(resto.image)">
-          <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+          <div class="image-container">
+            <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+          </div>
         </ng-container>
         <br>
         <p class="ligne"></p>
@@ -121,8 +123,6 @@
 
         <p class="ligne"></p>
 
-        <br>
-
        <div class="left-align">
         <ion-button
         class="btnpub contact"
@@ -132,7 +132,6 @@
         ajouter au panier
         <ion-icon name="chevron-forward"></ion-icon>
       </ion-button>
-
 
       </div>
 
@@ -171,10 +170,12 @@
       <ion-card-content>
         <!-- image Display -->
         <ng-container *ngIf="isImage(resto.image)">
-          <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+          <div class="image-container">
+            <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+          </div>
         </ng-container>
 
-        <br>
+
         <br>
 
       <!-- nom du plat -->
@@ -197,18 +198,13 @@
       </div>
        <br>
 
-       <br>
-
        <!-- Indication visuelle pour les resto supprimé -->
      <div *ngIf="userData.numuser === contact_admin">
        <ion-label class="label-title"> Rang affichage plat :</ion-label>
        <h2 class="message-content"> {{ resto.rang }}</h2>
      </div>
 
-     <br>
-
           <p class="ligne"></p>
-          <br>
 
          <!--  nbr j'aime -->
          <div class="left-align">

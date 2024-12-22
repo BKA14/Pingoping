@@ -19,7 +19,7 @@ const routes: Routes = [
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule),
     data: { preload: true },
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+    //canActivate: [AuthGuard] // Utilisez AuthGuard ici
 
   },
   {
@@ -347,7 +347,7 @@ const routes: Routes = [
   {
     path: 'menu',
     loadChildren: () => import('./menu/menu.module').then( m => m.MenuPageModule),
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'signalisation',
@@ -402,7 +402,7 @@ const routes: Routes = [
   {
     path: 'notifications',
     loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule),
-    canActivate: [AuthGuard] // Utilisez AuthGuard ici
+   // canActivate: [AuthGuard] // Utilisez AuthGuard ici
   },
   {
     path: 'verifie-code',

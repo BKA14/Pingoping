@@ -51,7 +51,6 @@
     Craquez pour un plat délicieux ! Commandez en ligne et savourez-le chez vous en quelques minutes.
   </h6>
 
-
   <ion-refresher slot="fixed" (ionRefresh)="refreshPage($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -93,10 +92,10 @@
       <ion-card-content>
         <!-- image Display -->
         <ng-container *ngIf="isImage(resto.image)">
-          <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+          <div class="image-container">
+            <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+          </div>
         </ng-container>
-        <br>
-
 
           <!-- Indication visuelle pour les resto supprimé -->
         <div  *ngIf="grade === 'admin' || grade === 'superadmin'">
@@ -110,11 +109,11 @@
         <h2 *ngIf="resto.description" class="message-content">{{ resto.description }}</h2>
         </div>
 
-          <!-- ville -->
+          <!-- ville
           <div *ngIf="resto.ville !== undefined && resto.ville !== null && resto.ville.trim() !== 'non'">
             <ion-label class="label-title"> Ville :</ion-label>
           <h2 *ngIf="resto.ville" class="message-content">{{ resto.ville }}</h2>
-        </div>
+        </div> -->
 
         <!-- contact_admin -->
         <div>
@@ -239,9 +238,11 @@
       <ion-card-content>
         <!-- image Display -->
         <ng-container *ngIf="isImage(resto.image)">
-          <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+          <div class="image-container">
+            <ion-img class="custom-image" [src]="resto.image.trim()"></ion-img>
+          </div>
         </ng-container>
-
+        <br>
 
         <!-- description -->
          <div *ngIf="resto.description !== undefined && resto.description !== null && resto.description.trim() !== 'non'">
@@ -249,11 +250,6 @@
         <h2 *ngIf="resto.description" class="message-content">{{ resto.description }}</h2>
         </div>
 
-        <!-- ville -->
-        <div *ngIf="resto.ville !== undefined && resto.ville !== null && resto.ville.trim() !== 'non'">
-          <ion-label class="label-title"> Ville :</ion-label>
-        <h2 *ngIf="resto.ville" class="message-content">{{ resto.ville }}</h2>
-      </div>
        <br>
         <!-- Horaire section -->
           <div class="horaire-row" *ngIf="resto.heure_deb !== undefined

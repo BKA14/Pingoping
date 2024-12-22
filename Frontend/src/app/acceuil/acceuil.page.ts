@@ -578,7 +578,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
       let data = {
 
         iduser: this.userData.iduser,
-        contactuser: this.userData.numuser,
+      //  contactuser: this.userData.numuser,
         etat: 'oui',
         pubid: pub.id,
 
@@ -601,7 +601,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
           let data = {
 
             iduser: this.userData.iduser,
-            contactuser: this.userData.numuser,
+           // contactuser: this.userData.numuser,
             etat: 'oui',
             pubid: pubs.id,
 
@@ -627,7 +627,7 @@ setVolume(event: Event, videoElement: HTMLVideoElement) {
           let data = {
 
             iduser: this.userData.iduser,
-            contactuser: this.userData.numuser,
+            //contactuser: this.userData.numuser,
             etat: 'non',
             pubid: pub.id,
 

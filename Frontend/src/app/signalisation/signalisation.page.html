@@ -55,15 +55,18 @@
     </ion-item>
 
     <br>
-    <p *ngIf="!selectedMedia" class="alert">Prenez ou choisissez une image/vidéo</p>
+    <p *ngIf="!selectedFile" class="alert">Prenez ou choisissez une image/vidéo</p>
     <p color="warning" class="alert">taille max : 100 Mo</p>
     <ion-item class="form-control">
     <ion-label>Photo/vidéo</ion-label>
-    <ion-button expand="block" color="success" (click)="selectMedia()">Choisir une photo/vidéo</ion-button>
+    <ion-label position="floating" class="h2">Choisir une photo/vidéo</ion-label><br/>
+    <input type="file" accept="image/*,video/*"  formControlName="image"  name="photo" (change)="onFileSelected($event)" />
     </ion-item>
     <br>
-    <ion-label *ngIf="selectedMedia">Si l'image choisie ne correspond pas, ou est trop floue, choisissez ou prenez une autre image/vidéo!</ion-label>
+    <ion-label *ngIf="selectedFile">Si l'image choisie ne correspond pas, ou est trop floue, choisissez ou prenez une autre image/vidéo!</ion-label>
     <br>
+
+
 
     <ion-button [disabled]="!signalementForm.get('ville').value  || !signalementForm.get('service').value || !signalementForm.get('image').value  || !signalementForm.get('location').value.longitude  || !signalementForm.get('location').value.latitude" expand="block" color="success" (click)="onSubmit()">Envoyer Signalisation</ion-button>
   </form>

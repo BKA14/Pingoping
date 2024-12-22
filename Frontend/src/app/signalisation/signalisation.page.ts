@@ -38,11 +38,12 @@ L.Marker.prototype.options.icon = L.icon({
 })
 export class SignalisationPage implements OnInit {
   signalementForm: FormGroup;
-  selectedMedia: string | undefined;
+  selectedMedia:string = 'none';
   service: any;
   ville: any;
   userData: any;
   serverTime: string | number | Date;
+  selectedFile: File;
 
 
   constructor(private fb: FormBuilder,
@@ -67,23 +68,22 @@ export class SignalisationPage implements OnInit {
     });
   }
 
+
   ngOnInit(): void {
     // Initialize any additional logic here if necessary
     this.getLocation();
     this.getservice();
     this.getville();
 
-        // S'abonner aux changements de données utilisateur
+  // S'abonner aux changements de données utilisateur
   this.authService.userData$.subscribe(data => {
     this.userData = data;
   });
 
   this.timeService.getServerTime().subscribe((response) => {
-    this.serverTime = response.serverTime;
+  this.serverTime = response.serverTime;
     // console.log('serveur time', this.serverTime );
   });
-
-   //console.log(console.log(this.userData.numuser));
 
   }
 
@@ -105,7 +105,9 @@ export class SignalisationPage implements OnInit {
       // console.log("Erreur de connection ",error);
       loading.dismiss();
   })
+
   }
+
 
   async getville(){
     const loading = await this.loadingCtrl.create({
@@ -131,62 +133,29 @@ export class SignalisationPage implements OnInit {
     this.getLocation();
   }
 
-  async selectMedia(): Promise<void> {
-    try {
-        const media = await Camera.getPhoto({
-            quality: 90,
-            allowEditing: false,
-            resultType: CameraResultType.Uri, // Utiliser Uri pour obtenir le chemin du fichier
-            source: CameraSource.Prompt // Permet à l'utilisateur de choisir entre la caméra et la galerie
-        });
 
-        const fileUri = media.webPath!;
-        const fileType = media.format;
-        const base64Data = await this.readAsBase64(fileUri);
 
-        // Vérifier la taille du fichier
-        const fileSizeInBytes = this.getFileSize(base64Data);
-        const maxVideoSizeInBytes = 100 * 1024 * 1024; // Limite de taille de 100 Mo pour les vidéos
+   // Ajoutez cette méthode pour gérer la sélection de fichier
+onFileSelected(event: any): void {
+  const files: FileList = event.target.files;
 
-        if (['jpeg', 'png', 'gif', 'bmp'].includes(fileType) && fileSizeInBytes <= maxVideoSizeInBytes) {
-            // C'est une image
-            this.selectedMedia = `data:image/${fileType};base64,${base64Data}`;
-            this.signalementForm.patchValue({ image: this.selectedMedia });
-        } else if (['mp4', 'webm', 'ogg'].includes(fileType) && fileSizeInBytes <= maxVideoSizeInBytes) {
-            // C'est une vidéo et elle est dans la limite de taille
-            this.selectedMedia = fileUri; // Utiliser le chemin URI de la vidéo
-            this.signalementForm.patchValue({ image: fileUri });
-        } else if (fileSizeInBytes > maxVideoSizeInBytes) {
-            alert('La taille du fichier dépasse la limite autorisée de 100 Mo.');
-        } else {
-            alert('Format de fichier non pris en charge.');
-        }
+  if (files.length > 0) {
+    // Assurez-vous que this.selectedFile contient le fichier sélectionné
+    this.selectedFile = files[0];
 
-       // alert(this.selectedMedia);
-    } catch (error) {
-        console.error('Erreur lors de la sélection du média:', error);
+    // Affichez des informations sur le fichier dans la console (optionnel)
+    //console.log('Nom du fichier:', this.selectedFile.name);
+
+    if (this.selectedFile.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const imagePreview = e.target.result;
+       // console.log('Aperçu de l\'image:', imagePreview);
+        // Vous pouvez affecter imagePreview à une variable de modèle pour l'afficher dans votre template.
+      };
+      reader.readAsDataURL(this.selectedFile);
     }
-}
-
-private async readAsBase64(path: string): Promise<string> {
-    const response = await fetch(path);
-    const blob = await response.blob();
-    return await this.convertBlobToBase64(blob) as string;
-}
-
-private convertBlobToBase64 = (blob: Blob): Promise<string | ArrayBuffer | null> => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-        resolve(reader.result);
-    };
-    reader.readAsDataURL(blob);
-});
-
-private getFileSize(base64String: string): number {
-    const stringLength = base64String.length - 'data:;base64,'.length;
-    const sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812; // taille en octets
-    return sizeInBytes;
+  }
 }
 
 
@@ -255,6 +224,7 @@ async quitter(id) {
    return alert.present();
 }
 
+
 async onSubmit() {
   const loading = await this.loadingController.create({
       message: 'Envoi en cours...',
@@ -279,21 +249,14 @@ async onSubmit() {
           ...this.signalementForm.value
       };
 
-    //   console.log('Combined data:', combinedData);
-
       try {
-
-        if (!this.selectedMedia) {
+        if (!this.selectedFile) {
           ('Aucune image ou vidéo sélectionnée');
             await loading.dismiss();
             return;
         }
-
-          const mediaType = this.getMediaType(this.selectedMedia);
-          const mediaBlob = this.getBlobFromBase64(this.selectedMedia, mediaType);
-
           const formData = new FormData();
-          formData.append(mediaType === 'video' ? 'video' : 'image', mediaBlob, `${mediaType}.${this.getFileExtension(this.selectedMedia)}`);
+          formData.append('image', this.selectedFile);
           formData.append('service', combinedData.service);
           formData.append('ville', combinedData.ville);
           formData.append('description', combinedData.description);

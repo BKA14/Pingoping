@@ -18,7 +18,8 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from '../environments/environment';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptorService } from './auth-interceptor.service';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
   providers: [StatusBar,Network,
     SplashScreen,CallNumber,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, WebSocketService,
-    CallNumber
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+    CallNumber,
 
   ],
   bootstrap: [AppComponent]

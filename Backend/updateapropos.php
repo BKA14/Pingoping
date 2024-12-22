@@ -28,7 +28,7 @@ if (!empty($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     // Générez un nom de fichier unique
     $file_name = generateRandomString(20) . "." . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
     // Spécifiez le chemin cible où vous souhaitez enregistrer le fichier sur votre serveur
-    $target_path = "C:/xampp/htdocs/img/" . $file_name;
+    $target_path = $url_move_apropos . $file_name;
 
     // Déplacez le fichier téléchargé vers le chemin spécifié
     if (!move_uploaded_file($_FILES['photo']['tmp_name'], $target_path)) {

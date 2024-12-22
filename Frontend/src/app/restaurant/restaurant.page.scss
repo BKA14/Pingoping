@@ -117,17 +117,20 @@ ion-card-content p {
 }
 
 
-/* Dans votre fichier CSS ou SCSS */
-.custom-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border-radius: 8px;
+.image-container {
+  display: flex;           /* Active Flexbox */
+  justify-content: center; /* Centre horizontalement */
+  align-items: center;     /* Centre verticalement */
+  height: 100%;            /* Ajustez la hauteur selon vos besoins */
+  width: 100%;             /* Ajustez la largeur selon vos besoins */
 }
+
+.custom-image {
+  max-width: 60%;  /* S'assure que l'image ne dépasse pas la largeur */
+  max-height: 60%; /* S'assure que l'image ne dépasse pas la hauteur */
+  object-fit: cover; /* Ajuste l'image pour qu'elle soit bien cadrée */
+}
+
 
 .erreur_chargement {
   text-align: center;
@@ -195,7 +198,7 @@ ion-card-content p {
   }
 
   ion-card-content p {
-    margin: 8px 0 0 0;
+    margin: 9px 0 0 0;
   }
 
 
@@ -203,7 +206,7 @@ ion-card-content p {
     font-size: 18px;
     color: #555555;
     margin-bottom: 15px;
-    padding: 1px 0;
+    padding: 5px 0;
     border-bottom: 1px solid #ddd;
   }
 
@@ -246,7 +249,7 @@ ion-card-content p {
 
   .localisation{
     //vertical-align: middle;
-    font-size: medium;
+    font-size: 12px;
     font-style: normal;
     padding: 3px;
     font-family: "Roboto", sans-serif;

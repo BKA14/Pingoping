@@ -12,7 +12,6 @@ $message = array();
 
 
 // Extraire les données de la requête JSON
-//$contactuser = $data['contactuser'];
 $iduser =  $data['iduser'];
 $idpub =  $data['pubid'];
 $etat = $data['etat'];
